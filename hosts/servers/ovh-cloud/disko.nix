@@ -9,9 +9,8 @@
         type = "disk";
         content = {
           type = "gpt";
-          partitions = [
-            {
-              name = "ESP";
+          partitions = {
+            ESP = {
               size = "100M";
               type = "EF00";
               content = {
@@ -20,9 +19,8 @@
                 mountOptions = [ "umask=0077" ];
                 mountpoint = "/boot/efi";
               };
-            }
-            {
-              name = "boot";
+            };
+            boot = {
               size = "1G";
               type = "8300";
               content = {
@@ -31,9 +29,8 @@
                 mountOptions = [ "noatime" ];
                 mountpoint = "/boot";
               };
-            }
-            {
-              name = "btrfs-system";
+            };
+            btrfs-system = {
               size = "100%";
               type = "8300";
               content = {
@@ -46,26 +43,23 @@
                   "space_cache=v2"
                   # Removed autodefrag for VM (hypervisor handles fragmentation)
                 ];
-                subvolumes = [
-                  {
-                    name = "root";
+                subvolumes = {
+                  root = {
                     mountpoint = "/";
                     mountOptions = [ "subvol=root" ];
-                  }
-                  {
-                    name = "home";
+                  };
+                  home = {
                     mountpoint = "/home";
                     mountOptions = [ "subvol=home" ];
-                  }
-                  {
-                    name = "var";
+                  };
+                  var = {
                     mountpoint = "/var";
                     mountOptions = [ "subvol=var" ];
-                  }
-                ];
+                  };
+                };
               };
-            }
-          ];
+            };
+          };
         };
       };
     };
