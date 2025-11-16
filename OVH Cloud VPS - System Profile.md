@@ -1,156 +1,160 @@
-# OVH Cloud VPS – System Profile
+# OVH Cloud VPS – NixOS System Profile
+
+**AI Agent Context**: This document describes the actual NixOS configuration for the OVH Cloud VPS server.
 
 ## Host Identity
 
-- **Hostname:** `OVH Cloud VPS`
-- **Provider / Platform:** OpenStack (QEMU/KVM)
-- **System:** OpenStack Nova `19.3.2`
-- **Virtualization:** KVM (`pc-i440fx-9.2`)
-- **Chassis:** QEMU virtual machine
-- **BIOS:** SeaBIOS `1.16.3-debian-1.16.3-2~bpo12+1` (2014-04-01)
-- **Console:** `pty pts/1`
+- **Hostname:** `ovh-cloud`
+- **Provider:** OVH Cloud (OpenStack/KVM virtualized)
+- **Virtualization:** KVM
+- **Architecture:** x86_64
 
 ## Operating System
 
-- **Distro:** Fedora Linux 42 (Cloud Edition)
-- **Kernel:** `6.17.5-200.fc42.x86_64` (x86_64, 64-bit)
-- **Init system:** `systemd v257`
-  - Default target: `multi-user`
-  - Tooling: `systemctl`
-- **Package manager:** `rpm`
-  - Frontends: `dnf`, `yum`
-- **Shell:**
-  - Default: `bash v5.2.37`
-  - Sudo: `sudo v1.9.17p1`
-- **Diagnostic tools:**
-  - `inxi v3.3.39`
+- **Distribution:** NixOS 25.05 (unstable)
+- **Configuration Management:** Nix Flakes
+- **Init System:** systemd
+- **Package Manager:** Nix
+- **User Shell:** Fish (with starship prompt)
 
-## CPU
+## Hardware Resources
 
-- **Model:** Intel Core (Haswell, no TSX)
-- **Architecture:** x86_64 (Haswell, v3)
-- **vCPUs:** 8
-- **Cores (reported):** 1 core, 1 die, 1 cluster (SMP virtual topology)
-- **Clock:**
-  - Base/Boost: `2.0 GHz / 2.0 GHz`
-  - Observed: ~`2.993 GHz` on all 8 vCPUs
-- **Cache:**
-  - L1: `8 × 64 KiB` (split `32K data + 32K instruction`)
-  - L2: `8 × 4 MiB` (total 32 MiB)
-  - L3: `8 × 16 MiB` (total 128 MiB)
-- **Flags (basic):** `avx`, `avx2`, `lm`, `nx`, `pae`, `sse`, `sse2`, `sse3`, `sse4_1`, `sse4_2`, `ssse3`, `vmx`
+**AI Agent Context**: Virtual hardware allocated by OVH hypervisor.
 
-### CPU Vulnerabilities (Summary)
-
-- **Mitigated / Not affected:** l1tf, meltdown (PTI), mds, gather_data_sampling, ghostwrite, mmio_stale_data, old_microcode, reg_file_data_sampling, retbleed, spec_rstack_overflow, tsa, tsx_async_abort, vmscape
-- **Spectre:**
-  - v1: mitigated (usercopy/swapgs barriers, `__user` ptr sanitization)
-  - v2: mitigated (Retpolines, RSB filling; STIBP disabled)
-- **Spec Store Bypass:** **Vulnerable**
-- **SRBDS:** unknown (hypervisor-dependent)
+- **vCPUs:** Allocated by hypervisor (check actual allocation)
+- **Architecture:** x86_64
 
 ## Memory
 
-- **Total RAM:** 23.44 GiB
-- **Available:** 22.9 GiB
-- **In use:** ~645.8 MiB (~2.8%)
-- **Swap:**
-  - Type: `zram`
-  - Size: `8 GiB`
-  - Usage: `0 KiB`
-  - Compression: `lzo-rle` (options: `lzo`, `lz4`, `lz4hc`, `zstd`, `deflate`, `842`)
-  - Device: `/dev/zram0`
-- **Kernel VM tunables:**
-  - Swappiness: `60`
-  - Cache pressure: `100`
-  - zswap: disabled
+- **RAM:** Allocated by hypervisor (check actual allocation)
+- **Swap:** Managed by NixOS configuration if configured
 
-## Storage
+## Storage Configuration
 
-- **Physical disk:**
-  - Device: `/dev/sda` (QEMU `HARDDISK`)
-  - Size: `200 GiB`
-  - Scheme: `GPT`
-  - Block size: 512B (physical & logical)
+**AI Agent Context**: Storage managed by disko.nix for declarative disk partitioning.
 
-### Partition Layout
+### Disk Layout (defined in disko.nix)
 
-- **EFI System Partition**
-  - Mount: `/boot/efi`
-  - Device: `/dev/sda2`
-  - Size: `100 MiB` (used: `17 MiB` ~17%)
-  - FS: `vfat`
-  - Block size: `512 B`
+- **Primary Disk:** `/dev/sda` (default, configurable via lib.mkDefault)
+- **Partition Scheme:** GPT
 
-- **Boot Partition**
-  - Mount: `/boot`
-  - Device: `/dev/sda3`
-  - Size: `1000 MiB` (used: `163.2 MiB` ~16.9%)
-  - FS: `ext4`
-  - Block size: `4096 B`
+### Partitions
 
-- **Main Btrfs Volume**
-  - Device: `/dev/sda4`
-  - Size: `198.92 GiB` (used: `~824.6 MiB` ~0.4%)
-  - FS: `btrfs`
-  - Block size: `4096 B`
-  - Subvolumes (same device, same size, different mountpoints):
-    - `/` (root)
-    - `/home`
-    - `/var`
-  - Mount options (kernel cmdline): `rootflags=subvol=root`
+1. **EFI System Partition**
+   - Size: `100M`
+   - Type: `EF00`
+   - Filesystem: `vfat`
+   - Mount: `/boot/efi`
+   - Options: `umask=0077`
 
-- **Local storage usage (overall):**
-  - Total: `200 GiB`
-  - Used: `~1004.7 MiB` (~0.5%)
+2. **Boot Partition**
+   - Size: `1G`
+   - Type: `8300`
+   - Filesystem: `ext4`
+   - Mount: `/boot`
+   - Options: `noatime`
 
-- **SMART:** `smartctl` not installed (no SMART data available)
+3. **Btrfs Root Partition**
+   - Size: `100%` (remaining space)
+   - Type: `8300`
+   - Filesystem: `btrfs`
+   - Mount Options: `noatime`, `space_cache=v2`
+   
+   **Btrfs Subvolumes:**
+   - `root` → `/` (root filesystem)
+   - `home` → `/home` (user home directories)
+   - `var` → `/var` (variable data)
 
-## Network
+## Network Configuration
 
-- **Primary interface:** `ens3`
-  - State: `up`
-  - Speed: `-1` (not reported by virt layer)
-  - Duplex: `unknown`
-  - MAC: `<redacted>`
-- **Virtual devices:**
-  - Intel 82371AB/EB/MB PIIX4 ACPI (bridge) – driver: `piix4_smbus` (module: `i2c_piix4`)
-  - Virtio network – driver: `virtio-pci` (`00:03.0`, `1af4:1000`)
-- **Network services:**
-  - `NetworkManager`
-  - `sshd`
+**AI Agent Context**: Networking managed by NixOS configuration.
 
-## Graphics
+- **Hostname:** `ovh-cloud`
+- **DHCP:** Enabled (`networking.useDHCP = true`)
+- **Firewall:** Managed by NixOS (configuration available in configuration.nix)
 
-- **GPU (virtual):** Cirrus Logic GD 5446 (QEMU)
-  - Driver: `cirrus-qemu` (alt: `cirrus_qemu`)
-  - Bus: `00:02.0` (`1013:00b8`)
-  - Output: `Virtual-1`
-    - Console modes: `640x480`–`800x600`
-- **Display server:** none (console/headless context)
-- **X11 tools available:** `xdpyinfo`, `xprop`, `xrandr` (for when X is used)
+## Services
 
-## Audio
+**AI Agent Context**: Core services enabled in NixOS configuration.
 
-- **API:** ALSA (`k6.17.5-200.fc42.x86_64`)
-- **Status:** inactive
-- **Devices:** none reported
+### SSH Service
+- **Enabled:** Yes
+- **Root Login:** Disabled (`permitRootLogin = "no"`)
+- **Authentication:** SSH keys only (password auth disabled)
+- **Interactive Auth:** Disabled (keyboard and challenge-response)
 
-## Sensors & Power
+## User Configuration
 
-- **Sensors:** no data from `/sys/class/hwmon` or `lm-sensors`
-- **Uptime:** ~9 minutes (at time of capture)
-- **Power states:**
-  - Suspend: `s2idle`
-  - Hibernate (platform): `shutdown`, `reboot`, `suspend`, `test_resume`
-  - Hibernate image size: `9.14 GiB`
-  - Wakeups: `0`
+**AI Agent Context**: System users defined in configuration.nix.
 
-## Notes
+### Admin User: hbohlen
+- **Type:** Normal user
+- **Groups:** `wheel`, `networkmanager`, `podman`
+- **SSH Access:** Via authorized_keys (keys to be added)
+- **Sudo:** Enabled without password (wheel group)
 
-- Designed as a **headless** cloud host (no active GUI, no audio).
-- Btrfs root with subvolume-based layout (`/`, `/home`, `/var`) on a single 200 GiB virtual disk.
-- Good headroom on:
-  - **CPU** (low usage at capture time)
-  - **RAM** (~23 GiB total, almost all free)
-  - **Disk** (only ~1 GiB used)
+## System Settings
+
+**AI Agent Context**: Basic system configuration.
+
+- **Timezone:** UTC
+- **Locale:** en_US.UTF-8
+- **Console Keymap:** US
+- **Console Font:** Lat2-Terminus16
+
+## Installed Packages
+
+**AI Agent Context**: System-level packages in environment.systemPackages.
+
+### System Tools
+- htop (process monitor)
+- unzip, zip (compression)
+- openssh (SSH client)
+- gcc, gnumake, pkg-config (build tools)
+
+### User Packages (Home Manager)
+- starship (prompt)
+- eza (ls replacement)
+- ripgrep (fast grep)
+- gh (GitHub CLI)
+- bottom (system monitor)
+- 1password-cli (secrets management)
+- git, neovim, fish
+- zoxide (directory jumper)
+- direnv, nix-direnv (environment management)
+
+## Configuration Files
+
+**AI Agent Context**: Location of NixOS configuration files.
+
+- **Flake:** `/flake.nix` (defines nixosConfigurations.ovh-cloud)
+- **System Config:** `/hosts/servers/ovh-cloud/configuration.nix`
+- **Disk Config:** `/hosts/servers/ovh-cloud/disko.nix`
+- **Home Manager:** `/hosts/servers/ovh-cloud/home.nix`
+
+## Flake Inputs
+
+**AI Agent Context**: External dependencies used in the flake.
+
+- `nixpkgs` (nixos-unstable)
+- `home-manager` (master branch)
+- `nixos-hardware` (hardware configurations)
+- `disko` (declarative disk partitioning)
+- `nixos-anywhere` (remote NixOS installation)
+- `nix-ai-tools` (AI development tools)
+- `opnix` (1Password NixOS integration)
+
+## System State Version
+
+- **Version:** 25.05 (NixOS unstable)
+- **Home Manager:** 24.11
+
+## Deployment Notes
+
+**AI Agent Context**: Server is designed as a headless cloud host for development and automation.
+
+- No GUI or desktop environment
+- Declarative disk partitioning with Btrfs subvolumes
+- SSH-only access with key authentication
+- User environment managed via Home Manager
+- Fish shell with modern CLI tools
