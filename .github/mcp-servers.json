@@ -1,0 +1,93 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/mcp-servers.json",
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "description": "GitHub MCP server for repository operations, issues, PRs, and code search"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/runner/work/pantherOS/pantherOS"],
+      "description": "Local filesystem access for the pantherOS repository"
+    },
+    "git": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git"],
+      "description": "Git operations and repository management"
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      },
+      "description": "Web search for NixOS documentation, package lookups, and troubleshooting"
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": {
+        "POSTGRES_CONNECTION_STRING": "${POSTGRES_CONNECTION_STRING}"
+      },
+      "description": "PostgreSQL database operations for AgentDB integration"
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "description": "Browser automation for testing desktop environment configurations"
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "description": "Enhanced reasoning for complex NixOS configuration decisions"
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "description": "Knowledge graph memory for tracking configuration patterns and decisions"
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "description": "HTTP requests for fetching NixOS packages, documentation, and external resources"
+    },
+    "nix-search": {
+      "command": "bash",
+      "args": ["-c", "nix search nixpkgs \"$@\""],
+      "description": "Custom MCP server wrapper for Nix package search"
+    },
+    "docker": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-docker"],
+      "description": "Docker container management for testing deployments"
+    }
+  },
+  "description": "MCP server configurations for pantherOS NixOS development environment",
+  "recommendations": {
+    "essential": ["github", "filesystem", "git", "brave-search"],
+    "nixos-specific": ["nix-search", "fetch"],
+    "ai-infrastructure": ["postgres", "memory", "sequential-thinking"],
+    "testing": ["puppeteer", "docker"]
+  },
+  "setup-instructions": {
+    "environment-variables": {
+      "GITHUB_TOKEN": "Required for github MCP server - generate at https://github.com/settings/tokens",
+      "BRAVE_API_KEY": "Optional for brave-search - get from https://brave.com/search/api/",
+      "POSTGRES_CONNECTION_STRING": "Required for postgres MCP server - format: postgresql://user:pass@host:port/db"
+    },
+    "installation": [
+      "Ensure Node.js 18+ is installed (already available in the 'node' dev shell)",
+      "MCP servers are automatically installed on first use via npx",
+      "For custom servers, ensure Nix is available in your PATH"
+    ],
+    "usage": {
+      "with-github-copilot": "Configure in your IDE's Copilot settings",
+      "with-opencode": "Add to .opencode/mcp/servers.json in your OpenCode configuration",
+      "with-claude-desktop": "Add to ~/Library/Application Support/Claude/claude_desktop_config.json"
+    }
+  }
+}

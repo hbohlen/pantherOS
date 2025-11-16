@@ -56,14 +56,33 @@ The repository provides multiple development shells via Nix flakes:
 - **node**: Node.js development (node 18/20, yarn, pnpm, npm)
 - **python**: Python development (python3, pip, virtualenv, black, pylint)
 - **go**: Go development (go, gopls, golangci-lint)
+- **mcp**: MCP-enabled AI development (Node.js, PostgreSQL, Docker, Nix tools)
+- **ai**: AI infrastructure development (Python, databases, MCP support)
 
 To enter a development shell:
 ```bash
 nix develop
 # or for specific environments:
 nix develop .#nix
-nix develop .#rust
+nix develop .#mcp  # For AI-assisted development with MCP servers
+nix develop .#ai   # For AI infrastructure work
 ```
+
+### MCP Server Integration
+
+The repository includes comprehensive MCP (Model Context Protocol) server configurations:
+
+- **Configuration**: See `.github/mcp-servers.json` for all available MCP servers
+- **Setup Guide**: Detailed instructions in `.github/MCP-SETUP.md`
+- **Servers Available**: GitHub, filesystem, git, brave-search, postgres, memory, sequential-thinking, puppeteer, docker, and custom nix-search wrapper
+
+**Essential MCP servers for this project:**
+- `github`: Repository operations and code search
+- `filesystem`: Local file access
+- `git`: Git operations
+- `nix-search`: NixOS package search
+- `postgres`: AgentDB integration (see `ai_infrastructure/`)
+- `memory`: Knowledge graph for configuration patterns
 
 ### Building System Configurations
 
@@ -179,9 +198,28 @@ This repository includes extensive AI development planning documentation in `ai_
 - Agentic-flow integration plans
 - pantherOS research roadmap with gap analysis
 
+## Development Tools & Configuration
+
+### Dev Container Support
+
+The repository includes Dev Container configuration (`.github/devcontainer.json`) for:
+- NixOS-based containerized development
+- Pre-configured VS Code extensions (nix-ide, Copilot, GitLens)
+- Automatic Nix cache setup
+- Volume mounts for /nix directory persistence
+
+### Environment Variables
+
+For MCP server integration, configure:
+- `GITHUB_TOKEN`: GitHub API access (required for github MCP server)
+- `BRAVE_API_KEY`: Web search capability (optional)
+- `POSTGRES_CONNECTION_STRING`: AgentDB database connection (for AI infrastructure work)
+- `MCP_CONFIG_PATH`: Path to MCP servers configuration (auto-set in mcp dev shell)
+
 ## Getting Help
 
 - Check the master topic map for navigation: [00_MASTER_TOPIC_MAP.md](../00_MASTER_TOPIC_MAP.md)
 - Review implementation guides in `system_config/implementation_guides/`
 - See code examples in `code_snippets/`
 - Consult the comprehensive architecture brief: `system_config/03_PANTHEROS_NIXOS_BRIEF.md`
+- MCP server setup and troubleshooting: [.github/MCP-SETUP.md](MCP-SETUP.md)
