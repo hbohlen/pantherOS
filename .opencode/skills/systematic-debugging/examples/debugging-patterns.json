@@ -1,0 +1,158 @@
+{
+  "examples": [
+    {
+      "id": "null_pointer_javascript",
+      "taskType": "null_reference",
+      "patternData": {
+        "problem": "Cannot read property 'substring' of null",
+        "code": "user.profile.name.substring(0, 10)",
+        "solution": "user.profile.name?.substring(0, 10) || ''",
+        "explanation": "Use optional chaining and null coalescing for safe property access"
+      },
+      "successRate": 0.95,
+      "usageCount": 47,
+      "tags": ["javascript", "null", "optional_chaining"],
+      "environment": {
+        "language": "javascript",
+        "runtime": "node",
+        "framework": "express"
+      }
+    },
+    {
+      "id": "type_error_python",
+      "taskType": "type_mismatch", 
+      "patternData": {
+        "problem": "TypeError: 'NoneType' object is not callable",
+        "code": "result = user.get_profile().format_name()",
+        "solution": "profile = user.get_profile(); result = profile.format_name() if profile else ''",
+        "explanation": "Check for None before method calls and handle gracefully"
+      },
+      "successRate": 0.88,
+      "usageCount": 32,
+      "tags": ["python", "type", "none_check"],
+      "environment": {
+        "language": "python",
+        "version": "3.9+",
+        "framework": "django"
+      }
+    },
+    {
+      "id": "syntax_error_typescript",
+      "taskType": "syntax_error",
+      "patternData": {
+        "problem": "SyntaxError: Unexpected token ':'",
+        "code": "const config = { port: 3000, host: 'localhost' }",
+        "solution": "Add type annotation: const config: Config = { port: 3000, host: 'localhost' }",
+        "explanation": "TypeScript requires type annotations for object literals"
+      },
+      "successRate": 0.92,
+      "usageCount": 28,
+      "tags": ["typescript", "syntax", "types"],
+      "environment": {
+        "language": "typescript",
+        "version": "4.5+",
+        "framework": "react"
+      }
+    },
+    {
+      "id": "network_timeout",
+      "taskType": "network_error",
+      "patternData": {
+        "problem": "Request timeout after 30 seconds",
+        "code": "await fetch('/api/data')",
+        "solution": "Implement timeout and retry: const response = await Promise.race([fetch('/api/data'), timeout(5000)])",
+        "explanation": "Set reasonable timeouts and implement retry logic for network calls"
+      },
+      "successRate": 0.84,
+      "usageCount": 19,
+      "tags": ["network", "timeout", "retry"],
+      "environment": {
+        "language": "javascript",
+        "runtime": "node",
+        "framework": "axios"
+      }
+    },
+    {
+      "id": "memory_leak_react",
+      "taskType": "memory_error",
+      "patternData": {
+        "problem": "Memory usage growing continuously in React app",
+        "code": "componentDidMount() { this.interval = setInterval(() => this.update(), 1000) }",
+        "solution": "Always cleanup: componentWillUnmount() { clearInterval(this.interval) }",
+        "explanation": "React requires cleanup of timers and subscriptions to prevent memory leaks"
+      },
+      "successRate": 0.91,
+      "usageCount": 35,
+      "tags": ["react", "memory", "cleanup", "timers"],
+      "environment": {
+        "language": "javascript",
+        "framework": "react",
+        "version": "17+"
+      }
+    }
+  ],
+  "common_patterns": {
+    "error_categories": {
+      "null_reference": {
+        "description": "Null or undefined reference errors",
+        "common_causes": [
+          "Missing null checks",
+          "API response format changes", 
+          "Uninitialized variables",
+          "Race conditions"
+        ],
+        "solution_strategies": [
+          "Optional chaining (?.),",
+          "Null coalescing (??)",
+          "Default value assignment",
+          "Defensive programming"
+        ]
+      },
+      "type_mismatch": {
+        "description": "Type-related runtime errors",
+        "common_causes": [
+          "Missing type annotations",
+          "API contract changes",
+          "Implicit type conversion",
+          "Generic type handling"
+        ],
+        "solution_strategies": [
+          "Type guards and narrowing",
+          "Explicit type checking",
+          "Union types and interfaces",
+          "Runtime type validation"
+        ]
+      },
+      "syntax_error": {
+        "description": "Compilation and parsing errors",
+        "common_causes": [
+          "Missing punctuation",
+          "Incorrect indentation",
+          "File encoding issues",
+          "Language version mismatch"
+        ],
+        "solution_strategies": [
+          "Linting and formatting tools",
+          "IDE syntax highlighting",
+          "Version compatibility checks",
+          "Automated code formatting"
+        ]
+      },
+      "network_error": {
+        "description": "Network and API-related issues",
+        "common_causes": [
+          "Timeout configuration",
+          "Rate limiting",
+          "Certificate issues",
+          "DNS resolution"
+        ],
+        "solution_strategies": [
+          "Implement timeouts",
+          "Add retry logic",
+          "Circuit breaker pattern",
+          "Request deduplication"
+        ]
+      }
+    }
+  }
+}

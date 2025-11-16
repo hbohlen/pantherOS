@@ -1,0 +1,83 @@
+{
+  "skill": {
+    "name": "systematic-debugging",
+    "version": "1.0.0",
+    "description": "Enhanced debugging with AgentDB pattern learning",
+    "category": "debugging",
+    "tags": ["debug", "patterns", "learning", "memory"],
+    "enabled": true
+  },
+  "memory": {
+    "agentdb": {
+      "enabled": true,
+      "indexPath": "/root/pantherOS/.opencode/agentdb/index",
+      "autoIndex": true,
+      "similarityThreshold": 0.8,
+      "maxPatterns": 1000,
+      "learningRate": 0.2
+    },
+    "focus": [
+      "debugging_patterns",
+      "solution_strategies",
+      "error_reproduction",
+      "root_cause_analysis"
+    ],
+    "sharing": [
+      "writing-plans",
+      "root-cause-tracing",
+      "code-reviewer"
+    ]
+  },
+  "performance": {
+    "targetQueryTime": 1,
+    "maxConcurrentQueries": 10,
+    "cacheSize": 1000,
+    "batchSize": 100
+  },
+  "analysis": {
+    "depth": "deep",
+    "patternMatching": true,
+    "learningEnabled": true,
+    "causalTracking": true,
+    "crossSessionLearning": true
+  },
+  "debugging": {
+    "techniques": [
+      "divide_and_conquer",
+      "binary_search", 
+      "rollback_testing",
+      "logging",
+      "stack_traces",
+      "variable_inspection"
+    ],
+    "validation": {
+      "unitTests": true,
+      "integrationTests": true,
+      "manualVerification": true
+    },
+    "rootCauseAnalysis": {
+      "enabled": true,
+      "confidenceThreshold": 0.7,
+      "evidenceRequirement": 2
+    }
+  },
+  "examples": {
+    "patterns": [
+      {
+        "id": "null_pointer_exception",
+        "description": "Null reference pattern with solution strategies",
+        "tags": ["null", "reference", "exception"]
+      },
+      {
+        "id": "type_mismatch",
+        "description": "Type error pattern with type checking strategies",
+        "tags": ["type", "error", "mismatch"]
+      },
+      {
+        "id": "syntax_error",
+        "description": "Syntax error pattern with validation strategies",
+        "tags": ["syntax", "error", "parsing"]
+      }
+    ]
+  }
+}
