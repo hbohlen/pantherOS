@@ -20,16 +20,6 @@
                 mountpoint = "/boot";
               };
             };
-            boot = {
-              size = "2G";
-              type = "8300";
-              content = {
-                type = "filesystem";
-                format = "ext4";
-                mountOptions = [ "noatime" ];
-                mountpoint = "/boot";
-              };
-            };
             btrfs-system = {
               size = "100%";
               type = "8300";
