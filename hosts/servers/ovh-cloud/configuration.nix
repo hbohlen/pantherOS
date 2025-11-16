@@ -20,10 +20,12 @@
   # Enable SSH with key-only authentication
   services.openssh = {
     enable = true;
-    permitRootLogin = "no";
-    passwordAuthentication = false;
-    kbdInteractiveAuthentication = false;
-    challengeResponseAuthentication = false;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      ChallengeResponseAuthentication = false;
+    };
   };
 
   # Admin user
@@ -31,7 +33,14 @@
     isNormalUser = true;
     extraGroups = [ "wheel" "networkmanager" "podman" ];
     openssh.authorizedKeys.keys = [
-      # TODO: Add SSH keys here
+      # Yoga laptop
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKL85xrOJYwZOR297WkW/w5QuEA8o5i4ykPd+YWlTGxM"
+      # Phone
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEe67lx5ILCFuGNN7nNGZJai0aQe5jFNJbEjqql2Szft"
+      # Desktop
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIOaBiJ/Gr+sWkyhZlLH2QrrZb13VxhTrpUoOTbr8gxS"
+      # Zephyrus laptop
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBY1sAb258Lkkw+6yl4M/YtbT3izNxFIP8Ag+UxEoipv"
     ];
   };
 
@@ -48,14 +57,16 @@
   console.keyMap = "us";
 
   # Basic packages
+  # NOTE: Dev tools (gcc, gnumake, pkg-config) commented out for initial deployment
+  # Uncomment after successful deployment
   environment.systemPackages = with pkgs; [
     htop
     unzip
     zip
     openssh
-    gcc
-    gnumake
-    pkg-config
+    # gcc
+    # gnumake
+    # pkg-config
   ];
 
   # System state version
