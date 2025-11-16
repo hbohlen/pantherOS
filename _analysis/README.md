@@ -28,6 +28,49 @@ Comprehensive inventory of all 83 documentation files in the repository, includi
 - Recommended tags for categorization
 - Action plan for pruning and reorganization
 
+### 🔍 [pruning_plan.md](./pruning_plan.md)
+**Size:** 7,100 words | 62KB
+
+Safe, conservative pruning strategy for documentation cleanup, including:
+- Files to keep as-is (20 core reference documents)
+- Files to keep but refactor/condense (15 files with useful content)
+- Files probably obsolete or low-value (5 candidates for deletion)
+- Duplicate/overlapping files analysis (27 files, 18 to remove)
+- Archive recommendations for aspirational content (13 files)
+- Detailed refactor execution checklist with 10 phases
+- Human review questions for critical decisions
+- Rollback plan and success criteria
+- Expected outcomes: 83 → 50 files (30% reduction)
+
+### 📐 [docs_structure_plan.md](./docs_structure_plan.md)
+**Size:** 7,500 words | 65KB
+
+Comprehensive `/docs` directory structure and sharding plan, including:
+- Proposed 8-category hierarchical structure (architecture, howto, ops, infra, etc.)
+- Detailed file mapping from current to target locations
+- Sharding rules for AI-optimized documentation (150-200 lines per file)
+- Document-by-document mapping table with actions (move, transform, split, merge)
+- 10-phase migration plan with validation checkpoints
+- File header templates and cross-reference guidelines
+- Success criteria and rollback procedures
+- Target: 60 focused files with improved discoverability
+
+### 🔴 [gaps_and_questions.md](./gaps_and_questions.md) ⭐ **NEW**
+**Size:** 10,200 words | 89KB
+
+Comprehensive gap analysis identifying missing documentation, code examples, unclear architecture, and open decisions:
+- **23 missing documentation gaps** across deployment, development, operations, security
+- **18 missing or weak code examples** for common workflows and configurations
+- **12 unclear architectural flows** needing clarification or documentation
+- **15 open decisions** with TODO markers and unresolved choices
+- **8 high-priority gaps** ready for Spec Kit specification
+- Detailed gap categorization with severity (🔴 Critical, 🟡 Important, 🟢 Nice-to-have)
+- Each gap includes: what exists, what's missing, impact, suggested path, priority
+- 6-phase action plan with timelines (Weeks 1-8+)
+- Specification readiness matrix for Spec Kit features
+- Documentation coverage analysis: 21% current → 80% target
+- Gap tracking template and quick reference for top 10 gaps
+
 ### 🏗️ [structure_overview.md](./structure_overview.md)
 **Size:** 3,080 words | 26KB
 
@@ -171,16 +214,21 @@ Proposed `/docs/` organization:
 
 ### For Human Readers
 - Start with this README for an overview
+- **Read `gaps_and_questions.md` first** to understand what's missing and needs work
 - Read `doc_inventory.md` for detailed file-by-file analysis
+- Read `pruning_plan.md` for cleanup strategy
+- Read `docs_structure_plan.md` for target organization
 - Read `structure_overview.md` for high-level repository organization
-- Use the "Next Suggested Agents" section in `doc_inventory.md` for action items
+- Use the "Recommended Action Plan" in `gaps_and_questions.md` for prioritized next steps
 
 ### For AI Agents
-- This analysis provides complete context for documentation cleanup tasks
+- **Start with `gaps_and_questions.md`** for comprehensive gap analysis before writing specs
+- This analysis provides complete context for documentation cleanup and improvement tasks
 - Each file includes detailed tags for categorization
 - Status indicators help prioritize actions (Core/Reference, Useful-But-Noisy, Obsolete, Scratch)
 - Embedded documentation sections identify doc-like content in code files
-- Use the recommended 4-phase plan for systematic improvement
+- Use the recommended phased plans for systematic improvement
+- Consult specification readiness matrix before creating Spec Kit specs
 
 ---
 
@@ -198,10 +246,13 @@ This analysis followed these constraints:
 ## Files Generated
 
 1. `doc_inventory.md` - Complete documentation inventory with tagging
-2. `structure_overview.md` - Repository structure and organization analysis
-3. `README.md` (this file) - Summary and navigation guide
+2. `pruning_plan.md` - Safe documentation cleanup strategy
+3. `docs_structure_plan.md` - Target /docs structure and migration plan
+4. `gaps_and_questions.md` - Comprehensive gap analysis for Spec Kit preparation ⭐ **NEW**
+5. `structure_overview.md` - Repository structure and organization analysis
+6. `README.md` (this file) - Summary and navigation guide
 
-**Total Analysis Size:** 58KB across 3 files
+**Total Analysis Size:** 276KB across 6 files
 
 ---
 
