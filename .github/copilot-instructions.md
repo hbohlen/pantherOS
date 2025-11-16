@@ -216,6 +216,10 @@ For MCP server integration, configure:
 - `POSTGRES_CONNECTION_STRING`: AgentDB database connection (for AI infrastructure work)
 - `MCP_CONFIG_PATH`: Path to MCP servers configuration (auto-set in mcp dev shell)
 
+**Complete secrets and environment variables documentation:**
+- Quick Reference: [.github/SECRETS-QUICK-REFERENCE.md](SECRETS-QUICK-REFERENCE.md)
+- Full Guide: [.github/SECRETS-AND-ENVIRONMENT-VARIABLES.md](SECRETS-AND-ENVIRONMENT-VARIABLES.md)
+
 ## Getting Help
 
 - Check the master topic map for navigation: [00_MASTER_TOPIC_MAP.md](../00_MASTER_TOPIC_MAP.md)

@@ -42,6 +42,10 @@ export BRAVE_API_KEY="your_brave_api_key"
 export POSTGRES_CONNECTION_STRING="postgresql://user:pass@localhost:5432/agentdb"
 ```
 
+**📚 For complete secrets setup, see:**
+- **Quick Reference**: [.github/SECRETS-QUICK-REFERENCE.md](SECRETS-QUICK-REFERENCE.md)
+- **Full Guide**: [.github/SECRETS-AND-ENVIRONMENT-VARIABLES.md](SECRETS-AND-ENVIRONMENT-VARIABLES.md)
+
 ### 3. Test MCP Server Connection
 
 ```bash
