@@ -9,7 +9,7 @@
 
   # Boot configuration
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.devices = [ "/dev/sda" ];
   boot.loader.grub.useOSProber = false;
   boot.kernelParams = [ "console=ttyS0" ];
 
