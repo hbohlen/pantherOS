@@ -7,11 +7,12 @@
     ./disko.nix
   ];
 
-  # Boot configuration
+  # Boot configuration for UEFI
   boot.loader.grub.enable = true;
-  boot.loader.grub.device = "/dev/sda";
+  boot.loader.grub.efiSupport = true;
+  boot.loader.grub.efiInstallAsRemovable = true;  # For cloud compatibility
+  boot.loader.grub.device = "nodev";  # Don't install to MBR for UEFI
   boot.loader.grub.useOSProber = false;
-  boot.loader.grub.mirroredBoots = [];
   boot.kernelParams = [ "console=ttyS0" ];
 
   # Network configuration
