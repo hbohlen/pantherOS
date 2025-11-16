@@ -17,6 +17,13 @@
 - [PERFORMANCE-OPTIMIZATIONS.md](PERFORMANCE-OPTIMIZATIONS.md) - Potential optimizations
 - [system_config/03_PANTHEROS_NIXOS_BRIEF.md](system_config/03_PANTHEROS_NIXOS_BRIEF.md) - Configuration brief
 
+### ✅ MCP & AI Development (Use These)
+- [.github/MCP-SETUP.md](.github/MCP-SETUP.md) - MCP server setup guide
+- [.github/MCP-VERIFICATION-REPORT.md](.github/MCP-VERIFICATION-REPORT.md) - Comprehensive MCP verification
+- [.github/copilot-instructions.md](.github/copilot-instructions.md) - GitHub Copilot integration
+- [.github/SECRETS-QUICK-REFERENCE.md](.github/SECRETS-QUICK-REFERENCE.md) - Environment variables setup
+- [.github/verify-mcp-config.sh](.github/verify-mcp-config.sh) - Automated validation script
+
 ### ⚠️ Outdated/Planning (Don't Use for Actual Config)
 - [OVH-DEPLOYMENT-GUIDE.md](OVH-DEPLOYMENT-GUIDE.md) - Outdated, use DEPLOYMENT.md instead
 - [DISK-OPTIMIZATION.md](DISK-OPTIMIZATION.md) - Describes unimplemented features
