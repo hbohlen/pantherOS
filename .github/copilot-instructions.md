@@ -220,6 +220,63 @@ For MCP server integration, configure:
 - Quick Reference: [.github/SECRETS-QUICK-REFERENCE.md](SECRETS-QUICK-REFERENCE.md)
 - Full Guide: [.github/SECRETS-AND-ENVIRONMENT-VARIABLES.md](SECRETS-AND-ENVIRONMENT-VARIABLES.md)
 
+## Spec-Driven Development with GitHub Spec Kit
+
+This repository is configured with [GitHub Spec Kit](https://github.com/github/spec-kit), a toolkit for implementing Spec-Driven Development (SDD). This methodology emphasizes creating clear specifications before implementation.
+
+### Available Spec Kit Commands
+
+The following slash commands are available for structured feature development:
+
+#### Core Development Workflow
+
+- `/speckit.constitution` - Create or update project governing principles and development guidelines
+- `/speckit.specify` - Define what you want to build (requirements and user stories)
+- `/speckit.plan` - Create technical implementation plans with your chosen tech stack
+- `/speckit.tasks` - Generate actionable task lists for implementation
+- `/speckit.implement` - Execute all tasks to build the feature according to the plan
+
+#### Quality & Analysis Commands
+
+- `/speckit.clarify` - Clarify underspecified areas (recommended before `/speckit.plan`)
+- `/speckit.analyze` - Cross-artifact consistency & coverage analysis
+- `/speckit.checklist` - Generate custom quality checklists for requirements validation
+- `/speckit.taskstoissues` - Convert task breakdown into GitHub issues
+
+### Spec Kit Directory Structure
+
+```
+.specify/
+├── memory/
+│   └── constitution.md          # Project principles and guidelines
+├── scripts/
+│   └── bash/                    # Helper scripts for feature management
+├── templates/
+│   ├── commands/                # Command definitions
+│   ├── spec-template.md         # Feature specification template
+│   ├── plan-template.md         # Implementation plan template
+│   ├── tasks-template.md        # Task breakdown template
+│   └── checklist-template.md   # Quality checklist template
+└── specs/                       # Feature specifications (created as needed)
+    └── NNN-feature-name/
+        ├── spec.md
+        ├── plan.md
+        ├── tasks.md
+        └── implementation-details/
+```
+
+### Using Spec Kit for New Features
+
+1. **Establish Principles**: Use `/speckit.constitution` to define project guidelines
+2. **Define Feature**: Use `/speckit.specify` to describe what you want to build
+3. **Create Plan**: Use `/speckit.plan` to define technical implementation
+4. **Break Down Tasks**: Use `/speckit.tasks` to create actionable task list
+5. **Implement**: Use `/speckit.implement` to execute the plan
+
+For more information, see:
+- [GitHub Spec Kit Documentation](https://github.com/github/spec-kit)
+- [Spec-Driven Development Guide](https://github.com/github/spec-kit/blob/main/spec-driven.md)
+
 ## Getting Help
 
 - Check the master topic map for navigation: [00_MASTER_TOPIC_MAP.md](../00_MASTER_TOPIC_MAP.md)
