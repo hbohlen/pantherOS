@@ -14,7 +14,7 @@
   boot.kernelParams = [ "console=ttyS0" ];
 
   # Network configuration
-  networking.hostName = "ovh-cloud";
+  networking.hostName = "hetzner-cloud";
   networking.useDHCP = true;
 
   # Enable SSH with key-only authentication

@@ -24,12 +24,28 @@
       modules = [
         ./hosts/servers/ovh-cloud/configuration.nix
         disko.nixosModules.default
-        opnix.nixosModules.default
-        home-manager.nixosModules.home-manager {
-          home-manager.users.hbohlen = ./hosts/servers/ovh-cloud/home.nix;
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-        }
+        # Temporarily disabled for initial deployment to reduce closure size
+        # opnix.nixosModules.default
+        # home-manager.nixosModules.home-manager {
+        #   home-manager.users.hbohlen = ./hosts/servers/ovh-cloud/home.nix;
+        #   home-manager.useGlobalPkgs = true;
+        #   home-manager.useUserPackages = true;
+        # }
+      ];
+    };
+
+    nixosConfigurations.hetzner-cloud = nixpkgs.lib.nixosSystem {
+      inherit system;
+      modules = [
+        ./hosts/servers/hetzner-cloud/configuration.nix
+        disko.nixosModules.default
+        # Temporarily disabled for initial deployment to reduce closure size
+        # opnix.nixosModules.default
+        # home-manager.nixosModules.home-manager {
+        #   home-manager.users.hbohlen = ./hosts/servers/hetzner-cloud/home.nix;
+        #   home-manager.useGlobalPkgs = true;
+        #   home-manager.useUserPackages = true;
+        # }
       ];
     };
 
