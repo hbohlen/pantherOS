@@ -1,0 +1,117 @@
+{
+  "agentdb": {
+    "enabled": true,
+    "indexing": {
+      "autoIndex": true,
+      "includePatterns": [
+        "**/*.md",
+        "**/*.js",
+        "**/*.ts",
+        "**/*.json",
+        "**/*.py",
+        "**/*.go",
+        "**/*.rs",
+        "**/*.java"
+      ],
+      "excludePatterns": [
+        "node_modules/**",
+        ".git/**",
+        "dist/**",
+        "build/**",
+        "target/**"
+      ],
+      "batchSize": 100,
+      "similarityThreshold": 0.8
+    },
+    "memory": {
+      "sessionPersistence": true,
+      "crossSession": true,
+      "patternLearning": true,
+      "maxMemoryMB": 512,
+      "quantization": true
+    },
+    "performance": {
+      "targetQueryTime": 1,
+      "maxConcurrentQueries": 10,
+      "cacheSize": 1000
+    }
+  },
+  "plugin": [
+    "opencode-skills",
+    "agentdb"
+  ],
+  "mcp": {
+    "agentdb": {
+      "type": "local",
+      "command": [
+        "node",
+        "/root/pantherOS/.opencode/mcp/agentdb-server.js"
+      ],
+      "enabled": true,
+      "timeout": 10000,
+      "config": {
+        "indexPath": "/root/pantherOS/.opencode/agentdb/index",
+        "maxMemory": "512MB",
+        "quantization": true
+      }
+    }
+  },
+  "skills": {
+    "systematic-debugging": {
+      "enabled": true,
+      "memory": {
+        "agentdb": true,
+        "focus": [
+          "debugging_patterns",
+          "solution_strategies"
+        ],
+        "sharing": [
+          "writing-plans",
+          "root-cause-tracing"
+        ]
+      }
+    },
+    "writing-plans": {
+      "enabled": true,
+      "memory": {
+        "agentdb": true,
+        "focus": [
+          "plan_templates",
+          "execution_patterns"
+        ],
+        "sharing": [
+          "systematic-debugging",
+          "code-reviewer"
+        ]
+      }
+    },
+    "root-cause-tracing": {
+      "enabled": true,
+      "memory": {
+        "agentdb": true,
+        "focus": [
+          "trace_patterns",
+          "causal_relationships"
+        ],
+        "sharing": [
+          "systematic-debugging",
+          "code-reviewer"
+        ]
+      }
+    },
+    "code-reviewer": {
+      "enabled": true,
+      "memory": {
+        "agentdb": true,
+        "focus": [
+          "review_patterns",
+          "quality_metrics"
+        ],
+        "sharing": [
+          "writing-plans",
+          "root-cause-tracing"
+        ]
+      }
+    }
+  }
+}
