@@ -69,8 +69,9 @@ nix run github:nix-community/nixos-anywhere -- \
 # Or with password (will prompt)
 nix run github:nix-community/nixos-anywhere -- \
   --flake .#ovh-cloud \
-  --target-host root@YOUR_SERVER_IP \
-  --ask-become-pass
+  --target-host root@158.69.218.24 \
+  --disk-config hosts/servers/ovh-cloud/disko.nix \
+  --env-password
 ```
 
 **What happens during deployment:**

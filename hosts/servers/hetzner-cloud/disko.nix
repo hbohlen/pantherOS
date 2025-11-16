@@ -3,9 +3,9 @@
 {
   disko.devices = {
     disk = {
-      # SYSTEM_DISK: Single 200 GiB disk (use /dev/sdb instead of /dev/sda)
+      # Hetzner cloud typically uses /dev/sda for the main disk
       main = {
-        device = lib.mkDefault "/dev/sdb";
+        device = lib.mkDefault "/dev/sda";
         type = "disk";
         content = {
           type = "gpt";
@@ -17,16 +17,6 @@
                 type = "filesystem";
                 format = "vfat";
                 mountOptions = [ "umask=0077" ];
-                mountpoint = "/boot/efi";
-              };
-            };
-            boot = {
-              size = "2G";
-              type = "8300";
-              content = {
-                type = "filesystem";
-                format = "ext4";
-                mountOptions = [ "noatime" ];
                 mountpoint = "/boot";
               };
             };
@@ -37,11 +27,11 @@
                 type = "btrfs";
                 extraArgs = [ "-f" ];  # Force mkfs.btrfs
                 # Btrfs subvolumes will be mounted by NixOS
-                # VM optimization: Use 'ssd' instead of 'ssd_spread' for virtual disks
+                # Cloud server optimization: Use 'ssd' for cloud storage
                 mountOptions = [
                   "noatime"
                   "space_cache=v2"
-                  # Removed autodefrag for VM (hypervisor handles fragmentation)
+                  "compress=zstd"
                 ];
                 subvolumes = {
                   root = {
