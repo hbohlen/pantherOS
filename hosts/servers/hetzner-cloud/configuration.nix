@@ -9,8 +9,9 @@
 
   # Boot configuration
   boot.loader.grub.enable = true;
-  boot.loader.grub.devices = [ "/dev/sda" ];
+  boot.loader.grub.device = "/dev/sda";
   boot.loader.grub.useOSProber = false;
+  boot.loader.grub.mirroredBoots = [];
   boot.kernelParams = [ "console=ttyS0" ];
 
   # Network configuration

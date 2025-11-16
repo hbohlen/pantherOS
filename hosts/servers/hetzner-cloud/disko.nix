@@ -10,10 +10,6 @@
         content = {
           type = "gpt";
           partitions = {
-            BIOS-BOOT = {
-              size = "1M";
-              type = "EF02";  # BIOS boot partition
-            };
             ESP = {
               size = "512M";
               type = "EF00";
@@ -21,7 +17,7 @@
                 type = "filesystem";
                 format = "vfat";
                 mountOptions = [ "umask=0077" ];
-                mountpoint = "/boot/efi";
+                mountpoint = "/boot";
               };
             };
             boot = {
