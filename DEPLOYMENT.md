@@ -1,80 +1,72 @@
 # NixOS VPS Deployment Guide
 
+**AI Agent Context**: Simple deployment guide for the minimal NixOS configuration.
+
 ## Overview
-This guide covers deploying NixOS to your OVH VPS using the configuration in this repository.
+This guide covers deploying NixOS to an OVH VPS using the minimal configuration in this repository.
 
 ## Prerequisites
 
-### Local Machine (Your Laptop)
+### Local Machine
 - Nix installed with flakes enabled
-- SSH access to your VPS (current Fedora installation)
-- 1Password CLI configured with service account token
-- Your service account token: `export OP_SERVICE_ACCOUNT_TOKEN="your-token"`
+- SSH access to target server
+- Git (to clone this repository)
 
 ### Target Server (OVH VPS)
-- Fedora 42 (current installation)
-- 200GB disk
+- Any Linux distribution (will be replaced)
+- 200GB disk (or adjust disko.nix for your size)
 - Root or sudo access
-- At least 2GB RAM (we have 23GB)
+- At least 2GB RAM recommended
 
 ## Deployment Steps
 
-### Step 1: Export 1Password Service Account Token
+### Step 1: Clone Repository
 ```bash
-export OP_SERVICE_ACCOUNT_TOKEN="your-service-account-token-here"
+git clone https://github.com/hbohlen/pantherOS.git
+cd pantherOS
 ```
 
-### Step 2: Verify Configuration Structure
-```bash
-cd ~/dev/pantherOS
+### Step 2: Review and Customize Configuration
 
-# Verify files exist
-ls -la flake.nix
-ls -la hosts/servers/ovh-cloud/
+**AI Agent Context**: Before deploying, review and customize these files.
+
+```bash
+# Review system configuration
+cat hosts/servers/ovh-cloud/configuration.nix
+
+# Review disk layout (adjust if needed)
+cat hosts/servers/ovh-cloud/disko.nix
+
+# Review user configuration
+cat hosts/servers/ovh-cloud/home.nix
 ```
 
-Expected files:
-- `flake.nix` - Main flake definition
-- `hosts/servers/ovh-cloud/configuration.nix` - System configuration
-- `hosts/servers/ovh-cloud/disko-config.nix` - Disk layout
-- `hosts/servers/ovh-cloud/home.nix` - User configuration
-
-### Step 3: Lock Flake (First Time Only)
-```bash
-nix flake lock
+**Important**: Add your SSH public key to `configuration.nix`:
+```nix
+users.users.hbohlen.openssh.authorizedKeys.keys = [
+  "ssh-ed25519 AAAA... your-key-here"
+];
 ```
 
-### Step 4: Verify the Configuration Builds
+### Step 3: Test Configuration Build
 ```bash
-# Build the system configuration
-nix build .#nixosConfigurations.ovh-cloud.config.system.build.nixosSystem
+# Check flake syntax
+nix flake check
 
-# Or test in a VM
-nix run github:nix-community/nixos-anywhere -- --flake .#ovh-cloud --vm-test
+# Test build (doesn't deploy)
+nix build .#nixosConfigurations.ovh-cloud.config.system.build.toplevel
 ```
 
-### Step 5: Deploy to VPS via nixos-anywhere
+### Step 4: Deploy to Server
 
-**Method A: Password Authentication (for first-time setup)**
+**Using nixos-anywhere (recommended):**
 ```bash
+# Deploy with SSH key authentication
 nix run github:nix-community/nixos-anywhere -- \
   --flake .#ovh-cloud \
-  --target-host root@<YOUR_VPS_IP_ADDRESS> \
-  --disk-config hosts/servers/ovh-cloud/disko-config.nix
-```
+  --target-host root@YOUR_SERVER_IP
 
-**Method B: SSH Key Authentication (recommended)**
-```bash
-nix run github:nix-community/nixos-anywhere -- \
-  --flake .#ovh-cloud \
-  --target-host root@<YOUR_VPS_IP_ADDRESS> \
-  --disk-config hosts/servers/ovh-cloud/disko-config.nix \
-  -i ~/.ssh/id_ed25519
-```
-
-**Method C: Using SSH Password (via env variable)**
-```bash
-export SSHPASS="your-root-password"
+# Or with password (will prompt)
 nix run github:nix-community/nixos-anywhere -- \
   --flake .#ovh-cloud \
   --target-host root@158.69.218.24 \
@@ -82,236 +74,256 @@ nix run github:nix-community/nixos-anywhere -- \
   --env-password
 ```
 
-### Step 6: Wait for Installation
-The deployment will:
-1. Partition the disk (EFI + Root)
-2. Install NixOS base system
-3. Apply configuration
-4. Reboot automatically
+**What happens during deployment:**
+1. Connects to target server via SSH
+2. Partitions disk according to disko.nix
+3. Installs NixOS base system
+4. Applies configuration from configuration.nix
+5. Reboots into new NixOS system
 
-**Duration:** ~5-10 minutes
+**Duration:** ~5-15 minutes depending on network speed
 
-### Step 7: Verify Deployment
+### Step 5: Verify Deployment
 
 **SSH into the new NixOS system:**
 ```bash
-ssh hbohlen@<YOUR_VPS_IP_ADDRESS>
-# OR if using Tailscale, once connected:
-ssh hbohlen@ovh-cloud
+ssh hbohlen@YOUR_SERVER_IP
 ```
 
 **Check system status:**
 ```bash
 # Verify NixOS
 cat /etc/os-release
+# Should show: NixOS 25.05
 
 # Check services
-systemctl status tailscaled
 systemctl status sshd
 
 # Verify packages
 nix --version
-claude --version
-gh --version
-op --version
+fish --version
 ```
 
-### Step 8: Connect to Tailscale
+### Step 6: Test User Environment
 
-**If not auto-connected:**
 ```bash
-sudo tailscale up --authkey="$(cat /var/run/secrets/opnix-1password/op://pantherOS/tailscale/authKey | head -n 1)"
-```
+# Check Home Manager
+home-manager --version
 
-**Or manually:**
-```bash
-sudo tailscale up
-# Follow authentication URL
-```
+# Verify shell
+echo $SHELL
+# Should show: /run/current-system/sw/bin/fish
 
-### Step 9: Verify All Services
-
-**Claude Code:**
-```bash
-# Set your API key
-export ANTHROPIC_API_KEY="your-api-key"
-
-# Test Claude
-claude doctor
-```
-
-**1Password CLI:**
-```bash
-# Authenticate (one-time)
-op signin
-
-# Verify access
-op vault list
-```
-
-**GitHub CLI:**
-```bash
-# Authenticate with GitHub
-gh auth login
-
-# Use token from 1Password
-export GITHUB_TOKEN=$(op read op://pantherOS/github-pat/token)
-echo $GITHUB_TOKEN | gh auth login --with-token
+# Test installed tools
+starship --version
+eza --version
+ripgrep --version
 ```
 
 ## Configuration Details
 
-### Disk Layout
+**AI Agent Context**: What's actually configured in the system.
+
+### Disk Layout (via disko.nix)
 ```
-/dev/sda
-├── /dev/sda1 (ESP) - 512MB, vfat, mounted at /boot
-└── /dev/sda2 (root) - remaining space, ext4, mounted at /
+/dev/sda (default device, configurable)
+├── ESP (100MB) - vfat, mounted at /boot/efi
+├── Boot (1GB) - ext4, mounted at /boot
+└── Root (remaining) - btrfs with subvolumes
+    ├── root → /
+    ├── home → /home
+    └── var → /var
 ```
 
 ### Enabled Services
-- **OpenSSH**: Key-based authentication only
-- **Tailscale**: VPN with auto-connect
-- **1Password CLI**: Secret management
-- **Claude Code**: AI coding assistant
-- **GitHub CLI**: GitHub integration
-- **Firewall**: Enabled with Tailscale access
+- **OpenSSH**: Key-based authentication only (password auth disabled)
+- **Firewall**: Basic firewall enabled
 
 ### User Accounts
-- **root**: SSH keys from 1Password (no password)
-- **hbohlen**: Admin user with wheel group
+- **hbohlen**: Normal user with wheel, networkmanager, podman groups
+- **Sudo**: Enabled for wheel group without password
 
-### Secrets (via OpNix)
-All secrets retrieved from 1Password vault:
-- SSH public keys (yogaSSH, zephyrusSSH, phoneSSH, desktopSSH)
-- Tailscale auth key
-- GitHub PAT
+### System Packages
+- Basic tools: htop, unzip, zip, openssh
+- Build tools: gcc, gnumake, pkg-config
 
-### Network Access
-- **Primary**: SSH over standard IP
-- **VPN**: SSH over Tailscale (once connected)
+### User Packages (via Home Manager)
+- Shell: fish (with starship prompt)
+- CLI tools: eza, ripgrep, bottom, zoxide
+- Dev tools: gh, git, neovim, direnv, nix-direnv
+- Utilities: 1password-cli (for secrets management)
+
+### System Settings
+- Timezone: UTC
+- Locale: en_US.UTF-8
+- Console: US keymap, Lat2-Terminus16 font
+
+## Making Configuration Changes
+
+### Update System Configuration
+
+```bash
+# 1. Edit configuration on your local machine
+vim hosts/servers/ovh-cloud/configuration.nix
+
+# 2. Test build
+nix build .#nixosConfigurations.ovh-cloud.config.system.build.toplevel
+
+# 3. Deploy changes
+# Option A: From server (if repo is cloned there)
+ssh hbohlen@SERVER_IP
+cd /path/to/pantherOS
+sudo nixos-rebuild switch --flake .#ovh-cloud
+
+# Option B: Remote deployment
+nixos-rebuild switch --flake .#ovh-cloud --target-host hbohlen@SERVER_IP --use-remote-sudo
+```
+
+### Update User Configuration
+
+```bash
+# Edit home.nix
+vim hosts/servers/ovh-cloud/home.nix
+
+# Deploy (after system rebuild)
+home-manager switch --flake .#ovh-cloud
+```
+
+### Rollback to Previous Generation
+
+```bash
+# On the server
+sudo nixos-rebuild switch --rollback
+
+# Or select from GRUB menu at boot
+```
 
 ## Troubleshooting
 
-### Can't Connect After Reboot
+### Can't Connect After Deployment
 ```bash
-# Check if SSH is running
-systemctl status sshd
+# Check if SSH is accessible
+ping SERVER_IP
 
-# Check firewall
-sudo iptables -L
+# Try connecting with verbose output
+ssh -v hbohlen@SERVER_IP
 
-# Check Tailscale status
-sudo tailscale status
+# Check if server rebooted successfully
+# (may need console access via hosting provider)
 ```
 
-### Tailscale Not Auto-Connecting
-```bash
-# Check systemd service
-systemctl status tailscale-autoconnect
+### Build Errors
 
-# Manual connection
-sudo tailscale up --authkey="$(cat /var/run/secrets/opnix-1password/op://pantherOS/tailscale/authKey | head -n 1)"
+```bash
+# Check flake syntax
+nix flake check
+
+# Show detailed errors
+nix build .#nixosConfigurations.ovh-cloud.config.system.build.toplevel --show-trace
 ```
 
-### 1Password CLI Not Working
-```bash
-# Set service account token
-export OP_SERVICE_ACCOUNT_TOKEN="your-token"
+### Deployment Hangs
 
-# Verify authentication
-op whoami
+```bash
+# If nixos-anywhere hangs, you may need to:
+# 1. Check server is responsive
+# 2. Verify SSH access
+# 3. Check disk space on target
+# 4. Review deployment logs
 ```
 
-### Configuration Changes
-```bash
-# Edit configuration
-vim ~/dev/pantherOS/hosts/servers/ovh-cloud/configuration.nix
+## Common Tasks
 
-# Rebuild and switch
-nixos-rebuild switch --flake ~/dev/pantherOS#ovh-cloud
+### Add System Package
 
-# Or from remote
-nixos-rebuild switch --flake git@github.com:youruser/pantherOS.git#ovh-cloud --target-host root@SERVER_IP
-```
-
-### Rollback
-```bash
-# List previous generations
-sudo nix-env --list-generations
-
-# Rollback to previous generation
-sudo nix-env --rollback
-
-# Or from GRUB menu (select previous entry)
-```
-
-## Post-Deployment
-
-### Update Configurations
-1. Clone this repo on the server: `git clone https://github.com/youruser/pantherOS.git`
-2. Make changes to `hosts/servers/ovh-cloud/configuration.nix`
-3. Rebuild: `nixos-rebuild switch --flake ./pantherOS#ovh-cloud`
-
-### Add More Services
-Edit `configuration.nix` and add:
 ```nix
-# Example: Add nginx
-services.nginx.enable = true;
-
-# Example: Add docker
-virtualisation.docker.enable = true;
-
-# Rebuild
-nixos-rebuild switch --flake .#ovh-cloud
+# In configuration.nix
+environment.systemPackages = with pkgs; [
+  htop
+  # Add your package here
+  vim
+];
 ```
 
-### Backup Configuration
-```bash
-# Commit to git
-git add .
-git commit -m "Update configuration"
-git push
+### Add User Package
 
-# Or copy configuration
-cp -r hosts/servers/ovh-cloud ~/backup-nixos-config-$(date +%Y%m%d)
+```nix
+# In home.nix
+home.packages = with pkgs; [
+  starship
+  # Add your package here
+  bat
+];
+```
+
+### Enable a Service
+
+```nix
+# In configuration.nix
+services.nginx = {
+  enable = true;
+  # ... additional configuration
+};
+```
+
+### Update All Packages
+
+```bash
+# Update flake inputs
+nix flake update
+
+# Review changes
+git diff flake.lock
+
+# Rebuild system
+sudo nixos-rebuild switch --flake .#ovh-cloud
+```
+
+### Clean Old Generations
+
+```bash
+# Remove old system generations (keep last 5)
+sudo nix-collect-garbage --delete-older-than 30d
+
+# Or keep specific number
+sudo nix-collect-garbage --delete-generations +5
 ```
 
 ## Useful Commands
 
-### System Info
+### System Management
 ```bash
-nixos-info                    # Show NixOS information
-systemctl list-units --failed # Check failed services
-journalctl -p err -b         # Check error logs
+# View system information
+nixos-version
+
+# Check failed services
+systemctl list-units --failed
+
+# View system logs
+journalctl -b  # current boot
+journalctl -p err  # errors only
 ```
 
-### Nix Commands
+### Package Management
 ```bash
-nix search nixpkgs PACKAGE    # Search for packages
-nix-env -iA nixos.PACKAGE     # Install package (non-declarative)
-nix-collect-garbage          # Clean old generations
-nixos-rebuild build          # Build system without switching
+# Search for packages
+nix search nixpkgs PACKAGE_NAME
+
+# Show package info
+nix-env -qa --description PACKAGE_NAME
+
+# Build without switching
+nixos-rebuild build --flake .#ovh-cloud
 ```
 
-### Service Management
-```bash
-systemctl restart SERVICENAME   # Restart service
-systemctl edit SERVICENAME      # Edit service override
-journalctl -u SERVICENAME -f    # Follow service logs
-```
-
-## Additional Resources
+## Resources
 
 - [NixOS Manual](https://nixos.org/manual/nixos/stable/)
-- [NixOS Wiki](https://nixos.wiki/)
-- [nixos-anywhere Documentation](https://github.com/nix-community/nixos-anywhere)
-- [OpNix Documentation](https://github.com/brizzbuzz/opnix)
-- [Home Manager Manual](https://nix-community.github.io/home-manager/)
+- [Nix Flakes](https://nixos.wiki/wiki/Flakes)
+- [Home Manager](https://nix-community.github.io/home-manager/)
+- [Disko](https://github.com/nix-community/disko)
+- [nixos-anywhere](https://github.com/nix-community/nixos-anywhere)
 
 ---
 
-**Note:** This configuration is optimized for a remote development server with emphasis on:
-- Security (key-only SSH, firewall)
-- Convenience (Tailscale, 1Password, Claude Code)
-- Maintainability (declarative configuration, flakes)
-- Performance (minimal overhead, efficient tooling)
+**AI Agent Context**: This deployment guide reflects the actual minimal configuration. Services like Tailscale, 1Password integration, Claude Code, and advanced features mentioned in other docs are NOT implemented in the current configuration.
