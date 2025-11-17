@@ -6,6 +6,9 @@
     "ghcr.io/devcontainers/features/github-cli:1": {},
     "ghcr.io/devcontainers/features/node:1": {
       "version": "20"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
     }
   },
   "customizations": {
@@ -45,7 +48,7 @@
       }
     }
   },
-  "postCreateCommand": "nix-env -iA nixpkgs.cachix && cachix use nix-community",
+  "postCreateCommand": "bash -c 'nix-env -iA nixpkgs.cachix && cachix use nix-community && curl -LsSf https://astral.sh/uv/install.sh | sh && export PATH=\"$HOME/.local/bin:$PATH\" && uv tool install specify-cli --from git+https://github.com/github/spec-kit.git'",
   "postStartCommand": "nix develop",
   "remoteUser": "nixos",
   "mounts": [
