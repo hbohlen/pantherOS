@@ -20,8 +20,9 @@ docs/archive/
 ├── future-features/            # Features planned but not yet configured (1 file)
 └── planning/
     ├── ai-infrastructure/      # AI infrastructure enhancement plans (10 files)
+    ├── architecture/           # Aspirational architecture diagrams (2 files)
     ├── desktop-environment/    # Dank Linux desktop environment docs (3 files)
-    └── performance-ideas.md    # Performance optimization ideas (1 file)
+    └── PERFORMANCE-OPTIMIZATIONS.md  # Performance optimization ideas (1 file)
 ```
 
 ---
@@ -100,6 +101,26 @@ This document lists potential performance optimizations to consider for future i
 Setup guide for OpNix secrets management. OpNix is imported in flake.nix but explicitly disabled to reduce closure size during initial deployment. This guide will be useful when OpNix integration is enabled.
 
 **Status:** Future feature - archived for reference when feature is implemented
+
+---
+
+### Architecture Diagrams (2 files)
+
+**Archived:** 2025-11-17 (Batch 4)  
+**Reason:** Describe aspirational modular architecture not yet implemented  
+**Location:** `docs/archive/planning/architecture/`
+
+These Mermaid diagrams describe a comprehensive modular NixOS architecture with:
+- Layered module system (core, profiles, hosts)
+- Multiple reusable profiles (workstation, server, common)
+- Hardware-specific optimizations
+- Advanced networking and security modules
+
+**Status:** Aspirational architecture - current implementation is much simpler (see CONFIGURATION-SUMMARY.md for actual structure)
+
+**Files:**
+1. `ARCHITECTURE_DIAGRAMS.md` - System architecture diagrams (1295 words)
+2. `ARCHITECTURE_DIAGRAMS_SYSTEMS.md` - System integration diagrams (1490 words)
 
 ---
 
