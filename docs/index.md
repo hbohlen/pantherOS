@@ -20,6 +20,12 @@ Welcome to the pantherOS documentation hub. This page provides an organized over
   - Agent usage guide for GitHub Copilot
   - NixOS-specific considerations
   - Troubleshooting common issues
+- **[Spec Kit Practical Examples](tools/spec-kit-examples.md)** ⭐ New!
+  - Real-world feature development workflows
+  - Complete PostgreSQL implementation example
+  - Quick specification examples
+  - Iterative development patterns
+  - Common workflow templates
 
 #### AI Development & MCP Servers
 - [MCP Setup Guide](../.github/MCP-SETUP.md) - Model Context Protocol server configuration

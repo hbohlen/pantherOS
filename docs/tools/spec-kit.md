@@ -11,6 +11,7 @@ This guide explains how to use [GitHub Spec Kit](https://github.com/github/spec-
 - [Agent Usage Guide](#agent-usage-guide)
 - [NixOS-Specific Considerations](#nixos-specific-considerations)
 - [Troubleshooting](#troubleshooting)
+- [Practical Examples](spec-kit-examples.md) ⭐ Real-world workflows and examples
 
 ## What is Spec Kit?
 
@@ -755,13 +756,18 @@ This is expected behavior with the current setup. The Nix development shells are
 
 ## Additional Resources
 
+### Spec Kit Documentation
 - [GitHub Spec Kit Repository](https://github.com/github/spec-kit)
 - [Spec-Driven Development Guide](https://github.com/github/spec-kit/blob/main/spec-driven.md)
 - [Video Overview](https://www.youtube.com/watch?v=a9eR1xsfvHg)
 - [Supported AI Agents](https://github.com/github/spec-kit#-supported-ai-agents)
-- [pantherOS Constitution](../../.specify/memory/constitution.md)
-- [pantherOS Copilot Instructions](../../.github/copilot-instructions.md)
-- [pantherOS Master Topic Map](../../00_MASTER_TOPIC_MAP.md)
+
+### pantherOS Documentation
+- **[Practical Examples](spec-kit-examples.md)** - Real-world Spec Kit workflows
+- [pantherOS Constitution](../../.specify/memory/constitution.md) - Project principles
+- [pantherOS Copilot Instructions](../../.github/copilot-instructions.md) - Copilot integration
+- [pantherOS Master Topic Map](../../00_MASTER_TOPIC_MAP.md) - Documentation index
+- [Devcontainer Guide](../../.github/devcontainer-readme.md) - Container setup
 
 ## Contributing to This Guide
 
