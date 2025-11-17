@@ -224,6 +224,120 @@ For MCP server integration, configure:
 
 This repository is configured with [GitHub Spec Kit](https://github.com/github/spec-kit), a toolkit for implementing Spec-Driven Development (SDD). This methodology emphasizes creating clear specifications before implementation.
 
+### 🔴 GLOBAL RULES - MUST FOLLOW
+
+These rules apply to **ALL** development work. No exceptions without explicit justification.
+
+#### 1. Prefer Spec-First Workflows
+
+**ALWAYS follow this sequence for new features or major changes:**
+
+1. **Check for existing specs** under `/docs/specs/` FIRST
+2. **If missing or incomplete**, help create or refine specs **BEFORE** editing code
+3. **No code changes** without corresponding spec (except trivial bug fixes)
+
+**What requires a spec:**
+- ✅ New features (any size)
+- ✅ Major refactoring or architectural changes
+- ✅ Breaking changes
+- ✅ Security improvements
+- ✅ Infrastructure changes
+
+**What doesn't require a spec:**
+- ⚪ Trivial bug fixes (< 10 lines, obvious fix)
+- ⚪ Routine dependency updates
+- ⚪ Minor documentation typo fixes
+
+#### 2. Use Spec Kit Commands Appropriately
+
+**Always use the correct command for each phase:**
+
+| When to use | Command | Purpose |
+|-------------|---------|---------|
+| Starting new feature | `/speckit.specify` | Define what and why |
+| Requirements unclear | `/speckit.clarify` | Fill specification gaps |
+| Ready to design | `/speckit.plan` | Create technical implementation plan |
+| Ready to break down work | `/speckit.tasks` | Generate actionable task breakdown |
+| Ready to implement | `/speckit.implement` | Execute the implementation plan |
+| Validating quality | `/speckit.analyze` | Check consistency and coverage |
+| Creating validation criteria | `/speckit.checklist` | Generate acceptance checklist |
+| Converting to issues | `/speckit.taskstoissues` | Create GitHub issues from tasks |
+
+#### 3. Documentation Expectations
+
+**Treat `/docs` as the single source of truth:**
+
+- **Update docs in the same PR** as code changes
+- **Keep docs sharded**: One major concept per file, with clear cross-links
+- **When adding/modifying significant behavior**: Update or create docs under `/docs`
+- **Documentation structure**:
+  - `/docs/specs/` - Feature specifications (created via Spec Kit)
+  - `/docs/architecture/` - System architecture and ADRs
+  - `/docs/howto/` - Task-oriented guides
+  - `/docs/reference/` - Configuration and API reference
+  - `/docs/contributing/` - Development workflow guides
+  - `/docs/examples/` - Code examples and templates
+
+#### 4. TODO Lists and Guidance
+
+**When generating TODO lists, for each task indicate:**
+
+1. **Which `/speckit.*` commands should be used** (if any)
+2. **Which file(s) in `/docs` or `/docs/specs` should be updated**
+3. **Dependencies** between tasks
+
+**Example format:**
+```markdown
+- [ ] Create PostgreSQL spec
+  - Commands: `/speckit.specify`, `/speckit.clarify`
+  - Update: `/docs/specs/010-postgresql/spec.md` (new)
+  - Update: `/docs/index.md` (link new spec)
+
+- [ ] Implement basic PostgreSQL service
+  - Depends on: PostgreSQL spec completed
+  - Commands: None (implementation task)
+  - Update: `/docs/examples/nixos/postgresql-basic.md` (new)
+  - Update: `/docs/reference/configuration-options.md`
+```
+
+### BEHAVIOR GUIDELINES
+
+#### Always Propose Tests and Documentation
+
+When modifying code, **ALWAYS propose:**
+
+1. **Tests** - What tests should be added/updated?
+2. **Documentation** - What docs in `/docs` need updating?
+3. **Examples** - Should we add code examples?
+
+#### Explain Which Spec You're Implementing
+
+When implementing features, **ALWAYS explain:**
+
+1. **Which spec** (e.g., "Implementing spec 009-gnome-desktop")
+2. **Which part of the spec** (e.g., "Section 3.2: Display Manager Configuration")
+3. **How implementation aligns** with spec requirements
+
+#### Handle Ambiguity Proactively
+
+**When there is ambiguity:**
+
+1. **Ask clarifying questions** OR
+2. **Suggest updating the relevant spec** using `/speckit.clarify`
+
+**Never:**
+- ❌ Make assumptions without documenting them
+- ❌ Proceed with unclear requirements
+- ❌ Implement features that contradict the spec
+
+#### Prefer Small, Reviewable Changes
+
+**Avoid large, monolithic changes:**
+
+- Align changes with specific tasks from `/speckit.tasks`
+- One task ≈ one PR (generally)
+- Reference spec and task in PR title: `feat: Add GDM config (spec-009, task 3.2)`
+
 ### Available Spec Kit Commands
 
 The following slash commands are available for structured feature development:
@@ -245,37 +359,52 @@ The following slash commands are available for structured feature development:
 
 ### Spec Kit Directory Structure
 
+**Spec Kit configuration** (templates and commands):
 ```
 .specify/
 ├── memory/
 │   └── constitution.md          # Project principles and guidelines
 ├── scripts/
 │   └── bash/                    # Helper scripts for feature management
-├── templates/
-│   ├── commands/                # Command definitions
-│   ├── spec-template.md         # Feature specification template
-│   ├── plan-template.md         # Implementation plan template
-│   ├── tasks-template.md        # Task breakdown template
-│   └── checklist-template.md   # Quality checklist template
-└── specs/                       # Feature specifications (created as needed)
-    └── NNN-feature-name/
-        ├── spec.md
-        ├── plan.md
-        ├── tasks.md
-        └── implementation-details/
+└── templates/
+    ├── spec-template.md         # Feature specification template
+    ├── plan-template.md         # Implementation plan template
+    ├── tasks-template.md        # Task breakdown template
+    └── checklist-template.md   # Quality checklist template
+
+.github/agents/
+└── speckit.*.md                 # Agent command definitions
+```
+
+**Feature specifications** (created as needed):
+```
+docs/specs/
+├── README.md                    # Specs directory guide
+└── NNN-feature-name/            # Each feature gets its own directory
+    ├── spec.md                  # Feature specification (required)
+    ├── plan.md                  # Implementation plan (optional)
+    ├── tasks.md                 # Task breakdown (optional)
+    └── implementation-details/  # Additional artifacts (optional)
 ```
 
 ### Using Spec Kit for New Features
 
-1. **Establish Principles**: Use `/speckit.constitution` to define project guidelines
-2. **Define Feature**: Use `/speckit.specify` to describe what you want to build
-3. **Create Plan**: Use `/speckit.plan` to define technical implementation
-4. **Break Down Tasks**: Use `/speckit.tasks` to create actionable task list
-5. **Implement**: Use `/speckit.implement` to execute the plan
+**Standard workflow (follow this sequence):**
 
-For more information, see:
-- [GitHub Spec Kit Documentation](https://github.com/github/spec-kit)
-- [Spec-Driven Development Guide](https://github.com/github/spec-kit/blob/main/spec-driven.md)
+1. **Check Existing Specs**: Search `/docs/specs/` first
+2. **Create Specification**: Use `/speckit.specify` to describe what you want to build
+3. **Clarify Requirements**: Use `/speckit.clarify` to fill gaps (recommended)
+4. **Create Technical Plan**: Use `/speckit.plan` to define implementation approach
+5. **Break Down Tasks**: Use `/speckit.tasks` to create actionable task list
+6. **Implement**: Use `/speckit.implement` to execute the plan (or work manually)
+7. **Validate**: Use `/speckit.analyze` and `/speckit.checklist` for quality assurance
+
+**Complete workflow documentation:**
+- [Spec-Driven Workflow Guide](../docs/contributing/spec-driven-workflow.md) - Comprehensive guide with examples
+- [Specs Directory README](../docs/specs/README.md) - Spec structure and organization
+- [Spec Kit Examples](../docs/tools/spec-kit-examples.md) - Real-world examples
+- [GitHub Spec Kit Documentation](https://github.com/github/spec-kit) - Upstream project
+- [Spec-Driven Development Guide](https://github.com/github/spec-kit/blob/main/spec-driven.md) - SDD methodology
 
 ## Getting Help
 
