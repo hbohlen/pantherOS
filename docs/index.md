@@ -2,30 +2,60 @@
 
 Welcome to the pantherOS documentation hub. This page provides an organized overview of all documentation resources in the repository.
 
+## 🔴 Important: Spec-First Development
+
+**This project uses Spec-Driven Development (SDD).** Before adding features or making major changes:
+
+1. **Check for existing specs** in [/docs/specs/](specs/)
+2. **Create a spec first** if one doesn't exist (use `/speckit.specify`)
+3. **Then implement** following the spec
+
+👉 See [Spec-Driven Workflow Guide](contributing/spec-driven-workflow.md) for complete instructions.
+
 ## Quick Links
 
 - [Main README](../README.md) - Repository overview and quick start
 - [Master Topic Map](../00_MASTER_TOPIC_MAP.md) - Complete documentation index
 - [Deployment Guide](../DEPLOYMENT.md) - How to deploy pantherOS configurations
+- [**Spec-Driven Workflow**](contributing/spec-driven-workflow.md) - How we develop features
 
 ## Documentation by Category
 
 ### Development Tools & Workflows
 
-#### Spec-Driven Development
-- **[GitHub Spec Kit Integration Guide](tools/spec-kit.md)** ⭐ New!
+#### 🎯 Spec-Driven Development (Start Here!)
+
+- **[Spec-Driven Workflow Guide](contributing/spec-driven-workflow.md)** 🔴 **READ THIS FIRST**
+  - Complete SDD workflow with global rules
+  - When and how to create specs
+  - Using Spec Kit commands effectively
+  - TODO format with spec references
+  - Integration with development workflow
+  - Examples and troubleshooting
+
+- **[Feature Specifications Directory](specs/)** 📋
+  - All feature specs in one place
+  - Spec structure and organization
+  - How to create and maintain specs
+  - Spec lifecycle and status indicators
+
+#### Spec Kit Tools & References
+
+- **[GitHub Spec Kit Integration Guide](tools/spec-kit.md)**
   - Complete guide for using Spec Kit with pantherOS
   - Installation instructions for uv and specify-cli
   - Detailed command reference with examples
   - Agent usage guide for GitHub Copilot
   - NixOS-specific considerations
   - Troubleshooting common issues
-- **[Spec Kit Quick Reference](tools/spec-kit-quick-reference.md)** ⭐ New!
+
+- **[Spec Kit Quick Reference](tools/spec-kit-quick-reference.md)**
   - Fast command reference and cheat sheet
   - Common workflows at a glance
   - Installation quick start
   - Troubleshooting shortcuts
-- **[Spec Kit Practical Examples](tools/spec-kit-examples.md)** ⭐ New!
+
+- **[Spec Kit Practical Examples](tools/spec-kit-examples.md)**
   - Real-world feature development workflows
   - Complete PostgreSQL implementation example
   - Quick specification examples
@@ -101,9 +131,10 @@ These documents describe the planned "Dank Linux" desktop environment (not yet i
 
 ### Specifications & Planning
 
+- **[Feature Specifications](specs/)** - All feature specs (main location)
 - [Spec Kit README](../.specify/README.md) - Spec Kit configuration overview
 - [pantherOS Constitution](../.specify/memory/constitution.md) - Project principles
-- [Feature Specifications](../.specify/specs/) - Individual feature specs
+- [Roadmap: Docs & Specs](roadmap-docs-and-specs.md) - Documentation improvement plan
 
 ## Documentation Status Legend
 
@@ -115,19 +146,35 @@ These documents describe the planned "Dank Linux" desktop environment (not yet i
 
 ### For New Contributors
 
+**🔴 IMPORTANT: This project uses Spec-Driven Development**
+
 1. Start with the [Main README](../README.md)
-2. Review the [pantherOS Constitution](../.specify/memory/constitution.md)
-3. Set up your development environment:
+2. **Read [Spec-Driven Workflow Guide](contributing/spec-driven-workflow.md)** 📋
+3. Review the [pantherOS Constitution](../.specify/memory/constitution.md)
+4. Set up your development environment:
    - Follow [MCP Setup Guide](../.github/MCP-SETUP.md)
    - Read [Spec Kit Integration Guide](tools/spec-kit.md)
-4. Explore example configurations in `hosts/`
+5. Browse existing specs in [/docs/specs/](specs/)
+6. Explore example configurations in `hosts/`
+
+**First contribution?** Pick a small task from [docs/specs/](specs/) or the [roadmap](roadmap-docs-and-specs.md).
 
 ### For AI Agents (GitHub Copilot, etc.)
 
-1. Review [GitHub Copilot Instructions](../.github/copilot-instructions.md)
-2. Understand [Spec-Driven Development workflow](tools/spec-kit.md#agent-usage-guide)
-3. Check [pantherOS Constitution](../.specify/memory/constitution.md) for project principles
-4. Use [Master Topic Map](../00_MASTER_TOPIC_MAP.md) to navigate documentation
+**⚠️ CRITICAL: Always follow Spec-Driven Development workflow**
+
+1. **Review [GitHub Copilot Instructions](../.github/copilot-instructions.md)** (includes global rules)
+2. **Understand [Spec-Driven Workflow](contributing/spec-driven-workflow.md)** (required reading)
+3. **Check [Feature Specs](specs/)** before making any code changes
+4. Use [pantherOS Constitution](../.specify/memory/constitution.md) for project principles
+5. Navigate with [Master Topic Map](../00_MASTER_TOPIC_MAP.md)
+
+**Key rules for AI agents:**
+- ✅ Always check `/docs/specs/` first
+- ✅ Create specs before code using `/speckit.specify`
+- ✅ Reference specs in all responses
+- ✅ Update `/docs` in same PR as code changes
+- ✅ Generate TODOs with spec references and Spec Kit commands
 
 ### For System Administrators
 
