@@ -17,9 +17,11 @@ These documents contain valuable planning and design work that may be useful for
 ```
 docs/archive/
 ├── README.md (this file)
+├── future-features/            # Features planned but not yet configured (1 file)
 └── planning/
-    ├── ai-infrastructure/       # AI infrastructure enhancement plans (10 files)
-    └── desktop-environment/     # Dank Linux desktop environment docs (3 files)
+    ├── ai-infrastructure/      # AI infrastructure enhancement plans (10 files)
+    ├── desktop-environment/    # Dank Linux desktop environment docs (3 files)
+    └── performance-ideas.md    # Performance optimization ideas (1 file)
 ```
 
 ---
@@ -74,6 +76,43 @@ These documents describe "Dank Linux" - a comprehensive desktop environment setu
 1. `00_dank_linux_master_guide.md` - Comprehensive Dank Linux guide (2561 words)
 2. `02_installation_guide.md` - Dank Linux installation guide (797 words)
 3. `04_keybindings_reference.md` - Keybindings reference (1541 words)
+
+---
+
+### Performance Optimization Ideas (1 file)
+
+**Archived:** 2025-11-17 (Batch 3)  
+**Reason:** Planning document without implementation path  
+**Location:** `docs/archive/planning/performance-ideas.md`
+
+This document lists potential performance optimizations to consider for future implementation. These are valuable ideas but belong in issue tracker rather than active documentation until implementation begins.
+
+**Status:** Planning ideas - may convert to GitHub issues
+
+---
+
+### OpNix Setup Guide (1 file)
+
+**Archived:** 2025-11-17 (Batch 3)  
+**Reason:** OpNix imported but not currently configured  
+**Location:** `docs/archive/future-features/OPNIX-SETUP.md`
+
+Setup guide for OpNix secrets management. OpNix is imported in flake.nix but explicitly disabled to reduce closure size during initial deployment. This guide will be useful when OpNix integration is enabled.
+
+**Status:** Future feature - archived for reference when feature is implemented
+
+---
+
+### Obsolete Files Removed (Batch 3)
+
+**Removed:** 2025-11-17  
+**Reason:** Superseded or describing non-existent features
+
+The following files were completely removed as they were superseded by other documentation or described features that won't be implemented:
+
+1. `OVH-DEPLOYMENT-GUIDE.md` - Superseded by comprehensive DEPLOYMENT.md
+2. `DISK-OPTIMIZATION.md` - Unimplemented disk optimizations (current disko configs are canonical)
+3. `NIXOS-QUICKSTART.md` - Unimplemented quickstart (README.md + DEPLOYMENT.md provide quickstart)
 
 ---
 
