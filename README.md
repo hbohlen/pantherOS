@@ -140,6 +140,7 @@ This repository includes comprehensive MCP (Model Context Protocol) server confi
 - **Setup Guide**: `.github/MCP-SETUP.md`
 - **Verification Report**: `.github/MCP-VERIFICATION-REPORT.md`
 - **Validation Script**: `.github/verify-mcp-config.sh`
+- **CI/CD Workflow**: `.github/workflows/mcp-verification.yml` (with firewall handling)
 
 **Quick Verification:**
 ```bash

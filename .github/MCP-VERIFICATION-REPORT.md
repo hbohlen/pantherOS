@@ -207,11 +207,63 @@ devShells.${system}.ai = pkgs.mkShell {
 - `eamodio.gitlens`
 - `ms-azuretools.vscode-docker`
 
+### 7. GitHub Actions CI/CD (`workflows/mcp-verification.yml`)
+
+**Location:** `.github/workflows/mcp-verification.yml`  
+**Status:** ✅ Implemented with firewall handling
+
+**Purpose:**
+Automated verification of MCP server configuration in CI/CD pipeline with robust firewall/network issue handling.
+
+**Features:**
+- ✅ Runs on push to main and copilot branches
+- ✅ Runs on pull requests to main
+- ✅ Manual workflow dispatch available
+- ✅ Node.js 20 environment setup
+- ✅ npm configured with retry logic and timeouts
+- ✅ Firewall-friendly npm configuration
+- ✅ Multiple validation stages
+
+**Firewall Handling:**
+```yaml
+# Increase timeout for slow networks
+npm config set fetch-timeout 60000
+npm config set fetch-retries 5
+npm config set fetch-retry-mintimeout 10000
+npm config set fetch-retry-maxtimeout 60000
+```
+
+**Validation Stages:**
+1. ✅ npm registry connectivity test with retries
+2. ✅ Configuration file validation
+3. ✅ JSON syntax validation
+4. ✅ MCP structure validation
+5. ✅ Package availability check with retries
+6. ✅ Summary report generation
+
+**Network Resilience:**
+- `continue-on-error: true` for network-dependent checks
+- Retry logic with exponential backoff
+- Graceful degradation for restricted environments
+- Clear warnings vs. errors
+
+**Triggers:**
+```yaml
+on:
+  push:
+    branches: [ main, copilot/** ]
+    paths:
+      - '.github/mcp-servers.json'
+      - '.github/verify-mcp-config.sh'
+  pull_request:
+    branches: [ main ]
+```
+
 ---
 
 ## Verification Tests
 
-### 7. Configuration Validation
+### 8. Configuration Validation
 
 **JSON Syntax:** ✅ Valid
 ```bash
@@ -243,7 +295,7 @@ GitHub MCP Server running on stdio
 
 ## GitHub Copilot Integration
 
-### 8. Copilot Coding Agent Capabilities
+### 9. Copilot Coding Agent Capabilities
 
 **Verified Capabilities:**
 
@@ -274,7 +326,7 @@ GitHub MCP Server running on stdio
 - Container management via `docker` MCP server
 - Database operations via `postgres` MCP server
 
-### 9. Environment Variable Support
+### 10. Environment Variable Support
 
 **Required for GitHub Copilot:**
 - `GITHUB_TOKEN` - ✅ Documented (github MCP server)
@@ -311,10 +363,11 @@ GitHub MCP Server running on stdio
    - Consider monitoring for package updates
    - Non-blocking for current functionality
 
-2. **Testing Suite** 💡 Add automated MCP verification tests
-   - Create test script to verify all MCP servers install correctly
-   - Add CI/CD pipeline to test MCP configuration on changes
-   - Validate environment variable requirements
+2. **Testing Suite** ✅ Automated MCP verification with CI/CD
+   - ✅ GitHub Actions workflow implemented (`.github/workflows/mcp-verification.yml`)
+   - ✅ Handles firewall issues with retry logic and timeout configuration
+   - ✅ Validates JSON syntax, MCP structure, and package availability
+   - ✅ Runs on push to main/copilot branches and pull requests
 
 3. **Schema Validation** 💡 Add JSON schema validation
    - Implement pre-commit hook to validate mcp-servers.json
@@ -338,7 +391,7 @@ GitHub MCP Server running on stdio
 
 ## Security Analysis
 
-### 10. Security Considerations
+### 11. Security Considerations
 
 ✅ **Secrets Management**
 - Secrets stored in 1Password (recommended)
