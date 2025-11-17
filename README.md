@@ -120,10 +120,13 @@ home.packages = with pkgs; [
 - [OVH Deployment Guide](OVH-DEPLOYMENT-GUIDE.md) - Detailed OVH-specific guide
 
 ### Development & AI Integration
+- **[Spec Kit Integration Guide](docs/tools/spec-kit.md)** - Complete guide for Spec-Driven Development ⭐ New!
 - [MCP Setup Guide](.github/MCP-SETUP.md) - Model Context Protocol server configuration
 - [MCP Verification Report](.github/MCP-VERIFICATION-REPORT.md) - Comprehensive analysis and validation
 - [Copilot Instructions](.github/copilot-instructions.md) - GitHub Copilot integration guide
+- [Devcontainer Guide](.github/devcontainer-readme.md) - Development container setup and usage
 - [Secrets Quick Reference](.github/SECRETS-QUICK-REFERENCE.md) - Environment variables setup
+- [Documentation Index](docs/index.md) - Complete documentation hub
 
 ### Planning (Future Work)
 - `ai_infrastructure/` - AI development plans (not implemented)
