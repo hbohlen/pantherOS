@@ -119,12 +119,48 @@ home.packages = with pkgs; [
 - [Deployment Guide](DEPLOYMENT.md) - Basic deployment instructions
 - [OVH Deployment Guide](OVH-DEPLOYMENT-GUIDE.md) - Detailed OVH-specific guide
 
+### Development & AI Integration
+- [MCP Setup Guide](.github/MCP-SETUP.md) - Model Context Protocol server configuration
+- [MCP Verification Report](.github/MCP-VERIFICATION-REPORT.md) - Comprehensive analysis and validation
+- [Copilot Instructions](.github/copilot-instructions.md) - GitHub Copilot integration guide
+- [Secrets Quick Reference](.github/SECRETS-QUICK-REFERENCE.md) - Environment variables setup
+
 ### Planning (Future Work)
 - `ai_infrastructure/` - AI development plans (not implemented)
 - `desktop_environment/` - Desktop environment docs (not implemented)
 - `architecture/` - Architecture documentation (aspirational)
 
 ## Development
+
+### MCP Server Configuration ✅
+
+This repository includes comprehensive MCP (Model Context Protocol) server configuration for AI-assisted development:
+
+- **Configuration**: `.github/mcp-servers.json` (11 servers configured)
+- **Setup Guide**: `.github/MCP-SETUP.md`
+- **Verification Report**: `.github/MCP-VERIFICATION-REPORT.md`
+- **Validation Script**: `.github/verify-mcp-config.sh`
+- **CI/CD Workflow**: `.github/workflows/mcp-verification.yml` (with firewall handling)
+
+**Quick Verification:**
+```bash
+# Run automated verification
+./.github/verify-mcp-config.sh
+
+# Enter MCP development environment
+nix develop .#mcp
+
+# Test GitHub MCP server
+npx -y @modelcontextprotocol/server-github
+```
+
+**Available MCP Servers:**
+- Essential: github, filesystem, git, brave-search
+- NixOS-specific: nix-search, fetch
+- AI Infrastructure: postgres, memory, sequential-thinking
+- Testing: puppeteer, docker
+
+**Status:** ✅ Production-ready, verified 2025-11-16
 
 ### Testing Changes
 
