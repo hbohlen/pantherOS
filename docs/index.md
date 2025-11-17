@@ -20,6 +20,11 @@ Welcome to the pantherOS documentation hub. This page provides an organized over
   - Agent usage guide for GitHub Copilot
   - NixOS-specific considerations
   - Troubleshooting common issues
+- **[Spec Kit Quick Reference](tools/spec-kit-quick-reference.md)** ⭐ New!
+  - Fast command reference and cheat sheet
+  - Common workflows at a glance
+  - Installation quick start
+  - Troubleshooting shortcuts
 - **[Spec Kit Practical Examples](tools/spec-kit-examples.md)** ⭐ New!
   - Real-world feature development workflows
   - Complete PostgreSQL implementation example
