@@ -135,6 +135,27 @@ home.packages = with pkgs; [
 
 ## Development
 
+### Hardware Scanning
+
+This repository includes a hardware scanning script to help with NixOS configuration planning:
+
+- **Script**: `device-scan.sh` - Scans hardware capabilities and generates markdown reports
+- **Purpose**: Useful for planning disko.nix setups and hardware-specific optimizations
+- **Output**: Creates detailed hardware specifications for optimal NixOS configuration
+
+#### Using the Device Scan Script
+
+```bash
+# Scan current host and save to default file (hardware-specs.md)
+./device-scan.sh
+
+# Scan with custom hostname and output file
+./device-scan.sh -o my-host-specs.md "my-server"
+
+# Use for planning disko.nix configurations
+./device-scan.sh -o hardware-specs.md
+```
+
 ### MCP Server Configuration ✅
 
 This repository includes comprehensive MCP (Model Context Protocol) server configuration for AI-assisted development:
