@@ -1,4 +1,1 @@
-```
-# No build artifacts, dependencies, or temporary files detected in changes
-# Only documentation and script files added
-```
+Nothing needs to be added to .gitignore as the changes only include shell script, markdown files, and README.md which are source/config files that should not be ignored.
