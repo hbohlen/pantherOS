@@ -1,0 +1,155 @@
+System:
+  Kernel: 6.17.8-2-cachyos arch: x86_64 bits: 64 compiler: clang v: 21.1.5
+    clocksource: tsc avail: acpi_pm
+    parameters: initrd=\initramfs-linux-cachyos.img
+    root=UUID=0ee43cfc-cd43-4ce4-8399-ab520cf7300e rw rootflags=subvol=/@
+    zswap.enabled=0 nowatchdog splash
+  Desktop: niri v: N/A tools: avail: swaylock vt: 1 dm: SDDM Distro: CachyOS
+    base: Arch Linux
+Machine:
+  Type: Laptop System: ASUSTeK product: ROG Zephyrus M16 GU603ZW_GU603ZW v: 1.0
+    serial: <superuser required>
+  Mobo: ASUSTeK model: GU603ZW v: 1.0 serial: <superuser required>
+    uuid: <superuser required> UEFI: American Megatrends LLC. v: GU603ZW.311
+    date: 12/22/2022
+Battery:
+  ID-1: BAT0 charge: 68.9 Wh (94.5%) condition: 72.9/90 Wh (81%) power: 29 W
+    volts: 15.86 min: 15.86 model: ASUSTeK ASUS Battery type: Li-ion serial: N/A
+    charging: status: discharging control: start: N/A end: 100% cycles: 33
+CPU:
+  Info: model: 12th Gen Intel Core i9-12900H bits: 64 type: MST AMCP
+    arch: Alder Lake gen: core 12 level: v3 note: check built: 2021+
+    process: Intel 7 (10nm ESF) family: 6 model-id: 0x9A (154) stepping: 3
+    microcode: 0x43A
+  Topology: cpus: 1x dies: 1 clusters: 8 cores: 14 threads: 20 mt: 6 tpc: 2
+    st: 8 smt: enabled cache: L1: 1.2 MiB desc: d-8x32 KiB, 6x48 KiB; i-6x32
+    KiB, 8x64 KiB L2: 11.5 MiB desc: 6x1.2 MiB, 2x2 MiB L3: 24 MiB
+    desc: 1x24 MiB
+  Speed (MHz): avg: 400 min/max: 400/4900:5000:3800 scaling:
+    driver: intel_pstate governor: performance cores: 1: 400 2: 400 3: 400 4: 400
+    5: 400 6: 400 7: 400 8: 400 9: 400 10: 400 11: 400 12: 400 13: 400 14: 400
+    15: 400 16: 400 17: 400 18: 400 19: 400 20: 400 bogomips: 116736
+  Flags-basic: avx avx2 ht lm nx pae sse sse2 sse3 sse4_1 sse4_2 ssse3 vmx
+  Vulnerabilities:
+  Type: gather_data_sampling status: Not affected
+  Type: ghostwrite status: Not affected
+  Type: indirect_target_selection status: Not affected
+  Type: itlb_multihit status: Not affected
+  Type: l1tf status: Not affected
+  Type: mds status: Not affected
+  Type: meltdown status: Not affected
+  Type: mmio_stale_data status: Not affected
+  Type: old_microcode status: Not affected
+  Type: reg_file_data_sampling mitigation: Clear Register File
+  Type: retbleed status: Not affected
+  Type: spec_rstack_overflow status: Not affected
+  Type: spec_store_bypass mitigation: Speculative Store Bypass disabled via
+    prctl
+  Type: spectre_v1 mitigation: usercopy/swapgs barriers and __user pointer
+    sanitization
+  Type: spectre_v2 mitigation: Enhanced / Automatic IBRS; IBPB: conditional;
+    PBRSB-eIBRS: SW sequence; BHI: BHI_DIS_S
+  Type: srbds status: Not affected
+  Type: tsa status: Not affected
+  Type: tsx_async_abort status: Not affected
+  Type: vmscape mitigation: IBPB before exit to userspace
+Graphics:
+  Device-1: Intel Alder Lake-P GT2 [Iris Xe Graphics] vendor: ASUSTeK
+    driver: i915 v: kernel alternate: xe arch: Xe process: Intel 10nm
+    built: 2021-22+ ports: active: none empty: DP-2,DP-3 bus-ID: 00:02.0
+    chip-ID: 8086:46a6 class-ID: 0380
+  Device-2: NVIDIA GA104 [Geforce RTX 3070 Ti Laptop GPU] vendor: ASUSTeK
+    driver: nvidia v: 580.105.08 alternate: nouveau,nvidia_drm
+    non-free: 550-580.xx+ status: current (as of 2025-08; EOL~2026-12-xx)
+    arch: Ampere code: GAxxx process: TSMC n7 (7nm) built: 2020-2023 pcie:
+    gen: 2 speed: 5 GT/s lanes: 8 link-max: gen: 4 speed: 16 GT/s lanes: 16
+    ports: active: eDP-1 empty: DP-1,HDMI-A-1 bus-ID: 01:00.0
+    chip-ID: 10de:24a0 class-ID: 0300
+  Device-3: IMC Networks USB2.0 HD UVC WebCam driver: uvcvideo type: USB
+    rev: 2.0 speed: 480 Mb/s lanes: 1 mode: 2.0 bus-ID: 3-8:3 chip-ID: 13d3:56eb
+    class-ID: fe01 serial: <filter>
+  Display: wayland server: X.org v: 1.21.1.20 with: Xwayland v: 24.1.9
+    compositor: niri driver: X: loaded: modesetting,nvidia unloaded: vesa
+    alternate: fbdev,intel,nouveau,nv dri: iris
+    gpu: nv_platform,nvidia,nvidia-nvswitch display-ID: 1
+  Monitor-1: eDP-1 model: BOE Display 0x0a0b built: 2020 res: mode: 2560x1600
+    hz: 60 scale: 150% (1.5) to: 1706x1066 dpi: 189 gamma: 1.2
+    size: 344x215mm (13.54x8.46") diag: 406mm (16") ratio: 16:10
+    modes: 2560x1600
+  API: EGL v: 1.5 hw: drv: intel iris drv: nvidia platforms: device: 0
+    drv: nvidia device: 1 drv: iris device: 3 drv: swrast gbm: drv: iris
+    surfaceless: drv: nvidia wayland: drv: nvidia inactive: x11,device-2
+  API: OpenGL v: 4.6.0 compat-v: 4.5 vendor: mesa v: 25.2.7-cachyos1.2
+    note: incomplete (EGL sourced) renderer: Mesa Intel Iris Xe Graphics (ADL
+    GT2), NVIDIA GeForce RTX 3070 Ti Laptop GPU/PCIe/SSE2, llvmpipe (LLVM
+    21.1.5 256 bits)
+  API: Vulkan Message: No Vulkan data available.
+  Info: Tools: api: eglinfo, glxinfo, vulkaninfo
+    gpu: nvidia-settings,nvidia-smi wl: wlr-randr x11: xdpyinfo, xprop, xrandr
+Audio:
+  Device-1: Intel Alder Lake PCH-P High Definition Audio vendor: ASUSTeK
+    driver: snd_hda_intel v: kernel alternate: snd_soc_avs,snd_sof_pci_intel_tgl
+    bus-ID: 00:1f.3 chip-ID: 8086:51c8 class-ID: 0403
+  Device-2: NVIDIA GA104 High Definition Audio vendor: ASUSTeK
+    driver: snd_hda_intel v: kernel pcie: gen: 4 speed: 16 GT/s lanes: 8
+    link-max: lanes: 16 bus-ID: 01:00.1 chip-ID: 10de:228b class-ID: 0403
+  API: ALSA v: k6.17.8-2-cachyos status: kernel-api
+    tools: alsactl,alsamixer,amixer
+  Server-1: sndiod v: N/A status: off tools: aucat,midicat,sndioctl
+  Server-2: JACK v: 1.9.22 status: off tools: N/A
+  Server-3: PipeWire v: 1.4.9 status: active with: 1: pipewire-pulse
+    status: active 2: wireplumber status: active 3: pipewire-alsa type: plugin
+    tools: pactl,pw-cat,pw-cli,wpctl
+Network:
+  Device-1: Intel Alder Lake-P PCH CNVi WiFi driver: iwlwifi v: kernel
+    bus-ID: 00:14.3 chip-ID: 8086:51f0 class-ID: 0280
+  IF: wlan0 state: up mac: <filter>
+  Device-2: Realtek RTL8125 2.5GbE vendor: ASUSTeK driver: r8169 v: kernel
+    pcie: gen: 2 speed: 5 GT/s lanes: 1 port: 3000 bus-ID: 2e:00.0
+    chip-ID: 10ec:8125 class-ID: 0200
+  IF: eno2 state: down mac: <filter>
+  IF-ID-1: tailscale0 state: unknown speed: -1 duplex: full mac: N/A
+  Info: services: NetworkManager, systemd-timesyncd, wpa_supplicant
+Bluetooth:
+  Device-1: Intel AX211 Bluetooth driver: btusb v: 0.8 type: USB rev: 2.0
+    speed: 12 Mb/s lanes: 1 mode: 1.1 bus-ID: 3-10:5 chip-ID: 8087:0033
+    class-ID: e001
+  Report: btmgmt ID: hci0 rfk-id: 3 state: up address: <filter> bt-v: 5.4
+    lmp-v: 13 status: discoverable: no pairing: no class-ID: 6c010c
+Drives:
+  Local Storage: total: 2.75 TiB used: 24.14 GiB (0.9%)
+  SMART Message: Unable to run smartctl. Root privileges required.
+  ID-1: /dev/nvme0n1 maj-min: 259:2 vendor: Micron model: 2450 MTFDKBA1T0TFK
+    size: 953.87 GiB block-size: physical: 512 B logical: 512 B speed: 63.2 Gb/s
+    lanes: 4 tech: SSD serial: <filter> fw-rev: V5MA010 temp: 30.9 C
+    scheme: GPT
+  ID-2: /dev/nvme1n1 maj-min: 259:0 vendor: Crucial model: CT2000P310SSD8
+    size: 1.82 TiB block-size: physical: 512 B logical: 512 B speed: 63.2 Gb/s
+    lanes: 4 tech: SSD serial: <filter> fw-rev: V8CR000 temp: 30.9 C
+    scheme: GPT
+Partition:
+  ID-1: / raw-size: 951.87 GiB size: 2.75 TiB (295.62%) used: 23.31 GiB (0.8%)
+    fs: btrfs dev: /dev/nvme0n1p2 maj-min: 259:4
+  ID-2: /boot raw-size: 2 GiB size: 2 GiB (99.80%) used: 848.5 MiB (41.5%)
+    fs: vfat dev: /dev/nvme0n1p1 maj-min: 259:3
+  ID-3: /home raw-size: 951.87 GiB size: 2.75 TiB (295.62%)
+    used: 23.31 GiB (0.8%) fs: btrfs dev: /dev/nvme0n1p2 maj-min: 259:4
+  ID-4: /var/log raw-size: 951.87 GiB size: 2.75 TiB (295.62%)
+    used: 23.31 GiB (0.8%) fs: btrfs dev: /dev/nvme0n1p2 maj-min: 259:4
+  ID-5: /var/tmp raw-size: 951.87 GiB size: 2.75 TiB (295.62%)
+    used: 23.31 GiB (0.8%) fs: btrfs dev: /dev/nvme0n1p2 maj-min: 259:4
+Swap:
+  Alert: No swap data was found.
+Sensors:
+  System Temperatures: cpu: 38.2 C mobo: N/A
+  Fan Speeds (rpm): N/A
+Info:
+  Memory: total: 40 GiB note: est. available: 38.86 GiB used: 3.95 GiB (10.2%)
+  Processes: 370 Power: uptime: 8m states: freeze,mem,disk suspend: s2idle
+    avail: deep wakeups: 0 hibernate: platform avail: shutdown, reboot, suspend,
+    test_resume image: 15.45 GiB services: upowerd Init: systemd v: 258
+    default: graphical tool: systemctl
+  Packages: pm: nix-default pkgs: 0 pm: nix-sys pkgs: 0 pm: nix-usr pkgs: 0
+    pm: pacman pkgs: 1245 libs: 302 tools: octopi,paru Compilers: clang: 21.1.5
+    gcc: 15.2.1 Shell: Bash v: 5.3.3 default: fish v: 4.2.1 running-in: ghostty
+    inxi: 3.3.39

@@ -1,0 +1,38 @@
+Hardware Discovery Summary for zephyrus
+Generated: Thu Nov 20 05:20:33 PM CST 2025
+
+=== Key Specifications ===
+CPU: 12th Gen Intel(R) Core(TM) i9-12900H
+Cores: 20
+Memory: 38Gi
+Storage Devices: 2
+GPU: NVIDIA Corporation GA104 [Geforce RTX 3070 Ti Laptop GPU] (rev a1)
+
+=== Storage Layout ===
+NAME        FSTYPE FSVER LABEL UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+zram0                                                                              
+nvme1n1                                                                            
+└─nvme1n1p1 btrfs              0ee43cfc-cd43-4ce4-8399-ab520cf7300e                
+nvme0n1                                                                            
+├─nvme0n1p1 vfat   FAT32       E0CE-FCD7                               1.2G    42% /boot
+└─nvme0n1p2 btrfs              0ee43cfc-cd43-4ce4-8399-ab520cf7300e    2.7T     1% /var/tmp
+                                                                                   /var/log
+                                                                                   /var/cache
+                                                                                   /home
+                                                                                   /root
+                                                                                   /srv
+                                                                                   /
+
+=== Network Interfaces ===
+Physical Interfaces: lo eno2 wlan0 tailscale0
+Wireless: wlan0 
+
+=== Special Hardware ===
+Battery: Yes (94%)
+Fingerprint Reader: No
+Touchscreen: No
+Backlight Control: Yes
+
+=== System Type ===
+Virtualization: none
+Form Factor: 10

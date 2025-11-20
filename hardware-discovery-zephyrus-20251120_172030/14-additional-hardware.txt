@@ -1,0 +1,13 @@
+14. Additional Hardware Detection...
+=== Fingerprint Readers ===
+No fingerprint readers detected
+=== Touchscreens ===
+No touchscreens detected
+No X11 touchscreens detected
+=== Laptop Features ===
+Backlight devices:
+nvidia_0
+Thermal zones:
+Thermal zones found: 281
+=== Accelerometer ===
+No accelerometer detected

@@ -6,6 +6,10 @@
         "-y",
         "@modelcontextprotocol/server-filesystem",
         "/home/hbohlen"
+      ],
+      "alwaysAllow": [
+        "directory_tree",
+        "search_files"
       ]
     },
     "puppeteer": {

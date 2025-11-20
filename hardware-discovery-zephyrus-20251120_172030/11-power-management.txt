@@ -1,0 +1,41 @@
+  native-path:          BAT0
+  vendor:               ASUSTeK
+  model:                ASUS Battery
+  power supply:         yes
+  updated:              Thu 20 Nov 2025 05:20:16 PM CST (15 seconds ago)
+  has history:          yes
+  has statistics:       yes
+  battery
+    present:             yes
+    rechargeable:        yes
+    state:               discharging
+    warning-level:       none
+    energy:              69.022 Wh
+    energy-empty:        0 Wh
+    energy-full:         72.924 Wh
+    energy-full-design:  90.005 Wh
+    voltage-min-design:  15.86 V
+    capacity-level:      Normal
+    energy-rate:         31.656 W
+    voltage:             15.86 V
+    charge-cycles:       33
+    time to empty:       2.2 hours
+    percentage:          95%
+    capacity:            81.0222%
+    technology:          lithium-ion
+    icon-name:          'battery-full-symbolic'
+  History (charge):
+    1763680756	95.000	discharging
+  History (rate):
+    1763680816	31.656	discharging
+    1763680786	24.138	discharging
+    1763680756	24.075	discharging
+    1763680726	23.980	discharging
+
+=== Additional Battery Info ===
+Status: Discharging
+Capacity: 94%
+Health: Unknown
+Power Now: 29023000 µW
+Energy Now: 68895000 µWh
+Energy Full: 72924000 µWh

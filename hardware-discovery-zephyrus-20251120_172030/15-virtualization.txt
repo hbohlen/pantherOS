@@ -1,0 +1,16 @@
+none
+  Static hostname: zephyrus
+        Icon name: computer-laptop
+          Chassis: laptop 💻
+Chassis Asset Tag: No Asset Tag
+       Machine ID: ab26c37edc804f819eca9c84bfc6e047
+          Boot ID: a0df3e41de0d4b77a703b5a6b25636f5
+ Operating System: CachyOS
+           Kernel: Linux 6.17.8-2-cachyos
+     Architecture: x86-64
+  Hardware Vendor: ASUSTeK COMPUTER INC.
+   Hardware Model: ROG Zephyrus M16 GU603ZW_GU603ZW
+ Hardware Version: 1.0
+ Firmware Version: GU603ZW.311
+    Firmware Date: Thu 2022-12-22
+     Firmware Age: 2y 10month 4w 2d

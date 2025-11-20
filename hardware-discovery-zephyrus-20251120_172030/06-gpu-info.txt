@@ -1,0 +1,22 @@
+	DeviceName: Second VGA
+	Subsystem: ASUSTeK Computer Inc. Device 1a8c
+	Kernel driver in use: i915
+	Kernel modules: i915, xe
+--
+01:00.0 VGA compatible controller: NVIDIA Corporation GA104 [Geforce RTX 3070 Ti Laptop GPU] (rev a1)
+	DeviceName: VGA
+	Subsystem: ASUSTeK Computer Inc. Device 1a8c
+	Kernel driver in use: nvidia
+	Kernel modules: nouveau, nvidia_drm, nvidia
+	DeviceName: Second VGA
+01:00.0 VGA compatible controller [0300]: NVIDIA Corporation GA104 [Geforce RTX 3070 Ti Laptop GPU] [10de:24a0] (rev a1)
+	DeviceName: VGA
+=== All Graphics Devices ===
+00:02.0 Display controller: Intel Corporation Alder Lake-P GT2 [Iris Xe Graphics] (rev 0c)
+01:00.0 VGA compatible controller: NVIDIA Corporation GA104 [Geforce RTX 3070 Ti Laptop GPU] (rev a1)
+=== OpenGL Information ===
+=== Vulkan Information ===
+=== Display Server ===
+XDG_SESSION_TYPE: wayland
+WAYLAND_DISPLAY: wayland-1
+DISPLAY: :1
