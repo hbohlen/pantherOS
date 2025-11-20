@@ -55,7 +55,7 @@ This design captures how the OpenCode memory stack (OpenCode server, Valkey, Fal
 - **Valkey**: `valkey/valkey:7.2`; args `--port 6380 --maxmemory 2gb --maxmemory-policy allkeys-lru --save 60 1000`; volume `/persist/containers/valkey:/data`; health check via `valkey-cli -p 6380 ping`.
 - **FalkorDB**: `falkordb/falkordb:latest`; env `REDIS_ARGS="--save 60 100"`; volume `/persist/containers/falkordb:/data`; ports 6379/3000.
 - **Datadog Agent**: `datadog/agent:latest`; environment file `/run/secrets/opencode.env`; env vars for logs/APM/LLM; socket mount `/var/run/podman/podman.sock:/var/run/docker.sock:ro`.
-- **OpenCode Server**: `opencode-server:latest`; volume `/persist/containers/opencode:/root/.local/share/opencode`; optional plugin `/path/to/plugin:/root/.opencode/plugin:ro` and Graphiti `/path/to/graphiti:/root/.opencode/graphiti:ro`; environment file `/run/secrets/opencode.env`; health check HTTP to `/config` on port 4096.
+- **OpenCode Server**: `opencode-server:latest`; volume `/persist/containers/opencode:/root/.local/share/opencode`; optional read-only mount of the full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents) to supply plugin and Graphiti assets; environment file `/run/secrets/opencode.env`; health check HTTP to `/config` on port 4096.
 
 ### Systemd Integration
 - Unit: `opencode-memory-pod.service`

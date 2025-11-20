@@ -20,7 +20,7 @@ This roadmap outlines the steps to author and validate the OpenCode server Conta
 **Objective**: Provision Graphiti and observability tooling within an isolated venv and lay down application assets.
 
 - [ ] Create `/opt/venv` and install `graphiti-core[falkordb]`, `falkordb`, `redis`, `ddtrace`, `datadog-api-client`, and `b2sdk` via pip.
-- [ ] Copy `plugin/` to `/root/.opencode/plugin/` and `graphiti/` to `/root/.opencode/graphiti/`.
+- [ ] Copy the full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents) into the image so plugin and Graphiti assets are available.
 - [ ] Copy `scripts/` to `/app/scripts/` and `config.json` to `/root/.config/opencode/opencode.json`.
 
 ### Phase 4: Runtime Configuration and Health

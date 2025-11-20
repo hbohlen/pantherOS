@@ -19,7 +19,7 @@ OpenCode currently lacks a defined plugin that feeds editor and chat activity in
 
 ## Proposed Solution
 - Create `graphiti-memory.ts` under the OpenCode plugin directory, exporting an `@opencode-ai/plugin` that connects to Valkey and wires event handlers.
-- Use environment-configurable paths/URIs with defaults: memory script `/root/.opencode/graphiti/memory_manager.py`, Valkey `redis://localhost:6380`, cache TTL 300 seconds.
+- Use environment-configurable paths/URIs with defaults aligned to the full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents), with the memory script pointing to its Graphiti `memory_manager.py`, Valkey `redis://localhost:6380`, cache TTL 300 seconds.
 - Implement helper utilities for hashing queries, cache get/set/invalidate, subprocess execution for store/query, and Datadog metric/event emission via DogStatsD/auxiliary script.
 - On `chat:start`, retrieve cached context when available; otherwise run `queryMemory`, cache the response, inject it as a system message, and emit hit/miss metrics.
 - On `file:write`, call `storeEpisode` with file metadata and invalidate relevant cache keys.

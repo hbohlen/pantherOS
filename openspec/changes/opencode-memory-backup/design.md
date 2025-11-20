@@ -8,7 +8,7 @@ This design introduces systemd automation on the hetzner-vps host to snapshot Op
 - **opencode-backup.timer**: Systemd timer with `OnCalendar=0/6:00:00` and `Persistent=true` to execute the service every six hours and catch up missed events.
 - **Btrfs Snapshots**: Subvolume snapshots under `/.snapshots/persist-<timestamp>` capturing `/persist` before uploads to ensure consistency.
 - **rclone Uploads**: S3-compatible uploads targeting `s3:opencode-memory-backups/<dataset>-<timestamp>` using endpoint `s3.us-west-004.backblazeb2.com` and B2 credentials from env vars.
-- **Graphiti Export**: `python3 /root/.opencode/graphiti/memory_manager.py export` writes a JSON export that the service uploads via `b2sdk` (per existing script behavior).
+- **Graphiti Export**: Use the Graphiti memory manager from the full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents) to write a JSON export that the service uploads via `b2sdk` (per existing script behavior).
 - **Snapshot Cleanup**: Retention enforcement deleting Btrfs snapshots older than 30 days using `find` + `btrfs subvolume delete`.
 
 ## Backup Flow

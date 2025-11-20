@@ -28,7 +28,7 @@ Create systemd-managed automation on `hosts/hetzner-vps/opencode-memory.nix` tha
 - **Upload latency/bandwidth**: Large graphs may slow uploads. Mitigation: oneshot unit design tolerates long runtime; timer persistence ensures eventual consistency.
 
 ## Proposed Implementation
-1. Define `opencode-backup.service` (Type=oneshot, User=opencode, After=opencode-memory-pod.service, EnvironmentFile=/run/secrets/opencode.env) that executes a shell script performing snapshot creation, rclone uploads for FalkorDB and Valkey paths, Graphiti export via `python3 /root/.opencode/graphiti/memory_manager.py export`, and snapshot cleanup older than 30 days.
+1. Define `opencode-backup.service` (Type=oneshot, User=opencode, After=opencode-memory-pod.service, EnvironmentFile=/run/secrets/opencode.env) that executes a shell script performing snapshot creation, rclone uploads for FalkorDB and Valkey paths, Graphiti export via the full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents), and snapshot cleanup older than 30 days.
 2. Add `opencode-backup.timer` with `OnCalendar=0/6:00:00` and `Persistent=true` to trigger the service every six hours, catching up missed runs after downtime.
 3. Emit timestamped destination prefixes such as `falkordb-{timestamp}` and `valkey-{timestamp}` under `s3:opencode-memory-backups` using the Backblaze S3 endpoint `s3.us-west-004.backblazeb2.com` configured via rclone environment.
 4. Integrate both units into `hosts/hetzner-vps/opencode-memory.nix`, ensuring they are enabled alongside the existing pod orchestration.

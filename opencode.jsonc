@@ -1,0 +1,108 @@
+{
+    // MCP servers at root level
+    "mcp": {
+        "brave-search": {
+            "type": "local",
+            "command": [
+                "npx",
+                "-y",
+                "@modelcontextprotocol/server-brave-search"
+            ],
+            "environment": {
+                "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
+            },
+            "enabled": true,      // Enable on startup
+            "timeout": 5000       // Optional: 5 second timeout
+        },
+        "sequential-thinking": {
+            "type": "local",
+            "command": [
+                "npx",
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking"
+            ],
+            "enabled": true
+        }
+    },
+    // Agent configuration
+    "agent": {
+        "architect": {
+            "prompt": ".opencode/agent/architect.md",
+            "model": "cliproxyapi/minimax-m2",
+            "options": {
+                "temperature": 1.0,
+                "top_p": 0.95,
+                "max_tokens": 8192,
+                "stream": true,
+                "thinking": { "type": "enabled" }
+            },
+            "description": "System architect and planner",
+            "mode": "primary",    // Optional: "subagent", "primary", or "all"
+            "permission": {
+                "edit": "allow",
+                "bash": "deny",
+                "webfetch": "allow",
+                "doom_loop": "deny",
+                "external_directory": "deny"
+            },
+            "tools": {
+                "brave-search": true,        // ✓ Enable Brave Search
+                "sequential-thinking": true,  // ✓ Enable sequential thinking
+                "read": true,                 // Built-in OpenCode tools
+                "write": true,
+                "edit": true,
+                "grep": true,
+                "glob": true,
+                "bash": false                 // Disabled via permission
+            }
+        },
+        "librarian": {
+            "prompt": ".opencode/agent/librarian.md",
+            "model": "cliproxyapi/minimax-m2",
+            "options": {
+                "temperature": 0.8,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true,
+                "thinking": { "type": "enabled" }
+            },
+            "permission": {
+                "bash": "deny",
+                "edit": "deny",
+                "webfetch": "allow"
+            },
+            "tools": {
+                "brave-search": true,   // Librarian can search
+                "context7": true,       // If you have this MCP
+                "read": true,
+                "grep": true,
+                "glob": true
+            }
+        },
+        "engineer": {
+            "prompt": ".opencode/agent/engineer.md",
+            "model": "cliproxyapi/glm-4.6",
+            "options": {
+                "do_sample": true,
+                "temperature": 0.3,
+                "top_p": 0.85,
+                "max_tokens": 65536,
+                "stream": true,
+                "thinking": { "type": "enabled" }
+            },
+            "permission": {
+                "edit": "allow",
+                "bash": "ask",
+                "webfetch": "deny"  // Engineer doesn't need web
+            },
+            "tools": {
+                "brave-search": false,  // Disable for engineer
+                "read": true,
+                "write": true,
+                "edit": true,
+                "patch": true,
+                "bash": true
+            }
+        }
+    }
+}

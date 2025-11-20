@@ -23,7 +23,7 @@ OpenCode's memory components (FalkorDB graph, Valkey cache data, and Graphiti ex
   - Authentication via env vars `B2_KEY_ID` and `B2_APP_KEY` from `/run/secrets/opencode.env`.
 
 ### Graphiti Export
-- Invoke `python3 /root/.opencode/graphiti/memory_manager.py export` as part of the service to produce a JSON export and upload it to the B2 bucket via existing `b2sdk` logic.
+- Invoke the Graphiti memory manager from the full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents) to produce a JSON export and upload it to the B2 bucket via existing `b2sdk` logic.
 - Use the same `<timestamp>` for associating this export with the snapshot window (e.g., include in logs or rely on script naming convention).
 
 ### Retention and Cleanup

@@ -23,8 +23,7 @@ This design defines how to construct a Containerfile for the OpenCode server tha
 **Principle**: Align filesystem paths with OpenCode and Graphiti expectations while keeping host-mounted assets organized.
 
 **Implementation**:
-- Populate `/root/.opencode/plugin/` with TypeScript plugin code from build context `plugin/`.
-- Populate `/root/.opencode/graphiti/` with Python memory manager code from build context `graphiti/`.
+- Bundle the full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents) in the image, including plugin and Graphiti assets sourced from the build context, to supply the developer tooling.
 - Place operational helper scripts under `/app/scripts/` sourced from build context `scripts/`.
 - Copy `config.json` from the build context to `/root/.config/opencode/opencode.json` to configure the server.
 
