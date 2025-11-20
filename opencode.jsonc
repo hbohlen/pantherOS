@@ -24,84 +24,354 @@
             "enabled": true
         }
     },
+    // Slash command configuration
+    "command": {
+        "openspec-proposal": {
+            "prompt": ".opencode/command/openspec-proposal.md",
+            "description": "Create an OpenSpec proposal with required sections and validation checks"
+        },
+        "openspec-apply": {
+            "prompt": ".opencode/command/openspec-apply.md",
+            "description": "Implement an approved OpenSpec, tracking tasks and test coverage"
+        },
+        "openspec-archive": {
+            "prompt": ".opencode/command/openspec-archive.md",
+            "description": "Archive completed OpenSpec work with changelogs and links"
+        }
+    },
     // Agent configuration
     "agent": {
-        "architect": {
-            "prompt": ".opencode/agent/architect.md",
-            "model": "cliproxyapi/minimax-m2",
+        "system-builder": {
+            "prompt": ".opencode/agent/system-builder.md",
+            "model": "cliproxyapi/gpt-4.1",
             "options": {
-                "temperature": 1.0,
-                "top_p": 0.95,
-                "max_tokens": 8192,
-                "stream": true,
-                "thinking": { "type": "enabled" }
-            },
-            "description": "System architect and planner",
-            "mode": "primary",    // Optional: "subagent", "primary", or "all"
-            "permission": {
-                "edit": "allow",
-                "bash": "deny",
-                "webfetch": "allow",
-                "doom_loop": "deny",
-                "external_directory": "deny"
-            },
-            "tools": {
-                "brave-search": true,        // ✓ Enable Brave Search
-                "sequential-thinking": true,  // ✓ Enable sequential thinking
-                "read": true,                 // Built-in OpenCode tools
-                "write": true,
-                "edit": true,
-                "grep": true,
-                "glob": true,
-                "bash": false                 // Disabled via permission
-            }
-        },
-        "librarian": {
-            "prompt": ".opencode/agent/librarian.md",
-            "model": "cliproxyapi/minimax-m2",
-            "options": {
-                "temperature": 0.8,
+                "temperature": 0.2,
                 "top_p": 0.9,
                 "max_tokens": 8192,
                 "stream": true,
                 "thinking": { "type": "enabled" }
             },
+            "description": "Main orchestrator for building complete context-aware AI systems",
+            "mode": "primary",
             "permission": {
+                "edit": "allow",
                 "bash": "deny",
-                "edit": "deny",
                 "webfetch": "allow"
             },
             "tools": {
-                "brave-search": true,   // Librarian can search
-                "context7": true,       // If you have this MCP
-                "read": true,
-                "grep": true,
-                "glob": true
-            }
-        },
-        "engineer": {
-            "prompt": ".opencode/agent/engineer.md",
-            "model": "cliproxyapi/glm-4.6",
-            "options": {
-                "do_sample": true,
-                "temperature": 0.3,
-                "top_p": 0.85,
-                "max_tokens": 65536,
-                "stream": true,
-                "thinking": { "type": "enabled" }
-            },
-            "permission": {
-                "edit": "allow",
-                "bash": "ask",
-                "webfetch": "deny"  // Engineer doesn't need web
-            },
-            "tools": {
-                "brave-search": false,  // Disable for engineer
                 "read": true,
                 "write": true,
                 "edit": true,
-                "patch": true,
+                "bash": false,
+                "task": true,
+                "glob": true,
+                "grep": false
+            }
+        },
+        "openagent": {
+            "prompt": ".opencode/agent/openagent.md",
+            "model": "cliproxyapi/gpt-4.1",
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.95,
+                "max_tokens": 8192,
+                "stream": true,
+                "thinking": { "type": "enabled" }
+            },
+            "description": "Universal agent and workflow coordinator",
+            "mode": "primary",
+            "permission": {
+                "edit": "allow",
+                "bash": "ask",
+                "webfetch": "allow"
+            },
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "grep": true,
+                "glob": true,
+                "bash": true,
+                "task": true,
+                "patch": true
+            }
+        },
+        "codebase-agent": {
+            "prompt": ".opencode/agent/codebase-agent.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.1,
+                "top_p": 0.9,
+                "max_tokens": 32768,
+                "stream": true,
+                "thinking": { "type": "enabled" }
+            },
+            "description": "Multi-language implementation agent for modular and functional development",
+            "mode": "primary",
+            "permission": {
+                "edit": "allow",
+                "bash": "ask",
+                "webfetch": "deny"
+            },
+            "tools": {
+                "read": true,
+                "edit": true,
+                "write": true,
+                "grep": true,
+                "glob": true,
+                "bash": true,
+                "patch": true
+            }
+        },
+        "domain-analyzer": {
+            "prompt": ".opencode/agent/subagents/system-builder/domain-analyzer.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.1,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Analyzes user domains to design agent and context structures",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true
+            }
+        },
+        "workflow-designer": {
+            "prompt": ".opencode/agent/subagents/system-builder/workflow-designer.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Designs execution workflows and orchestrations for generated systems",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true
+            }
+        },
+        "agent-generator": {
+            "prompt": ".opencode/agent/subagents/system-builder/agent-generator.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Creates specialized agent definitions for new systems",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true
+            }
+        },
+        "command-creator": {
+            "prompt": ".opencode/agent/subagents/system-builder/command-creator.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Builds command definitions for generated systems",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true
+            }
+        },
+        "context-organizer": {
+            "prompt": ".opencode/agent/subagents/system-builder/context-organizer.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Structures project context and knowledge files",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true
+            }
+        },
+        "documentation": {
+            "prompt": ".opencode/agent/subagents/core/documentation.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Documentation-focused assistant for project updates",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true
+            }
+        },
+        "task-manager": {
+            "prompt": ".opencode/agent/subagents/core/task-manager.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Breaks down complex work into actionable tasks",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true
+            }
+        },
+        "reviewer": {
+            "prompt": ".opencode/agent/subagents/code/reviewer.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Performs security and code reviews",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true
+            }
+        },
+        "coder-agent": {
+            "prompt": ".opencode/agent/subagents/code/coder-agent.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.1,
+                "top_p": 0.9,
+                "max_tokens": 16384,
+                "stream": true
+            },
+            "description": "Implementation-focused coding assistant",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true,
+                "bash": true,
+                "patch": true
+            }
+        },
+        "codebase-pattern-analyst": {
+            "prompt": ".opencode/agent/subagents/code/codebase-pattern-analyst.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.1,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Analyzes repositories to identify patterns and risks",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true
+            }
+        },
+        "tester": {
+            "prompt": ".opencode/agent/subagents/code/tester.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Writes and executes tests for implemented changes",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true,
                 "bash": true
+            }
+        },
+        "build-agent": {
+            "prompt": ".opencode/agent/subagents/code/build-agent.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Handles build validation and type checking",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true,
+                "bash": true
+            }
+        },
+        "image-specialist": {
+            "prompt": ".opencode/agent/subagents/utils/image-specialist.md",
+            "model": "cliproxyapi/gpt-4.1-mini",
+            "options": {
+                "temperature": 0.2,
+                "top_p": 0.9,
+                "max_tokens": 8192,
+                "stream": true
+            },
+            "description": "Creates and critiques images for documentation and UI tasks",
+            "mode": "subagent",
+            "tools": {
+                "read": true,
+                "write": true,
+                "edit": true,
+                "glob": true,
+                "grep": true
             }
         }
     }

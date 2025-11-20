@@ -206,7 +206,7 @@ home/hbohlen/
 │   │   ├── agent/
 │   │   ├── tool/
 │   │   ├── plugin/
-│   │   ├── skills/
+│   │   ├── .opencode/skills/
 │   │   └── command/
 │   ├── claude-code/           # settings.json
 │   └── zed/                   # Zed config
