@@ -8,7 +8,6 @@
     },
     "share": "manual",
     "autoupdate": true,
-
     // PROVIDERS: MiniMax (Planner) & Z.ai (Coder)
     "provider": {
         "cliproxyapi": {
@@ -31,8 +30,12 @@
                         "cache_write": 0,
                     },
                     "modalities": {
-                        "input": ["text"],
-                        "output": ["text"],
+                        "input": [
+                            "text"
+                        ],
+                        "output": [
+                            "text"
+                        ],
                     },
                     "attachment": true,
                     "reasoning": true,
@@ -59,8 +62,12 @@
                         "cache_write": 0,
                     },
                     "modalities": {
-                        "input": ["text"], // Currently only text supported via Anthropic API
-                        "output": ["text"],
+                        "input": [
+                            "text"
+                        ], // Currently only text supported via Anthropic API
+                        "output": [
+                            "text"
+                        ],
                     },
                     "attachment": false, // Not supported via Anthropic compatibility API
                     "reasoning": true,
@@ -92,8 +99,16 @@
                         },
                     },
                     "modalities": {
-                        "input": ["text", "image", "audio", "video", "pdf"],
-                        "output": ["text"],
+                        "input": [
+                            "text",
+                            "image",
+                            "audio",
+                            "video",
+                            "pdf"
+                        ],
+                        "output": [
+                            "text"
+                        ],
                     },
                     "attachment": true,
                     "reasoning": true,
@@ -126,8 +141,16 @@
                         },
                     },
                     "modalities": {
-                        "input": ["text", "image", "audio", "video", "pdf"],
-                        "output": ["text"],
+                        "input": [
+                            "text",
+                            "image",
+                            "audio",
+                            "video",
+                            "pdf"
+                        ],
+                        "output": [
+                            "text"
+                        ],
                     },
                     "attachment": true,
                     "reasoning": true,
@@ -155,8 +178,13 @@
                         "cache_write": 0.625,
                     },
                     "modalities": {
-                        "input": ["text", "image"],
-                        "output": ["text"],
+                        "input": [
+                            "text",
+                            "image"
+                        ],
+                        "output": [
+                            "text"
+                        ],
                     },
                     "attachment": true,
                     "reasoning": true, // Advanced reasoning mode
@@ -183,8 +211,13 @@
                         "cache_write": 0.75,
                     },
                     "modalities": {
-                        "input": ["text", "image"],
-                        "output": ["text"],
+                        "input": [
+                            "text",
+                            "image"
+                        ],
+                        "output": [
+                            "text"
+                        ],
                     },
                     "attachment": true,
                     "reasoning": true,
@@ -212,8 +245,12 @@
                         "cache_write": 0,
                     },
                     "modalities": {
-                        "input": ["text"],
-                        "output": ["text"],
+                        "input": [
+                            "text"
+                        ],
+                        "output": [
+                            "text"
+                        ],
                     },
                     "attachment": true,
                     "reasoning": false, // Non-thinking model
@@ -240,8 +277,12 @@
                         "cache_write": 0,
                     },
                     "modalities": {
-                        "input": ["text"],
-                        "output": ["text"],
+                        "input": [
+                            "text"
+                        ],
+                        "output": [
+                            "text"
+                        ],
                     },
                     "attachment": true,
                     "reasoning": false, // Non-thinking variant
@@ -274,25 +315,27 @@
                             "cache_read": 0,
                             "cache_write": 0,
                         },
-
                         "input": 0,
                         "output": 0,
                     },
-
                     "modalities": {
-                        "input": ["audio", "image", "pdf", "text", "video"],
+                        "input": [
+                            "audio",
+                            "image",
+                            "pdf",
+                            "text",
+                            "video"
+                        ],
                         "output": [],
                     },
                     //"headers": {},
                     "temperature": true,
                     "tool_call": true,
-
                     "name": "MiniMax-M2",
                     "limit": {
                         "context": 200000,
                         "output": 0,
                     },
-
                     "options": {},
                     "reasoning": true,
                 },
@@ -318,7 +361,6 @@
             },
         },
     },
-
     // GLOBAL CONTEXT
     "instructions": [
         "AGENTS.md",
@@ -327,7 +369,6 @@
         "docs/architecture/overview.md",
         "docs/guides/module-development.md",
     ],
-
     "permission": {
         "edit": "ask",
         "bash": {
@@ -349,7 +390,6 @@
         "bash": true,
         "patch": true,
     },
-
     // MCP SERVERS
     "mcp": {
         "filesystem": {
@@ -387,11 +427,18 @@
         },
         "puppeteer": {
             "type": "local",
-            "command": ["npx", "-y", "@modelcontextprotocol/server-puppeteer"],
+            "command": [
+                "npx",
+                "-y",
+                "@modelcontextprotocol/server-puppeteer"
+            ],
         },
         "nixos": {
             "type": "local",
-            "command": ["uvx", "mcp-nixos"],
+            "command": [
+                "uvx",
+                "mcp-nixos"
+            ],
         },
         "sequential-thinking": {
             "type": "local",
@@ -412,7 +459,9 @@
                 "top_p": 0.95,
                 "max_tokens": 16384,
                 "stream": true,
-                "thinking": { "type": "enabled" },
+                "thinking": {
+                    "type": "enabled"
+                },
             },
             "permission": {
                 "edit": "allow",
@@ -429,7 +478,6 @@
                 "glob": true,
             },
         },
-
         // Specialized coder (uses your GLM-4.6)
         "codebase-agent": {
             "prompt": "~/.opencode/agent/codebase-agent.md", // From OpenAgents
@@ -439,7 +487,9 @@
                 "top_p": 0.85,
                 "max_tokens": 65536,
                 "stream": true,
-                "thinking": { "type": "enabled" },
+                "thinking": {
+                    "type": "enabled"
+                },
             },
             "permission": {
                 "edit": "allow",
@@ -453,7 +503,6 @@
                 "bash": true,
             },
         },
-
         // SUBAGENTS (auto-delegated, use faster/cheaper models)
         "task-manager": {
             "prompt": "~/.opencode/agent/subagents/task-manager.md",
@@ -464,7 +513,6 @@
                 "max_tokens": 8192,
             },
         },
-
         "reviewer": {
             "prompt": "~/.opencode/agent/subagents/reviewer.md",
             "model": "cliproxyapi/gpt-5-codex", // Best for code review
@@ -475,7 +523,6 @@
                 "max_tokens": 32768,
             },
         },
-
         "tester": {
             "prompt": "~/.opencode/agent/subagents/tester.md",
             "model": "cliproxyapi/qwen3-coder-plus", // Good for test generation
@@ -485,13 +532,11 @@
                 "max_tokens": 32768,
             },
         },
-
         "coder-agent": {
             "prompt": "~/.opencode/agent/subagents/coder-agent.md",
             "model": "cliproxyapi/glm-4.6", // Your primary coder
             "mode": "subagent",
         },
-
         "documentation": {
             "prompt": "~/.opencode/agent/subagents/documentation.md",
             "model": "cliproxyapi/gemini-2.5-pro", // Great for docs
@@ -501,24 +546,28 @@
                 "max_tokens": 16384,
             },
         },
-
         "build-agent": {
             "prompt": "~/.opencode/agent/subagents/build-agent.md",
             "model": "cliproxyapi/gemini-2.5-flash", // Fast for builds
             "mode": "subagent",
         },
     },
-
     // === LSP SERVERS ===
     "lsp": {
         "nix-nil": {
-            "command": ["nil"],
-            "extensions": [".nix"],
+            "command": [
+                "nil"
+            ],
+            "extensions": [
+                ".nix"
+            ],
             "env": {},
             "initialization": {
                 "nil": {
                     "formatting": {
-                        "command": ["alejandra"],
+                        "command": [
+                            "alejandra"
+                        ],
                     },
                     "diagnostics": {
                         "ignored": [],
@@ -529,8 +578,12 @@
             "disabled": false,
         },
         "nix-nixd": {
-            "command": ["nixd"],
-            "extensions": [".nix"],
+            "command": [
+                "nixd"
+            ],
+            "extensions": [
+                ".nix"
+            ],
             "env": {},
             "initialization": {
                 "nixd": {
@@ -538,7 +591,9 @@
                         "expr": "import <nixpkgs> { }",
                     },
                     "formatting": {
-                        "command": ["alejandra"],
+                        "command": [
+                            "alejandra"
+                        ],
                     },
                     "options": {
                         "nixos": {
@@ -550,138 +605,250 @@
             "disabled": false,
         },
         "python": {
-            "command": ["pyright-langserver", "--stdio"],
-            "extensions": [".py"],
+            "command": [
+                "pyright-langserver",
+                "--stdio"
+            ],
+            "extensions": [
+                ".py"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
         "typescript": {
-            "command": ["typescript-language-server", "--stdio"],
-            "extensions": [".ts", ".tsx", ".js", ".jsx"],
+            "command": [
+                "typescript-language-server",
+                "--stdio"
+            ],
+            "extensions": [
+                ".ts",
+                ".tsx",
+                ".js",
+                ".jsx"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
         "markdown": {
-            "command": ["marksman", "server"],
-            "extensions": [".md"],
+            "command": [
+                "marksman",
+                "server"
+            ],
+            "extensions": [
+                ".md"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
         "yaml": {
-            "command": ["yaml-language-server", "--stdio"],
-            "extensions": [".yaml", ".yml"],
+            "command": [
+                "yaml-language-server",
+                "--stdio"
+            ],
+            "extensions": [
+                ".yaml",
+                ".yml"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
         "json": {
-            "command": ["vscode-json-languageserver", "--stdio"],
-            "extensions": [".json", ".jsonc"],
+            "command": [
+                "vscode-json-languageserver",
+                "--stdio"
+            ],
+            "extensions": [
+                ".json",
+                ".jsonc"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
         "xml": {
-            "command": ["lemminx"],
-            "extensions": [".xml"],
+            "command": [
+                "lemminx"
+            ],
+            "extensions": [
+                ".xml"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
         "lua": {
-            "command": ["lua-language-server"],
-            "extensions": [".lua"],
+            "command": [
+                "lua-language-server"
+            ],
+            "extensions": [
+                ".lua"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
         "bash": {
-            "command": ["bash-language-server", "start"],
-            "extensions": [".sh", ".bash"],
+            "command": [
+                "bash-language-server",
+                "start"
+            ],
+            "extensions": [
+                ".sh",
+                ".bash"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
         "rust": {
-            "command": ["rust-analyzer"],
-            "extensions": [".rs"],
+            "command": [
+                "rust-analyzer"
+            ],
+            "extensions": [
+                ".rs"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
         "go": {
-            "command": ["gopls"],
-            "extensions": [".go"],
+            "command": [
+                "gopls"
+            ],
+            "extensions": [
+                ".go"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
         "docker": {
-            "command": ["docker-langserver", "--stdio"],
-            "extensions": ["Dockerfile", ".dockerfile"],
+            "command": [
+                "docker-langserver",
+                "--stdio"
+            ],
+            "extensions": [
+                "Dockerfile",
+                ".dockerfile"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
         "fish": {
-            "command": ["fish-lsp", "start"],
-            "extensions": [".fish"],
+            "command": [
+                "fish-lsp",
+                "start"
+            ],
+            "extensions": [
+                ".fish"
+            ],
             "env": {},
             "initialization": {},
             "disabled": false,
         },
     },
-
     // === FORMATTERS ===
     "formatter": {
         "nix": {
-            "command": ["alejandra", "--quiet"],
-            "extensions": [".nix"],
+            "command": [
+                "alejandra",
+                "--quiet"
+            ],
+            "extensions": [
+                ".nix"
+            ],
             "environment": {},
             "disabled": false,
         },
         "python": {
-            "command": ["black", "--quiet", "-"],
-            "extensions": [".py"],
+            "command": [
+                "black",
+                "--quiet",
+                "-"
+            ],
+            "extensions": [
+                ".py"
+            ],
             "environment": {},
             "disabled": false,
         },
         "typescript": {
-            "command": ["prettier", "--parser", "typescript"],
-            "extensions": [".ts"],
+            "command": [
+                "prettier",
+                "--parser",
+                "typescript"
+            ],
+            "extensions": [
+                ".ts"
+            ],
             "environment": {},
             "disabled": false,
         },
         "javascript": {
-            "command": ["prettier", "--parser", "babel"],
-            "extensions": [".js"],
+            "command": [
+                "prettier",
+                "--parser",
+                "babel"
+            ],
+            "extensions": [
+                ".js"
+            ],
             "environment": {},
             "disabled": false,
         },
         "react": {
-            "command": ["prettier", "--parser", "typescript"],
-            "extensions": [".jsx", ".tsx"],
+            "command": [
+                "prettier",
+                "--parser",
+                "typescript"
+            ],
+            "extensions": [
+                ".jsx",
+                ".tsx"
+            ],
             "environment": {},
             "disabled": false,
         },
         "markdown": {
-            "command": ["prettier", "--parser", "markdown"],
-            "extensions": [".md"],
+            "command": [
+                "prettier",
+                "--parser",
+                "markdown"
+            ],
+            "extensions": [
+                ".md"
+            ],
             "environment": {},
             "disabled": false,
         },
         "yaml": {
-            "command": ["prettier", "--parser", "yaml"],
-            "extensions": [".yaml", ".yml"],
+            "command": [
+                "prettier",
+                "--parser",
+                "yaml"
+            ],
+            "extensions": [
+                ".yaml",
+                ".yml"
+            ],
             "environment": {},
             "disabled": false,
         },
         "json": {
-            "command": ["prettier", "--parser", "json"],
-            "extensions": [".json", ".jsonc"],
+            "command": [
+                "prettier",
+                "--parser",
+                "json"
+            ],
+            "extensions": [
+                ".json",
+                ".jsonc"
+            ],
             "environment": {},
             "disabled": false,
         },
@@ -692,48 +859,82 @@
                 "xml",
                 "--plugin=@prettier/plugin-xml",
             ],
-            "extensions": [".xml"],
+            "extensions": [
+                ".xml"
+            ],
             "environment": {},
             "disabled": false,
         },
         "lua": {
-            "command": ["stylua", "-"],
-            "extensions": [".lua"],
+            "command": [
+                "stylua",
+                "-"
+            ],
+            "extensions": [
+                ".lua"
+            ],
             "environment": {},
             "disabled": false,
         },
         "rust": {
-            "command": ["rustfmt", "--emit", "stdout"],
-            "extensions": [".rs"],
+            "command": [
+                "rustfmt",
+                "--emit",
+                "stdout"
+            ],
+            "extensions": [
+                ".rs"
+            ],
             "environment": {},
             "disabled": false,
         },
         "go": {
-            "command": ["gofmt"],
-            "extensions": [".go"],
+            "command": [
+                "gofmt"
+            ],
+            "extensions": [
+                ".go"
+            ],
             "environment": {},
             "disabled": false,
         },
         "bash": {
-            "command": ["shfmt", "-i", "4"],
-            "extensions": [".sh", ".bash"],
+            "command": [
+                "shfmt",
+                "-i",
+                "4"
+            ],
+            "extensions": [
+                ".sh",
+                ".bash"
+            ],
             "environment": {},
             "disabled": false,
         },
         "dockerfile": {
-            "command": ["prettier", "--parser", "sh"],
-            "extensions": ["Dockerfile", ".dockerfile"],
+            "command": [
+                "prettier",
+                "--parser",
+                "sh"
+            ],
+            "extensions": [
+                "Dockerfile",
+                ".dockerfile"
+            ],
             "environment": {},
             "disabled": false,
         },
         "fish": {
-            "command": ["fish_indent"],
-            "extensions": [".fish"],
+            "command": [
+                "fish_indent"
+            ],
+            "extensions": [
+                ".fish"
+            ],
             "environment": {},
             "disabled": false,
         },
     },
-
     "snapshot": true,
     "experimental": {
         "batch_tool": true,
@@ -760,8 +961,9 @@
             "template": "",
         },
     },
-
-    "plugin": ["opencode-skills"],
+    "plugin": [
+        "opencode-skills"
+    ],
     "username": "hbohlen",
     "$schema": "https://opencode.ai/config.json",
 }
