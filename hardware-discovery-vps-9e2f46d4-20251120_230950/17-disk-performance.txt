@@ -1,0 +1,15 @@
+=== Disk Performance Metrics ===
+Testing /dev/sda performance...
+Read speed test (first 1GB):
+Read test failed
+=== TRIM Support ===
+NAME    DISC-ALN DISC-GRAN DISC-MAX DISC-ZERO
+loop0          0        4K       4G         0
+loop1          0        4K       4G         0
+loop2          0        4K       4G         0
+sda            0        4K       1G         0
+├─sda1         0        4K       1G         0
+├─sda14        0        4K       1G         0
+└─sda15        0        4K       1G         0
+=== I/O Scheduler ===
+sda: [none] mq-deadline 

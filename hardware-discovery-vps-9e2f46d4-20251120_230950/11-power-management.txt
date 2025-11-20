@@ -1,0 +1,3 @@
+No battery found
+=== Additional Battery Info ===
+No battery status information available

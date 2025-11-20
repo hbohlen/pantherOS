@@ -1,0 +1,12 @@
+kvm
+ Static hostname: vps-9e2f46d4
+       Icon name: computer-vm
+         Chassis: vm
+      Machine ID: f1d32701697d4904bafb80afe11b7dd6
+         Boot ID: 7b89f98809a34d04bee88c006e7a1447
+  Virtualization: kvm
+Operating System: Ubuntu 22.04.5 LTS
+          Kernel: Linux 5.15.0-160-generic
+    Architecture: x86-64
+ Hardware Vendor: OpenStack Foundation
+  Hardware Model: OpenStack Nova
