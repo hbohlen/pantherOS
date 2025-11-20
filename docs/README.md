@@ -32,8 +32,8 @@ Module-specific documentation (mirrors `../modules/` structure)
 - **[nixos/](./modules/nixos/)** - System modules documentation
   - **[core/](./modules/nixos/core/)** - Core system functionality
   - **[services/](./modules/nixos/services/)** - Network services
-  - **[security/](./modules/nixos/security/) - Security configurations
-  - **[hardware/](./modules/nytics/hardware/)** - Hardware-specific modules
+  - **[security/](./modules/nixos/security/)** - Security configurations
+  - **[hardware/](./modules/nixos/hardware/)** - Hardware-specific modules
 - **[home-manager/](./modules/home-manager/)** - User modules documentation
   - **[shell/](./modules/home-manager/shell/)** - Terminal and shell
   - **[applications/](./modules/home-manager/applications/)** - User applications

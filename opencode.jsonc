@@ -1,108 +1,116 @@
 {
-    // MCP servers at root level
-    "mcp": {
-        "brave-search": {
-            "type": "local",
-            "command": [
-                "npx",
-                "-y",
-                "@modelcontextprotocol/server-brave-search"
-            ],
-            "environment": {
-                "BRAVE_API_KEY": "${env:BRAVE_API_KEY}"
-            },
-            "enabled": true,      // Enable on startup
-            "timeout": 5000       // Optional: 5 second timeout
-        },
-        "sequential-thinking": {
-            "type": "local",
-            "command": [
-                "npx",
-                "-y",
-                "@modelcontextprotocol/server-sequential-thinking"
-            ],
-            "enabled": true
+  "agent": {
+    "architect": {
+      "model": "cliproxyapi/minimax-m2",
+      "prompt": ".opencode/.opencode/agent/system-builder.md",
+      "tools": {
+        "brave-search": true,
+        "sequential-thinking": true,
+        "read": true,
+        "write": true,
+        "edit": true,
+        "grep": true,
+        "glob": true,
+        "bash": false
+      },
+      "description": "System architect and planner",
+      "mode": "primary",
+      "permission": {
+        "edit": "allow",
+        "bash": "deny",
+        "webfetch": "allow",
+        "doom_loop": "deny",
+        "external_directory": "deny"
+      },
+      "options": {
+        "temperature": 1,
+        "top_p": 0.95,
+        "max_tokens": 8192,
+        "stream": true,
+        "thinking": {
+          "type": "enabled"
         }
+      }
     },
-    // Agent configuration
-    "agent": {
-        "architect": {
-            "prompt": ".opencode/.opencode/agent/system-builder.md",
-            "model": "cliproxyapi/minimax-m2",
-            "options": {
-                "temperature": 1.0,
-                "top_p": 0.95,
-                "max_tokens": 8192,
-                "stream": true,
-                "thinking": { "type": "enabled" }
-            },
-            "description": "System architect and planner",
-            "mode": "primary",    // Optional: "subagent", "primary", or "all"
-            "permission": {
-                "edit": "allow",
-                "bash": "deny",
-                "webfetch": "allow",
-                "doom_loop": "deny",
-                "external_directory": "deny"
-            },
-            "tools": {
-                "brave-search": true,        // ✓ Enable Brave Search
-                "sequential-thinking": true,  // ✓ Enable sequential thinking
-                "read": true,                 // Built-in OpenCode tools
-                "write": true,
-                "edit": true,
-                "grep": true,
-                "glob": true,
-                "bash": false                 // Disabled via permission
-            }
-        },
-        "librarian": {
-            "prompt": ".opencode/.opencode/agent/openagent.md",
-            "model": "cliproxyapi/minimax-m2",
-            "options": {
-                "temperature": 0.8,
-                "top_p": 0.9,
-                "max_tokens": 8192,
-                "stream": true,
-                "thinking": { "type": "enabled" }
-            },
-            "permission": {
-                "bash": "deny",
-                "edit": "deny",
-                "webfetch": "allow"
-            },
-            "tools": {
-                "brave-search": true,   // Librarian can search
-                "context7": true,       // If you have this MCP
-                "read": true,
-                "grep": true,
-                "glob": true
-            }
-        },
-        "engineer": {
-            "prompt": ".opencode/.opencode/agent/codebase-agent.md",
-            "model": "cliproxyapi/glm-4.6",
-            "options": {
-                "do_sample": true,
-                "temperature": 0.3,
-                "top_p": 0.85,
-                "max_tokens": 65536,
-                "stream": true,
-                "thinking": { "type": "enabled" }
-            },
-            "permission": {
-                "edit": "allow",
-                "bash": "ask",
-                "webfetch": "deny"  // Engineer doesn't need web
-            },
-            "tools": {
-                "brave-search": false,  // Disable for engineer
-                "read": true,
-                "write": true,
-                "edit": true,
-                "patch": true,
-                "bash": true
-            }
+    "librarian": {
+      "model": "cliproxyapi/minimax-m2",
+      "prompt": ".opencode/.opencode/agent/openagent.md",
+      "tools": {
+        "brave-search": true,
+        "context7": true,
+        "read": true,
+        "grep": true,
+        "glob": true
+      },
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
+        "webfetch": "allow"
+      },
+      "options": {
+        "temperature": 0.8,
+        "top_p": 0.9,
+        "max_tokens": 8192,
+        "stream": true,
+        "thinking": {
+          "type": "enabled"
         }
+      }
+    },
+    "engineer": {
+      "model": "cliproxyapi/glm-4.6",
+      "prompt": ".opencode/.opencode/agent/codebase-agent.md",
+      "tools": {
+        "brave-search": false,
+        "read": true,
+        "write": true,
+        "edit": true,
+        "patch": true,
+        "bash": true
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": "ask",
+        "webfetch": "deny"
+      },
+      "options": {
+        "do_sample": true,
+        "temperature": 0.3,
+        "top_p": 0.85,
+        "max_tokens": 65536,
+        "stream": true,
+        "thinking": {
+          "type": "enabled"
+        }
+      }
     }
+  },
+  "mcp": {
+    "brave-search": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "environment": {
+        "BRAVE_API_KEY": "$"
+      },
+      "enabled": true,
+      "timeout": 5000
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "enabled": true
+    }
+  },
+  "plugin": [
+    "opencode-skills"
+  ],
+  "$schema": "https://opencode.ai/config.json"
 }
