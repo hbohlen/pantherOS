@@ -1,5 +1,6 @@
 # Server port
 port: 8317
+
 # Management API settings
 remote-management:
     # Whether to allow remote (non-localhost) management access.
@@ -11,28 +12,38 @@ remote-management:
     secret-key: "xxx"
     # Disable the bundled management control panel asset download and HTTP route when true.
     disable-control-panel: false
+
 # Authentication directory (supports ~ for home directory)
 auth-dir: "/home/hbohlen/.cli-proxy-api"
+
 # API keys for authentication
 api-keys:
     - "xxx"
     - "xxx"
+
 # Enable debug logging
 debug: true
+
 # When true, write application logs to rotating files instead of stdout
 logging-to-file: true
+
 # When false, disable in-memory usage statistics aggregation
 usage-statistics-enabled: true
-# Proxy URL. Supports socks5/http/https protocols. Example: socks5://user:pass@192.168.1.1:1080/
+
+# Proxy URL. Supports socks5/http/https protocols. Example: socks5://user:pass@192.168.1.1:1080
 proxy-url: ""
+
 # Number of times to retry a request. Retries will occur if the HTTP response code is 403, 408, 500, 502, 503, or 504.
 request-retry: 3
+
 # Quota exceeded behavior
 quota-exceeded:
     switch-project: true # Whether to automatically switch to another project when a quota is exceeded
     switch-preview-model: true # Whether to automatically switch to a preview model when a quota is exceeded
+
 # When true, enable authentication for the WebSocket API (/v1/ws).
 ws-auth: false
+
 # Gemini API keys (preferred)
 #gemini-api-key:
 #  - api-key: "AIzaSy...01"
@@ -44,9 +55,11 @@ ws-auth: false
 
 request-log: true
 disable-cooling: false
+
 payload:
     default: []
     override: []
+
 # API keys for official Generative Language API (legacy compatibility)
 #generative-language-api-key:
 #  - "AIzaSy...01"
@@ -66,6 +79,7 @@ openai-compatibility:
             alias: "glm-4.5"
           - name: "glm-4.5-air"
             alias: "glm-4.5-air"
+
 # Codex API keys
 #codex-api-key:
 #  - api-key: "sk-atSM..."
@@ -83,6 +97,7 @@ claude-api-key:
             alias: minimax-m2
           - name: MiniMax-M2-Stable
             alias: minimax-m2-stable
+
 # Claude API keys
 #claude-api-key:
 #  - api-key: "sk-atSM..." # use the official claude API key, no need to set the base url
