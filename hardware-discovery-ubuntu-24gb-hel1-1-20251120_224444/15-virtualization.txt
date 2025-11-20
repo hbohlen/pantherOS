@@ -1,0 +1,15 @@
+kvm
+ Static hostname: ubuntu-24gb-hel1-1
+       Icon name: computer-vm
+         Chassis: vm 🖴
+      Machine ID: 22e0430f2d414c228f18696233fb4819
+         Boot ID: c3f58e13910846369cec6f3cd4d65b11
+  Virtualization: kvm
+Operating System: Ubuntu 24.04.3 LTS
+          Kernel: Linux 6.8.0-71-generic
+    Architecture: x86-64
+ Hardware Vendor: Hetzner
+  Hardware Model: vServer
+Firmware Version: 20171111
+   Firmware Date: Sat 2017-11-11
+    Firmware Age: 8y 1w 2d

@@ -1,0 +1,315 @@
+00:00.0 Host bridge [0600]: Intel Corporation 82G33/G31/P35/P31 Express DRAM Controller [8086:29c0]
+	Subsystem: Red Hat, Inc. QEMU Virtual Machine [1af4:1100]
+00:01.0 VGA compatible controller [0300]: Red Hat, Inc. Virtio 1.0 GPU [1af4:1050] (rev 01)
+	Subsystem: Red Hat, Inc. Virtio 1.0 GPU [1af4:1100]
+	Kernel driver in use: virtio-pci
+00:02.0 PCI bridge [0604]: Red Hat, Inc. QEMU PCIe Root port [1b36:000c]
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port [1b36:0000]
+	Kernel driver in use: pcieport
+00:02.1 PCI bridge [0604]: Red Hat, Inc. QEMU PCIe Root port [1b36:000c]
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port [1b36:0000]
+	Kernel driver in use: pcieport
+00:02.2 PCI bridge [0604]: Red Hat, Inc. QEMU PCIe Root port [1b36:000c]
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port [1b36:0000]
+	Kernel driver in use: pcieport
+00:02.3 PCI bridge [0604]: Red Hat, Inc. QEMU PCIe Root port [1b36:000c]
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port [1b36:0000]
+	Kernel driver in use: pcieport
+00:02.4 PCI bridge [0604]: Red Hat, Inc. QEMU PCIe Root port [1b36:000c]
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port [1b36:0000]
+	Kernel driver in use: pcieport
+00:02.5 PCI bridge [0604]: Red Hat, Inc. QEMU PCIe Root port [1b36:000c]
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port [1b36:0000]
+	Kernel driver in use: pcieport
+00:02.6 PCI bridge [0604]: Red Hat, Inc. QEMU PCIe Root port [1b36:000c]
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port [1b36:0000]
+	Kernel driver in use: pcieport
+00:02.7 PCI bridge [0604]: Red Hat, Inc. QEMU PCIe Root port [1b36:000c]
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port [1b36:0000]
+	Kernel driver in use: pcieport
+00:03.0 PCI bridge [0604]: Red Hat, Inc. QEMU PCIe Root port [1b36:000c]
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port [1b36:0000]
+	Kernel driver in use: pcieport
+00:1f.0 ISA bridge [0601]: Intel Corporation 82801IB (ICH9) LPC Interface Controller [8086:2918] (rev 02)
+	Subsystem: Red Hat, Inc. QEMU Virtual Machine [1af4:1100]
+00:1f.2 SATA controller [0106]: Intel Corporation 82801IR/IO/IH (ICH9R/DO/DH) 6 port SATA Controller [AHCI mode] [8086:2922] (rev 02)
+	Subsystem: Red Hat, Inc. QEMU Virtual Machine [1af4:1100]
+	Kernel driver in use: ahci
+	Kernel modules: ahci
+00:1f.3 SMBus [0c05]: Intel Corporation 82801I (ICH9 Family) SMBus Controller [8086:2930] (rev 02)
+	Subsystem: Red Hat, Inc. QEMU Virtual Machine [1af4:1100]
+01:00.0 Ethernet controller [0200]: Red Hat, Inc. Virtio 1.0 network device [1af4:1041] (rev 01)
+	Subsystem: Red Hat, Inc. Virtio 1.0 network device [1af4:1100]
+	Kernel driver in use: virtio-pci
+02:00.0 USB controller [0c03]: Red Hat, Inc. QEMU XHCI Host Controller [1b36:000d] (rev 01)
+	Subsystem: Red Hat, Inc. QEMU XHCI Host Controller [1af4:1100]
+	Kernel driver in use: xhci_hcd
+	Kernel modules: xhci_pci
+03:00.0 Communication controller [0780]: Red Hat, Inc. Virtio 1.0 console [1af4:1043] (rev 01)
+	Subsystem: Red Hat, Inc. Virtio 1.0 console [1af4:1100]
+	Kernel driver in use: virtio-pci
+04:00.0 Unclassified device [00ff]: Red Hat, Inc. Virtio 1.0 memory balloon [1af4:1045] (rev 01)
+	Subsystem: Red Hat, Inc. Virtio 1.0 memory balloon [1af4:1100]
+	Kernel driver in use: virtio-pci
+05:00.0 Unclassified device [00ff]: Red Hat, Inc. Virtio 1.0 RNG [1af4:1044] (rev 01)
+	Subsystem: Red Hat, Inc. Virtio 1.0 RNG [1af4:1100]
+	Kernel driver in use: virtio-pci
+06:00.0 SCSI storage controller [0100]: Red Hat, Inc. Virtio 1.0 SCSI [1af4:1048] (rev 01)
+	Subsystem: Red Hat, Inc. Virtio 1.0 SCSI [1af4:1100]
+	Kernel driver in use: virtio-pci
+00:00.0 Host bridge: Intel Corporation 82G33/G31/P35/P31 Express DRAM Controller
+	Subsystem: Red Hat, Inc. QEMU Virtual Machine
+	Flags: bus master, fast devsel, latency 0
+
+00:01.0 VGA compatible controller: Red Hat, Inc. Virtio 1.0 GPU (rev 01) (prog-if 00 [VGA controller])
+	Subsystem: Red Hat, Inc. Virtio 1.0 GPU
+	Flags: bus master, fast devsel, latency 0, IRQ 21
+	Memory at 80000000 (32-bit, prefetchable) [size=8M]
+	Memory at c060500000 (64-bit, prefetchable) [size=16K]
+	Memory at 8138a000 (32-bit, non-prefetchable) [size=4K]
+	Expansion ROM at 000c0000 [disabled] [size=128K]
+	Capabilities: [98] MSI-X: Enable+ Count=3 Masked-
+	Capabilities: [84] Vendor Specific Information: VirtIO: <unknown>
+	Capabilities: [70] Vendor Specific Information: VirtIO: Notify
+	Capabilities: [60] Vendor Specific Information: VirtIO: DeviceCfg
+	Capabilities: [50] Vendor Specific Information: VirtIO: ISR
+	Capabilities: [40] Vendor Specific Information: VirtIO: CommonCfg
+	Kernel driver in use: virtio-pci
+
+00:02.0 PCI bridge: Red Hat, Inc. QEMU PCIe Root port (prog-if 00 [Normal decode])
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 81389000 (32-bit, non-prefetchable) [size=4K]
+	Bus: primary=00, secondary=01, subordinate=01, sec-latency=0
+	I/O behind bridge: [disabled] [16-bit]
+	Memory behind bridge: 81200000-812fffff [size=1M] [32-bit]
+	Prefetchable memory behind bridge: c060000000-c0600fffff [size=1M] [32-bit]
+	Capabilities: [54] Express Root Port (Slot+), MSI 00
+	Capabilities: [48] MSI-X: Enable+ Count=1 Masked-
+	Capabilities: [40] Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [148] Access Control Services
+	Kernel driver in use: pcieport
+
+00:02.1 PCI bridge: Red Hat, Inc. QEMU PCIe Root port (prog-if 00 [Normal decode])
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 81388000 (32-bit, non-prefetchable) [size=4K]
+	Bus: primary=00, secondary=02, subordinate=02, sec-latency=0
+	I/O behind bridge: [disabled] [16-bit]
+	Memory behind bridge: 81100000-811fffff [size=1M] [32-bit]
+	Prefetchable memory behind bridge: [disabled] [64-bit]
+	Capabilities: [54] Express Root Port (Slot+), MSI 00
+	Capabilities: [48] MSI-X: Enable+ Count=1 Masked-
+	Capabilities: [40] Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [148] Access Control Services
+	Kernel driver in use: pcieport
+
+00:02.2 PCI bridge: Red Hat, Inc. QEMU PCIe Root port (prog-if 00 [Normal decode])
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 81387000 (32-bit, non-prefetchable) [size=4K]
+	Bus: primary=00, secondary=03, subordinate=03, sec-latency=0
+	I/O behind bridge: [disabled] [16-bit]
+	Memory behind bridge: 81000000-810fffff [size=1M] [32-bit]
+	Prefetchable memory behind bridge: c060100000-c0601fffff [size=1M] [32-bit]
+	Capabilities: [54] Express Root Port (Slot+), MSI 00
+	Capabilities: [48] MSI-X: Enable+ Count=1 Masked-
+	Capabilities: [40] Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [148] Access Control Services
+	Kernel driver in use: pcieport
+
+00:02.3 PCI bridge: Red Hat, Inc. QEMU PCIe Root port (prog-if 00 [Normal decode])
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 81386000 (32-bit, non-prefetchable) [size=4K]
+	Bus: primary=00, secondary=04, subordinate=04, sec-latency=0
+	I/O behind bridge: [disabled] [16-bit]
+	Memory behind bridge: [disabled] [32-bit]
+	Prefetchable memory behind bridge: c060200000-c0602fffff [size=1M] [32-bit]
+	Capabilities: [54] Express Root Port (Slot+), MSI 00
+	Capabilities: [48] MSI-X: Enable+ Count=1 Masked-
+	Capabilities: [40] Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [148] Access Control Services
+	Kernel driver in use: pcieport
+
+00:02.4 PCI bridge: Red Hat, Inc. QEMU PCIe Root port (prog-if 00 [Normal decode])
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 81385000 (32-bit, non-prefetchable) [size=4K]
+	Bus: primary=00, secondary=05, subordinate=05, sec-latency=0
+	I/O behind bridge: [disabled] [16-bit]
+	Memory behind bridge: 80f00000-80ffffff [size=1M] [32-bit]
+	Prefetchable memory behind bridge: c060300000-c0603fffff [size=1M] [32-bit]
+	Capabilities: [54] Express Root Port (Slot+), MSI 00
+	Capabilities: [48] MSI-X: Enable+ Count=1 Masked-
+	Capabilities: [40] Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [148] Access Control Services
+	Kernel driver in use: pcieport
+
+00:02.5 PCI bridge: Red Hat, Inc. QEMU PCIe Root port (prog-if 00 [Normal decode])
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 81384000 (32-bit, non-prefetchable) [size=4K]
+	Bus: primary=00, secondary=06, subordinate=06, sec-latency=0
+	I/O behind bridge: [disabled] [16-bit]
+	Memory behind bridge: 80e00000-80efffff [size=1M] [32-bit]
+	Prefetchable memory behind bridge: c060400000-c0604fffff [size=1M] [32-bit]
+	Capabilities: [54] Express Root Port (Slot+), MSI 00
+	Capabilities: [48] MSI-X: Enable+ Count=1 Masked-
+	Capabilities: [40] Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [148] Access Control Services
+	Kernel driver in use: pcieport
+
+00:02.6 PCI bridge: Red Hat, Inc. QEMU PCIe Root port (prog-if 00 [Normal decode])
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 81383000 (32-bit, non-prefetchable) [size=4K]
+	Bus: primary=00, secondary=07, subordinate=07, sec-latency=0
+	I/O behind bridge: 1000-1fff [size=4K] [16-bit]
+	Memory behind bridge: 80c00000-80dfffff [size=2M] [32-bit]
+	Prefetchable memory behind bridge: c000000000-c01fffffff [size=512M] [32-bit]
+	Capabilities: [54] Express Root Port (Slot+), MSI 00
+	Capabilities: [48] MSI-X: Enable+ Count=1 Masked-
+	Capabilities: [40] Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [148] Access Control Services
+	Kernel driver in use: pcieport
+
+00:02.7 PCI bridge: Red Hat, Inc. QEMU PCIe Root port (prog-if 00 [Normal decode])
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 81382000 (32-bit, non-prefetchable) [size=4K]
+	Bus: primary=00, secondary=08, subordinate=08, sec-latency=0
+	I/O behind bridge: 2000-2fff [size=4K] [16-bit]
+	Memory behind bridge: 80a00000-80bfffff [size=2M] [32-bit]
+	Prefetchable memory behind bridge: c020000000-c03fffffff [size=512M] [32-bit]
+	Capabilities: [54] Express Root Port (Slot+), MSI 00
+	Capabilities: [48] MSI-X: Enable+ Count=1 Masked-
+	Capabilities: [40] Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [148] Access Control Services
+	Kernel driver in use: pcieport
+
+00:03.0 PCI bridge: Red Hat, Inc. QEMU PCIe Root port (prog-if 00 [Normal decode])
+	Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Flags: bus master, fast devsel, latency 0, IRQ 23
+	Memory at 81381000 (32-bit, non-prefetchable) [size=4K]
+	Bus: primary=00, secondary=09, subordinate=09, sec-latency=0
+	I/O behind bridge: 3000-3fff [size=4K] [16-bit]
+	Memory behind bridge: 80800000-809fffff [size=2M] [32-bit]
+	Prefetchable memory behind bridge: c040000000-c05fffffff [size=512M] [32-bit]
+	Capabilities: [54] Express Root Port (Slot+), MSI 00
+	Capabilities: [48] MSI-X: Enable+ Count=1 Masked-
+	Capabilities: [40] Subsystem: Red Hat, Inc. QEMU PCIe Root port
+	Capabilities: [100] Advanced Error Reporting
+	Capabilities: [148] Access Control Services
+	Kernel driver in use: pcieport
+
+00:1f.0 ISA bridge: Intel Corporation 82801IB (ICH9) LPC Interface Controller (rev 02)
+	Subsystem: Red Hat, Inc. QEMU Virtual Machine
+	Flags: bus master, fast devsel, latency 0
+
+00:1f.2 SATA controller: Intel Corporation 82801IR/IO/IH (ICH9R/DO/DH) 6 port SATA Controller [AHCI mode] (rev 02) (prog-if 01 [AHCI 1.0])
+	Subsystem: Red Hat, Inc. QEMU Virtual Machine
+	Flags: bus master, fast devsel, latency 0, IRQ 68
+	I/O ports at 6040 [size=32]
+	Memory at 81380000 (32-bit, non-prefetchable) [size=4K]
+	Capabilities: [80] MSI: Enable+ Count=1/1 Maskable- 64bit+
+	Capabilities: [a8] SATA HBA v1.0
+	Kernel driver in use: ahci
+	Kernel modules: ahci
+
+00:1f.3 SMBus: Intel Corporation 82801I (ICH9 Family) SMBus Controller (rev 02)
+	Subsystem: Red Hat, Inc. QEMU Virtual Machine
+	Flags: bus master, fast devsel, latency 0, IRQ 10
+	I/O ports at 6000 [size=64]
+
+01:00.0 Ethernet controller: Red Hat, Inc. Virtio 1.0 network device (rev 01)
+	Subsystem: Red Hat, Inc. Virtio 1.0 network device
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 81200000 (32-bit, non-prefetchable) [size=4K]
+	Memory at c060000000 (64-bit, prefetchable) [size=16K]
+	Expansion ROM at 81280000 [disabled] [size=512K]
+	Capabilities: [dc] MSI-X: Enable+ Count=4 Masked-
+	Capabilities: [c8] Vendor Specific Information: VirtIO: <unknown>
+	Capabilities: [b4] Vendor Specific Information: VirtIO: Notify
+	Capabilities: [a4] Vendor Specific Information: VirtIO: DeviceCfg
+	Capabilities: [94] Vendor Specific Information: VirtIO: ISR
+	Capabilities: [84] Vendor Specific Information: VirtIO: CommonCfg
+	Capabilities: [7c] Power Management version 3
+	Capabilities: [40] Express Endpoint, MSI 00
+	Kernel driver in use: virtio-pci
+
+02:00.0 USB controller: Red Hat, Inc. QEMU XHCI Host Controller (rev 01) (prog-if 30 [XHCI])
+	Subsystem: Red Hat, Inc. QEMU XHCI Host Controller
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 81100000 (64-bit, non-prefetchable) [size=16K]
+	Capabilities: [90] MSI-X: Enable+ Count=16 Masked-
+	Capabilities: [a0] Express Endpoint, MSI 00
+	Kernel driver in use: xhci_hcd
+	Kernel modules: xhci_pci
+
+03:00.0 Communication controller: Red Hat, Inc. Virtio 1.0 console (rev 01)
+	Subsystem: Red Hat, Inc. Virtio 1.0 console
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 81000000 (32-bit, non-prefetchable) [size=4K]
+	Memory at c060100000 (64-bit, prefetchable) [size=16K]
+	Capabilities: [dc] MSI-X: Enable+ Count=2 Masked-
+	Capabilities: [c8] Vendor Specific Information: VirtIO: <unknown>
+	Capabilities: [b4] Vendor Specific Information: VirtIO: Notify
+	Capabilities: [a4] Vendor Specific Information: VirtIO: DeviceCfg
+	Capabilities: [94] Vendor Specific Information: VirtIO: ISR
+	Capabilities: [84] Vendor Specific Information: VirtIO: CommonCfg
+	Capabilities: [7c] Power Management version 3
+	Capabilities: [40] Express Endpoint, MSI 00
+	Kernel driver in use: virtio-pci
+
+04:00.0 Unclassified device [00ff]: Red Hat, Inc. Virtio 1.0 memory balloon (rev 01)
+	Subsystem: Red Hat, Inc. Virtio 1.0 memory balloon
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at c060200000 (64-bit, prefetchable) [size=16K]
+	Capabilities: [c8] Vendor Specific Information: VirtIO: <unknown>
+	Capabilities: [b4] Vendor Specific Information: VirtIO: Notify
+	Capabilities: [a4] Vendor Specific Information: VirtIO: DeviceCfg
+	Capabilities: [94] Vendor Specific Information: VirtIO: ISR
+	Capabilities: [84] Vendor Specific Information: VirtIO: CommonCfg
+	Capabilities: [7c] Power Management version 3
+	Capabilities: [40] Express Endpoint, MSI 00
+	Kernel driver in use: virtio-pci
+
+05:00.0 Unclassified device [00ff]: Red Hat, Inc. Virtio 1.0 RNG (rev 01)
+	Subsystem: Red Hat, Inc. Virtio 1.0 RNG
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 80f00000 (32-bit, non-prefetchable) [size=4K]
+	Memory at c060300000 (64-bit, prefetchable) [size=16K]
+	Capabilities: [dc] MSI-X: Enable+ Count=2 Masked-
+	Capabilities: [c8] Vendor Specific Information: VirtIO: <unknown>
+	Capabilities: [b4] Vendor Specific Information: VirtIO: Notify
+	Capabilities: [a4] Vendor Specific Information: VirtIO: DeviceCfg
+	Capabilities: [94] Vendor Specific Information: VirtIO: ISR
+	Capabilities: [84] Vendor Specific Information: VirtIO: CommonCfg
+	Capabilities: [7c] Power Management version 3
+	Capabilities: [40] Express Endpoint, MSI 00
+	Kernel driver in use: virtio-pci
+
+06:00.0 SCSI storage controller: Red Hat, Inc. Virtio 1.0 SCSI (rev 01)
+	Subsystem: Red Hat, Inc. Virtio 1.0 SCSI
+	Flags: bus master, fast devsel, latency 0, IRQ 22
+	Memory at 80e00000 (32-bit, non-prefetchable) [size=4K]
+	Memory at c060400000 (64-bit, prefetchable) [size=16K]
+	Capabilities: [dc] MSI-X: Enable+ Count=15 Masked-
+	Capabilities: [c8] Vendor Specific Information: VirtIO: <unknown>
+	Capabilities: [b4] Vendor Specific Information: VirtIO: Notify
+	Capabilities: [a4] Vendor Specific Information: VirtIO: DeviceCfg
+	Capabilities: [94] Vendor Specific Information: VirtIO: ISR
+	Capabilities: [84] Vendor Specific Information: VirtIO: CommonCfg
+	Capabilities: [7c] Power Management version 3
+	Capabilities: [40] Express Endpoint, MSI 00
+	Kernel driver in use: virtio-pci
+
