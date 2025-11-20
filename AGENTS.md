@@ -1,3 +1,22 @@
+<!-- OPENSPEC:START -->
+# OpenSpec Instructions
+
+These instructions are for AI assistants working in this project.
+
+Always open `@/openspec/AGENTS.md` when the request:
+- Mentions planning or proposals (words like proposal, spec, change, plan)
+- Introduces new capabilities, breaking changes, architecture shifts, or big performance/security work
+- Sounds ambiguous and you need the authoritative spec before coding
+
+Use `@/openspec/AGENTS.md` to learn:
+- How to create and apply change proposals
+- Spec format and conventions
+- Project structure and guidelines
+
+Keep this managed block so 'openspec update' can refresh the instructions.
+
+<!-- OPENSPEC:END -->
+
 # Agent Guidance for pantherOS Root
 
 ## Purpose
@@ -130,6 +149,74 @@ nix flake update
 alejandra .
 ```
 
+## Skills Integration
+
+pantherOS includes specialized skills for automated workflows:
+
+### Available Skills
+- **pantheros-deployment-orchestrator** - Automated deployment and rollback
+- **pantheros-hardware-scanner** - Hardware discovery and documentation
+- **pantheros-module-generator** - Automated module creation
+- **pantheros-secrets-manager** - 1Password integration and secrets handling
+
+### When to Use Skills
+- **Hardware Discovery**: Use `pantheros-hardware-scanner` before any host configuration
+- **Module Creation**: Use `pantheros-module-generator` for consistent module patterns
+- **Deployment**: Use `pantheros-deployment-orchestrator` for safe host deployment
+- **Secrets Management**: Use `pantheros-secrets-manager` for all 1Password operations
+
+### Skill Integration Pattern
+```bash
+# Example: Hardware discovery workflow
+cd /home/hbohlen/dev/pantherOS
+./skills/pantheros-hardware-scanner/scripts/scan-hardware.sh yoga
+```
+
+## OpenSpec Integration
+
+OpenSpec provides structured change proposal workflow for significant changes.
+
+### When to Use OpenSpec
+Use OpenSpec for:
+- **Architecture Changes**: Module system restructuring, host layout changes
+- **Breaking Changes**: API modifications, dependency updates
+- **Security Model Changes**: Firewall rules, authentication changes
+- **Performance Changes**: Major optimization work
+- **New Capabilities**: Adding new tooling or workflows
+
+### OpenSpec Workflow
+1. **Proposal**: `/spec-gen <name>` - Generate change proposal
+2. **Implementation**: `/code-impl <name>` - Implement approved spec
+3. **Validation**: `/nixos-check <name>` - Verify implementation
+4. **Archive**: `/openspec-archive <name>` - Archive completed change
+
+### Integration with Phases
+- **Phase 1**: Hardware discovery specifications
+- **Phase 2**: Module interface specifications  
+- **Phase 3**: Host configuration specifications
+
+## Agent Integration
+
+OpenCode agents provide specialized assistance for pantherOS development:
+
+### Agent Roles
+- **Architect**: System design and module planning
+- **Engineer**: Implementation and code development
+- **Librarian**: Research and validation
+- **Reviewer**: Quality assurance and testing
+
+### Agent Workflow
+1. **Architect** analyzes requirements and creates proposals
+2. **Librarian** validates feasibility and researches options
+3. **Engineer** implements according to specifications
+4. **Reviewer** validates and approves changes
+
+### Custom Commands
+- `/spec-gen <name>` - Generate OpenSpec proposal
+- `/code-impl <name>` - Implement from specification
+- `/nixos-check <name>` - Validate NixOS configuration
+- `/research <query>` - Research with context7 and nixos
+
 ## Working in Subdirectories
 
 Each subdirectory has its own AGENTS.md with specific guidance:
@@ -138,6 +225,7 @@ Each subdirectory has its own AGENTS.md with specific guidance:
 - `AGENTS.md` - This file, project overview and guidelines
 
 ### Subdirectory Guidance
+- `openspec/AGENTS.md` - OpenSpec change proposal workflow
 - `docs/AGENTS.md` - Documentation-specific guidance
 - `modules/AGENTS.md` - For module development
 - `hosts/AGENTS.md` - For host configuration

@@ -1,555 +1,753 @@
-# Agent Guidance for /home
+# Home-Manager Development for pantherOS
 
-## Purpose
-Home-manager configurations for user-specific settings, applications, and dotfiles.
+## Overview
 
-## Directory Structure
+Home-Manager in pantherOS manages user-level configurations including shell environments, desktop settings, applications, and development tools. All user configurations are modular and follow the single-concern principle.
 
-```
-home/
-└── hbohlen/              # Username-specific directory
-    ├── home.nix          # Main home-manager config
-    ├── configs/          # Config file templates
-    │   ├── fish/
-    │   ├── ghostty/
-    │   ├── opencode/
-    │   ├── zed/
-    │   └── ...
-    └── profiles/         # User-specific profiles
-        ├── development/
-        └── workstation/
-```
+## User Environment Modules
 
-## home.nix Structure
+### Shell Configuration
+Terminal and shell environment setup:
 
+#### Fish Shell Module
 ```nix
-{ inputs, pkgs, ... }:
-
-{
-  # Import home-manager modules
-  imports = [
-    inputs.home-manager.nixosModules.home-manager
-
-    # Your custom home-manager modules
-    ../../modules/home-manager/shell/fish.nix
-    ../../modules/home-manager/applications/zed.nix
-    ../../modules/home-manager/development/languages/node.nix
-    ../../modules/home-manager/desktop/niri.nix
-
-    # User profiles
-    ./profiles/development/development.nix
-  ];
-
-  # Home-manager configuration
-  home.username = "hbohlen";
-  home.homeDirectory = "/home/hbohlen";
-  home.sessionName = "fish";  # or "bash", "zsh"
-
-  # Nix configuration
-  home.nix = {
-    package = pkgs.nix;
-    registry = {
-      nixpkgs.flake = inputs.nixpkgs;
-      home-manager.flake = inputs.home-manager;
-    };
-    extraOptions = "experimental-features = nix-command flakes";
-  };
-
-  # Programs
-  programs.home-manager.enable = true;
-
-  # Packages
-  home.packages = with pkgs; [
-    # Additional packages not in modules
-  ];
-
-  # Environment variables
-  home.sessionVariables = {
-    EDITOR = "zed";
-    VISUAL = "zed";
-    TERM = "ghostty";
-  ];
-
-  # Shell configuration
-  programs = {
-    fish = {
-      enable = true;
-      # Fish config in modules/home-manager/shell/fish.nix
-    };
-  };
-
-  # File management
-  home.file = {
-    # Config files managed directly
-    ".config/opencode/opencode.jsonc".text = ''
-      {
-        "global": {
-          "model": "claude-3-sonnet",
-          "temperature": 0.7
-        }
-      }
-    '';
-  };
-
-  # Services
-  services = {
-    # User services
-  };
-
-  # State version (must match system)
-  home.stateVersion = "24.11";
-}
-```
-
-## Config File Management
-
-### Using Config Directories
-
-For complex applications, use `configs/` directory:
-
-```
-home/hbohlen/
-├── configs/
-│   ├── fish/
-│   │   └── config.fish
-│   ├── ghostty/
-│   │   └── config.toml
-│   ├── opencode/
-│   │   ├── opencode.jsonc
-│   │   ├── agent/
-│   │   ├── tool/
-│   │   ├── plugin/
-│   │   ├── skills/
-│   │   └── command/
-│   └── zed/
-│       ├── settings.json
-│       └── keymap.json
-```
-
-Then in `home.nix`:
-```nix
-home.file = {
-  ".config/fish/config.fish".source = ./configs/fish/config.fish;
-  ".config/ghostty/config.toml".source = ./configs/ghostty/config.toml;
-  ".config/opencode".source = ./configs/opencode;
-};
-```
-
-### Template Files
-
-Use Nix templates for dynamic configs:
-
-```nix
-home.file.".config/myapp/config".text = lib.mkTemplate ./template.conf.tmpl {
-  USER = config.home.username;
-  HOSTNAME = config.networking.hostName;
-  HOME_DIR = config.home.homeDirectory;
-};
-```
-
-## OpenCode Configuration
-
-**Critical**: OpenCode has specific directory structure:
-
-```nix
-home.file = {
-  # Main config
-  ".config/opencode/opencode.jsonc".text = ''
-    {
-      "global": {
-        "model": "claude-3-sonnet",
-        "temperature": 0.7,
-        "theme": "catppuccin"
-      },
-      "ui": {
-        "mode": "pane"
-      }
-    }
-  '';
-
-  # Feature directories (can be empty initially)
-  ".config/opencode/agent".source = ./configs/opencode/agent;
-  ".config/opencode/tool".source = ./configs/opencode/tool;
-  ".config/opencode/plugin".source = ./configs/opencode/plugin;
-  ".config/opencode/skills".source = ./configs/opencode/skills;
-  ".config/opencode/command".source = ./configs/opencode/command;
-};
-```
-
-## Fish Shell Configuration
-
-Fish configuration is in `modules/home-manager/shell/fish.nix`:
-
-```nix
-{ config, lib, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 {
   programs.fish = {
     enable = true;
-
+    
+    shellAliases = {
+      ll = "ls -la";
+      la = "ls -la";
+      ".." = "cd ..";
+      "..." = "cd ../..";
+    };
+    
     shellInit = ''
-      # System-wide fish init
-      set -gx PATH $PATH $HOME/.local/bin $HOME/.cargo/bin
-    '';
-
-    interactiveInit = ''
-      # Fish-specific initialization
-      if status is-interactive
-        # Commands to run in interactive shells only
-        zoxide init fish | source
-        starship init fish | source
+      # Auto-activate devShell in ~/dev
+      if test -d ~/dev
+        cd ~/dev
+        if test -e shell.nix -o -e default.nix
+          nix develop
+        end
+        cd -
       end
     '';
-
-    plugins = [
-      # Plugins from nixpkgs
-      {
-        name = "z";
-        src = pkgs.fishPlugins.z;
-      }
-      {
-        name = "nix-env";
-        src = pkgs.fishPlugins.nix-env;
-      }
-    ];
-
+    
     functions = {
-      my-custom-function = ''
-        echo "Custom function"
-      '';
+      fish_greeting = {
+        body = "";
+        description = "Disable fish greeting";
+      };
     };
-
-    abbreviations = {
-      ll = "ls -lah";
-      ga = "git add";
-      gc = "git commit";
-      gp = "git push";
-      gl = "git log --oneline -10";
-    };
-
-    promptInit = ''
-      # Custom prompt if not using starship
-    '';
   };
 }
 ```
 
-## Ghostty Configuration
-
+#### Ghostty Terminal Module
 ```nix
-programs.ghostty = {
-  enable = true;
-
-  config = {
-    theme = "catppuccin";
-    font-family = "JetBrains Mono";
-    font-size = 14;
-
-    shell-integration = "fish";
-
-    keybinds = {
-      "ctrl+shift+p" = "command_palette";
-      "ctrl+`" = "toggle_split";
-    };
-  };
-};
-```
-
-## Zed Configuration
-
-```nix
-programs.zed = {
-  enable = true;
-
-  settings = {
-    theme = "Catppuccin Mocha";
-    font_size = 14;
-    font_family = "JetBrains Mono";
-    line_height = 1.5;
-
-    ai = {
-      enabled = true;
-      provider = "openai";
-    };
-
-    rust = {
-      formatting = "rustfmt";
-    };
-  };
-
-  extensions = [
-    "nix"
-    "rust"
-    "python"
-    "typescript"
-    "tailwindcss"
-  ];
-
-  keymap = {
-    "ctrl-p" = "command_palette";
-    "ctrl+shift+f" = "project_search";
-    "ctrl+/" = "toggle_comment";
-  };
-};
-```
-
-## Dev Environment Auto-activation
-
-### Using direnv
-
-In `home.nix`:
-```nix
-programs.direnv = {
-  enable = true;
-  enableNixDirenvIntegration = true;
-  nix.envName = ".envrc";
-};
-```
-
-Then in `~/dev`, create `.envrc`:
-```
-use_nix
-```
-
-This automatically activates the Nix environment when entering `~/dev`.
-
-### Using atuin
-
-```nix
-programs.atuin = {
-  enable = true;
-  enableBashIntegration = false;
-  enableFishIntegration = true;
-  history = {
-    databasePath = "${config.home.homeDirectory}/.local/share/atuin/history.db";
-  };
-};
-```
-
-## Profiles
-
-User-specific profiles for different use cases:
-
-### development.nix
-```nix
-{ pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 {
-  imports = [
-    ../../../../modules/home-manager/development/languages/node.nix
-    ../../../../modules/home-manager/development/languages/python.nix
-    ../../../../modules/home-manager/development/languages/go.nix
-    ../../../../modules/home-manager/development/languages/rust.nix
-    ../../../../modules/home-manager/development/ai-tools.nix
-  ];
+  programs.ghostty = {
+    enable = true;
+    
+    settings = {
+      font-family = "JetBrains Mono";
+      font-size = 14;
+      theme = "auto";
+      
+      # Wayland integration
+      window-theme = "dark";
+      background-opacity = 0.95;
+      
+      # Key bindings
+      keybind = [
+        "ctrl+shift+c=copy_to_clipboard"
+        "ctrl+shift+v=paste_from_clipboard"
+        "ctrl+shift+t=new_tab"
+        "ctrl+shift+w=close_tab"
+      ];
+    };
+  };
+}
+```
 
-  # Dev-specific settings
+### Application Integration
+User application configuration:
+
+#### 1Password Module
+```nix
+{ lib, config, pkgs, ... }:
+
+{
+  programs._1password = {
+    enable = true;
+    settings = {
+      # Biometric unlock
+      biometric_unlock = true;
+      
+      # Integration with system auth
+      system_auth = true;
+      
+      # SSH agent
+      ssh_agent = true;
+    };
+  };
+  
+  # 1Password CLI
+  home.packages = with pkgs; [ _1password-cli ];
+  
+  # OpNix integration
+  programs.opnix = {
+    enable = true;
+    vault = "pantherOS";
+  };
+}
+```
+
+#### Browser Module
+```nix
+{ lib, config, pkgs, ... }:
+
+{
+  programs.zen-browser = {
+    enable = true;
+    
+    settings = {
+      # Privacy settings
+      privacy.trackingProtection = "strict";
+      privacy.resistFingerprinting = true;
+      
+      # Development settings
+      devtools.enabled = true;
+      
+      # Extensions
+      extensions = {
+        ublock-origin = true;
+        dark-reader = true;
+        react-devtools = true;
+      };
+    };
+  };
+}
+```
+
+### Development Tools
+Development environment configuration:
+
+#### Zed IDE Module
+```nix
+{ lib, config, pkgs, ... }:
+
+{
+  programs.zed = {
+    enable = true;
+    
+    settings = {
+      # Theme
+      theme = "One Dark";
+      
+      # Font
+      font_family = "JetBrains Mono";
+      font_size = 14;
+      
+      # Features
+      features = {
+        copilot = true;
+        git = true;
+        diagnostics = true;
+      };
+      
+      # Language configurations
+      languages = {
+        nix = {
+          formatter = "alejandra";
+          lsp_server = "nil";
+        };
+        
+        typescript = {
+          formatter = "prettier";
+          lsp_server = "typescript-language-server";
+        };
+        
+        python = {
+          formatter = "black";
+          lsp_server = "pylsp";
+        };
+      };
+    };
+  };
+}
+```
+
+### Desktop Environment
+Desktop and window manager configuration:
+
+#### Niri Window Manager Module
+```nix
+{ lib, config, pkgs, ... }:
+
+{
+  programs.niri = {
+    enable = true;
+    
+    settings = {
+      # Input configuration
+      input = {
+        keyboard = {
+          repeat-delay = 600;
+          repeat-rate = 25;
+          track-layout = "window";
+        };
+        
+        touchpad = {
+          tap = true;
+          dwt = true;
+          natural-scroll = true;
+        };
+        
+        mouse = {
+          accel-speed = 0.5;
+        };
+      };
+      
+      # Output configuration
+      output = {
+        "eDP-1" = {
+          mode = {
+            width = 1920;
+            height = 1080;
+            refresh = 60.0;
+          };
+          position = { x = 0; y = 0; };
+        };
+      };
+      
+      # Layout configuration
+      layout = {
+        focus-ring = {
+          width = 4;
+          active-color = "#7fc8ff";
+          inactive-color = "#505050";
+        };
+        
+        border = {
+          width = 2;
+          active-color = "#333333";
+          inactive-color = "#222222";
+        };
+        
+        gaps = 8;
+        
+        preset-column-widths = [
+          { proportion = 1.0; }
+          { proportion = 0.5; }
+          { proportion = 0.33; }
+        ];
+      };
+      
+      # Window rules
+      window-rules = [
+        {
+          matches = [
+            { app-id = "zen"; }
+          ];
+          default-column-width = { proportion = 0.7; };
+        }
+        
+        {
+          matches = [
+            { app-id = "zed"; }
+          ];
+          default-column-width = { proportion = 0.8; };
+        }
+      ];
+      
+      # Key bindings
+      keybind = [
+        # System
+        { mods = ["Super" "Shift"]; key = "Q"; action = "quit"; }
+        { mods = ["Super"]; key = "Return"; action = "spawn"; command = "ghostty"; }
+        
+        # Window management
+        { mods = ["Super"]; key = "J"; action = "focus-column-left"; }
+        { mods = ["Super"]; key = "K"; action = "focus-column-right"; }
+        { mods = ["Super" "Shift"]; key = "J"; action = "move-column-left"; }
+        { mods = ["Super" "Shift"]; key = "K"; action = "move-column-right"; }
+        
+        # Layout
+        { mods = ["Super"]; key = "D"; action = "toggle-column-width"; }
+        { mods = ["Super"]; key = "F"; action = "toggle-fullscreen-column"; }
+        
+        # Workspaces
+        { mods = ["Super"]; key = "1"; action = "focus-workspace"; args = ["1"]; }
+        { mods = ["Super"]; key = "2"; action = "focus-workspace"; args = ["2"]; }
+        { mods = ["Super"]; key = "3"; action = "focus-workspace"; args = ["3"]; }
+        { mods = ["Super" "Shift"]; key = "1"; action = "move-column-to-workspace"; args = ["1"]; }
+        { mods = ["Super" "Shift"]; key = "2"; action = "move-column-to-workspace"; args = ["2"]; }
+        { mods = ["Super" "Shift"]; key = "3"; action = "move-column-to-workspace"; args = ["3"]; }
+      ];
+    };
+  };
+}
+```
+
+#### DankMaterialShell Integration Module
+```nix
+{ lib, config, pkgs, ... }:
+
+{
+  programs.dankmaterialshell = {
+    enable = true;
+    
+    settings = {
+      # Theme configuration
+      theme = {
+        mode = "auto"; # light, dark, auto
+        primary = "#6200ee";
+        secondary = "#03dac6";
+        surface = "#ffffff";
+        on-surface = "#000000";
+      };
+      
+      # Components
+      components = {
+        dankgreeter = {
+          enable = true;
+          background = "blur";
+          show-clock = true;
+        };
+        
+        dankgop = {
+          enable = true;
+          update-interval = 1000; # ms
+          show-gpu = true;
+        };
+        
+        danksearch = {
+          enable = true;
+          fuzzy-search = true;
+          show-icons = true;
+        };
+      };
+      
+      # Integration
+      niri = {
+        integration = true;
+        keybindings = true;
+      };
+    };
+  };
+}
+```
+
+## AI Tools Integration
+
+### Claude Code CLI Module
+```nix
+{ lib, config, pkgs, ... }:
+
+{
+  programs.claude-code = {
+    enable = true;
+    
+    settings = {
+      # API configuration
+      api-key = "op:pantherOS/claude-api/key";
+      
+      # Model configuration
+      model = "claude-3-5-sonnet-20241022";
+      max-tokens = 8192;
+      
+      # Project configuration
+      project-root = "~/dev";
+      auto-detect-project = true;
+      
+      # Integration
+      editor-integration = {
+        zed = true;
+        vscode = false;
+      };
+    };
+  };
+}
+```
+
+### OpenCode Integration Module
+```nix
+{ lib, config, pkgs, ... }:
+
+{
+  programs.opencode = {
+    enable = true;
+    
+    settings = {
+      # Global configuration
+      auto-update = true;
+      telemetry = false;
+      
+      # Agent configuration
+      agents = {
+        architect = {
+          enabled = true;
+          model = "claude-3-5-sonnet";
+        };
+        
+        engineer = {
+          enabled = true;
+          model = "claude-3-5-sonnet";
+        };
+        
+        librarian = {
+          enabled = true;
+          model = "claude-3-5-sonnet";
+        };
+        
+        reviewer = {
+          enabled = true;
+          model = "claude-3-5-sonnet";
+        };
+      };
+      
+      # Tool configuration
+      tools = {
+        nixos-search = true;
+        context7 = true;
+        brave-search = true;
+        puppeteer = true;
+      };
+    };
+  };
+  
+  # OpenCode configuration files
+  home.file.".config/opencode/opencode.jsonc" = {
+    text = builtins.toJSON config.programs.opencode.settings;
+  };
+  
+  # Feature directories
+  home.file.".config/opencode/agent/.gitkeep".text = "";
+  home.file.".config/opencode/tool/.gitkeep".text = "";
+  home.file.".config/opencode/plugin/.gitkeep".text = "";
+  home.file.".config/opencode/skills/.gitkeep".text = "";
+  home.file.".config/opencode/command/.gitkeep".text = "";
+}
+```
+
+### Development Environment Automation
+```nix
+{ lib, config, pkgs, ... }:
+
+{
+  # Auto-activate devShell in ~/dev
+  programs.fish.functions.dev-activate = {
+    body = ''
+      # Function to activate devShell when entering ~/dev
+      function __dev_activate --on-variable PWD
+        if test "$PWD" = ~/dev
+          if test -e shell.nix -o -e default.nix
+            if not set -q IN_NIX_SHELL
+              echo "🔧 Activating development environment..."
+              nix develop
+            end
+          end
+        end
+      end
+      
+      # Initial activation
+      __dev_activate
+    '';
+    description = "Auto-activate devShell in ~/dev directory";
+  };
+  
+  # Development utilities
+  home.packages = with pkgs; [
+    # File management
+    exa
+    bat
+    ripgrep
+    fzf
+    
+    # Navigation
+    zoxide
+    
+    # Git utilities
+    gitui
+    delta
+    
+    # Development tools
+    nil # Nix LSP
+    alejandra # Nix formatter
+    
+    # AI tools
+    claude-code-cli
+    opencode
+  ];
+  
+  # Git configuration
   programs.git = {
     enable = true;
-    userName = "Your Name";
-    userEmail = "your.email@example.com";
-  };
-
-  home.packages = with pkgs; [
-    # Dev tools
-    git
-    gh
-    just
-    fd
-    ripgrep
-  ];
-}
-```
-
-### workstation.nix
-```nix
-{ ... }:
-
-{
-  imports = [
-    ../../../../modules/home-manager/desktop/niri.nix
-    ../../../../modules/home-manager/applications/zed.nix
-    ../../../../modules/home-manager/applications/zen-browser.nix
-  ];
-
-  programs.fish.shellInit = ''
-    # Workstation-specific init
-  '';
-}
-```
-
-## Environment Variables
-
-Set in `home.nix`:
-
-```nix
-home.sessionVariables = {
-  # Editors
-  EDITOR = "zed";
-  VISUAL = "zed";
-
-  # Terminal
-  TERM = "ghostty";
-
-  # Development
-  CARGO_HOME = "${config.home.homeDirectory}/.cargo";
-  GOPATH = "${config.home.homeDirectory}/go";
-  NODE_ENV = "development";
-
-  # Paths
-  PATH = "${config.home.homeDirectory}/.local/bin:${config.home.homeDirectory}/.cargo/bin";
-
-  # App-specific
-  ZED_THEME = "catppuccin";
-};
-```
-
-## Services
-
-User-level systemd services:
-
-```nix
-services = {
-  atuin-daemon = {
-    enable = true;
-  };
-
-  # Custom user service
-  my-service = {
-    enable = true;
-    Package = pkgs.my-package;
-    ServiceConfig = {
-      Type = "simple";
-      ExecStart = "${pkgs.my-package}/bin/my-service";
+    
+    userName = "hbohlen";
+    userEmail = "hbohlen@example.com";
+    
+    aliases = {
+      st = "status";
+      co = "checkout";
+      br = "branch";
+      ci = "commit";
+      unstage = "reset HEAD --";
+      last = "log -1 HEAD";
+      visual = "!gitk";
+    };
+    
+    extraConfig = {
+      init.defaultBranch = "main";
+      pull.rebase = true;
+      push.autoSetupRemote = true;
+      
+      # Delta pager
+      core.pager = "delta";
+      delta.enable = true;
+      delta.line-numbers = true;
+      
+      # Signing
+      commit.gpgsign = true;
+      gpg.format = "ssh";
+      user.signingkey = "op:pantherOS/ssh-keys/desktopSSH/public";
     };
   };
-};
+}
 ```
 
-## Testing Home Configuration
+## Workflow Integration
 
-### Build (Safe)
+### Module Development Patterns
+Follow consistent patterns for home-manager modules:
+
+#### Basic Module Structure
+```nix
+{ lib, config, pkgs, ... }:
+
+{
+  options = {
+    programs.myApp = {
+      enable = lib.mkEnableOption "myApp";
+      
+      settings = lib.mkOption {
+        type = lib.types.attrs;
+        default = { };
+        description = "Configuration for myApp";
+      };
+    };
+  };
+
+  config = lib.mkIf config.programs.myApp.enable {
+    # Package installation
+    home.packages = with pkgs; [ myApp ];
+    
+    # Configuration files
+    home.file.".config/myApp/config.json" = {
+      text = builtins.toJSON config.programs.myApp.settings;
+    };
+    
+    # Environment variables
+    home.sessionVariables = {
+      MY_APP_CONFIG = "${config.xdg.configHome}/myApp/config.json";
+    };
+  };
+}
+```
+
+#### Conditional Features
+```nix
+{ lib, config, pkgs, ... }:
+
+{
+  config = lib.mkIf config.programs.development.enable {
+    # Base development tools
+    home.packages = with pkgs; [
+      git
+      vim
+    ];
+    
+    # Optional language support
+    home.packages = with pkgs; [
+    ] ++ lib.optionals config.programs.development.languages.node [
+      nodejs
+      npm
+    ] ++ lib.optionals config.programs.development.languages.python [
+      python3
+      pip
+    ] ++ lib.optionals config.programs.development.languages.rust [
+      rustc
+      cargo
+    ];
+  };
+}
+```
+
+### Testing Procedures
+Test home-manager configurations:
+
+#### Build Testing
 ```bash
-home-manager build
+# Test home-manager build
+home-manager build --flake .#hbohlen
+
+# Test activation
+home-manager switch --flake .#hbohlen
+
+# Test specific host
+home-manager build --flake .#hbohlen@yoga
 ```
 
-### Switch (Live)
+#### Configuration Testing
 ```bash
-home-manager switch
+# Test with different configurations
+home-manager build --flake .#hbohlen --option extra-experimental-features nix-command
+
+# Check configuration
+home-manager check --flake .#hbohlen
 ```
 
-### Rollback
-```bash
-home-manager generations
-home-manager switch --profile 'home-manager-file' <generation-number>
-```
+### Cross-Host Consistency
+Maintain consistency across workstations:
 
-## Common Patterns
-
-### Package Installation
+#### Shared Base Configuration
 ```nix
-home.packages = with pkgs; [
-  # System packages available to user
-  vim
-  htop
-  tree
-];
+# home/hbohlen/common.nix
+{ lib, config, pkgs, ... }:
 
-# Or per-profile
-home.packages = pkgs.lib.mkIf config.profiles.development.enable (with pkgs; [
-  # Development packages
-]);
-```
-
-### Symlink Existing Config
-```nix
-home.file.".config/exists".source = /existing/config;
-```
-
-### Conditional Configuration
-```nix
-home.file.".config/app/config" = lib.mkIf config.services.app.enable {
-  source = ./configs/app;
-  recursive = true;
-};
-```
-
-### Multiple Config Files
-```nix
-home.file = {
-  ".config/app/conf1".source = ./configs/app/conf1;
-  ".config/app/conf2".source = ./configs/app/conf2;
-  ".config/app/conf3".source = ./configs/app/conf3;
-};
-```
-
-## Directory Permissions
-
-```nix
-home.file = {
-  ".ssh/id_rsa".source = ./configs/ssh/id_rsa;
-  ".ssh/id_rsa.pub".source = ./configs/ssh/id_rsa.pub;
-};
-
-home.activation = {
-  setupSSH = lib.mkAfter ''
-    chmod 600 ~/.ssh/id_rsa
-    chmod 644 ~/.ssh/id_rsa.pub
-    ssh-add
-  '';
-};
-```
-
-## Activation Scripts
-
-For custom setup logic:
-
-```nix
-home.activation = {
-  mySetup = ''
-    echo "Running custom setup"
-    mkdir -p ~/.local/share/my-app
-  '';
-
-  after = "linkConfig";  # Run after file linking
-};
-```
-
-## Documentation
-
-Each user configuration section should be documented in:
-- `docs/modules/home-manager/` - Module documentation
-- `docs/users/hbohlen/` - User-specific documentation
-
-## Integration with System Config
-
-Home-manager config is invoked from `hosts/<host>/default.nix`:
-
-```nix
-home-manager.users.hbohlen = { pkgs, ... }: {
-  imports = [
-    ../../../modules/home-manager/shell/fish.nix
-    # ... other imports
+{
+  # Shared configuration for all hosts
+  programs.fish.enable = true;
+  programs.ghostty.enable = true;
+  programs._1password.enable = true;
+  
+  # Shared packages
+  home.packages = with pkgs; [
+    git
+    ripgrep
+    fzf
   ];
-
-  # Config
-  home.username = "hbohlen";
-  # ...
-};
+}
 ```
 
-## Success Criteria
+#### Host-Specific Configuration
+```nix
+# home/hbohlen/yoga.nix
+{ lib, config, pkgs, ... }:
 
-Home configuration is complete when:
-- [ ] Builds successfully with `home-manager build`
-- [ ] All dotfiles in correct locations
-- [ ] Applications configured correctly
-- [ ] Shell works properly
-- [ ] Dev environment auto-activates in ~/dev
-- [ ] Fish shell fully configured
-- [ ] Ghostty terminal working
-- [ ] Zed IDE configured
-- [ ] AI tools integrated
-- [ ] OpenCode properly configured
-- [ ] No hardcoded secrets
-- [ ] Documentation complete
+{
+  imports = [ ./common.nix ];
+  
+  # Yoga-specific configuration
+  programs.fish.shellAliases = {
+    battery = "upower -i /org/freedesktop/UPower/devices/battery_BAT0";
+  };
+  
+  # Battery optimization tools
+  home.packages = with pkgs; [
+    tlp
+    powertop
+  ];
+}
+```
+
+## Best Practices
+
+### Configuration Organization
+- **Modular Structure**: One concern per module
+- **Shared Configuration**: Common settings in base modules
+- **Host-Specific**: Separate files for host differences
+- **Feature Flags**: Use options to enable/disable features
+
+### Package Management
+- **Declarative**: Define all packages in configuration
+- **Version Pinning**: Pin critical package versions
+- **Security**: Regular security updates
+- **Optimization**: Remove unused packages
+
+### Security Considerations
+- **No Secrets**: Never commit secrets or API keys
+- **1Password Integration**: Use OpNix for secrets
+- **SSH Keys**: Manage through 1Password
+- **File Permissions**: Proper permissions for config files
+
+### Performance Optimization
+- **Startup Optimization**: Minimize startup services
+- **Resource Management**: Monitor resource usage
+- **Cache Management**: Clean caches regularly
+- **Profile Optimization**: Optimize for specific hardware
+
+## Troubleshooting
+
+### Common Issues
+
+#### Home-Manager Build Fails
+```bash
+# Check for syntax errors
+home-manager check --flake .#hbohlen
+
+# Show build trace
+home-manager build --flake .#hbohlen --show-trace
+
+# Check for missing dependencies
+nix-store --query --requisites $(home-manager build --flake .#hbohlen)
+```
+
+#### Configuration Not Applied
+```bash
+# Check activation
+home-manager switch --flake .#hbohlen --verbose
+
+# Check generation
+home-manager generations
+
+# Rollback if needed
+home-manager switch --generation <number>
+```
+
+#### Package Conflicts
+```bash
+# Check for conflicts
+nix-store --query --roots
+
+# Clean up
+nix-collect-garbage -d
+
+# Rebuild
+home-manager switch --flake .#hbohlen
+```
+
+### Debug Procedures
+
+#### Enable Debug Logging
+```bash
+# Enable verbose output
+home-manager switch --flake .#hbohlen --verbose --print-build-logs
+
+# Check environment
+home-manager exec --flake .#hbohlen env | grep -i home
+```
+
+#### Test Individual Modules
+```bash
+# Test specific module
+home-manager build --flake .#hbohlen --option extra-experimental-features nix-command -I nixos-config=modules/home-manager/shell/fish.nix
+```
+
+## Related Documentation
+
+- [Module Development Guide](../guides/module-development.md)
+- [Architecture Overview](../architecture/overview.md)
+- [Phase 2 Tasks](../todos/phase2-module-development.md)
+- [AI Tools Integration](../README.md#ai-development-tools)
+
+---
+
+**Maintained by:** pantherOS User Experience Team
+**Last Updated:** 2025-11-19
+**Version:** 1.0

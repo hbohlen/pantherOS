@@ -1,314 +1,495 @@
-# Agent Guidance for /modules
+# Module Development for pantherOS
 
-## Purpose
-All modular Nix configurations live here. Modules are the building blocks of this NixOS setup.
+## Overview
 
-## Module Structure
+pantherOS follows a strict modular architecture where each module addresses exactly one concern. This ensures maintainability, reusability, and clear separation of responsibilities.
 
+## Single-Concern Principle
+
+Every module must address exactly one well-defined concern:
+
+### Good Examples
+- `modules/nixos/security/firewall.nix` - Only firewall configuration
+- `modules/home-manager/shell/fish.nix` - Only Fish shell configuration
+- `modules/nixos/services/tailscale.nix` - Only Tailscale integration
+- `modules/shared/nixpkgs-config.nix` - Only Nixpkgs configuration
+
+### Avoid
+- Combining unrelated functionality
+- Creating "kitchen sink" modules
+- Hard-coding host-specific settings in general modules
+- Mixing system and user concerns
+
+## Module Categories
+
+### System Modules (modules/nixos/)
+System-level configuration that affects the entire system:
+
+#### Core Modules
+- **Purpose**: Essential system functionality
+- **Examples**: Boot configuration, systemd, basic system settings
+- **Location**: `modules/nixos/core/`
+
+#### Service Modules
+- **Purpose**: Network services and daemons
+- **Examples**: SSH, Tailscale, Caddy, Podman
+- **Location**: `modules/nixos/services/`
+
+#### Security Modules
+- **Purpose**: Security configurations
+- **Examples**: Firewall, SSH hardening, access control
+- **Location**: `modules/nixos/security/`
+
+#### Hardware Modules
+- **Purpose**: Hardware-specific configurations
+- **Examples**: GPU drivers, power management, device-specific settings
+- **Location**: `modules/nixos/hardware/`
+
+### User Modules (modules/home-manager/)
+User-level configuration that affects individual users:
+
+#### Shell Modules
+- **Purpose**: Terminal and shell configuration
+- **Examples**: Fish, Ghostty, terminal utilities
+- **Location**: `modules/home-manager/shell/`
+
+#### Application Modules
+- **Purpose**: User applications
+- **Examples**: 1Password, browsers, development tools
+- **Location**: `modules/home-manager/applications/`
+
+#### Development Modules
+- **Purpose**: Development tools and environments
+- **Examples**: Languages, LSPs, AI tools
+- **Location**: `modules/home-manager/development/`
+
+#### Desktop Modules
+- **Purpose**: Desktop environment
+- **Examples**: Niri, DankMaterialShell, UI elements
+- **Location**: `modules/home-manager/desktop/`
+
+### Shared Modules (modules/shared/)
+Modules used by both system and user configurations:
+
+#### Base Modules
+- **Purpose**: Common configuration patterns
+- **Examples**: Utility functions, shared options
+- **Location**: `modules/shared/base/`
+
+#### Option Modules
+- **Purpose**: Shared option definitions
+- **Examples**: Global configuration options
+- **Location**: `modules/shared/options/`
+
+#### Utility Modules
+- **Purpose**: Helper functions and libraries
+- **Examples**: Custom functions, validation helpers
+- **Location**: `modules/shared/utils/`
+
+## Development Workflow
+
+### 1. Hardware Analysis
+Before creating any module:
+```bash
+# Scan hardware if relevant
+./skills/pantheros-hardware-scanner/scripts/scan-hardware.sh <host>
+
+# Review hardware specifications
+cat docs/hardware/<host>.md
+
+# Identify hardware-specific requirements
 ```
-modules/
-├── nixos/              # System-level modules
-│   ├── core/           # Essential system services
-│   ├── services/       # Network services, databases
-│   ├── security/       # Firewall, SSH, Tailscale
-│   └── hardware/       # Hardware-specific configs
-├── home-manager/       # User-level modules
-│   ├── shell/          # Fish, Ghostty, terminals
-│   ├── applications/   # Zed, Zen, 1Password
-│   ├── development/    # Languages, AI tools
-│   └── desktop/        # Niri, DankMaterialShell
-└── shared/             # Shared modules (nixos + hm)
+
+### 2. Module Design
+Plan your module before implementation:
+
+#### Determine Module Type
+- **System module**: Affects entire system → `modules/nixos/`
+- **User module**: Affects user environment → `modules/home-manager/`
+- **Shared module**: Used by both → `modules/shared/`
+
+#### Define Single Concern
+- What specific problem does this solve?
+- Is this truly a single concern?
+- Can this be split into smaller modules?
+
+#### Plan Interface
+- What options are needed?
+- What are sensible defaults?
+- How will users configure this?
+
+### 3. Implementation
+Create the module following pantherOS patterns:
+
+#### File Structure
+```bash
+# Create module file
+touch modules/<category>/<subcategory>/<module-name>.nix
+
+# Create documentation
+touch docs/modules/<category>/<subcategory>/<module-name>.md
 ```
 
-## Module Standards
-
-### Module Template
+#### Module Template
 ```nix
-{ config, lib, pkgs, ... }:
+{ lib, config, pkgs, ... }:
 
 {
   options = {
-    services.my-module = {
-      enable = lib.mkEnableOption "my-module";
-      # Additional options here
+    # Define module options here
+    programs.myModule.enable = lib.mkEnableOption "myModule";
+
+    programs.myModule.settings = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      description = "Configuration for myModule";
     };
   };
 
-  config = lib.mkIf config.services.my-module.enable {
-    # Configuration here
+  config = lib.mkIf config.programs.myModule.enable {
+    # Define module implementation here
+    
+    # Example: Add packages
+    environment.systemPackages = with pkgs; [
+      my-module-package
+    ];
+
+    # Example: Configure service
+    services.my-service = {
+      enable = true;
+      inherit (config.programs.myModule.settings) setting;
+    };
   };
 }
 ```
 
-### Key Requirements
-1. **Single Concern** - Each module handles ONE thing
-2. **Self-Contained** - No dependencies on other modules
-3. **Documented** - Add docs/modules/ entry
-4. **Tested** - Build succeeds
+### 4. Documentation
+Create comprehensive documentation:
 
-## Working in nixos/
-
-### Core Modules
-Essential system functionality:
-- `base.nix` - Base system configuration
-- `users.nix` - User accounts and groups
-- `locale.nix` - Language, timezone, keyboard
-- `networking.nix` - Network configuration
-- `boot.nix` - Boot loader and initrd
-
-### Services Modules
-Network services and daemons:
-- `podman.nix` - Container runtime
-- `caddy.nix` - Reverse proxy
-- `tailscale.nix` - VPN configuration
-- `ssh.nix` - SSH server
-- `firewall.nix` - Firewall rules
-
-### Security Modules
-Security-related configurations:
-- `hardening.nix` - System hardening
-- `opnix.nix` - 1Password integration
-- `audit.nix` - System auditing
-
-### Hardware Modules
-Hardware-specific configs:
-- `optimizations.nix` - CPU/GPU optimizations per host
-- `power.nix` - Power management
-- ` sensors.nix` - Hardware sensors
-
-## Working in home-manager/
-
-### Shell Modules
-Terminal and shell configurations:
-- `fish.nix` - Fish shell setup
-- `ghostty.nix` - Terminal emulator
-- `completions.nix` - Shell completions
-
-### Application Modules
-User applications:
-- `zed.nix` - Zed IDE configuration
-- `zen-browser.nix` - Zen Browser setup
-- `onepassword.nix` - 1Password CLI/GUI
-
-### Development Modules
-Development environment:
-- `languages/` - Language-specific configs
-  - `node.nix` - Node.js/npm
-  - `python.nix` - Python/pip
-  - `go.nix` - Go toolchain
-  - `rust.nix` - Rust toolchain
-- `ai-tools.nix` - AI coding assistants
-- `lsp.nix` - Language server protocol
-- `formatters.nix` - Code formatters
-
-### Desktop Modules
-Desktop environment:
-- `niri.nix` - Window manager
-- `dank-material-shell.nix` - Material Design UI
-- `wallpapers.nix` - Wallpaper management
-
-## Module Documentation
-
-Each module MUST have documentation:
-
+#### Module Documentation
 ```markdown
-# Module Name
+# <Category>: <Module Name>
 
-## Purpose
-Brief description of what this module does.
+## Overview
+<What this module does and why it exists>
 
-## Requirements
-- Packages, inputs, or other modules required
-- Hardware requirements
-- Configuration prerequisites
+## Options
+### `module.enable`
+- **Type**: Boolean
+- **Default**: `false`
+- **Description**: Enable <module functionality>
 
-## Usage
+### `module.setting`
+- **Type**: <type>
+- **Default**: <value>
+- **Description**: <what it controls>
+
+## Usage Examples
+### Basic
 ```nix
 {
-  imports = [
-    # Add the module
-  ];
-
-  services.my-module.enable = true;
+  <module>.enable = true;
 }
 ```
 
-## Configuration Options
-- `services.my-module.option` - Description of option
-- List all configurable options
-
-## Testing
-```bash
-nixos-rebuild build .#<hostname>
-```
-
-## Notes
-- Important caveats
-- Known issues
-- Future plans
-```
-
-Save as: `docs/modules/<category>/<module-name>.md`
-
-## Import Patterns
-
-### In Host Config
+### Advanced
 ```nix
 {
-  imports = [
-    # NixOS modules
-    ./disko.nix
-    ./hardware.nix
-    ../../modules/nixos/core/base.nix
-    ../../modules/nixos/services/podman.nix
-
-    # Home-manager modules (in home-manager config)
-    # These go in home/hbohlen/home.nix
-  ];
-}
-```
-
-### In Other Modules
-```nix
-{
-  imports = [
-    # Shared module
-    ../../modules/shared/feature.nix
-  ];
-}
-```
-
-## Testing Modules
-
-Before committing a module:
-```bash
-# Build test
-nixos-rebuild build .#yoga
-
-# Or specific module
-nix-build -A nixosConfigurations.yoga.config
-
-# Check for errors
-nix-env -qaP | grep error  # Check for errors
-```
-
-## Common Module Patterns
-
-### Enable Pattern
-```nix
-options = {
-  services.my-service.enable = lib.mkEnableOption "my-service";
-};
-
-config = lib.mkIf config.services.my-service.enable {
-  # config
-};
-```
-
-### Package Pattern
-```nix
-{ pkgs, ... }:
-
-{
-  environment.systemPackages = with pkgs; [
-    package1
-    package2
-  ];
-}
-```
-
-### Service Pattern
-```nix
-{ config, pkgs, ... }:
-
-{
-  services.my-service = {
+  <module> = {
     enable = true;
-    package = pkgs.my-service;
+    setting = "custom-value";
   };
 }
 ```
 
-## Module Organization Tips
-
-### What Makes a Good Module
-- **Focused**: One clear purpose
-- **Reusable**: Can be used across hosts
-- **Composable**: Works well with other modules
-- **Documented**: Clear purpose and options
-- **Tested**: Known to work
-
-### When to Split a Module
-If a module does multiple things:
-- Base config + specialized variants
-- Multiple services that can be used independently
-- Different features that can be enabled separately
-
-### When to Merge Modules
-If modules are:
-- Always used together
-- Share heavy interdependencies
-- Single concern split artificially
+## Integration
+- Required modules
+- Optional dependencies
+- Conflicts with other modules
+- Best practices
 
 ## Troubleshooting
-
-### Module Not Loading
-Check imports in host config:
-```nix
-# Relative path from host file
-../../modules/nixos/category/module.nix
-
-# Verify file exists
-ls -la modules/nixos/category/module.nix
+- Common issues
+- Debug procedures
+- Log locations
 ```
 
-### Options Not Working
-- Check `options` section defined correctly
-- Verify `config` section uses `mkIf` or proper conditional
-- Check for typos in option names
+### 5. Testing
+Thoroughly test your module:
 
-### Build Failures
-- Import errors: Check paths
-- Undefined variables: Check `{ pkgs, ... }:` in arguments
-- Type errors: Check option types (bool vs string vs int)
+#### Build Testing
+```bash
+# Test build for each host type
+nixos-rebuild build .#yoga      # Workstation
+nixos-rebuild build .#zephyrus   # Performance workstation
+nixos-rebuild build .#hetzner-vps # Server
+nixos-rebuild build .#ovh-vps    # Server
+```
+
+#### Configuration Testing
+```bash
+# Test with different configurations
+nixos-rebuild build .#yoga --option extra-experimental-features nix-command
+
+# Test dry-run activation
+nixos-rebuild dry-activate --flake .#yoga
+```
+
+#### Integration Testing
+- Test with other modules enabled
+- Test on different hardware
+- Test with various option combinations
+
+## Integration with Skills
+
+### Module Generator Skill
+Use the automated module generator for consistent patterns:
+```bash
+# Generate a new module
+./skills/pantheros-module-generator/scripts/generate-module.sh \
+  --category nixos \
+  --subcategory services \
+  --name my-service \
+  --description "My custom service"
+```
+
+### Hardware-Specific Patterns
+When creating hardware-specific modules:
+- Use hardware scanner data
+- Consider optimization requirements
+- Document hardware dependencies
+- Test on relevant hardware
+
+### Security Requirements
+All modules must follow security guidelines:
+- No hardcoded secrets
+- Proper file permissions
+- Secure defaults
+- Security documentation
+
+## Module Design Patterns
+
+### Enable/Disable Pattern
+```nix
+options = {
+  services.myService.enable = lib.mkEnableOption "myService";
+};
+
+config = lib.mkIf config.services.myService.enable {
+  # Configuration when enabled
+};
+```
+
+### Settings Pattern
+```nix
+options = {
+  services.myService = {
+    enable = lib.mkEnableOption "myService";
+    
+    settings = lib.mkOption {
+      type = lib.types.attrs;
+      default = { };
+      description = "Configuration for myService";
+    };
+  };
+};
+```
+
+### Package Selection Pattern
+```nix
+options = {
+  programs.myApp = {
+    enable = lib.mkEnableOption "myApp";
+    
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.myApp;
+      description = "myApp package to use";
+    };
+  };
+};
+```
+
+### Conditional Features Pattern
+```nix
+config = lib.mkIf config.programs.myModule.enable {
+  # Base configuration
+  
+  # Optional features
+  programs.myModule.advancedFeature = lib.mkIf 
+    config.programs.myModule.enableAdvanced true;
+};
+```
+
+## Import Patterns and Conventions
+
+### Relative Imports
+Always use relative imports:
+```nix
+# In host configuration
+imports = [
+  ./modules/nixos/services/my-service.nix
+  ../../modules/nixos/security/firewall.nix
+];
+```
+
+### Module Organization
+Group related imports:
+```nix
+imports = [
+  # Core modules
+  ../../modules/nixos/core/base.nix
+  ../../modules/nixos/core/boot.nix
+  
+  # Security modules
+  ../../modules/nixos/security/firewall.nix
+  ../../modules/nixos/security/ssh.nix
+  
+  # Service modules
+  ../../modules/nixos/services/tailscale.nix
+  ../../modules/nixos/services/caddy.nix
+];
+```
+
+### Conditional Imports
+Use conditional imports for optional features:
+```nix
+imports = [
+  ../../modules/nixos/core/base.nix
+] ++ lib.optionals config.services.desktop.enable [
+  ../../modules/nixos/desktop/niri.nix
+];
+```
+
+## Testing and Validation
+
+### Build Validation
+Every module must pass build testing:
+```bash
+# Test all hosts
+for host in yoga zephyrus hetzner-vps ovh-vps; do
+  echo "Testing $host..."
+  nixos-rebuild build .#$host || echo "Build failed for $host"
+done
+```
+
+### Configuration Validation
+- Test with default settings
+- Test with custom settings
+- Test edge cases
+- Test error conditions
+
+### Integration Validation
+- Test with other modules
+- Test on different hardware
+- Test upgrade scenarios
+- Test rollback procedures
+
+## Documentation Requirements
+
+### Module Documentation
+Every module must have documentation:
+- Purpose and scope
+- Options and types
+- Usage examples
+- Integration notes
+- Troubleshooting guide
+
+### Category Documentation
+Each module category must have:
+- Overview of category purpose
+- List of modules in category
+- Common patterns
+- Best practices
+- Related categories
+
+### Cross-References
+- Link between related modules
+- Reference dependencies
+- Document alternatives
+- Provide migration paths
 
 ## Best Practices
 
-1. **Use `lib.mkEnableOption`** for boolean options
-2. **Use `lib.mkOption`** with type for typed options
-3. **Use `lib.mkIf`** for conditional config
-4. **Use `lib.mkDefault`** for sensible defaults
-5. **Document all options** in module and docs
-6. **Test with multiple hosts** to ensure reusability
-7. **Keep modules small** - easier to debug and maintain
-8. **Version module dependencies** if needed
+### Code Quality
+- Follow Nix formatting standards
+- Use descriptive variable names
+- Add comments for complex logic
+- Keep functions pure
 
-## Module Categories Reference
+### Option Design
+- Use appropriate types
+- Provide sensible defaults
+- Document all options
+- Validate input values
 
-### System Categories
-- `core/` - Core system functionality
-- `services/` - Network services
-- `security/` - Security configurations
-- `hardware/` - Hardware-specific
-- `virtualization/` - VMs, containers
-- `programs/` - System-wide programs
+### Performance
+- Minimize evaluation overhead
+- Use lazy evaluation appropriately
+- Avoid unnecessary dependencies
+- Optimize for common cases
 
-### Home-Manager Categories
-- `shell/` - Terminal and shell
-- `applications/` - User applications
-- `development/` - Dev tools and languages
-- `desktop/` - Desktop environment
-- `services/` - User services
-- `utilities/` - Utilities and helpers
+### Security
+- Never hardcode secrets
+- Use secure defaults
+- Validate all inputs
+- Document security implications
 
-## Success Criteria
+## Troubleshooting
 
-Module is complete when:
-- [ ] Single, clear purpose
-- [ ] Options properly defined
-- [ ] Documentation created
-- [ ] Builds successfully
-- [ ] Used by at least one host
-- [ ] Follows naming conventions
-- [ ] No hardcoded values
-- [ ] Relative imports correct
+### Module Not Found
+- Check import paths are correct
+- Verify file exists
+- Check for typos in filename
+- Ensure proper relative paths
+
+### Option Not Working
+- Check option name spelling
+- Verify module is imported
+- Check option type is correct
+- Ensure module is enabled
+
+### Build Errors
+- Run `nixos-rebuild build` to see full error
+- Check for syntax errors
+- Verify all required options are set
+- Check for circular dependencies
+
+### Circular Dependencies
+- Module A imports Module B, B imports A
+- Solution: Redesign or move to shared/
+- Use conditional imports
+- Split into smaller modules
+
+## Migration Guide
+
+### When to Create New Module
+- New functionality added
+- Existing module has multiple concerns
+- Reusable across multiple hosts
+- Breaking changes needed
+
+### When to Modify Existing
+- Bug fixes
+- Adding options to existing concern
+- Performance improvements
+- Documentation updates
+
+### Breaking Changes
+- Version the module if incompatible changes needed
+- Document migration path
+- Provide backward compatibility if possible
+- Update all dependent configurations
+
+## Related Documentation
+
+- [Module Development Guide](../guides/module-development.md)
+- [Architecture Overview](../architecture/overview.md)
+- [Testing and Deployment](../guides/testing-deployment.md)
+- [Phase 2 Tasks](../todos/phase2-module-development.md)
+
+---
+
+**Maintained by:** pantherOS Module Team
+**Last Updated:** 2025-11-19
+**Version:** 1.0
