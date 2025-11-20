@@ -27,7 +27,7 @@
     // Agent configuration
     "agent": {
         "architect": {
-            "prompt": ".opencode/agent/architect.md",
+            "prompt": ".opencode/.opencode/agent/system-builder.md",
             "model": "cliproxyapi/minimax-m2",
             "options": {
                 "temperature": 1.0,
@@ -57,7 +57,7 @@
             }
         },
         "librarian": {
-            "prompt": ".opencode/agent/librarian.md",
+            "prompt": ".opencode/.opencode/agent/openagent.md",
             "model": "cliproxyapi/minimax-m2",
             "options": {
                 "temperature": 0.8,
@@ -80,7 +80,7 @@
             }
         },
         "engineer": {
-            "prompt": ".opencode/agent/engineer.md",
+            "prompt": ".opencode/.opencode/agent/codebase-agent.md",
             "model": "cliproxyapi/glm-4.6",
             "options": {
                 "do_sample": true,
