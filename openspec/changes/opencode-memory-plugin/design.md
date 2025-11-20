@@ -5,7 +5,7 @@ The plugin adds automated memory capture and retrieval to OpenCode by bridging e
 
 ## Components
 - **Plugin Runtime**: TypeScript plugin at `containers/opencode-server/plugin/graphiti-memory.ts` that registers OpenCode event handlers.
-- **Graphiti Memory Script**: Python script at `/root/.opencode/graphiti/memory_manager.py` providing store/query/export logic.
+- **Graphiti Memory Script**: Python script from the full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents) providing store/query/export logic.
 - **Valkey Cache**: Redis-compatible cache at `redis://localhost:6380` for query results and cache invalidation patterns.
 - **Datadog Observability**: DogStatsD metrics over UDP `localhost:8125` and event publishing via `/app/scripts/send_datadog_event.py`.
 

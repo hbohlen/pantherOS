@@ -24,8 +24,7 @@ The repository lacks a documented specification for the OpenCode server image th
 - Install OpenCode globally via `npm install -g opencode`.
 - Create `/opt/venv` and install Python packages `graphiti-core[falkordb]`, `falkordb`, `redis`, `ddtrace`, `datadog-api-client`, and `b2sdk`.
 - Copy build-context assets:
-  - `plugin/` → `/root/.opencode/plugin/`
-  - `graphiti/` → `/root/.opencode/graphiti/`
+  - The full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents) providing plugin and Graphiti code.
   - `scripts/` → `/app/scripts/`
   - `config.json` → `/root/.config/opencode/opencode.json`
 - Declare environment defaults: `FALKORDB_HOST=localhost`, `FALKORDB_PORT=6379`, `VALKEY_HOST=localhost`, `VALKEY_PORT=6380`.

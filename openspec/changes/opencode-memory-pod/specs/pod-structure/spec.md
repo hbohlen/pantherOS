@@ -36,8 +36,7 @@
    - Port: 4096
    - Volumes:
      - `/persist/containers/opencode:/root/.local/share/opencode`
-     - Optional: `/path/to/plugin:/root/.opencode/plugin:ro`
-     - Optional: `/path/to/graphiti:/root/.opencode/graphiti:ro`
+     - Optional: mount the full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents) read-only to supply plugin and Graphiti assets.
    - EnvironmentFile: `/run/secrets/opencode.env`
    - Health check: `curl -f http://localhost:4096/config`
 

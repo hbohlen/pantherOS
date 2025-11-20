@@ -7,7 +7,7 @@
 
 **Details**:
 - Module must load on OpenCode startup and log `🧠 Graphiti Memory Plugin loaded`.
-- Use configuration defaults: `MEMORY_SCRIPT=/root/.opencode/graphiti/memory_manager.py`, `VALKEY_URL=redis://localhost:6380`, `CACHE_TTL_SECONDS=300`.
+- Use configuration defaults aligned with the full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents), with `MEMORY_SCRIPT` pointing to its Graphiti `memory_manager.py`, `VALKEY_URL=redis://localhost:6380`, `CACHE_TTL_SECONDS=300`.
 - Log Valkey connection: `📦 Valkey cache connected at {host}:{port}` after successful client setup.
 
 ### Helper Utilities

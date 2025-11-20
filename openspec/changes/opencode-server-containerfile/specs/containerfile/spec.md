@@ -20,9 +20,8 @@
 **Requirement**: Lay out application assets and configuration in the container using build-context files.
 
 **Details**:
-- Copy `plugin/` from the build context to `/root/.opencode/plugin/`.
-- Copy `graphiti/` from the build context to `/root/.opencode/graphiti/`.
-- Copy `scripts/` from the build context to `/app/scripts/`.
+ - Copy the full OpenAgents developer package (https://github.com/darrenhinde/OpenAgents) from the build context so the plugin and Graphiti assets are available together in the image.
+ - Copy `scripts/` from the build context to `/app/scripts/`.
 - Copy `config.json` from the build context to `/root/.config/opencode/opencode.json`.
 
 ### Runtime Defaults and Ports
