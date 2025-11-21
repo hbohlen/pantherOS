@@ -43,11 +43,164 @@
             # Btrfs root partition - Remaining space (~457GB)
             root = {
               size = "100%";
-              type = "8300";  # Linux filesystem type
+              type = "8300";
               content = {
                 type = "btrfs";
-                extraArgs = [ "-f" ];  # Force creation (wipe existing)
-                # Subvolumes defined in next task
+                extraArgs = [ "-f" ];
+
+                subvolumes = {
+                  # ============================================
+                  # ROOT SUBVOLUME - System files
+                  # ============================================
+                  # Purpose: Core system files and configuration
+                  # Why: Separating root allows for impermanence (ephemeral root)
+                  # and easy system snapshots without including user data
+                  "/root" = {
+                    mountpoint = "/";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                      "ssd"
+                      "discard=async"
+                    ];
+                  };
+
+                  # ============================================
+                  # HOME SUBVOLUME - User data
+                  # ============================================
+                  # Purpose: User home directories and dotfiles
+                  # Why: Separate snapshots for user data, independent backup
+                  # retention from system, and quotas if needed
+                  "/home" = {
+                    mountpoint = "/home";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                      "ssd"
+                      "discard=async"
+                    ];
+                  };
+
+                  # ============================================
+                  # DEV SUBVOLUME - Development projects
+                  # ============================================
+                  # Purpose: Code repositories and development work
+                  # Why: Separate from home for targeted snapshots before
+                  # major changes, different compression (code compresses well),
+                  # and potential different backup frequency
+                  "/home/dev" = {
+                    mountpoint = "/home/hbohlen/dev";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                      "ssd"
+                      "discard=async"
+                    ];
+                  };
+
+                  # ============================================
+                  # NIX SUBVOLUME - Nix store
+                  # ============================================
+                  # Purpose: /nix/store and Nix database
+                  # Why: Critical for boot, needs to be mounted early,
+                  # high read traffic but low writes, compress well
+                  "/nix" = {
+                    mountpoint = "/nix";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                      "ssd"
+                      "discard=async"
+                    ];
+                  };
+
+                  # ============================================
+                  # VAR SUBVOLUME - Variable data
+                  # ============================================
+                  # Purpose: /var for service data, state, spool
+                  # Why: Separate from root for independent snapshots,
+                  # services often have different retention needs
+                  "/var" = {
+                    mountpoint = "/var";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                      "ssd"
+                      "discard=async"
+                    ];
+                  };
+
+                  # ============================================
+                  # LOG SUBVOLUME - System logs
+                  # ============================================
+                  # Purpose: /var/log for all logging
+                  # Why: High write frequency with small sequential writes,
+                  # nodatacow improves performance for constant appending,
+                  # separate retention from system state
+                  "/var/log" = {
+                    mountpoint = "/var/log";
+                    mountOptions = [
+                      "noatime"
+                      "nodatacow"
+                      "nodatasum"
+                      "ssd"
+                      "discard=async"
+                    ];
+                  };
+
+                  # ============================================
+                  # CACHE SUBVOLUME - Application caches
+                  # ============================================
+                  # Purpose: /var/cache for package caches, build caches
+                  # Why: Can be cleared without data loss, separate from
+                  # snapshots (no point backing up caches), good compression
+                  "/var/cache" = {
+                    mountpoint = "/var/cache";
+                    mountOptions = [
+                      "compress=zstd"
+                      "noatime"
+                      "ssd"
+                      "discard=async"
+                    ];
+                  };
+
+                  # ============================================
+                  # CONTAINERS SUBVOLUME - Podman/Docker storage
+                  # ============================================
+                  # Purpose: Container images, layers, and volumes
+                  # Why: nodatacow because container storage does many
+                  # random writes (database in container = disaster with COW),
+                  # separate for easy cleanup and migration
+                  "/var/lib/containers" = {
+                    mountpoint = "/var/lib/containers";
+                    mountOptions = [
+                      "noatime"
+                      "nodatacow"
+                      "nodatasum"
+                      "ssd"
+                      "discard=async"
+                    ];
+                  };
+
+                  # ============================================
+                  # SWAP SUBVOLUME - Swapfile location
+                  # ============================================
+                  # Purpose: Contains the swapfile
+                  # Why: Btrfs requires nodatacow for swapfiles,
+                  # separate subvolume allows easy swapfile management
+                  # without affecting other data
+                  "/swap" = {
+                    mountpoint = "/swap";
+                    swap.swapfile.size = "4G";
+                    mountOptions = [
+                      "noatime"
+                      "nodatacow"
+                      "nodatasum"
+                      "ssd"
+                      "discard=async"
+                    ];
+                  };
+                };
               };
               priority = 3;
             };
