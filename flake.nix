@@ -19,13 +19,13 @@
 
     # OpNix - 1Password secrets for NixOS
     opnix = {
-      url = "github:mrjones2014/opnix";
+      url = "github:brizzbuzz/opnix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # nix-ai-tools - AI coding tools
     nix-ai-tools = {
-      url = "github:hraban/nix-ai-tools";
+      url = "github:numtide/nix-ai-tools";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

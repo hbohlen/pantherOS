@@ -6,47 +6,49 @@ This project is a personal NixOS configuration featuring multi-host, flake-based
 ### Lenovo Yoga 7 2-in-1 14AKP10
 - Host name - `yoga`
 - Configured for lightweight programming and web browsing for research. Should prioritize battery life over raw speed and performance.
-- CPU -
-- GPU -
-- RAM - 
-- Disk - 
-- #todo: Research what information is relevant to from the host device to determine configuration and optimization strategies?
-- #todo: Have AI agent develop a plan for scanning my device for the determined hardware specs
-- #todo: Have AI agent update or record the relevant host device hardware specs
+- CPU - AMD Ryzen AI 7 350 w/ Radeon 860M (16 cores)
+- GPU - Integrated Radeon 860M
+- RAM - 14GB
+- Disk - 1x NVMe SSD (~1TB, Btrfs)
+- Wireless - wlan0
+- Battery - Yes
+- Form Factor - Laptop (31)
+- **Status**: Hardware discovery complete ✓
 
 ### ASUS ROG Zephyrus M16 GU603ZW
 - Host name - `zephyrus`
 - Configured for best speed and performance. Multiple power profiles present ranging from battery efficient to plugged-in raw performance. Optimized for heavy development workflows utilizing Podman containers, multi-SSD optimizations, AI coding CLI tools like Claude Code CLI, Zed IDE, opencode.ai CLI, etc.
-- CPU -
-- GPU -
-- RAM -
-- Disk -
-- #todo: Research what information is relevant to from the host device to determine configuration and optimization strategies?
-- #todo: Have AI agent develop a plan for scanning my device for the determined hardware specs
-- #todo: Have AI agent update or record the relevant host device hardware specs
+- CPU - Intel i9-12900H (20 cores)
+- GPU - NVIDIA RTX 3070 Ti Laptop
+- RAM - 38GB
+- Disk - 2x NVMe SSDs (~2.7TB each, Btrfs)
+- Wireless - wlan0
+- Battery - Yes
+- Form Factor - Laptop (10)
+- **Status**: Hardware discovery complete ✓, Tailscale already installed
 ## Servers
 
 ### Hetzner Cloud VPS
 - Host name - `hetzner-vps`
 - Configure for optimal performance for running a personal codespace on the server. Tuned for being able to run AI coding CLI tools like Claude Code. Tuned for Podman container hosting. Secured with Tailscale, 1password CLI service account secrets and OpNix. Reverse Proxies via Caddy.
--  CPU - 
-- GPU - if applicable
-- RAM -
-- Disk -
-- #todo: Research what information is relevant to from the host device to determine configuration and optimization strategies?
-- #todo: Have AI agent develop a plan for scanning my device for the determined hardware specs
-- #todo: Have AI agent update or record the relevant host device hardware specs
+- CPU - AMD EPYC Genoa (12 cores @ 2.0GHz)
+- GPU - Virtio 1.0 GPU (virtual)
+- RAM - 24GB
+- Disk - 1x SSD (~440GB, ext4)
+- Virtualization - KVM
+- Form Factor - Server (1)
+- **Status**: Hardware discovery complete ✓
 
 ### OVH Cloud VPS
-- Host name -
+- Host name - `ovh-vps`
 - Secondary VPS server tuned the same as the `hetzner` VPS.
-- CPU -
-- GPU -
-- RAM -
-- Disk -
-- #todo: Research what information is relevant to from the host device to determine configuration and optimization strategies?
-- #todo: Have AI agent develop a plan for scanning my device for the determined hardware specs
-- #todo: Have AI agent update or record the relevant host device hardware specs
+- CPU - Intel Core Processor (Haswell, no TSX) (8 cores)
+- GPU - Cirrus Logic GD 5446 (virtual)
+- RAM - 22GB
+- Disk - 1x SSD (~195GB, ext4)
+- Virtualization - KVM
+- Form Factor - Server (1)
+- **Status**: Hardware discovery complete ✓
 
 ## Secrets Management
 All secrets managed with `_1password` service account and [OpNix](https://github.com/brizzbuzz/opnix). For personal devices, `_1password-gui` will be installed and integrated with the Biometric Unlock/System authentication polkit to allow for authentication through 1password. I have a 1password service account current created. The service account name is `pantherOS` and there is a single vault also named `pantherOS`. The `pantherOS` vault was created with the `--can-create-vaults` flag, so any new vaults created with the service account will be automatically added to the service account. This help later when restructuring the service account.
@@ -60,9 +62,15 @@ All secrets managed with `_1password` service account and [OpNix](https://github
 
 ## Disk Configuration
 [Disko](https://github.com/nix-community/disko) will be used to create `disko.nix` files for each `host`. The filesystem should be `btrfs`. There should be optimal sub-volume layouts. All personal coding projects will live in the `~/dev`. Podman and Podman Compose will be used, so potential sub-volume. Optimizations for SSD longevity.
-#todo: Scan each host for hardware specs and capabilities
-#todo: Determine optimal disk layout configurations optimized for host purpose
-#todo: Create `disko.nix` for each host
+
+### Current Filesystem Status
+- **yoga**: Already using Btrfs ✓ (NVMe SSD ~1TB)
+- **zephyrus**: Already using Btrfs ✓ (2x NVMe SSDs ~2.7TB each)
+- **hetzner-vps**: Currently ext4 → needs migration to Btrfs
+- **ovh-vps**: Currently ext4 → needs migration to Btrfs
+
+**Status**: Hardware discovery complete ✓
+**Next**: Determine optimal disk layout configurations optimized for host purpose
 
 ## Security
 
