@@ -157,9 +157,7 @@
   # - Audit trail in 1Password
 
   # Install 1Password CLI
-  environment.systemPackages = with pkgs; [
-    _1password-cli
-  ];
+  # (Will be combined with AI tools below)
 
   # Enable OpNix - fetches secrets from 1Password during build
   # Requires OP_SERVICE_ACCOUNT_TOKEN environment variable
@@ -205,4 +203,46 @@
       ${pkgs._1password-cli}/bin/op read 'op://pantherOS/phoneSSH/"public key"' > $out
     ''))
   ];
+
+  # ============================================
+  # AI CODING TOOLS
+  # ============================================
+  # Installation strategy: System packages vs Home Manager
+  #
+  # System packages (environment.systemPackages):
+  # - Available to all users
+  # - Managed by root/nixos-rebuild
+  # - Good for: CLI tools, daemons, system utilities
+  #
+  # Home Manager (home.packages):
+  # - Per-user configuration
+  # - User can customize without root
+  # - Good for: User-specific tools, dotfiles integration
+  #
+  # Decision: System packages for AI tools because:
+  # 1. Single user server - no need for per-user config
+  # 2. Simpler management - one rebuild updates everything
+  # 3. AI tools are CLI-based, no user-specific config needed
+
+  environment.systemPackages = with pkgs; [
+    # 1Password CLI (secrets management)
+    _1password-cli
+
+    # AI Development Tools from nix-ai-tools
+    inputs.nix-ai-tools.packages.${pkgs.system}.opencode
+    inputs.nix-ai-tools.packages.${pkgs.system}.claude-code
+
+    # Shell
+    fish
+
+    # Essential utilities
+    git
+    curl
+    wget
+    htop
+    tree
+  ];
+
+  # Enable fish shell system-wide
+  programs.fish.enable = true;
 }
