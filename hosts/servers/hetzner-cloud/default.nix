@@ -110,4 +110,43 @@
     # Enable connection tracking for stateful firewall
     checkReversePath = "loose";  # Required for Tailscale
   };
+
+  # ============================================
+  # USER CONFIGURATION
+  # ============================================
+  # Minimal user setup for server administration
+  # Authentication via Tailscale SSH (no password needed)
+
+  users.users.hbohlen = {
+    isNormalUser = true;
+    description = "Henning Bohlen";
+    extraGroups = [
+      "wheel"       # sudo access
+      "docker"      # container management (if using Docker)
+      "podman"      # container management (if using Podman)
+    ];
+
+    # No password - auth via Tailscale SSH identity
+    # For emergency access, use Hetzner console with root
+    hashedPassword = null;
+
+    # Default shell
+    shell = pkgs.fish;
+
+    # SSH public keys from 1Password (fallback access)
+    # Primary access: Tailscale SSH
+    # Fallback: 1Password SSH agent + these keys
+    openssh.authorizedKeys.keys = [
+      # SSH keys managed via OpNix from 1Password vault
+      # op://pantherOS/yogaSSH/public key
+      # op://pantherOS/zephyrusSSH/public key
+      # op://pantherOS/desktopSSH/public key
+      # op://pantherOS/phoneSSH/public key
+      # These will be injected by OpNix during build
+    ];
+  };
+
+  # Allow wheel group to sudo without password
+  # Safe because auth is via Tailscale identity
+  security.sudo.wheelNeedsPassword = false;
 }
