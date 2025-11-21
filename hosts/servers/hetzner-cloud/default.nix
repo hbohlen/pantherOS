@@ -132,21 +132,77 @@
 
     # Default shell
     shell = pkgs.fish;
-
-    # SSH public keys from 1Password (fallback access)
-    # Primary access: Tailscale SSH
-    # Fallback: 1Password SSH agent + these keys
-    openssh.authorizedKeys.keys = [
-      # SSH keys managed via OpNix from 1Password vault
-      # op://pantherOS/yogaSSH/public key
-      # op://pantherOS/zephyrusSSH/public key
-      # op://pantherOS/desktopSSH/public key
-      # op://pantherOS/phoneSSH/public key
-      # These will be injected by OpNix during build
-    ];
   };
 
   # Allow wheel group to sudo without password
   # Safe because auth is via Tailscale identity
   security.sudo.wheelNeedsPassword = false;
+
+  # ============================================
+  # 1PASSWORD CLI & OPNIX
+  # ============================================
+  # How they fit together:
+  # 1. 1Password CLI (op) - Command-line interface to 1Password vaults
+  # 2. OpNix - NixOS module that uses 'op' to inject secrets at build time
+  #
+  # Workflow:
+  # 1. Store secrets in 1Password (API keys, tokens, etc.)
+  # 2. Reference in Nix config: op://<vault>/<item>/<field>
+  # 3. OpNix fetches and injects during nixos-rebuild
+  #
+  # Benefits:
+  # - Secrets never in git
+  # - Single source of truth
+  # - Easy rotation
+  # - Audit trail in 1Password
+
+  # Install 1Password CLI
+  environment.systemPackages = with pkgs; [
+    _1password-cli
+  ];
+
+  # Enable OpNix - fetches secrets from 1Password during build
+  # Requires OP_SERVICE_ACCOUNT_TOKEN environment variable
+  # Service account: pantherOS
+  # Vault: pantherOS
+  services.opnix = {
+    enable = true;
+  };
+
+  # Define secrets fetched from 1Password
+  age.secrets = {
+    # Tailscale authentication key
+    # Used for automated Tailscale connection on boot
+    tailscale-auth-key = {
+      source = "op://pantherOS/tailscale/authKey";
+      owner = "root";
+      group = "root";
+      mode = "0400";
+    };
+  };
+
+  # SSH public keys from 1Password
+  # These are injected into user's authorized_keys
+  # Note: Field names with spaces must be quoted
+  users.users.hbohlen.openssh.authorizedKeys.keys = [
+    # Yoga workstation
+    (builtins.readFile (pkgs.runCommand "yoga-ssh-key" {} ''
+      ${pkgs._1password-cli}/bin/op read 'op://pantherOS/yogaSSH/"public key"' > $out
+    ''))
+
+    # Zephyrus workstation
+    (builtins.readFile (pkgs.runCommand "zephyrus-ssh-key" {} ''
+      ${pkgs._1password-cli}/bin/op read 'op://pantherOS/zephyrusSSH/"public key"' > $out
+    ''))
+
+    # Desktop
+    (builtins.readFile (pkgs.runCommand "desktop-ssh-key" {} ''
+      ${pkgs._1password-cli}/bin/op read 'op://pantherOS/desktopSSH/"public key"' > $out
+    ''))
+
+    # Phone
+    (builtins.readFile (pkgs.runCommand "phone-ssh-key" {} ''
+      ${pkgs._1password-cli}/bin/op read 'op://pantherOS/phoneSSH/"public key"' > $out
+    ''))
+  ];
 }
