@@ -245,4 +245,39 @@
 
   # Enable fish shell system-wide
   programs.fish.enable = true;
+
+  # ============================================
+  # 1PASSWORD SSH AGENT
+  # ============================================
+  # 1Password as SSH agent provides:
+  # 1. Fallback authentication if Tailscale SSH fails
+  # 2. SSH key management via 1Password
+  # 3. Biometric authentication support (from devices)
+  # 4. Centralized key storage and rotation
+  #
+  # SSH Keys available in 1Password vault:
+  # - yogaSSH (Lenovo Yoga workstation)
+  # - zephyrusSSH (ASUS ROG Zephyrus workstation)
+  # - desktopSSH (Desktop)
+  # - phoneSSH (Mobile device)
+
+  programs._1password = {
+    enable = true;
+  };
+
+  programs._1password-gui = {
+    enable = false;  # Server - no GUI needed
+  };
+
+  # Configure SSH to use 1Password agent as fallback
+  # This allows SSH connections using keys stored in 1Password
+  programs.ssh = {
+    enable = true;
+    extraConfig = ''
+      # Use 1Password SSH agent as fallback
+      # Primary: Tailscale SSH (identity-based)
+      # Fallback: 1Password SSH agent + authorized keys
+      IdentityAgent ~/.1password/agent.sock
+    '';
+  };
 }
