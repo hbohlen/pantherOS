@@ -1,164 +1,424 @@
-# pantherOS Architecture Overview
+# System Architecture Overview
 
-> **Category:** Architecture  
-> **Audience:** Contributors, System Architects  
-> **Last Updated:** 2025-11-17
+This document describes the overall architecture of the pantherOS NixOS configuration.
 
-This document provides a high-level overview of the pantherOS system architecture.
+## Project Vision
 
-## Table of Contents
+pantherOS is a comprehensive, multi-host NixOS configuration for personal developer infrastructure. It aims to solve configuration drift between devices by providing a declarative, modular, and reproducible framework.
 
-- [Design Philosophy](#design-philosophy)
-- [Current Implementation](#current-implementation)
-- [Technology Stack](#technology-stack)
-- [Repository Structure](#repository-structure)
-- [Core Components](#core-components)
+**Core Goals:**
+- Declarative configuration for all hosts
+- Modular design for maintainability
+- Reproducible across different hardware
+- Optimized for solo developer workflows
+- Zero configuration drift
 
-## Design Philosophy
+## Host Architecture
 
-pantherOS is built on four core principles (detailed in the [Constitution](decisions/constitution.md)):
+### Host Classification
 
-1. **Declarative Configuration** - All system state declared in Nix expressions
-2. **Modular Architecture** - Three-layer module system for composability
-3. **Reproducibility** - Deterministic builds with flake lock files
-4. **Security by Default** - Minimal attack surface with secure defaults
+The infrastructure consists of 4 hosts, categorized by purpose:
 
-## Current Implementation
+#### Workstations
+- **yoga**: Lenovo Yoga 7 2-in-1
+  - Purpose: Lightweight programming, research
+  - Optimizations: Battery life, portability
+  - Primary use: Mobile development, web browsing
 
-**Status**: Minimal working configuration for cloud VPS deployments
+- **zephyrus**: ASUS ROG Zephyrus M16
+  - Purpose: High-performance development
+  - Optimizations: Raw performance, multi-SSD
+  - Primary use: Heavy development, Podman containers, AI tools
 
-pantherOS currently provides:
-- Single-host NixOS configurations using Flakes
-- Declarative disk management with disko
-- SSH-based authentication and user management
-- Home Manager for user environment configuration
-- Modern shell environment (Fish, Starship, eza, zoxide)
+#### Servers
+- **hetzner-vps**: Hetzner Cloud VPS
+  - Purpose: Primary codespace server
+  - Optimizations: Server workloads, network services
+  - Primary use: Remote development, service hosting
 
-**Not Yet Implemented**:
-- Multi-host configurations (planned)
-- Desktop environment (Niri, DankMaterialShell) (planned)
-- Full modular architecture with profiles (in progress)
-- OpNix secrets management (imported but not configured)
-- Monitoring and observability stack (planned)
+- **ovh-vps**: OVH Cloud VPS
+  - Purpose: Secondary server (backup/mirror)
+  - Optimizations: Same as Hetzner
+  - Primary use: Redundancy, additional workloads
 
-See [Configuration Summary](../reference/configuration-summary.md) for current system state.
+### Host Configuration Strategy
 
-## Technology Stack
+Each host has three configuration layers:
 
-### Core Technologies
+1. **Hardware Layer** (`hosts/<hostname>/hardware.nix`)
+   - Hardware detection
+   - Kernel parameters
+   - Firmware
+   - Device-specific settings
 
-- **[NixOS](https://nixos.org/)** - Declarative Linux distribution
-  - Reproducible system configurations
-  - Atomic upgrades and rollbacks
-  - Declarative package management
+2. **Disk Layer** (`hosts/<hostname>/disko.nix`)
+   - Filesystem layout (Btrfs)
+   - Sub-volume structure
+   - Mount options
+   - SSD optimizations
 
-- **[Nix Flakes](https://nixos.wiki/wiki/Flakes)** - Modern Nix interface
-  - Hermetic, reproducible builds
-  - Explicit dependency management
-  - Composable configurations
+3. **System Layer** (`hosts/<hostname>/default.nix`)
+   - Modules
+   - Services
+   - Applications
+   - User configuration
 
-- **[Home Manager](https://github.com/nix-community/home-manager)** - User environment management
-  - Declarative dotfile management
-  - User-level package management
-  - Cross-platform configuration
+## Modular Architecture
 
-### Deployment Tools
+### Module Organization
 
-- **[disko](https://github.com/nix-community/disko)** - Declarative disk partitioning
-  - NixOS-native disk configuration
-  - Reproducible filesystem layouts
-  - Supports RAID, LVM, ZFS, and more
+Modules are organized by concern and scope:
 
-- **[nixos-anywhere](https://github.com/nix-community/nixos-anywhere)** - Remote NixOS installation
-  - Install NixOS from any Linux system
-  - Supports cloud VPS and bare metal
-  - Integrates with disko for disk setup
-
-### Development Tools
-
-- **[nixpkgs-fmt](https://github.com/nix-community/nixpkgs-fmt)** - Code formatter
-- **[nil](https://github.com/oxalica/nil)** - Nix language server
-- **[Spec Kit](https://github.com/github/spec-kit)** - Spec-driven development framework
-
-## Repository Structure
-
+#### System Modules (modules/nixos/)
 ```
-pantherOS/
-├── flake.nix                    # Main flake configuration
-├── flake.lock                   # Pinned dependency versions
-│
-├── hosts/                       # Host-specific configurations
-│   └── servers/
-│       ├── ovh-cloud/           # OVH VPS configuration
-│       └── hetzner-cloud/       # Hetzner VPS configuration
-│
-├── docs/                        # Documentation
-│   ├── architecture/            # Architecture docs and ADRs
-│   ├── howto/                   # Task-oriented guides
-│   ├── ops/                     # Operations documentation
-│   ├── reference/               # Reference documentation
-│   ├── specs/                   # Feature specifications
-│   ├── tools/                   # Tool documentation
-│   └── contributing/            # Contribution guides
-│
-├── .github/                     # GitHub configuration
-│   ├── agents/                  # Spec Kit agent definitions
-│   ├── MCP-SETUP.md            # MCP server configuration
-│   └── copilot-instructions.md # AI agent guidelines
-│
-└── .specify/                    # Spec Kit configuration
-    ├── templates/               # Specification templates
-    └── scripts/                 # Helper scripts
+nixos/
+├── core/              # Core system functionality
+│   ├── base/         # Fundamental system config
+│   ├── boot/         # Bootloader, initrd
+│   └── systemd/      # Systemd configuration
+├── services/         # Network services and daemons
+│   ├── ssh/          # SSH server
+│   ├── tailscale/    # Tailscale integration
+│   └── ...
+├── security/         # Security configurations
+│   ├── firewall/     # Firewall rules
+│   ├── ssh/          # SSH hardening
+│   └── ...
+└── hardware/         # Hardware-specific modules
+    ├── yoga/         # Yoga-specific config
+    ├── zephyrus/     # Zephyrus-specific config
+    └── servers/      # Server-specific config
 ```
 
-For detailed structure documentation, see [Configuration Summary](../reference/configuration-summary.md).
+#### Home-Manager Modules (modules/home-manager/)
+```
+home-manager/
+├── shell/            # Terminal and shell
+│   ├── fish/         # Fish shell
+│   ├── ghostty/      # Ghostty terminal
+│   └── ...
+├── applications/     # User applications
+│   ├── 1password/    # 1Password integration
+│   ├── zed/          # Zed IDE
+│   └── ...
+├── development/      # Development tools
+│   ├── languages/    # Language environments
+│   ├── ai-tools/     # AI coding assistants
+│   └── ...
+└── desktop/          # Desktop environment
+    ├── niri/         # Window manager
+    ├── dms/          # DankMaterialShell
+    └── ...
+```
 
-## Core Components
+#### Shared Modules (modules/shared/)
+```
+shared/
+├── base/             # Common configuration
+├── options/          # Shared options
+└── utils/            # Helper functions
+```
 
-### Flake Configuration
+### Single Concern Principle
 
-The `flake.nix` file serves as the entry point for all NixOS configurations:
+Each module has a single, well-defined purpose:
 
-- Defines system inputs (nixpkgs, home-manager, disko, etc.)
-- Exports nixosConfigurations for each host
-- Provides development shells for different use cases
-- Manages dependency versions through flake.lock
+**Good Examples:**
+- `modules/nixos/security/firewall.nix` - Only firewall configuration
+- `modules/home-manager/shell/fish.nix` - Only Fish shell configuration
+- `modules/nixos/services/tailscale.nix` - Only Tailscale integration
 
-### Host Configurations
+**Avoid:**
+- Combining unrelated functionality
+- Creating "kitchen sink" modules
+- Hard-coding host-specific settings in general modules
 
-Each host has three main configuration files:
+### Module Dependencies
 
-1. **configuration.nix** - System-level NixOS configuration
-   - Boot configuration
-   - Networking setup
-   - System services
-   - Package installation
+Dependencies are managed carefully:
 
-2. **disko.nix** - Disk partitioning and filesystem layout
-   - Declarative disk configuration
-   - Filesystem types and mount points
-   - Partition sizes and layouts
+**Implicit Dependencies:**
+- Modules in the same category may depend on each other
+- Core modules are imported before specialized modules
 
-3. **home.nix** - User environment configuration (optional)
-   - Dotfiles and user packages
-   - Shell configuration
-   - User-level services
+**Explicit Dependencies:**
+- Documented in module comments
+- Use `mkIf` to ensure proper ordering
+- Avoid circular dependencies
 
-### Development Shells
+**No Hard Dependencies:**
+- Modules should work independently
+- Optional features via `mkIf config.module.feature`
 
-Multiple development environments are provided via `nix develop`:
+## File System Design
 
-- **default** - General development (git, neovim, fish, starship)
-- **nix** - Nix development (nil, nixpkgs-fmt)
-- **mcp** - MCP-enabled AI development
-- **rust**, **node**, **python**, **go** - Language-specific shells
+### Btrfs Sub-Volume Strategy
 
-See [Infrastructure Documentation](../infra/) for details on development shells.
+All hosts use Btrfs with optimized sub-volume layouts:
 
-## See Also
+```
+/
+├── @                   # Root sub-volume
+├── @home              # Home directory
+├── @dev               # Development projects
+├── @var               # Variable data
+├── @nix               # Nix store (if separate)
+└── @snapshots         # Snapshots
+```
 
-- **[pantherOS Constitution](decisions/constitution.md)** - Core principles and governance
-- **[Configuration Summary](../reference/configuration-summary.md)** - Current system state
-- **[Deployment Guide](../DEPLOYMENT.md)** - How to deploy pantherOS
-- **[Infrastructure Documentation](../infra/)** - NixOS tooling and concepts
-- **[Spec-Driven Workflow](../contributing/spec-driven-workflow.md)** - Development methodology
+**Benefits:**
+- Atomic snapshots of sub-volumes
+- Different mount options per sub-volume
+- Compression for space savings
+- Easy rollback
+
+**Mount Options:**
+- `compress=zstd` - Compression for SSD longevity
+- `noatime` - Reduced disk writes
+- `ssd` - SSD-specific optimizations
+
+### Home Directory Structure
+
+```
+/home/hbohlen/
+├── .config/           # Application configs
+├── .local/            # Local applications
+├── dev/               # Development projects (auto-activate devShell)
+├── .nix-profile/      # Nix user profile
+└── .cache/            # Cache directories
+```
+
+Key aspects:
+- All configuration via home-manager
+- Development projects in `~/dev` with auto-activation
+- Dotfiles managed declaratively
+
+## Security Model
+
+### Tailscale Mesh Network
+
+All devices connected via Tailscale:
+- Creates secure mesh network
+- Zero-trust access between devices
+- No open ports to internet
+- Works behind NAT/firewalls
+
+**Components:**
+- All workstations connected
+- All servers connected
+- Containers can access Tailnet
+- ACLs for fine-grained control
+
+### Secrets Management
+
+1Password as single source of truth:
+- Service account: `pantherOS`
+- OpNix integration for NixOS
+- 1Password GUI for workstations
+- SSH keys managed via 1Password
+
+**Secrets Flow:**
+```
+1Password → OpNix → NixOS configuration → Services
+```
+
+### Firewall Strategy
+
+**Workstations:**
+- Default deny incoming
+- Allow Tailscale
+- Allow essential services
+
+**Servers:**
+- Default deny all
+- Allow Tailscale SSH only
+- Allow specific services via reverse proxy
+- No direct internet exposure
+
+## Development Environment
+
+### DevShell
+
+Auto-activated environment for `~/dev`:
+- Complete language support (Node, Python, Go, Rust, Nix)
+- LSP servers configured
+- Formatters installed
+- AI coding tools integrated
+
+### Languages and Tooling
+
+**Languages:**
+- Node.js/JavaScript/TypeScript
+- Python
+- Go
+- Rust
+- Nix
+
+**AI Tools:**
+- Claude Code CLI
+- opencode.ai
+- qwen-code
+- And others via nix-ai-tools
+
+**Development Tools:**
+- Zed IDE (primary)
+- Ghostty (terminal)
+- Fish (shell)
+- Podman (containers)
+
+### Desktop Environment
+
+**Window Manager:** Niri (Wayland)
+**Shell Integration:** DankMaterialShell
+**Terminal:** Ghostty
+**Shell:** Fish
+
+## Configuration Flow
+
+### Configuration Hierarchy
+
+```
+flake.nix
+└── nixosConfigurations.<hostname>
+    ├── hosts/<hostname>/default.nix
+    │   ├── hardware.nix
+    │   ├── disko.nix
+    │   └── imported modules
+    │       ├── modules/nixos/*
+    │       ├── modules/shared/*
+    │       └── external inputs
+    └── home-manager configuration
+        └── modules/home-manager/*
+```
+
+### Build Process
+
+1. **Flake evaluation** - Resolve all inputs and modules
+2. **Hardware detection** - Apply hardware-specific settings
+3. **Disk configuration** - Create filesystem layout
+4. **System modules** - Configure system services
+5. **User modules** - Configure user environment
+6. **Activation** - Apply configuration
+
+### Testing Flow
+
+1. **Build test** - Verify compilation
+2. **Dry run** - Test activation
+3. **Switch** - Apply configuration (carefully for servers)
+
+## Key Design Decisions
+
+### Why NixOS?
+- Declarative configuration
+- Atomic upgrades and rollbacks
+- Reproducible builds
+- Excellent package management
+- Strong ecosystem
+
+### Why Btrfs?
+- Built-in snapshots
+- Sub-volumes for flexible layout
+- Compression
+- Checksums for data integrity
+- Good performance
+
+### Why Tailscale?
+- Easy zero-config VPN
+- No firewall punching
+- Works everywhere
+- Good security model
+- Simple access control
+
+### Why Modular?
+- Single concern per module
+- Easy to understand
+- Simple to test
+- Reusable components
+- Easy to maintain
+
+### Why Home-Manager?
+- Declarative user configuration
+- Separates user from system
+- Better organization
+- Standard patterns
+
+## Configuration Management
+
+### Update Strategy
+
+**Regular Updates:**
+```bash
+nix flake update  # Update inputs
+nixos-rebuild build .#<hostname>  # Test
+nixos-rebuild switch .#<hostname>  # Deploy
+```
+
+**Rollback:**
+```bash
+nixos-rebuild switch --generation -1  # Previous
+# Or select from GRUB menu
+```
+
+### Git Workflow
+
+**Branch Structure:**
+- `main` - Stable configuration
+- `refactor` - Development work
+- Feature branches for major changes
+
+**Commit Strategy:**
+- Small, focused commits
+- Commit before major changes
+- Test after each commit
+- Clear commit messages
+
+### CI/CD
+
+**Automated Testing:**
+- Build all hosts on changes
+- Test in CI before merging
+- Verification steps
+
+**Deployment:**
+- Manual deployment (for now)
+- Potential automation in future
+- Always tested first
+
+## Future Enhancements
+
+### Planned Improvements
+- Private Nix cache (Backblaze B2 + Attic)
+- Automated CI/CD pipeline
+- Additional modules as needed
+- Enhanced security features
+- Better monitoring
+
+### Scalability
+- Architecture supports adding more hosts
+- Modular design allows expansion
+- Pattern-based approach scales well
+- Documentation evolves with system
+
+## Success Metrics
+
+**Configuration is complete when:**
+- [ ] All 4 hosts build successfully
+- [ ] Hardware specs documented
+- [ ] All TODOs addressed
+- [ ] Zero configuration drift
+- [ ] Documentation complete
+- [ ] Deployment is reproducible
+
+## Related Documentation
+
+- [Module Organization](./module-organization.md)
+- [Disk Layouts](./disk-layouts.md)
+- [Security Model](./security-model.md)
+- [Hardware Discovery Guide](../guides/hardware-discovery.md)
+- [Module Development Guide](../guides/module-development.md)
+
+---
+
+**Maintained by:** hbohlen
+**Last Updated:** 2025-11-19
+**Version:** 1.0

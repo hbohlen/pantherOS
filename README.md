@@ -1,236 +1,142 @@
-# pantherOS - NixOS Configuration Repository
+# pantherOS - Declarative NixOS Configuration
 
-**AI Agent Context**: This is a minimal NixOS configuration repository for a single OVH Cloud VPS server.
+A personal, multi-host NixOS configuration for solo developer infrastructure. This repository manages configurations for multiple workstations and servers with a modular, flake-based approach.
 
-**Last Updated:** 2025-11-16  
-**Status:** Minimal working configuration
+## 🎯 Overview
 
-## Overview
+This project provides a **declarative, modular, and reproducible** framework for managing personal development infrastructure. It solves the problem of configuration drift between devices and servers by providing a single source of truth for all system configurations.
 
-This repository contains a simple, declarative NixOS configuration for an OVH Cloud VPS using Nix flakes. The configuration is intentionally minimal and focused on maintainability.
+## 🖥️ Managed Hosts
 
-## What This Repository Contains
+### Workstations
+- **yoga** - Lenovo Yoga 7 2-in-1 (battery-optimized, lightweight development)
+- **zephyrus** - ASUS ROG Zephyrus M16 (performance workstation, heavy development workflows)
 
-**AI Agent Context**: Actual files in this repository.
+### Servers
+- **hetzner-vps** - Hetzner Cloud VPS (primary development server)
+- **ovh-vps** - OVH Cloud VPS (secondary server)
 
-### NixOS Configuration
-- `flake.nix` - Main flake definition
-- `hosts/servers/ovh-cloud/` - Single server configuration
-  - `configuration.nix` - System configuration
-  - `disko.nix` - Disk partitioning
-  - `home.nix` - Home Manager configuration
+## 📚 Documentation
 
-### Documentation
-- `README.md` - This file
-- `OVH Cloud VPS - System Profile.md` - Actual NixOS server profile
-- `PERFORMANCE-OPTIMIZATIONS.md` - Potential optimizations
-- `system_config/03_PANTHEROS_NIXOS_BRIEF.md` - Configuration overview
-- `DEPLOYMENT.md` - Deployment instructions
-- `OVH-DEPLOYMENT-GUIDE.md` - Detailed deployment guide
+Complete documentation is available in the [docs/](./docs/) directory:
 
-### Planning Documents (Future Work)
-- `ai_infrastructure/` - Project planning (not implemented)
-- `desktop_environment/` - Desktop docs (not implemented)
-- `architecture/` - Architecture docs (aspirational)
-- `code_snippets/` - Code examples (some relevant)
+- [Getting Started Guide](./docs/guides/getting-started.md) - Initial setup and basic usage
+- [Architecture Guide](./docs/guides/architecture.md) - System design and structure
+- [Module Development Guide](./docs/guides/module-development.md) - Creating and maintaining modules
+- [Tutorials](./docs/tutorials/) - Step-by-step guides for specific tasks
+- [Reference Materials](./docs/reference/) - Quick reference and specifications
+- [Troubleshooting](./docs/troubleshooting/) - Common issues and solutions
 
-## Current Configuration Features
+For AI agents working with this codebase, see the [Project Primer](./docs/context/project-primer.md).
 
-**AI Agent Context**: What IS actually implemented.
+## 🚀 Quick Start
 
-### ✅ Implemented
-- Single NixOS server configuration (OVH Cloud VPS)
-- Declarative disk partitioning via disko
-- Btrfs filesystem with subvolumes
-- SSH-only access with key authentication
-- Basic system packages (htop, gcc, make, etc.)
-- Home Manager for user environment
-- Fish shell with starship prompt
-- Modern CLI tools (eza, ripgrep, zoxide, etc.)
-
-### ❌ NOT Implemented
-- Desktop environment (Niri, DankMaterialShell)
-- Multiple host configurations
-- Modular architecture (modules/, profiles/)
-- OpNix secrets management (imported but not configured)
-- Tailscale VPN
-- Datadog monitoring
-- Container services
-- Security hardening modules
-- Hardware-specific optimizations
-
-## Quick Start
-
-### Deploy to OVH VPS
-
-```bash
-# 1. Clone repository
-git clone https://github.com/hbohlen/pantherOS.git
-cd pantherOS
-
-# 2. Review configuration
-cat hosts/servers/ovh-cloud/configuration.nix
-
-# 3. Deploy (requires root SSH access to server)
-nix run github:nix-community/nixos-anywhere -- \
-  --flake .#ovh-cloud \
-  --target-host root@YOUR_SERVER_IP
-```
-
-### Update Configuration
-
-```bash
-# 1. Edit configuration
-vim hosts/servers/ovh-cloud/configuration.nix
-
-# 2. Test build locally
-nix build .#nixosConfigurations.ovh-cloud.config.system.build.toplevel
-
-# 3. Deploy to server
-sudo nixos-rebuild switch --flake .#ovh-cloud
-```
-
-### Add Packages
-
-```bash
-# System-level: Edit configuration.nix
-environment.systemPackages = with pkgs; [
-  htop
-  neovim  # Add package
-];
-
-# User-level: Edit home.nix
-home.packages = with pkgs; [
-  starship
-  bat  # Add package
-];
-```
-
-## Documentation
-
-**AI Agent Context**: Key documentation files.
-
-### Configuration
-- [NixOS Configuration Brief](system_config/03_PANTHEROS_NIXOS_BRIEF.md) - Overview of actual configuration
-- [System Profile](OVH%20Cloud%20VPS%20-%20System%20Profile.md) - Server specifications
-- [Performance Optimizations](PERFORMANCE-OPTIMIZATIONS.md) - Potential optimizations
+### Prerequisites
+- NixOS installed on target machines
+- 1Password account with service account configured
+- Access to Tailscale Tailnet
 
 ### Deployment
-- [Deployment Guide](DEPLOYMENT.md) - Basic deployment instructions
-- [OVH Deployment Guide](OVH-DEPLOYMENT-GUIDE.md) - Detailed OVH-specific guide
 
-### Development & AI Integration
-- **[Spec Kit Integration Guide](docs/tools/spec-kit.md)** - Complete guide for Spec-Driven Development ⭐ New!
-- [MCP Setup Guide](.github/MCP-SETUP.md) - Model Context Protocol server configuration
-- [MCP Verification Report](.github/MCP-VERIFICATION-REPORT.md) - Comprehensive analysis and validation
-- [Copilot Instructions](.github/copilot-instructions.md) - GitHub Copilot integration guide
-- [Devcontainer Guide](.github/devcontainer-readme.md) - Development container setup and usage
-- [Secrets Quick Reference](.github/SECRETS-QUICK-REFERENCE.md) - Environment variables setup
-- [Documentation Index](docs/index.md) - Complete documentation hub
+1. **Clone this repository**
+   ```bash
+   git clone <repository-url>
+   cd pantherOS
+   ```
 
-### Planning (Future Work)
-- `ai_infrastructure/` - AI development plans (not implemented)
-- `desktop_environment/` - Desktop environment docs (not implemented)
-- `architecture/` - Architecture documentation (aspirational)
+2. **Configure 1Password service account**
+   - Ensure `opnix` is configured with your `pantherOS` service account
+   - Verify vault access: `op nix list-items pantherOS`
 
-## Development
+3. **Deploy to a host**
+   ```bash
+   # For yoga workstation
+   nixos-rebuild switch --flake .#yoga
 
-### Hardware Scanning
+   # For zephyrus workstation
+   nixos-rebuild switch --flake .#zephyrus
 
-This repository includes a hardware scanning script to help with NixOS configuration planning:
+   # For hetzner VPS
+   nixos-rebuild switch --flake .#hetzner-vps
 
-- **Script**: `device-scan.sh` - Scans hardware capabilities and generates markdown reports
-- **Purpose**: Useful for planning disko.nix setups and hardware-specific optimizations
-- **Output**: Creates detailed hardware specifications for optimal NixOS configuration
+   # For ovh VPS
+   nixos-rebuild switch --flake .#ovh-vps
+   ```
 
-#### Using the Device Scan Script
+## 🛠️ Development
 
+### Working on Configuration
+
+1. **Create a new module**
+   ```bash
+   # System module
+   touch modules/nixos/services/my-service.nix
+
+   # Check the Module Development Guide for patterns
+   # See: docs/guides/module-development.md
+   ```
+
+2. **Add module to a host**
+   Edit `hosts/<hostname>/default.nix`:
+   ```nix
+   {
+     imports = [
+       ./disko.nix
+       ./hardware.nix
+
+       # Add your new module
+       ../../modules/nixos/services/my-service.nix
+     ];
+   }
+   ```
+
+3. **Test configuration**
+   ```bash
+   nixos-rebuild build --flake .#<hostname>
+   ```
+
+### Development Shell
+
+A fully configured development environment is available:
 ```bash
-# Scan current host and save to default file (hardware-specs.md)
-./device-scan.sh
-
-# Scan with custom hostname and output file
-./device-scan.sh -o my-host-specs.md "my-server"
-
-# Use for planning disko.nix configurations
-./device-scan.sh -o hardware-specs.md
+nix develop
 ```
 
-### MCP Server Configuration ✅
+This provides all necessary tools for working on the configuration, including Nix language servers, formatters, and development utilities.
 
-This repository includes comprehensive MCP (Model Context Protocol) server configuration for AI-assisted development:
+## 🔒 Security
 
-- **Configuration**: `.github/mcp-servers.json` (11 servers configured)
-- **Setup Guide**: `.github/MCP-SETUP.md`
-- **Verification Report**: `.github/MCP-VERIFICATION-REPORT.md`
-- **Validation Script**: `.github/verify-mcp-config.sh`
-- **CI/CD Workflow**: `.github/workflows/mcp-verification.yml` (with firewall handling)
+### Secrets Management
+- All secrets are managed through 1Password service account
+- Reference format: `op:<vault>/<item>/<section>/<field>`
+- Never commit secrets to the repository
+- Use OpNix for NixOS integration
 
-**Quick Verification:**
-```bash
-# Run automated verification
-./.github/verify-mcp-config.sh
+### Network Security
+- All hosts operate within a Tailscale Tailnet
+- Firewall rules configured per host type
+- SSH access restricted to Tailnet devices
+- No public-facing services (except through reverse proxy with Tailnet access)
 
-# Enter MCP development environment
-nix develop .#mcp
+## 🧩 OpenSpec Change Management
 
-# Test GitHub MCP server
-npx -y @modelcontextprotocol/server-github
-```
+This project uses OpenSpec for structured change management. See the [Specification Documentation](./docs/specs/specifications.md) and individual proposals in `openspec/changes/` for details on planned and implemented changes.
 
-**Available MCP Servers:**
-- Essential: github, filesystem, git, brave-search
-- NixOS-specific: nix-search, fetch
-- AI Infrastructure: postgres, memory, sequential-thinking
-- Testing: puppeteer, docker
+## 📝 License
 
-**Status:** ✅ Production-ready, verified 2025-11-16
+Personal configuration repository. See repository license for details.
 
-### Testing Changes
+## 🆘 Support
 
-```bash
-# Check flake syntax
-nix flake check
-
-# Build without activating
-nix build .#nixosConfigurations.ovh-cloud.config.system.build.toplevel
-
-# Test in VM (if supported)
-nixos-rebuild build-vm --flake .#ovh-cloud
-```
-
-### Update Dependencies
-
-```bash
-# Update all flake inputs
-nix flake update
-
-# Update specific input
-nix flake lock --update-input nixpkgs
-
-# Review changes
-git diff flake.lock
-```
-
-## Contributing
-
-This is a personal NixOS configuration repository. If you find it useful:
-1. Fork it
-2. Adapt it to your needs
-3. Learn from the structure
-
-## Resources
-
-- [NixOS Manual](https://nixos.org/manual/nixos/stable/)
-- [Nix Flakes](https://nixos.wiki/wiki/Flakes)
-- [Home Manager Manual](https://nix-community.github.io/home-manager/)
-- [Disko Documentation](https://github.com/nix-community/disko)
-- [nixos-anywhere](https://github.com/nix-community/nixos-anywhere)
-
-## License
-
-MIT License - See LICENSE file for details
+For issues or questions:
+1. Check documentation in [docs/](./docs/)
+2. Review existing issues
+3. Create new issue with:
+   - Host affected
+   - Error messages
+   - Steps to reproduce
+   - Expected behavior
 
 ---
 
-**For AI Agents**: This repository contains a minimal, working NixOS configuration. Many planning documents describe future features that are NOT implemented. Always verify what exists in the actual configuration files before making assumptions about capabilities.
+**Built with ❤️ using NixOS**

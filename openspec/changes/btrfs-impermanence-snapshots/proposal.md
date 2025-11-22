@@ -1,0 +1,76 @@
+# Change: Btrfs Impermanence with Snapshots
+
+## Why
+
+Current pantherOS Btrfs configuration lacks impermanence features and snapshot automation that are standard practice in 2025 NixOS deployments. Modern Btrfs impermanence provides better security, cleaner system state management, and automatic rollback capabilities while maintaining data persistence where needed.
+
+## What Changes
+
+- Add Btrfs impermanence module with automatic snapshot management
+- Implement subvolume reset on boot for clean system state
+- Add persistent data directories configuration
+- Create automated snapshot cleanup policies
+- Add Btrfs optimization settings (compression, SSD optimizations)
+- Implement rollback mechanisms for system recovery
+
+## Impact
+
+- Affected specs: `btrfs-impermanence`
+- Affected code: `modules/nixos/filesystems/impermanence.nix`, `modules/shared/filesystems/btrfs.nix`
+- Changes to all host disko configurations and Btrfs mount options
+
+---
+
+# ADDED Requirements
+
+## Requirement: Btrfs Impermanence with Snapshots
+
+The system SHALL implement Btrfs-based impermanence with automatic snapshot management and selective data persistence.
+
+#### Scenario: Clean boot impermanence
+- **WHEN** system boots
+- **THEN** root and home subvolumes shall be reset to clean state while preserving specified persistent directories
+
+#### Scenario: Automatic snapshot management
+- **WHEN** system configuration changes are applied
+- **THEN** automatic snapshots shall be created before changes with configurable retention policies
+
+#### Scenario: Selective data persistence
+- **WHEN** impermanence is enabled
+- **THEN** user-specified directories shall be persisted across reboots via bind mounts or dedicated persistent subvolumes
+
+## Requirement: Btrfs Optimization
+
+The system SHALL apply Btrfs optimizations appropriate for SSD longevity and performance.
+
+#### Scenario: SSD optimization
+- **WHEN** Btrfs is on SSD storage
+- **THEN** filesystem shall be configured with compression, CoW optimization, and reduced write amplification settings
+
+#### Scenario: Performance tuning
+- **WHEN** Btrfs performance monitoring indicates bottlenecks
+- **THEN** system shall apply appropriate mount options and subvolume configurations to optimize I/O performance
+
+## Requirement: Snapshot-based Rollback
+
+The system SHALL provide snapshot-based rollback capabilities for system recovery.
+
+#### Scenario: System rollback
+- **WHEN** administrator initiates system rollback
+- **THEN** system shall be restored to previous working snapshot state with minimal downtime
+
+#### Scenario: Automatic rollback on failure
+- **WHEN** system fails to boot after configuration changes
+- **THEN** system shall automatically rollback to last known good snapshot
+
+## Requirement: Persistent Data Management
+
+The system SHALL provide flexible persistent data management separate from impermanent system state.
+
+#### Scenario: User data persistence
+- **WHEN** impermanence is enabled
+- **THEN** user data in configured directories shall persist across system reboots and state resets
+
+#### Scenario: Application state persistence
+- **WHEN** applications require persistent state
+- **THEN** application data directories shall be configurable for persistence while maintaining system impermanence

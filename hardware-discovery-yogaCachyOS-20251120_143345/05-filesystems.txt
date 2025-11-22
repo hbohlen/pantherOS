@@ -1,0 +1,24 @@
+Filesystem      Size  Used Avail Use% Mounted on
+dev             7.4G     0  7.4G   0% /dev
+run             7.4G  2.0M  7.4G   1% /run
+efivarfs        148K   40K  104K  28% /sys/firmware/efi/efivars
+/dev/nvme0n1p2  954G   37G  917G   4% /
+tmpfs           7.4G   28M  7.4G   1% /dev/shm
+tmpfs           1.0M     0  1.0M   0% /run/credentials/systemd-journald.service
+tmpfs           1.0M     0  1.0M   0% /run/credentials/systemd-resolved.service
+tmpfs           7.4G  167M  7.3G   3% /tmp
+/dev/nvme0n1p2  954G   37G  917G   4% /srv
+/dev/nvme0n1p2  954G   37G  917G   4% /home
+/dev/nvme0n1p2  954G   37G  917G   4% /var/cache
+/dev/nvme0n1p2  954G   37G  917G   4% /root
+/dev/nvme0n1p2  954G   37G  917G   4% /var/log
+/dev/nvme0n1p2  954G   37G  917G   4% /var/tmp
+/dev/nvme0n1p1  300M  9.7M  290M   4% /boot/efi
+tmpfs           1.5G  636K  1.5G   1% /run/user/1000
+/dev/nvme0n1p2 on / type btrfs (rw,noatime,compress=zstd:3,ssd,discard=async,space_cache=v2,commit=120,subvolid=256,subvol=/@)
+/dev/nvme0n1p2 on /srv type btrfs (rw,noatime,compress=zstd:3,ssd,discard=async,space_cache=v2,commit=120,subvolid=259,subvol=/@srv)
+/dev/nvme0n1p2 on /home type btrfs (rw,noatime,compress=zstd:3,ssd,discard=async,space_cache=v2,commit=120,subvolid=257,subvol=/@home)
+/dev/nvme0n1p2 on /var/cache type btrfs (rw,noatime,compress=zstd:3,ssd,discard=async,space_cache=v2,commit=120,subvolid=260,subvol=/@cache)
+/dev/nvme0n1p2 on /root type btrfs (rw,noatime,compress=zstd:3,ssd,discard=async,space_cache=v2,commit=120,subvolid=258,subvol=/@root)
+/dev/nvme0n1p2 on /var/log type btrfs (rw,noatime,compress=zstd:3,ssd,discard=async,space_cache=v2,commit=120,subvolid=262,subvol=/@log)
+/dev/nvme0n1p2 on /var/tmp type btrfs (rw,noatime,compress=zstd:3,ssd,discard=async,space_cache=v2,commit=120,subvolid=261,subvol=/@tmp)

@@ -1,0 +1,12 @@
+=== Disk Performance Metrics ===
+Testing /dev/nvme0n1 performance...
+Read speed test (first 1GB):
+1073741824 bytes (1.1 GB, 1.0 GiB) copied, 0.358038 s, 3.0 GB/s
+=== TRIM Support ===
+NAME        DISC-ALN DISC-GRAN DISC-MAX DISC-ZERO
+zram0              0        4K       2T         0
+nvme0n1            0      512B       2T         0
+├─nvme0n1p1        0      512B       2T         0
+└─nvme0n1p2        0      512B       2T         0
+=== I/O Scheduler ===
+nvme0n1: [none] mq-deadline kyber adios bfq 

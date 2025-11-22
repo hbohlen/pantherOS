@@ -1,0 +1,5 @@
+{
+  "apiUrl": "https://api.minimax.io/antropic",
+  "apiKey": "${MINIMAX_API_KEY}",
+  "model": "minimax-m2"
+}

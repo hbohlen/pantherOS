@@ -1,240 +1,114 @@
 {
-  description = "PantherOS - NixOS Configurations";
+  description = "pantherOS - Declarative NixOS Configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    home-manager.url = "github:nix-community/home-manager/master";
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    disko.url = "github:nix-community/disko";
-    nixos-anywhere.url = "github:nix-community/nixos-anywhere";
-    nix-ai-tools.url = "github:numtide/nix-ai-tools";
-    opnix.url = "github:brizzbuzz/opnix";
+    
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, nixos-hardware, disko, nix-ai-tools, opnix, ... }:
-  let
-    system = "x86_64-linux";
-    pkgs = import nixpkgs { 
-      inherit system; 
-      config.allowUnfree = true;
+  outputs = { self, nixpkgs, disko, nixos-hardware, home-manager, ... }: {
+    nixosConfigurations = {
+      # Yoga - Lenovo Yoga 7 2-in-1 (battery-optimized, lightweight development)
+      yoga = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/yoga
+          disko.nixosModules.disko
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.hbohlen = ./home/hbohlen/default.nix;
+          }
+        ];
+      };
+
+      # Zephyrus - ASUS ROG Zephyrus M16 (performance workstation, heavy development workflows)
+      zephyrus = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/zephyrus
+          disko.nixosModules.disko
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.hbohlen = ./home/hbohlen/default.nix;
+          }
+        ];
+      };
+
+      # Hetzner VPS - Hetzner Cloud VPS (primary development server)
+      hetzner-vps = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/servers/hetzner-vps
+          disko.nixosModules.disko
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.hbohlen = ./home/hbohlen/default.nix;
+          }
+        ];
+      };
+
+      # OVH Cloud VPS - OVH Cloud VPS (secondary server)
+      ovh-vps = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/servers/ovh-cloud
+          disko.nixosModules.disko
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.hbohlen = ./home/hbohlen/default.nix;
+          }
+        ];
+      };
     };
-  in {
-    nixosConfigurations.ovh-cloud = nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [
-        ./hosts/servers/ovh-cloud/configuration.nix
-        disko.nixosModules.default
-        # Temporarily disabled for initial deployment to reduce closure size
-        # opnix.nixosModules.default
-        # home-manager.nixosModules.home-manager {
-        #   home-manager.users.hbohlen = ./hosts/servers/ovh-cloud/home.nix;
-        #   home-manager.useGlobalPkgs = true;
-        #   home-manager.useUserPackages = true;
-        # }
+
+    # Development shell for working on the configuration
+    devShells.x86_64-linux.default = with nixpkgs.legacyPackages.x86_64-linux; mkShell {
+      buildInputs = [
+        nix
+        git
+        home-manager
+        disko.packages.x86_64-linux.disko
+        nixos-rebuild
+        nixos-generators
+        nil
+        nixfmt
       ];
+      
+      shellHook = ''
+        echo "pantherOS Development Environment"
+        echo "================================="
+        echo ""
+        echo "Available tools:"
+        echo "- nix, nixos-rebuild, git"
+        echo "- home-manager, disko"
+        echo "- nil (Nix language server)"
+        echo "- nixfmt (formatter)"
+        echo ""
+        echo "To test a configuration: nixos-rebuild build --flake .#<hostname>"
+        echo "To enter a Nix shell in this directory: nix develop"
+      '';
     };
-
-    nixosConfigurations.hetzner-cloud = nixpkgs.lib.nixosSystem {
-      inherit system;
-      modules = [
-        ./hosts/servers/hetzner-cloud/configuration.nix
-        disko.nixosModules.default
-        # Temporarily disabled for initial deployment to reduce closure size
-        # opnix.nixosModules.default
-        # home-manager.nixosModules.home-manager {
-        #   home-manager.users.hbohlen = ./hosts/servers/hetzner-cloud/home.nix;
-        #   home-manager.useGlobalPkgs = true;
-        #   home-manager.useUserPackages = true;
-        # }
-      ];
-    };
-
-    # Development shells for different project types
-    devShells.${system} = {
-      default = pkgs.mkShell {
-        packages = with pkgs; [
-          git
-          neovim
-          fish
-          starship
-          direnv
-          nil
-          nixpkgs-fmt
-        ];
-      };
-
-      nix = pkgs.mkShell {
-        packages = with pkgs; [
-          nix
-          nil
-          nixpkgs-fmt
-          nix-init
-          nix-eval-lsp
-          git
-          neovim
-        ];
-      };
-
-      rust = pkgs.mkShell {
-        packages = with pkgs; [
-          rustup
-          cargo
-          rust-analyzer
-          clippy
-          bindgen
-          cbindgen
-          git
-          neovim
-        ];
-      };
-
-      node = pkgs.mkShell {
-        packages = with pkgs; [
-          nodejs-18_x
-          nodejs-20_x
-          yarn
-          pnpm
-          npm-9_x
-          git
-          neovim
-        ];
-      };
-
-      python = pkgs.mkShell {
-        packages = with pkgs; [
-          python3
-          python3Packages.pip
-          python3Packages.virtualenv
-          python3Packages.venv
-          python3Packages.pylint
-          python3Packages.black
-          python3Packages.isort
-          git
-          neovim
-        ];
-      };
-
-      go = pkgs.mkShell {
-        packages = with pkgs; [
-          go
-          gopls
-          golangci-lint
-          gotools
-          air
-          git
-          neovim
-        ];
-      };
-
-      # MCP-enabled development shell with AI tooling
-      mcp = pkgs.mkShell {
-        packages = with pkgs; [
-          # Core development tools
-          git
-          neovim
-          fish
-          starship
-          direnv
-          
-          # Nix tools
-          nil
-          nixpkgs-fmt
-          nix-init
-          
-          # Node.js for MCP servers
-          nodejs-20_x
-          yarn
-          
-          # Database tools for AgentDB
-          postgresql
-          sqlite
-          
-          # Additional utilities
-          jq
-          curl
-          wget
-          ripgrep
-          fd
-          bat
-          
-          # Docker for testing
-          docker
-          docker-compose
-        ];
-        
-        shellHook = ''
-          echo "🚀 pantherOS MCP Development Environment"
-          echo "📚 MCP servers configured in .github/mcp-servers.json"
-          echo "🔧 Use 'nix develop .#<shell>' to switch environments"
-          echo ""
-          echo "Available development shells:"
-          echo "  - default: General development"
-          echo "  - nix: Nix-specific development"
-          echo "  - rust: Rust development"
-          echo "  - node: Node.js development"
-          echo "  - python: Python development"
-          echo "  - go: Go development"
-          echo "  - mcp: AI/MCP development (current)"
-          echo ""
-          
-          # Set up MCP environment variables if not already set
-          export MCP_CONFIG_PATH="${MCP_CONFIG_PATH:-.github/mcp-servers.json}"
-          
-          # Create .opencode directory structure if it doesn't exist
-          if [ ! -d ".opencode" ]; then
-            echo "Creating .opencode directory structure..."
-            mkdir -p .opencode/{mcp,plugin,skills}
-          fi
-        '';
-      };
-
-      # AI infrastructure development shell
-      ai = pkgs.mkShell {
-        packages = with pkgs; [
-          # Python for AI/ML tools
-          python3
-          python3Packages.pip
-          python3Packages.virtualenv
-          python3Packages.numpy
-          python3Packages.pandas
-          
-          # Node.js for MCP and tooling
-          nodejs-20_x
-          yarn
-          
-          # Database tools
-          postgresql
-          sqlite
-          redis
-          
-          # Development tools
-          git
-          neovim
-          tmux
-          
-          # Nix tools
-          nil
-          nixpkgs-fmt
-          
-          # Utilities
-          jq
-          curl
-          ripgrep
-        ];
-        
-        shellHook = ''
-          echo "🤖 pantherOS AI Infrastructure Development"
-          echo "📖 See ai_infrastructure/ for integration plans"
-          echo ""
-          echo "Key components:"
-          echo "  - AgentDB: Vector database integration"
-          echo "  - MCP Servers: Model Context Protocol tools"
-          echo "  - OpenCode: AI development environment"
-          echo ""
-        '';
-      };
-    };
-
-    packages.${system}.default = self.nixosConfigurations.ovh-cloud.config.system.build.toplevel;
   };
 }

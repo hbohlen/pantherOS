@@ -1,1 +1,11 @@
-Nothing needs to be added to .gitignore as the changes only include shell script, markdown files, and README.md which are source/config files that should not be ignored.
+.env
+/node_modules/**
+.dmux/
+
+# Claude Memory - Include core files, exclude private data
+.claude/sessions/
+.claude/backups/
+.claude/memory.json
+
+# But include the core system
+!CLAUDE.md

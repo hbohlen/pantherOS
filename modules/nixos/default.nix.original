@@ -1,0 +1,39 @@
+# PantherOS NixOS Modules Collection
+# Aggregates all PantherOS-specific NixOS modules
+
+{
+  # Core modules
+  base = import ./core/base.nix;
+  boot = import ./core/boot.nix;
+  systemd = import ./core/systemd.nix;
+  networking = import ./core/networking.nix;
+  users = import ./core/users.nix;
+
+  # Service modules
+  tailscale = import ./services/tailscale.nix;
+  ssh-service = import ./services/ssh.nix;
+  podman = import ./services/podman.nix;
+  net-services = import ./services/networking.nix;
+  monitoring = import ./services/monitoring.nix;
+
+  # Security modules
+  firewall = import ./security/firewall.nix;
+  ssh-security = import ./security/ssh.nix;
+  systemd-hardening = import ./security/systemd-hardening.nix;
+  kernel-security = import ./security/kernel.nix;
+  audit = import ./security/audit.nix;
+
+  # Filesystem modules
+  btrfs = import ./filesystems/btrfs.nix;
+  impermanence = import ./filesystems/impermanence.nix;
+  snapshots = import ./filesystems/snapshots.nix;
+  encryption = import ./filesystems/encryption.nix;
+  optimization = import ./filesystems/optimization.nix;
+
+  # Hardware modules
+  workstations = import ./hardware/workstations.nix;
+  servers = import ./hardware/servers.nix;
+  yoga = import ./hardware/yoga.nix;
+  zephyrus = import ./hardware/zephyrus.nix;
+  vps = import ./hardware/vps.nix;
+}

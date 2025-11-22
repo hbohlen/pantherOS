@@ -1,0 +1,902 @@
+{
+  "theme": "opencode",
+  "tui": {
+    "scroll_speed": 3,
+    "scroll_acceleration": {
+      "enabled": true,
+    },
+  },
+  "share": "manual",
+  "autoupdate": true,
+
+  // PROVIDERS: MiniMax (Planner) & Z.ai (Coder)
+  "provider": {
+    "cliproxyapi": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "CLIProxyAPI (Multi-Provider)",
+      "options": {
+        "baseURL": "http://localhost:8317/v1",
+      },
+      "models": {
+        "glm-4.6": {
+          "name": "GLM-4.6",
+          "limit": {
+            "context": 200000, // Expanded from 128K to 200K
+            "output": 8192, // Standard output limit
+          },
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cache_read": 0,
+            "cache_write": 0,
+          },
+          "modalities": {
+            "input": ["text"],
+            "output": ["text"],
+          },
+          "attachment": true,
+          "reasoning": true,
+          "temperature": true,
+          "tool_call": true,
+          "options": {
+            "do_sample": true,
+            "temperature": 0.3,
+            "top_p": 0.85,
+            "max_tokens": 8192,
+          },
+        },
+        // MiniMax
+        "minimax-m2": {
+          "name": "MiniMax-M2",
+          "limit": {
+            "context": 204800, // Official context window
+            "output": 16384, // Keep as you had it
+          },
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cache_read": 0,
+            "cache_write": 0,
+          },
+          "modalities": {
+            "input": ["text"], // Currently only text supported via Anthropic API
+            "output": ["text"],
+          },
+          "attachment": false, // Not supported via Anthropic compatibility API
+          "reasoning": true,
+          "temperature": true,
+          "tool_call": true,
+          "options": {
+            "temperature": 1.0,
+            "top_p": 0.95,
+            "max_tokens": 16384,
+          },
+        },
+        // Gemini models
+        "gemini-2.5-pro": {
+          "name": "Gemini 2.5 Pro",
+          "limit": {
+            "context": 1048576, // 1M tokens (2M coming soon)
+            "output": 65536, // 64K max output
+          },
+          "cost": {
+            "input": 1.25, // $1.25 per 1M tokens (≤200K context)
+            "output": 10.0, // $10 per 1M tokens
+            "cache_read": 0.3125, // $0.3125 per 1M tokens (cached)
+            "cache_write": 2.5, // $2.50 per 1M tokens
+            "context_over_200k": {
+              "input": 2.5, // $2.50 per 1M tokens (>200K context)
+              "output": 15.0, // $15 per 1M tokens
+              "cache_read": 0.625,
+              "cache_write": 5.0,
+            },
+          },
+          "modalities": {
+            "input": ["text", "image", "audio", "video", "pdf"],
+            "output": ["text"],
+          },
+          "attachment": true,
+          "reasoning": true,
+          "temperature": true,
+          "tool_call": true,
+          "experimental": false, // Stable model
+          "options": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "top_k": 40,
+            "max_tokens": 8192,
+          },
+        },
+        "gemini-2.5-flash": {
+          "name": "Gemini 2.5 Flash",
+          "limit": {
+            "context": 1048576, // 1M tokens
+            "output": 65536, // 64K max output
+          },
+          "cost": {
+            "input": 0.075, // $0.075 per 1M tokens (≤200K)
+            "output": 0.3, // $0.30 per 1M tokens
+            "cache_read": 0.01875, // $0.01875 per 1M tokens
+            "cache_write": 0.15, // $0.15 per 1M tokens
+            "context_over_200k": {
+              "input": 0.15, // $0.15 per 1M tokens (>200K)
+              "output": 0.6, // $0.60 per 1M tokens
+              "cache_read": 0.0375,
+              "cache_write": 0.3,
+            },
+          },
+          "modalities": {
+            "input": ["text", "image", "audio", "video", "pdf"],
+            "output": ["text"],
+          },
+          "attachment": true,
+          "reasoning": true,
+          "temperature": true,
+          "tool_call": true,
+          "options": {
+            "temperature": 0.7, // Balanced default
+            "top_p": 0.95,
+            "top_k": 40,
+            "max_tokens": 8192,
+            "candidate_count": 1,
+          },
+        },
+        // Codex models
+        "gpt-5": {
+          "name": "GPT-5",
+          "limit": {
+            "context": 272000, // 272K input tokens
+            "output": 128000, // 128K output tokens (total 400K)
+          },
+          "cost": {
+            "input": 1.25, // $1.25 per 1M tokens
+            "output": 10.0, // $10 per 1M tokens
+            "cache_read": 0.3125,
+            "cache_write": 0.625,
+          },
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"],
+          },
+          "attachment": true,
+          "reasoning": true, // Advanced reasoning mode
+          "temperature": true,
+          "tool_call": true,
+          "options": {
+            "temperature": 0.7,
+            "top_p": 0.95,
+            "max_tokens": 16384,
+            "reasoning_effort": "medium", // minimal, low, medium, high, extensive
+            "verbosity": "medium", // low, medium, high
+          },
+        },
+        "gpt-5-codex": {
+          "name": "GPT-5 Codex",
+          "limit": {
+            "context": 272000,
+            "output": 128000,
+          },
+          "cost": {
+            "input": 1.5,
+            "output": 12.0,
+            "cache_read": 0.375,
+            "cache_write": 0.75,
+          },
+          "modalities": {
+            "input": ["text", "image"],
+            "output": ["text"],
+          },
+          "attachment": true,
+          "reasoning": true,
+          "temperature": true,
+          "tool_call": true,
+          "experimental": true, // Just mark as experimental
+          "options": {
+            "temperature": 0.3,
+            "top_p": 0.85,
+            "max_tokens": 65536,
+            "seed": 42,
+          },
+        },
+        // Qwen models
+        "qwen3-coder-plus": {
+          "name": "Qwen3 Coder Plus",
+          "limit": {
+            "context": 1000000, // 1M token context
+            "output": 66000, // 66K max output
+          },
+          "cost": {
+            "input": 1.0, // $1 per million tokens
+            "output": 5.0, // $5 per million tokens
+            "cache_read": 0,
+            "cache_write": 0,
+          },
+          "modalities": {
+            "input": ["text"],
+            "output": ["text"],
+          },
+          "attachment": true,
+          "reasoning": false, // Non-thinking model
+          "temperature": true,
+          "tool_call": true, // Hermes-style tool calling
+          "options": {
+            "temperature": 0.7,
+            "top_p": 0.8,
+            "top_k": 20,
+            "repetition_penalty": 1.05,
+            "max_tokens": 65536, // Recommended for most queries
+          },
+        },
+        "qwen3-coder-flash": {
+          "name": "Qwen3 Coder Flash",
+          "limit": {
+            "context": 256000, // Native 256K (1M with YaRN)
+            "output": 65536, // Recommended output length
+          },
+          "cost": {
+            "input": 0,
+            "output": 0,
+            "cache_read": 0,
+            "cache_write": 0,
+          },
+          "modalities": {
+            "input": ["text"],
+            "output": ["text"],
+          },
+          "attachment": true,
+          "reasoning": false, // Non-thinking variant
+          "temperature": true,
+          "tool_call": true, // Hermes-style tool calling
+          "options": {
+            "temperature": 0.7,
+            "top_p": 0.8,
+            "top_k": 20,
+            "repetition_penalty": 1.05,
+            "max_tokens": 65536,
+          },
+        },
+      },
+    },
+    "cerebras": {
+      "npm": "@ai-sdk/openai-compatible",
+      //"api": "https://api.cerebras.ai/v1",
+      "options": {
+        "baseURL": "https://api.cerebras.ai/v1",
+      },
+      "models": {
+        "gpt-oss-120b": {
+          "name": "gpt-oss-120b",
+          "limit": {
+            "context": 65536,
+            "output": 65536,
+          },
+        },
+      },
+    },
+    "openai": {
+      "options": {
+        "reasoningEffort": "medium",
+        "reasoningSummary": "auto",
+        "textVerbosity": "medium",
+        "include": ["reasoning.encrypted_content"],
+        "store": false,
+      },
+      "models": {
+        "gpt-5.1-codex-low": {
+          "name": "GPT 5.1 Codex Low (OAuth)",
+          "limit": {
+            "context": 272000,
+            "output": 128000,
+          },
+          "options": {
+            "reasoningEffort": "low",
+            "reasoningSummary": "auto",
+            "textVerbosity": "medium",
+            "include": ["reasoning.encrypted_content"],
+            "store": false,
+          },
+        },
+        "gpt-5.1-codex-medium": {
+          "name": "GPT 5.1 Codex Medium (OAuth)",
+          "limit": {
+            "context": 272000,
+            "output": 128000,
+          },
+          "options": {
+            "reasoningEffort": "medium",
+            "reasoningSummary": "auto",
+            "textVerbosity": "medium",
+            "include": ["reasoning.encrypted_content"],
+            "store": false,
+          },
+        },
+        "gpt-5.1-codex-high": {
+          "name": "GPT 5.1 Codex High (OAuth)",
+          "limit": {
+            "context": 272000,
+            "output": 128000,
+          },
+          "options": {
+            "reasoningEffort": "high",
+            "reasoningSummary": "detailed",
+            "textVerbosity": "medium",
+            "include": ["reasoning.encrypted_content"],
+            "store": false,
+          },
+        },
+        "gpt-5.1-codex-mini-medium": {
+          "name": "GPT 5.1 Codex Mini Medium (OAuth)",
+          "limit": {
+            "context": 272000,
+            "output": 128000,
+          },
+          "options": {
+            "reasoningEffort": "medium",
+            "reasoningSummary": "auto",
+            "textVerbosity": "medium",
+            "include": ["reasoning.encrypted_content"],
+            "store": false,
+          },
+        },
+        "gpt-5.1-codex-mini-high": {
+          "name": "GPT 5.1 Codex Mini High (OAuth)",
+          "limit": {
+            "context": 272000,
+            "output": 128000,
+          },
+          "options": {
+            "reasoningEffort": "high",
+            "reasoningSummary": "detailed",
+            "textVerbosity": "medium",
+            "include": ["reasoning.encrypted_content"],
+            "store": false,
+          },
+        },
+        "gpt-5.1-low": {
+          "name": "GPT 5.1 Low (OAuth)",
+          "limit": {
+            "context": 272000,
+            "output": 128000,
+          },
+          "options": {
+            "reasoningEffort": "low",
+            "reasoningSummary": "auto",
+            "textVerbosity": "low",
+            "include": ["reasoning.encrypted_content"],
+            "store": false,
+          },
+        },
+        "gpt-5.1-medium": {
+          "name": "GPT 5.1 Medium (OAuth)",
+          "limit": {
+            "context": 272000,
+            "output": 128000,
+          },
+          "options": {
+            "reasoningEffort": "medium",
+            "reasoningSummary": "auto",
+            "textVerbosity": "medium",
+            "include": ["reasoning.encrypted_content"],
+            "store": false,
+          },
+        },
+        "gpt-5.1-high": {
+          "name": "GPT 5.1 High (OAuth)",
+          "limit": {
+            "context": 272000,
+            "output": 128000,
+          },
+          "options": {
+            "reasoningEffort": "high",
+            "reasoningSummary": "detailed",
+            "textVerbosity": "high",
+            "include": ["reasoning.encrypted_content"],
+            "store": false,
+          },
+        },
+      },
+    },
+  },
+  // "minimax": {
+  //     "npm": "@ai-sdk/anthropic",
+  //     "options": {
+  //         "baseURL": "https://api.minimax.io/anthropic/v1",
+  //         //"apiKey": "${env:MINIMAX_API_KEY}",
+  //     },
+  //     "models": {
+  //         "MiniMax-M2": {
+  //             "cost": {
+  //                 "cache_read": 0,
+  //                 "cache_write": 0,
+  //                 "context_over_200k": {
+  //                     "input": 0,
+  //                     "output": 0,
+  //                     "cache_read": 0,
+  //                     "cache_write": 0,
+  //                 },
+
+  //                 "input": 0,
+  //                 "output": 0,
+  //             },
+
+  //             "modalities": {
+  //                 "input": ["audio", "image", "pdf", "text", "video"],
+  //                 "output": [],
+  //             },
+  //             //"headers": {},
+  //             "temperature": true,
+  //             "tool_call": true,
+
+  //             "name": "MiniMax-M2",
+  //             "limit": {
+  //                 "context": 200000,
+  //                 "output": 0,
+  //             },
+
+  //             "options": {},
+  //             "reasoning": true,
+  //         },
+  //     },
+  // },
+  // "zai": {
+  //     "npm": "@ai-sdk/openai-compatible",
+  //     "options": {
+  //         "baseURL": "https://api.z.ai/api/coding/paas/v4",
+  //         //"apiKey": "{env:ZAI_API_KEY}",
+  //     },
+  //     "models": {
+  //         "GLM-4.6": {
+  //             "name": "GLM-4.6",
+  //             "options": {},
+  //             "reasoning": true,
+  //             "temperature": true,
+  //             "limit": {
+  //                 "context": 128000,
+  //                 "output": 0,
+  //             },
+  //         },
+  //     },
+  // },
+
+  // GLOBAL CONTEXT
+  "instructions": [
+    "AGENTS.md",
+    "README.md",
+    "brief.md",
+    "docs/architecture/overview.md",
+    "docs/guides/module-development.md",
+  ],
+
+  "permission": {
+    "edit": "ask",
+    "bash": {
+      "rm -rf *": "ask",
+      "sudo *": "deny",
+      "chmod *": "ask",
+      "curl *": "ask",
+      "wget *": "ask",
+      "docker *": "ask",
+      "kubectl *": "ask",
+    },
+  },
+  "tools": {
+    "read": true,
+    "edit": true,
+    "write": true,
+    "grep": true,
+    "glob": true,
+    "bash": true,
+    "patch": true,
+  },
+
+  // MCP SERVERS
+  "mcp": {
+    "filesystem": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/hbohlen",
+      ],
+      "enabled": true,
+      "environment": {},
+      "timeout": 5000,
+    },
+    "brave-search": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-brave-search"],
+      "environment": {
+        "BRAVE_API_KEY": "${env:BRAVE_API_KEY}",
+      },
+    },
+    "context7": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "{env:CONTEXT7_API_KEY}",
+      ],
+    },
+    "puppeteer": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-puppeteer"],
+    },
+    "nixos": {
+      "type": "local",
+      "command": ["uvx", "mcp-nixos"],
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking",
+      ],
+    },
+  },
+  "agent": {
+    // Primary orchestrator (replaces your architect)
+    "openagent": {
+      "prompt": "~/.opencode/agent/openagent.md", // Installed by OpenAgents
+      "model": "cliproxyapi/minimax-m2", // Use your MiniMax for planning
+      "options": {
+        "temperature": 1.0,
+        "top_p": 0.95,
+        "max_tokens": 16384,
+        "stream": true,
+        "thinking": { "type": "enabled" },
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": "ask",
+        "webfetch": "allow",
+      },
+      "tools": {
+        "brave-search": true,
+        "sequential-thinking": true,
+        "read": true,
+        "write": true,
+        "edit": true,
+        "grep": true,
+        "glob": true,
+      },
+    },
+
+    // Specialized coder (uses your GLM-4.6)
+    "codebase-agent": {
+      "prompt": "~/.opencode/agent/codebase-agent.md", // From OpenAgents
+      "model": "cliproxyapi/glm-4.6",
+      "options": {
+        "temperature": 0.3,
+        "top_p": 0.85,
+        "max_tokens": 65536,
+        "stream": true,
+        "thinking": { "type": "enabled" },
+      },
+      "permission": {
+        "edit": "allow",
+        "bash": "ask",
+      },
+      "tools": {
+        "read": true,
+        "write": true,
+        "edit": true,
+        "patch": true,
+        "bash": true,
+      },
+    },
+
+    // SUBAGENTS (auto-delegated, use faster/cheaper models)
+    "task-manager": {
+      "prompt": "~/.opencode/agent/subagents/task-manager.md",
+      "model": "cliproxyapi/gemini-2.5-flash", // Fast for task breakdown
+      "mode": "subagent",
+      "options": {
+        "temperature": 0.7,
+        "max_tokens": 8192,
+      },
+    },
+
+    "reviewer": {
+      "prompt": "~/.opencode/agent/subagents/reviewer.md",
+      "model": "cliproxyapi/gpt-5-codex", // Best for code review
+      "mode": "subagent",
+      "options": {
+        "temperature": 0.3,
+        "reasoning_effort": "extensive",
+        "max_tokens": 32768,
+      },
+    },
+
+    "tester": {
+      "prompt": "~/.opencode/agent/subagents/tester.md",
+      "model": "cliproxyapi/qwen3-coder-plus", // Good for test generation
+      "mode": "subagent",
+      "options": {
+        "temperature": 0.6,
+        "max_tokens": 32768,
+      },
+    },
+
+    "coder-agent": {
+      "prompt": "~/.opencode/agent/subagents/coder-agent.md",
+      "model": "cliproxyapi/glm-4.6", // Your primary coder
+      "mode": "subagent",
+    },
+
+    "documentation": {
+      "prompt": "~/.opencode/agent/subagents/documentation.md",
+      "model": "cliproxyapi/gemini-2.5-pro", // Great for docs
+      "mode": "subagent",
+      "options": {
+        "temperature": 0.8,
+        "max_tokens": 16384,
+      },
+    },
+
+    "build-agent": {
+      "prompt": "~/.opencode/agent/subagents/build-agent.md",
+      "model": "cliproxyapi/gemini-2.5-flash", // Fast for builds
+      "mode": "subagent",
+    },
+  },
+
+  // === LSP SERVERS ===
+  "lsp": {
+    "nix-nil": {
+      "command": ["nil"],
+      "extensions": [".nix"],
+      "env": {},
+      "initialization": {
+        "nil": {
+          "formatting": {
+            "command": ["alejandra"],
+          },
+          "diagnostics": {
+            "ignored": [],
+            "excludedFiles": [],
+          },
+        },
+      },
+      "disabled": false,
+    },
+    "nix-nixd": {
+      "command": ["nixd"],
+      "extensions": [".nix"],
+      "env": {},
+      "initialization": {
+        "nixd": {
+          "nixpkgs": {
+            "expr": "import <nixpkgs> { }",
+          },
+          "formatting": {
+            "command": ["alejandra"],
+          },
+          "options": {
+            "nixos": {
+              "expr": "(builtins.getFlake \"/home/hbohlen/dev/pantherOS\").nixosConfigurations.yoga7.options",
+            },
+          },
+        },
+      },
+      "disabled": false,
+    },
+    "python": {
+      "command": ["pyright-langserver", "--stdio"],
+      "extensions": [".py"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+    "typescript": {
+      "command": ["typescript-language-server", "--stdio"],
+      "extensions": [".ts", ".tsx", ".js", ".jsx"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+    "markdown": {
+      "command": ["marksman", "server"],
+      "extensions": [".md"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+    "yaml": {
+      "command": ["yaml-language-server", "--stdio"],
+      "extensions": [".yaml", ".yml"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+    "json": {
+      "command": ["vscode-json-languageserver", "--stdio"],
+      "extensions": [".json", ".jsonc"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+    "xml": {
+      "command": ["lemminx"],
+      "extensions": [".xml"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+    "lua": {
+      "command": ["lua-language-server"],
+      "extensions": [".lua"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+    "bash": {
+      "command": ["bash-language-server", "start"],
+      "extensions": [".sh", ".bash"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+    "rust": {
+      "command": ["rust-analyzer"],
+      "extensions": [".rs"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+    "go": {
+      "command": ["gopls"],
+      "extensions": [".go"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+    "docker": {
+      "command": ["docker-langserver", "--stdio"],
+      "extensions": ["Dockerfile", ".dockerfile"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+    "fish": {
+      "command": ["fish-lsp", "start"],
+      "extensions": [".fish"],
+      "env": {},
+      "initialization": {},
+      "disabled": false,
+    },
+  },
+
+  // === FORMATTERS ===
+  "formatter": {
+    "nix": {
+      "command": ["alejandra", "--quiet"],
+      "extensions": [".nix"],
+      "environment": {},
+      "disabled": false,
+    },
+    "python": {
+      "command": ["black", "--quiet", "-"],
+      "extensions": [".py"],
+      "environment": {},
+      "disabled": false,
+    },
+    "typescript": {
+      "command": ["prettier", "--parser", "typescript"],
+      "extensions": [".ts"],
+      "environment": {},
+      "disabled": false,
+    },
+    "javascript": {
+      "command": ["prettier", "--parser", "babel"],
+      "extensions": [".js"],
+      "environment": {},
+      "disabled": false,
+    },
+    "react": {
+      "command": ["prettier", "--parser", "typescript"],
+      "extensions": [".jsx", ".tsx"],
+      "environment": {},
+      "disabled": false,
+    },
+    "markdown": {
+      "command": ["prettier", "--parser", "markdown"],
+      "extensions": [".md"],
+      "environment": {},
+      "disabled": false,
+    },
+    "yaml": {
+      "command": ["prettier", "--parser", "yaml"],
+      "extensions": [".yaml", ".yml"],
+      "environment": {},
+      "disabled": false,
+    },
+    "json": {
+      "command": ["prettier", "--parser", "json"],
+      "extensions": [".json", ".jsonc"],
+      "environment": {},
+      "disabled": false,
+    },
+    "xml": {
+      "command": [
+        "prettier",
+        "--parser",
+        "xml",
+        "--plugin=@prettier/plugin-xml",
+      ],
+      "extensions": [".xml"],
+      "environment": {},
+      "disabled": false,
+    },
+    "lua": {
+      "command": ["stylua", "-"],
+      "extensions": [".lua"],
+      "environment": {},
+      "disabled": false,
+    },
+    "rust": {
+      "command": ["rustfmt", "--emit", "stdout"],
+      "extensions": [".rs"],
+      "environment": {},
+      "disabled": false,
+    },
+    "go": {
+      "command": ["gofmt"],
+      "extensions": [".go"],
+      "environment": {},
+      "disabled": false,
+    },
+    "bash": {
+      "command": ["shfmt", "-i", "4"],
+      "extensions": [".sh", ".bash"],
+      "environment": {},
+      "disabled": false,
+    },
+    "dockerfile": {
+      "command": ["prettier", "--parser", "sh"],
+      "extensions": ["Dockerfile", ".dockerfile"],
+      "environment": {},
+      "disabled": false,
+    },
+    "fish": {
+      "command": ["fish_indent"],
+      "extensions": [".fish"],
+      "environment": {},
+      "disabled": false,
+    },
+  },
+
+  "snapshot": true,
+  "experimental": {
+    "batch_tool": true,
+    "hook": {
+      "file_edited": {
+        "command": [],
+        "environment": [],
+      },
+      "session_completed": [
+        {
+          "command": [],
+          "environment": {},
+        },
+      ],
+    },
+  },
+  "layout": "auto",
+  "command": {
+    "command": {
+      "agent": "",
+      "description": "",
+      "model": "",
+      "subtask": true,
+      "template": "",
+    },
+  },
+
+  "plugin": ["opencode-skills", "opencode-openai-codex-auth"],
+  "username": "hbohlen",
+  "$schema": "https://opencode.ai/config.json",
+}

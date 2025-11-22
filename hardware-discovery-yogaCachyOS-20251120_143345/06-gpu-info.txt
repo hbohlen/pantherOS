@@ -1,0 +1,8 @@
+=== All Graphics Devices ===
+04:00.0 Display controller: Advanced Micro Devices, Inc. [AMD/ATI] Krackan [Radeon 840M / 860M Graphics] (rev c2)
+=== OpenGL Information ===
+=== Vulkan Information ===
+=== Display Server ===
+XDG_SESSION_TYPE: 
+WAYLAND_DISPLAY: 
+DISPLAY: :1
