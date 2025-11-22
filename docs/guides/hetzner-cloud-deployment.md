@@ -303,17 +303,47 @@ hcloud server delete pantheros-server
 
 ## Next Steps
 
-### 1. Tailscale Configuration
+### 1. Automated Deployment Scripts
+The pantherOS repository now includes automated deployment scripts to simplify the deployment process:
+
+#### 1.1 Main Deployment Script
+Use the main deployment script to create and configure a Hetzner Cloud server:
+```bash
+# Make the script executable
+chmod +x deploy-hetzner.sh
+
+# Run the deployment script
+./deploy-hetzner.sh --server-type cpx52 --location fsn1
+```
+
+#### 1.2 Rescue Mode Deployment Helper
+For a guided deployment through the rescue mode process:
+```bash
+# Make the script executable
+chmod +x deploy-hetzner-rescue.sh
+
+# Run the rescue mode deployment helper
+./deploy-hetzner-rescue.sh
+```
+
+#### 1.3 Script Options
+Both scripts support various options:
+- `--server-type`: Specify server type (default: cpx52)
+- `--location`: Specify location (default: fsn1)
+- `--ssh-key-path`: Path to SSH public key file
+- `--project`: Hetzner project name (optional)
+
+### 2. Tailscale Configuration
 - Connect the server to your Tailscale network
 - Configure exit nodes if needed
 - Set up ACLs for secure access
 
-### 2. Service Deployment
+### 3. Service Deployment
 - Deploy your containers via Podman
 - Set up web services via Caddy
 - Configure monitoring and backups
 
-### 3. Monitoring
+### 4. Monitoring
 - Set up monitoring for the server
 - Configure alerting for critical issues
 - Implement backup strategies

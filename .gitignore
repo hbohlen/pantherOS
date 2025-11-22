@@ -9,3 +9,4 @@
 
 # But include the core system
 !CLAUDE.md
+/logs/openai/**
