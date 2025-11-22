@@ -23,6 +23,7 @@ in
 
   config = mkIf cfg.enable {
     # Setting default values for user configurations
-    environment.defaultPackages = [ cfg.shell ];
+    # Add shell to systemPackages instead of replacing defaultPackages
+    environment.systemPackages = [ cfg.shell ];
   };
 }
