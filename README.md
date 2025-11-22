@@ -16,38 +16,18 @@ This project provides a **declarative, modular, and reproducible** framework for
 - **hetzner-vps** - Hetzner Cloud VPS (primary development server)
 - **ovh-vps** - OVH Cloud VPS (secondary server)
 
-## 🏗️ Architecture
+## 📚 Documentation
 
-### Core Principles
-- **Modular Design**: Single-concern modules for maximum reusability
-- **Hardware Separation**: Hardware-specific configs isolated in `hardware.nix` files
-- **Declarative Disk Management**: All disk layouts defined with [Disko](https://github.com/nix-community/disko)
-- **Secrets Management**: 1Password service account with OpNix integration
-- **Security First**: All systems behind Tailscale Tailnet with proper firewall configuration
+Complete documentation is available in the [docs/](./docs/) directory:
 
-### Directory Structure
-```
-pantherOS/
-├── docs/                  # Documentation
-├── flake.nix             # Flake entry point
-├── home/                 # Home-manager configurations
-│   └── hbohlen/         # User-specific configs
-├── hosts/               # Host-specific configurations
-│   ├── yoga/           # Lenovo Yoga workstation
-│   ├── zephyrus/       # ASUS ROG workstation
-│   └── servers/        # Server configurations
-│       ├── hetzner-vps/
-│       └── ovh-vps/
-├── lib/                 # Custom helper functions
-├── modules/             # Modular configurations
-│   ├── nixos/         # System-level modules
-│   ├── home-manager/  # User-level modules
-│   └── shared/        # Shared modules
-├── overlays/           # Package overlays
-├── pkgs/              # Custom packages
-├── profiles/          # Reusable configuration profiles
-└── scripts/           # Automation scripts
-```
+- [Getting Started Guide](./docs/guides/getting-started.md) - Initial setup and basic usage
+- [Architecture Guide](./docs/guides/architecture.md) - System design and structure
+- [Module Development Guide](./docs/guides/module-development.md) - Creating and maintaining modules
+- [Tutorials](./docs/tutorials/) - Step-by-step guides for specific tasks
+- [Reference Materials](./docs/reference/) - Quick reference and specifications
+- [Troubleshooting](./docs/troubleshooting/) - Common issues and solutions
+
+For AI agents working with this codebase, see the [Project Primer](./docs/context/project-primer.md).
 
 ## 🚀 Quick Start
 
@@ -91,11 +71,9 @@ pantherOS/
    ```bash
    # System module
    touch modules/nixos/services/my-service.nix
-   touch docs/modules/nixos/services/my-service.md
 
-   # Home-manager module
-   touch modules/home-manager/applications/my-app.nix
-   touch docs/modules/home-manager/applications/my-app.md
+   # Check the Module Development Guide for patterns
+   # See: docs/guides/module-development.md
    ```
 
 2. **Add module to a host**
@@ -140,82 +118,9 @@ This provides all necessary tools for working on the configuration, including Ni
 - SSH access restricted to Tailnet devices
 - No public-facing services (except through reverse proxy with Tailnet access)
 
-## 🎨 Desktop Environment
+## 🧩 OpenSpec Change Management
 
-### Window Manager
-- **Niri** - Wayland compositor with layouts and tiling
-- **DankMaterialShell** - Enhanced Material Design UI layer
-  - DankGreeter - Login screen
-  - DankGop - System monitoring
-  - DankSearch - Application launcher
-  - DankMaterialShell Niri integration
-
-### Terminal & Shell
-- **Ghostty** - Fast, feature-rich terminal
-- **Fish** - User-friendly shell with full auto-completion
-
-### Applications
-- **Zed IDE** - High-performance code editor
-- **Zen Browser** - Privacy-focused Firefox fork
-- **1Password** - Password manager with biometric unlock
-
-## 🧩 AI Development Tools
-
-Integrated via [nix-ai-tools](https://github.com/numtide/nix-ai-tools):
-- Claude Code CLI
-- OpenCode
-- Qwen Code
-- Gemini CLI
-- Codex ACP
-- Catnip
-
-## 📦 Package Management
-
-### System Packages
-- Managed through NixOS modules
-- Custom packages in `pkgs/` directory
-- Package overlays in `overlays/` directory
-
-### Development Languages
-Each language includes:
-- Package manager
-- LSP (Language Server Protocol)
-- Formatter
-- Full AI tool integration
-
-Supported languages:
-- Node.js / TypeScript
-- Python
-- Go
-- Rust
-- Nix
-
-## 🔧 Disk Configuration
-
-All hosts use Btrfs with optimized sub-volume layouts:
-- Root on Btrfs with sub-volumes
-- Optimized for SSD longevity
-- Home directory at `~/dev` for all projects
-- Podman containers with dedicated sub-volumes
-
-## 📖 Documentation
-
-- **README.md** - This file (overview and quick start)
-- **docs/** - Detailed documentation
-  - **architecture/** - System design decisions
-  - **guides/** - Step-by-step guides
-  - **modules/** - Module-specific documentation
-  - **todos/** - Remaining tasks and roadmap
-
-## 🤝 Contributing
-
-When modifying this configuration:
-
-1. **Follow modular structure** - Keep modules single-concern
-2. **Document changes** - Update relevant documentation
-3. **Test thoroughly** - Build before switching
-4. **Review security** - Ensure secrets aren't committed
-5. **Update todos** - Mark completed items in `docs/todos/`
+This project uses OpenSpec for structured change management. See the [Specification Documentation](./docs/specs/specifications.md) and individual proposals in `openspec/changes/` for details on planned and implemented changes.
 
 ## 📝 License
 
@@ -224,7 +129,7 @@ Personal configuration repository. See repository license for details.
 ## 🆘 Support
 
 For issues or questions:
-1. Check documentation in `docs/`
+1. Check documentation in [docs/](./docs/)
 2. Review existing issues
 3. Create new issue with:
    - Host affected
