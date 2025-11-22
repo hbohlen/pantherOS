@@ -68,7 +68,7 @@ in
     github = {
       token = mkOption {
         type = types.str;
-        default = "op:pantherOS/github-pat/token";
+        default = "op://pantherOS/github-pat/token";
         description = "1Password reference for GitHub personal access token";
       };
     };
@@ -76,7 +76,7 @@ in
     tailscale = {
       authKey = mkOption {
         type = types.str;
-        default = "op:pantherOS/Tailscale/authKey";
+        default = "op://pantherOS/Tailscale/authKey";
         description = "1Password reference for Tailscale auth key";
       };
     };
@@ -84,7 +84,7 @@ in
     onepassword = {
       serviceAccountToken = mkOption {
         type = types.str;
-        default = "op:pantherOS/OP_SERVICE_ACCOUNT_TOKEN/token";
+        default = "op://pantherOS/OP_SERVICE_ACCOUNT_TOKEN/token";
         description = "1Password reference for service account token";
       };
     };

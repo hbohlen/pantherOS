@@ -14,7 +14,7 @@ in
     };
   };
 
-  config = mkIf (cfg.enable && config.pantherOS.services.tailscale.enable) {
+  config = mkIf (config.pantherOS.services.tailscale.firewall.enable && config.pantherOS.services.tailscale.enable) {
     # Open the Tailscale port in the firewall
     networking.firewall.allowedUDPPorts = [ config.pantherOS.services.tailscale.port ];
   };
