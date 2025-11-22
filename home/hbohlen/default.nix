@@ -2,8 +2,8 @@
 
 {
   imports = [
-    ../../modules/home-manager/shell/fish.nix
-    ../../modules/home-manager/shell/fnm.nix
+    ../../modules/home-manager/shell/fish
+    ../../modules/home-manager/development/node
   ];
 
   # Enable Fish shell with fnm integration
