@@ -2,6 +2,8 @@
 
 # Simple validation script to check syntax of Nix modules
 
+set -euo pipefail
+
 echo "Validating Nix module syntax..."
 
 # Change to the modules directory

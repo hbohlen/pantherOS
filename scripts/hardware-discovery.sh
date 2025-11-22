@@ -2,6 +2,8 @@
 # Hardware Discovery Script for pantherOS
 # Run this on each host to gather all required information
 
+set -euo pipefail
+
 HOSTNAME=$(hostname)
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 OUTPUT_DIR="hardware-discovery-${HOSTNAME}-${TIMESTAMP}"

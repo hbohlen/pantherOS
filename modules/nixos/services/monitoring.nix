@@ -110,7 +110,15 @@ in
           smtp_smarthost: 'localhost:587'
           smtp_from: 'alertmanager@localhost'
           smtp_auth_username: 'alertmanager'
-          smtp_auth_password: 'password'
+          # SECURITY: Never hardcode passwords! Use secrets management instead.
+          # Recommended approaches:
+          #   - sops-nix: config.sops.secrets.alertmanager_password.path
+          #   - agenix: config.age.secrets.alertmanager_password.path
+          #   - 1Password: Use opnix to reference secrets
+          # Example with sops-nix:
+          #   smtp_auth_password_file: ${config.sops.secrets.alertmanager_smtp_password.path}
+          # For now, this field should be configured externally or the alertmanager
+          # configuration should be overridden with proper secrets management.
         
         route:
           group_by: ['alertname']
