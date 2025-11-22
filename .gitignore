@@ -1,12 +1,9 @@
-.env
-/node_modules/**
-.dmux/
-
-# Claude Memory - Include core files, exclude private data
-.claude/sessions/
-.claude/backups/
-.claude/memory.json
-
-# But include the core system
-!CLAUDE.md
-/logs/openai/**
+```
+# Documentation and specification files
+docs/security/secret-management.md
+openspec/changes/1password-integration/
+openspec/changes/home-manager-module-structure/
+openspec/changes/podman-container-management/
+openspec/changes/tailscale-configuration/
+openspec/changes/workstation-configurations/
+```
