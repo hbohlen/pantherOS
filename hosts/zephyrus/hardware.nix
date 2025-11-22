@@ -37,14 +37,21 @@
   };
   
   # NVIDIA driver configuration (ROG laptops typically have NVIDIA GPU)
-  # Uncomment and configure based on actual hardware
+  # IMPORTANT: These PCI bus IDs are examples only and MUST be verified on actual hardware.
+  # To find correct bus IDs, run on the target system:
+  #   lspci | grep -E "VGA|3D"
+  # Look for lines like "00:02.0 VGA" (Intel) and "01:00.0 3D" (NVIDIA)
+  # Then use the bus:device.function format below (e.g., "PCI:0:2:0" for 00:02.0)
+  # 
+  # Uncomment and configure based on actual hardware detection:
   # hardware.nvidia = {
   #   modesetting.enable = true;
   #   powerManagement.enable = true;
   #   prime = {
   #     offload.enable = true;
-  #     intelBusId = "PCI:0:2:0";
-  #     nvidiaBusId = "PCI:1:0:0";
+  #     # Example values - VERIFY THESE ON ACTUAL HARDWARE:
+  #     intelBusId = "PCI:0:2:0";    # From lspci, typically Intel integrated GPU
+  #     nvidiaBusId = "PCI:1:0:0";   # From lspci, typically NVIDIA discrete GPU
   #   };
   # };
   

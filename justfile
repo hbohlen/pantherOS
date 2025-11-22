@@ -12,10 +12,10 @@ build HOST:
 # Build all host configurations
 build-all:
   @echo "Building all hosts..."
-  @just build yoga
-  @just build zephyrus
-  @just build hetzner-vps
-  @just build ovh-vps
+  @for host in yoga zephyrus hetzner-vps ovh-vps; do \
+    echo "Building $$host..."; \
+    just build $$host || exit 1; \
+  done
   @echo "✓ All hosts built successfully"
 
 # Test a host configuration (activates without adding to boot menu)

@@ -30,7 +30,10 @@
               priority = 1;
             };
             
-            # Swap (32GB) - Matches RAM for hibernation
+            # Swap (32GB) - Sized to match typical RAM for hibernation capability
+            # NOTE: Adjust this size based on actual RAM when deploying.
+            # For hibernation support, swap should be >= RAM size.
+            # Run 'free -h' on the target system to determine correct size.
             swap = {
               size = "32G";
               type = "8200";
