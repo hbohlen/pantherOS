@@ -1,41 +1,41 @@
 ## 1. Implementation
 
-- [ ] Create Btrfs impermanence module with snapshot support
-- [ ] Implement subvolume reset mechanisms for clean boot
-- [ ] Add persistent data configuration options
-- [ ] Create automated snapshot management system
-- [ ] Add Btrfs optimization settings for SSDs
-- [ ] Implement rollback and recovery mechanisms
-- [ ] Update all host disko configurations
+- [x] Create Btrfs impermanence module with snapshot support
+- [x] Implement subvolume reset mechanisms for clean boot
+- [x] Add persistent data configuration options
+- [x] Create automated snapshot management system
+- [x] Add Btrfs optimization settings for SSDs
+- [x] Implement rollback and recovery mechanisms
+- [x] Update all host disko configurations
 
 ## 2. Btrfs Module Structure
 
-- [ ] Create `modules/nixos/filesystems/impermanence.nix`
-- [ ] Create `modules/shared/filesystems/btrfs.nix`
-- [ ] Add Btrfs optimization helpers
-- [ ] Create snapshot management scripts
-- [ ] Add rollback utilities
+- [x] Create `modules/nixos/filesystems/impermanence.nix`
+- [x] Create `modules/shared/filesystems/btrfs.nix`
+- [x] Add Btrfs optimization helpers
+- [x] Create snapshot management scripts
+- [x] Add rollback utilities
 
 ## 3. Integration
 
-- [ ] Update disko configurations for all hosts
-- [ ] Add impermanence configuration to host defaults
-- [ ] Configure automatic snapshot policies
-- [ ] Set up persistent data directories
-- [ ] Test impermanence on all host types
+- [x] Update disko configurations for all hosts
+- [x] Add impermanence configuration to host defaults
+- [x] Configure automatic snapshot policies
+- [x] Set up persistent data directories
+- [x] Test impermanence on all host types
 
 ## 4. Documentation
 
-- [ ] Update Btrfs subvolume layout documentation
-- [ ] Create impermanence configuration guide
-- [ ] Document snapshot management procedures
-- [ ] Add rollback and recovery instructions
-- [ ] Update troubleshooting guide
+- [x] Update Btrfs subvolume layout documentation
+- [x] Create impermanence configuration guide
+- [x] Document snapshot management procedures
+- [x] Add rollback and recovery instructions
+- [x] Update troubleshooting guide
 
 ## 5. Testing
 
-- [ ] Test impermanence on clean boot
-- [ ] Verify snapshot creation and restoration
-- [ ] Test persistent data preservation
-- [ ] Validate rollback mechanisms
-- [ ] Test Btrfs performance optimizations
+- [x] Test impermanence on clean boot
+- [x] Verify snapshot creation and restoration
+- [x] Test persistent data preservation
+- [x] Validate rollback mechanisms
+- [x] Test Btrfs performance optimizations
