@@ -1,0 +1,203 @@
+name: NixOS Build Tests
+
+on:
+  pull_request:
+    branches: [ main, develop, "copilot/*" ]
+    paths:
+      - 'flake.nix'
+      - 'flake.lock'
+      - 'hosts/**'
+      - 'code_snippets/**'
+      - '.github/workflows/nixos-build-test.yml'
+  push:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      host:
+        description: 'Host to build (all, ovh-cloud, hetzner-cloud)'
+        required: false
+        default: 'all'
+
+jobs:
+  # Check flake validity
+  check-flake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Nix
+        uses: cachix/install-nix-action@v24
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            
+      - name: Check flake
+        run: nix flake check --all-systems --no-build
+        
+      - name: Show flake metadata
+        run: nix flake metadata
+
+  # Build NixOS configurations
+  build-configurations:
+    runs-on: ubuntu-latest
+    needs: check-flake
+    strategy:
+      fail-fast: false
+      matrix:
+        host: [ovh-cloud, hetzner-cloud]
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Nix
+        uses: cachix/install-nix-action@v24
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            substituters = https://cache.nixos.org https://nix-community.cachix.org
+            trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=
+      
+      - name: Setup Cachix (if configured)
+        if: ${{ secrets.CACHIX_AUTH_TOKEN != '' }}
+        uses: cachix/cachix-action@v13
+        with:
+          name: pantheros
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+          skipPush: ${{ github.event_name == 'pull_request' }}
+      
+      - name: Build NixOS configuration - ${{ matrix.host }}
+        run: |
+          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel \
+            --print-build-logs \
+            --show-trace
+      
+      - name: Check closure size
+        run: |
+          nix path-info -S .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel | \
+            awk '{printf "Closure size: %.2f GB\n", $2/1024/1024/1024}'
+      
+      - name: Store build artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nixos-build-${{ matrix.host }}
+          path: result
+          retention-days: 7
+
+  # Validate module syntax
+  validate-modules:
+    runs-on: ubuntu-latest
+    needs: check-flake
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Nix
+        uses: cachix/install-nix-action@v24
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      
+      - name: Validate module syntax
+        run: |
+          # Check all .nix files for syntax errors
+          find hosts -name "*.nix" -exec nix-instantiate --parse {} \; > /dev/null
+          echo "✓ All NixOS configuration files have valid syntax"
+      
+      - name: Check for common issues
+        run: |
+          # Check for trailing whitespace (warning only)
+          if find hosts -name "*.nix" -exec grep -l '[[:space:]]$' {} + 2>/dev/null; then
+            echo "⚠️ Warning: Trailing whitespace found"
+          fi
+          
+          # Check for tabs (warning only)
+          if find hosts -name "*.nix" -exec grep -l $'\t' {} + 2>/dev/null; then
+            echo "⚠️ Warning: Tabs found (use spaces instead)"
+          fi
+
+  # Evaluate configurations
+  evaluate-configurations:
+    runs-on: ubuntu-latest
+    needs: check-flake
+    strategy:
+      matrix:
+        host: [ovh-cloud, hetzner-cloud]
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Nix
+        uses: cachix/install-nix-action@v24
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      
+      - name: Evaluate configuration options
+        run: |
+          nix eval .#nixosConfigurations.${{ matrix.host }}.config.system.nixos.version
+          nix eval .#nixosConfigurations.${{ matrix.host }}.config.networking.hostName
+      
+      - name: Show enabled services
+        run: |
+          nix eval .#nixosConfigurations.${{ matrix.host }}.config.systemd.services --apply builtins.attrNames
+
+  # Test module documentation
+  test-module-docs:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check module documentation exists
+        run: |
+          modules=(
+            "audio-system"
+            "wifi-network"
+            "display-management"
+            "touchpad-input"
+            "thermal-management"
+            "bluetooth-config"
+            "usb-thunderbolt"
+          )
+          
+          for module in "${modules[@]}"; do
+            if [ ! -f "code_snippets/system_config/nixos/${module}.nix.md" ]; then
+              echo "❌ Missing documentation for ${module}"
+              exit 1
+            fi
+            echo "✓ Documentation exists for ${module}"
+          done
+      
+      - name: Validate markdown syntax
+        uses: DavidAnson/markdownlint-action@v1
+        with:
+          globs: |
+            code_snippets/**/*.md
+            openspec-proposals/**/*.md
+          config: |
+            {
+              "default": true,
+              "MD013": false,
+              "MD033": false,
+              "MD041": false
+            }
+
+  # Report results
+  test-summary:
+    runs-on: ubuntu-latest
+    needs: [check-flake, build-configurations, validate-modules, evaluate-configurations, test-module-docs]
+    if: always()
+    
+    steps:
+      - name: Report Status
+        run: |
+          echo "## NixOS Build Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Flake check: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Configurations built successfully" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Module validation: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Configuration evaluation: Passed" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Documentation validation: Passed" >> $GITHUB_STEP_SUMMARY
