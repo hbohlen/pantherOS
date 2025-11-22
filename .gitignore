@@ -1,9 +1,5 @@
-```
-# Documentation and specification files
-docs/security/secret-management.md
-openspec/changes/1password-integration/
-openspec/changes/home-manager-module-structure/
-openspec/changes/podman-container-management/
-openspec/changes/tailscale-configuration/
-openspec/changes/workstation-configurations/
-```
+
+
+
+/logs/openai/**
+/node_modules/**
