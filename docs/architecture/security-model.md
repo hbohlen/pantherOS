@@ -207,6 +207,36 @@ ACLs define granular network access between hosts:
 }
 ```
 
+#### Secret Path Mapping
+
+All secrets are organized in the 1Password vault with specific paths for different services:
+
+- **Backblaze B2**:
+  - `op://pantherOS/backblaze-b2/default/endpoint`
+  - `op://pantherOS/backblaze-b2/default/region`
+  - `op://pantherOS/backblaze-b2/master/keyID`
+  - `op://pantherOS/backblaze-b2/master/keyName`
+  - `op://pantherOS/backblaze-b2/master/applicationKey`
+  - `op://pantherOS/backblaze-b2/pantherOS-nix-cache/keyID`
+  - `op://pantherOS/backblaze-b2/pantherOS-nix-cache/keyName`
+  - `op://pantherOS/backblaze-b2/pantherOS-nix-cache/applicationKey`
+
+- **GitHub Personal Access Token**:
+  - `op://pantherOS/github-pat/token`
+
+- **Tailscale**:
+  - `op://pantherOS/Tailscale/authKey`
+
+- **1Password Service Account Token**:
+  - `op://pantherOS/OP_SERVICE_ACCOUNT_TOKEN/token`
+
+- **Datadog**:
+  - `op://pantherOS/datadog/default/DD_HOST`
+  - `op://pantherOS/datadog/pantherOS/APPLICATION_KEY`
+  - `op://pantherOS/datadog/pantherOS/KEY_ID`
+  - `op://pantherOS/datadog/hetzner-vps/API_KEY`
+  - `op://pantherOS/datadog/hetzner-vps/KEY_ID`
+
 #### SSH Key Management
 SSH keys are stored in 1Password and retrieved dynamically:
 
