@@ -1,5 +1,37 @@
+# Environment files
 .env
+.env.local
+.env.*.local
+
+# Node modules
 /node_modules/**
+
+# Nix build artifacts
+result
+result-*
+.direnv/
+
+# Hardware discovery outputs
+hardware-discovery-*/
+
+# Deployment logs
+*.log
+logs/
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS files
+Thumbs.db
+
+# Temporary files
+tmp/
+.tmp/
 .dmux/
 
 # Claude Memory - Include core files, exclude private data
@@ -9,4 +41,17 @@
 
 # But include the core system
 !CLAUDE.md
+
+# OpenAI logs
 /logs/openai/**
+
+# Nix REPL history
+.nix-repl-history
+
+# Age/sops secrets (if using)
+*.age
+secrets.yaml
+!secrets.yaml.example
+
+# Local development
+.local/
