@@ -1,7 +1,0 @@
-- PantherOS is a personal, multi-host NixOS configuration that keeps workstations and servers in sync via a single flake-based source of truth.
-- Core goals: reproducible infrastructure, security-first defaults (Btrfs impermanence, hardened services), modular reuse, and OpenSpec-governed change management.
-- Managed hosts today: yoga (Lenovo Yoga 7 dev laptop), zephyrus (ASUS ROG Zephyrus workstation), hetzner-vps and ovh-vps (cloud servers).
-- Repository pillars: `flake.nix` entry, `modules/nixos/*` for reusable modules (core/services/security/filesystems/hardware), `hosts/*` per-device configs, `home/` for Home Manager, and `openspec/` for proposals/tasks.
-- Documentation lives under `docs/` with guides, architecture notes, checklists, and context briefs aimed at AI agents.
-- Secrets integrate through 1Password (OpNix) with centralized mappings per OpenSpec proposal 005; networking assumes Tailscale.
-- Current focus areas include finishing 1Password integration, Home Manager module framework, and automated testing/verification (per IMPLEMENTATION_COMPLETE.md roadmap).
