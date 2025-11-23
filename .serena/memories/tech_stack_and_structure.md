@@ -1,0 +1,6 @@
+- Language & tooling: pure Nix/NixOS modules with flakes; Nix packages pulled from `nixos-unstable`. Key inputs: `disko`, `nixos-hardware`, `home-manager`.
+- Filesystems/security: Btrfs impermanence modules, Podman services, systemd hardening, Tailscale networking, secrets via 1Password service account.
+- Directory map: `modules/nixos/` split into `core/`, `services/`, `security/`, `filesystems/`, `hardware/`; `home/` for user modules; `hosts/{workstations,servers}/` for device configs; `config/` for shared settings; `openspec/changes/` for proposals; `docs/` for consolidated documentation.
+- `flake.nix` defines all host systems and a `devShell` bundling nix, git, home-manager, disko CLI, `nixfmt`, nil language server, etc.
+- Deployment helpers include `deploy-hetzner.sh`, `deploy-hetzner-rescue.sh`, and `verify-deployment.sh`, plus extensive Hetzner deployment documentation in `docs/guides/hetzner-cloud-deployment.md`.
+- CI/tests rely on GitHub Actions workflow `.github/workflows/nixos-build-test.yml` invoking `nix flake check` across systems; local parity via `.github/scripts/test-nixos-build.sh`.
