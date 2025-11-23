@@ -6,6 +6,8 @@ A personal, multi-host NixOS configuration for solo developer infrastructure. Th
 
 This project provides a **declarative, modular, and reproducible** framework for managing personal development infrastructure. It solves the problem of configuration drift between devices and servers by providing a single source of truth for all system configurations.
 
+**📖 For a comprehensive design overview, architecture details, and agent task packs, see [OVERVIEW.md](./OVERVIEW.md).**
+
 ## 🖥️ Managed Hosts
 
 ### Workstations
@@ -18,6 +20,12 @@ This project provides a **declarative, modular, and reproducible** framework for
 
 ## 📚 Documentation
 
+**Essential Reading:**
+
+- **[OVERVIEW.md](./OVERVIEW.md)** - Comprehensive design overview, goals, architecture, and agent task packs
+
+**Detailed Documentation:**
+
 Complete documentation is available in the [docs/](./docs/) directory:
 
 - [Getting Started Guide](./docs/guides/getting-started.md) - Initial setup and basic usage
@@ -27,7 +35,10 @@ Complete documentation is available in the [docs/](./docs/) directory:
 - [Reference Materials](./docs/reference/) - Quick reference and specifications
 - [Troubleshooting](./docs/troubleshooting/) - Common issues and solutions
 
-For AI agents working with this codebase, see the [Project Primer](./docs/context/project-primer.md).
+**For AI Agents:**
+
+- [OVERVIEW.md](./OVERVIEW.md) - Design overview with agent task packs
+- [Project Primer](./docs/context/project-primer.md) - Project context
 
 ## 🚀 Quick Start
 
