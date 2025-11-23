@@ -44,7 +44,7 @@
 
             # Btrfs root with impermanence
             root = {
-              size = "max";
+              size = "100%";
               type = "8300";
               content = {
                 type = "btrfs";
