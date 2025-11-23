@@ -1,20 +1,19 @@
 ---
-
 description: "Code review, security, and quality assurance agent"
 mode: subagent
 temperature: 0.1
 tools:
-  read: true
-  grep: true
-  glob: true
-  bash: false
-  edit: false
-  write: false
+    read: true
+    grep: true
+    glob: true
+    bash: false
+    edit: false
+    write: false
 permissions:
-  bash:
-    "*": "deny"
-  edit:
-    "**/*": "deny"
+    bash:
+        "*": "deny"
+    edit:
+        "**/*": "deny"
 ---
 
 # Review Agent
@@ -41,6 +40,7 @@ Then give a short summary of the review.
 - Risk level (including security risk) and recommended follow-ups
 
 **Context Loading:**
+
 - Load project patterns and security guidelines
 - Analyze code against established conventions
 - Flag deviations from team standards
