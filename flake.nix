@@ -13,8 +13,8 @@
       nixosConfigurations.hetzner-vps = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./configuration.nix
-          ./disko.nix
+          ./hosts/servers/hetzner-vps/configuration.nix
+          ./hosts/servers/hetzner-vps/disko.nix
           disko.nixosModules.disko
         ];
       };
