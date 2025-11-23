@@ -24,6 +24,7 @@
   };
 
   networking.hostName = "hetzner-vps";
+  networking.useNetworkd = true;
 
   # Use systemd.network instead of networking.useDHCP
   systemd.network = {
