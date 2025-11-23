@@ -31,7 +31,7 @@ This document outlines the technical specifications and requirements for Panther
 ## Software Architecture
 
 ### Operating System Foundation
-- **Base**: NixOS 24.05 or later
+- **Base**: NixOS 25.05 or later
 - **Package Manager**: Nix (latest stable)
 - **Init System**: systemd
 - **Shell**: Bash, Zsh
@@ -166,7 +166,7 @@ This document outlines the technical specifications and requirements for Panther
 ## Compatibility Specifications
 
 ### NixOS Compatibility
-- Compatible with NixOS 24.05 and later
+- Compatible with NixOS 25.05 and later
 - Uses standard NixOS module system
 - Integrates with NixOS tooling and workflows
 

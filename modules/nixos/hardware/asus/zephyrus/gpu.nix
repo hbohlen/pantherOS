@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -33,11 +38,14 @@ in
     boot.kernelModules = mkIf cfg.enableHybridGraphics [ "nouveau" ];
 
     # GPU management tools
-    environment.systemPackages = with pkgs; [
-      nvidia-vaapi-driver
-      nvtop
-    ] ++ optionals cfg.enableNvidia [
-      # NVIDIA-specific tools would go here
-    ];
+    environment.systemPackages =
+      with pkgs;
+      [
+        nvidia-vaapi-driver
+        nvtopPackages.nvidia
+      ]
+      ++ optionals cfg.enableNvidia [
+        # NVIDIA-specific tools would go here
+      ];
   };
 }

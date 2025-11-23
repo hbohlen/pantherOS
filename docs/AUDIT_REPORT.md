@@ -466,7 +466,7 @@ Each host properly imports:
   ];
   
   networking.hostName = "yoga";
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.05";
 }
 ```
 

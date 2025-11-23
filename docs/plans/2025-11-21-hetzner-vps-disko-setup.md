@@ -340,7 +340,7 @@ Subvolumes:
   };
 
   # Placeholder - update after installation
-  system.stateVersion = "24.05";
+  system.stateVersion = "25.05";
 }
 ```
 
@@ -1364,4 +1364,3 @@ nixos-rebuild switch --flake .#hetzner-vps --target-host hbohlen@hetzner-vps
 **Plan Created:** 2025-11-21
 **Estimated Implementation Time:** 2-3 hours
 **Author:** BMad Orchestrator (Harley-chan)
-

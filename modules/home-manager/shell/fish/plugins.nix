@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,35 +11,25 @@ let
   cfg = config.programs.fish;
 in
 {
-  options.programs.fish = {
-    enableStarship = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enable Starship prompt for fish";
-    };
+  options.programs.fish.enableStarship = mkOption {
+    type = types.bool;
+    default = true;
+    description = "Enable Starship prompt for fish";
+  };
 
-    enableZoxide = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enable Zoxide (smarter cd) for fish";
-    };
+  options.programs.fish.enableZoxide = mkOption {
+    type = types.bool;
+    default = true;
+    description = "Enable Zoxide (smarter cd) for fish";
+  };
 
-    enableFzf = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enable fzf integration for fish";
-    };
-
-    plugins = mkOption {
-      type = types.listOf types.package;
-      default = [];
-      description = "Additional fish plugins to install";
-    };
+  options.programs.fish.enableFzf = mkOption {
+    type = types.bool;
+    default = true;
+    description = "Enable fzf integration for fish";
   };
 
   config = mkIf cfg.enable {
-    programs.fish.plugins = cfg.plugins;
-
     # Starship prompt
     programs.starship = mkIf cfg.enableStarship {
       enable = true;

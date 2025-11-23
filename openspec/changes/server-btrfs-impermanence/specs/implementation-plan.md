@@ -13,7 +13,7 @@ This implementation plan provides step-by-step instructions for implementing the
 ## Prerequisites
 
 ### Environment Requirements
-- NixOS 24.05 or later
+- NixOS 25.05 or later
 - Btrfs-progs installed
 - Sudo/root access
 - Backup of existing system
