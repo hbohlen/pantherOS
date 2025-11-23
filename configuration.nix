@@ -3,7 +3,7 @@
 {
   imports = [ ];
 
-  # Boot
+  # Boot - simple BIOS GRUB
   boot.loader.grub = {
     enable = true;
     device = "/dev/sda";
@@ -25,7 +25,7 @@
     };
   };
 
-  # Your SSH key - GET YOUR PUBLIC KEY WITH: cat ~/.ssh/id_ed25519.pub
+  # Your SSH key
   users.users.root.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBY1sAb258Lkkw+6yl4M/YtbT3izNxFIP8Ag+UxEoipv"
   ];
@@ -42,19 +42,12 @@
   ];
 
   # Nix settings
-  nix = {
-    settings = {
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-      auto-optimise-store = true;
-    };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
-    };
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    auto-optimise-store = true;
   };
 
   system.stateVersion = "25.05";
