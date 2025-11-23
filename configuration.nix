@@ -19,10 +19,10 @@
   # SSH
   services.openssh = {
     enable = true;
-    settings = {
-      PermitRootLogin = "prohibit-password";
-      PasswordAuthentication = false;
-    };
+    # settings = {
+    #   PermitRootLogin = "prohibit-password";
+    #   PasswordAuthentication = false;
+    # };
   };
 
   # Your SSH key
@@ -31,7 +31,7 @@
   ];
 
   # Tailscale
-  services.tailscale.enable = true;
+  # services.tailscale.enable = true;
 
   # Basic packages
   environment.systemPackages = with pkgs; [
