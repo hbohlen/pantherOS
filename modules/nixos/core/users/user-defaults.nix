@@ -2,8 +2,13 @@
 
 with lib;
 
+let
+  cfg = config.pantherOS.core.userDefaults;
+in
 {
   options.pantherOS.core.userDefaults = {
+    enable = mkEnableOption "PantherOS user defaults configuration";
+
     shell = mkOption {
       type = types.package;
       default = pkgs.bashInteractive;
@@ -16,8 +21,9 @@ with lib;
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     # Setting default values for user configurations
-    environment.defaultPackages = [ pkgs.bashInteractive ];
+    # Add shell to systemPackages instead of replacing defaultPackages
+    environment.systemPackages = [ cfg.shell ];
   };
 }
