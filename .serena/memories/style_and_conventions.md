@@ -1,0 +1,5 @@
+- Follow NixOS module patterns: each module exposes `options` and `config`, wraps logic in `mkIf cfg.enable`, and defines toggles with `mkEnableOption` plus typed `mkOption`s (per `docs/guides/module-development.md`).
+- Option namespace uses `pantherOS.<category>.<capability>.<setting>`; keep modules single-purpose and aggregate via `default.nix` in their directory. Prefer descriptive names, camelCase for multi-word options, and security-first defaults.
+- Documentation standards (see `docs/style-guide.md`): Markdown with H1-only title, clear heading hierarchy, fenced code blocks w/ language tags, hyphen bullet lists, descriptive relative links, and consistent terminology (PantherOS/OpenSpec, etc.).
+- Commit/process expectations: create OpenSpec proposals for major work, document design decisions, keep host configs importing relevant modules, and ensure secrets go through centralized mapping (no raw `op://` strings).
+- Quality habits: test modules in VMs, include helpful option descriptions/defaults, avoid tabs/trailing whitespace (test script checks), and keep docs/templates aligned with provided guide templates.

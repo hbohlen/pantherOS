@@ -1,0 +1,8 @@
+- Enter dev shell with bundled tooling: `nix develop`.
+- Format/pretty-print Nix files via `nixfmt` (available inside the dev shell).
+- Quick validation: `nix flake check --no-build` (syntax + eval) and `nix flake metadata` for flake info.
+- Full local gate before commits: `./.github/scripts/test-nixos-build.sh` (runs flake check, builds key hosts, parses modules, documentation checks).
+- Build/switch hosts directly: `nixos-rebuild build --flake .#<hostname>` and `sudo nixos-rebuild switch --flake .#<hostname>`; for CI-style builds use `nix build .#nixosConfigurations.<host>.config.system.build.toplevel --print-build-logs --show-trace`.
+- Deployment helpers: `./deploy-hetzner.sh` (automated cloud provisioning), `./deploy-hetzner-rescue.sh` (guided rescue-mode flow), and `./verify-deployment.sh` (post-deploy sanity checks).
+- Hetzner operations per guide: `hcloud server create ...`, `hcloud server enable-rescue ...`, `hcloud ssh-key create ...` when prepping infrastructure.
+- Post-deploy validation snippets: `systemctl status tailscale`, `tailscale status`, `nixos-version`, `df -h`, `btrfs filesystem show`, `sudo nixos-rebuild switch --rollback` for rollback, as documented in `docs/guides/hetzner-cloud-deployment.md` and `docs/checklists/post-deployment-verification.md`.

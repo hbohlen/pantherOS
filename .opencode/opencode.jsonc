@@ -465,6 +465,9 @@
     "brief.md",
     "docs/architecture/overview.md",
     "docs/guides/module-development.md",
+    ".opencode/context/core/static-context.md",
+    ".opencode/context/core/delegation-examples.md",
+    ".opencode/context/core/execution-path-examples.md",
   ],
 
   "permission": {
@@ -540,7 +543,7 @@
   "agent": {
     // Primary orchestrator (replaces your architect)
     "openagent": {
-      "prompt": "~/.opencode/agent/openagent.md", // Installed by OpenAgents
+      "prompt": "~/.opencode/agent/openagent.md", // Optimized version - research-backed prompt design
       "model": "cliproxyapi/minimax-m2", // Use your MiniMax for planning
       "options": {
         "temperature": 1.0,
