@@ -63,6 +63,21 @@ For AI agents working with this codebase, see the [Project Primer](./docs/contex
    nixos-rebuild switch --flake .#ovh-vps
    ```
 
+### Deploying to Hetzner Cloud Servers
+
+To deploy PantherOS to a Hetzner Cloud VPS, you can use either the manual process or the automated nixos-anywhere method.
+
+**Using nixos-anywhere (recommended):**
+1. Ensure you have the Hetzner Cloud CLI (`hcloud`) installed and configured
+2. Run the deployment script with the `--nixos-anywhere` flag:
+   ```bash
+   ./deploy-hetzner.sh --nixos-anywhere
+   ```
+
+**Manual deployment:**
+1. Use the existing scripts as documented in the deployment guide
+2. Follow the rescue mode process as explained in `deploy-hetzner.sh` and `deploy-hetzner-rescue.sh`
+
 ## 🛠️ Development
 
 ### Working on Configuration

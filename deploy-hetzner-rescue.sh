@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
-# PantherOS Hetzner Cloud Rescue Mode Deployment Helper
+# PantherOS Hetzner Cloud Deployment Helper
 # This script provides a guided process for deploying PantherOS using rescue mode
 # which is required for custom disk layouts with Btrfs subvolumes
+#
+# Note: You can also use nixos-anywhere for automated deployment by running:
+# nix run github:numtide/nixos-anywhere -- --flake .#hetzner-vps root@<server-ip>
 
 set -euo pipefail
 

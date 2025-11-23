@@ -13,6 +13,7 @@ LOCATION="fsn1"      # Falkenstein, Germany
 IMAGE="nixos-25.05"  # Or use rescue mode as per documentation
 SSH_PUB_KEY_PATH="$HOME/.ssh/id_ed25519.pub"  # Default SSH key path
 SSH_PRIV_KEY_PATH="$HOME/.ssh/id_ed25519"    # Default SSH private key path
+USE_NIXOS_ANYWHERE=false  # Flag to use nixos-anywhere for automated deployment
 
 # Function to print usage
 print_usage() {
@@ -24,8 +25,9 @@ print_usage() {
     echo "  -l, --location LOC      Hetzner location (default: fsn1)"
     echo "  -k, --ssh-key-path PATH SSH public key path (default: ~/.ssh/id_ed25519.pub)"
     echo "  --project PROJECT       Hetzner project name (optional)"
+    echo "  --nixos-anywhere        Use nixos-anywhere for automated deployment (default: false)"
     echo ""
-    echo "Example: $0 --server-type cpx52 --location hel1 --ssh-key-path ~/.ssh/pantheros.pub"
+    echo "Example: $0 --server-type cpx52 --location hel1 --ssh-key-path ~/.ssh/pantheros.pub --nixos-anywhere"
     echo ""
 }
 
@@ -54,6 +56,14 @@ check_prerequisites() {
         echo "Error: SSH public key not found at $SSH_PUB_KEY_PATH"
         echo "Please create an SSH key pair first:"
         echo "  ssh-keygen -t ed25519 -C 'pantheros-deploy@hetzner'"
+        exit 1
+    fi
+
+    # Check if nix is installed when using nixos-anywhere
+    if [[ "$USE_NIXOS_ANYWHERE" == true ]] && ! command -v nix &> /dev/null; then
+        echo "Error: nix package manager is not installed, but required for nixos-anywhere."
+        echo "Please install nix first:"
+        echo "  curl -L https://nixos.org/nix/install | sh"
         exit 1
     fi
 
@@ -125,14 +135,45 @@ get_server_details() {
     fi
 }
 
-# Function to deploy PantherOS using rescue mode
-deploy_pantheros() {
+# Function to deploy PantherOS using nixos-anywhere
+deploy_pantheros_anywhere() {
     local server_ip="$1"
-    echo "Deploying PantherOS to server $server_ip..."
+    echo "Deploying PantherOS to server $server_ip using nixos-anywhere..."
+
+    # Get the server ID to enable rescue mode
+    SERVER_ID=$(hcloud server list --output noheader --format "{{.ID}}" --selector "ipv4_ip=${server_ip}")
+
+    # Enable rescue mode
+    echo "Enabling rescue mode on server $SERVER_ID..."
+    hcloud server enable-rescue --type linux64 "$SERVER_ID"
+
+    echo "Rescue mode enabled. The server will reboot into rescue mode."
+    echo "Waiting 90 seconds for rescue system to boot..."
+    sleep 90
+
+    # Run nixos-anywhere to deploy PantherOS
+    echo "Deploying PantherOS using nixos-anywhere..."
+    nix run github:numtide/nixos-anywhere -- --debug --flake .#hetzner-vps "root@${server_ip}"
+
+    # After successful deployment, disable rescue mode
+    echo "Disabling rescue mode..."
+    hcloud server disable-rescue "$SERVER_ID"
+
+    echo "PantherOS has been deployed to $server_ip using nixos-anywhere!"
+    echo "Server is now running PantherOS and accessible via SSH."
+    echo
+    echo "To access your server: ssh hbohlen@$server_ip"
+    echo
+}
+
+# Function to deploy PantherOS using manual rescue mode
+deploy_pantheros_manual() {
+    local server_ip="$1"
+    echo "Deploying PantherOS to server $server_ip using manual rescue mode..."
 
     # For PantherOS deployment, we need to follow the rescue mode approach
     # as documented in the repository
-    echo "This deployment will use the rescue mode approach as documented in PantherOS:"
+    echo "This deployment will use the manual rescue mode approach as documented in PantherOS:"
     echo "1. Boot server in rescue mode"
     echo "2. Partition disk using disko"
     echo "3. Clone PantherOS repository"
@@ -195,6 +236,10 @@ while [[ $# -gt 0 ]]; do
             PROJECT_NAME="$2"
             shift 2
             ;;
+        --nixos-anywhere)
+            USE_NIXOS_ANYWHERE=true
+            shift
+            ;;
         *)
             echo "Unknown option: $1"
             print_usage
@@ -213,7 +258,11 @@ main() {
     create_ssh_key
     create_server
     if get_server_details; then
-        deploy_pantheros "$SERVER_IP"
+        if [[ "$USE_NIXOS_ANYWHERE" == true ]]; then
+            deploy_pantheros_anywhere "$SERVER_IP"
+        else
+            deploy_pantheros_manual "$SERVER_IP"
+        fi
     else
         echo "Failed to retrieve server details. Cannot proceed with deployment."
         exit 1

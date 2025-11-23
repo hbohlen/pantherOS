@@ -25,13 +25,11 @@
   
   # File system configuration is handled by disko.nix, not here
   # to prevent conflicts with the Btrfs impermanence setup
-  fileSystems = {
-    "/".device = "/dev/disk/by-label/nixos";
-    "/".fsType = "btrfs";
-  };
-  
+  # Remove these as they conflict with disko's partitioning
+  # fileSystems and swapDevices are configured via disko
+
   # Enable swap using the partition defined in disko.nix
-  swapDevices = [ 
+  swapDevices = [
     { device = "/dev/disk/by-label/swap"; randomEncryption = true; }
   ];
   
