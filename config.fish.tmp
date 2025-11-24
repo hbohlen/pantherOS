@@ -1,0 +1,44 @@
+source /usr/share/cachyos-fish-config/cachyos-config.fish
+
+# overwrite greeting
+# potentially disabling fastfetch
+#function fish_greeting
+#    # smth smth
+#end
+
+
+
+# 1Password environment variables
+set -gx OP_BIOMETRIC_UNLOCK_ENABLED true
+set -gx SSH_AUTH_SOCK ~/.1password/agent.sock
+set -gx PATH $PATH /home/hbohlen/agentic/bin
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+alias ls="exa"
+alias ll="exa -la"
+alias gi="~/bin/gi"
+set -gx OP_CONFIG_DIR "$HOME/.config/op"
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source
+
+# Nix configuration (if not already loaded by system)
+if test -e '/nix/var/nix/profiles/default/etc/profile.d/nix.fish'
+    source /nix/var/nix/profiles/default/etc/profile.d/nix.fish
+end
+
+# direnv configuration
+if type -q direnv
+    direnv hook fish | source
+end
+
+# fnm (Fast Node Manager) initialization
+# Check if fnm is available before initializing
+if type -q fnm
+    fnm env --use-on-cd --shell fish | source
+else
+    # Fallback: add fnm to PATH if installed in standard location
+    if test -d "$HOME/.fnm"
+        set -gx PATH $PATH "$HOME/.fnm"
+    end
+end
+
+# tmux integration functions
+source ~/.config/fish/functions/_tmux_integration.fish
