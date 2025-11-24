@@ -36,18 +36,14 @@
   };
 
   users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBY1sAb258Lkkw+6yl4M/YtbT3izNxFIP8Ag+UxEoipv"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEe67lx5ILCFuGNN7nNGZJai0aQe5jFNJbEjqql2Szft"
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKL85xrOJYwZOR297WkW/w5QuEA8o5i4ykPd+YWlTGxM"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGm8R69+sP9Fdt1plIZIjxxuRBx386mEQjGAJ9G38n1G"
   ];
 
   users.users.hbohlen = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBY1sAb258Lkkw+6yl4M/YtbT3izNxFIP8Ag+UxEoipv"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEe67lx5ILCFuGNN7nNGZJai0aQe5jFNJbEjqql2Szft"
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKL85xrOJYwZOR297WkW/w5QuEA8o5i4ykPd+YWlTGxM"
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGm8R69+sP9Fdt1plIZIjxxuRBx386mEQjGAJ9G38n1G"
     ];
   };
 
