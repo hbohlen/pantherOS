@@ -64,6 +64,14 @@
                     mountpoint = "/swap";
                     mountOptions = [ "noatime" ];
                   };
+                  "@containers" = {
+                    mountpoint = "/var/lib/containers";
+                    mountOptions = [
+                      "nodatacow"
+                      "noatime"
+                      "space_cache=v2"
+                    ];
+                  };
                 };
               };
             };
