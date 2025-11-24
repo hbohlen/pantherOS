@@ -3,7 +3,7 @@
     disk = {
       main = {
         type = "disk";
-        device = "/dev/sda";
+        device = "/dev/disk/by-id/virtio-disk0";
         content = {
           type = "gpt";
           partitions = {
