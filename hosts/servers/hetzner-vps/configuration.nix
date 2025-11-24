@@ -1,3 +1,4 @@
+# hosts/servers/hetzner-vps/configuration.nix
 { pkgs, ... }:
 {
   # Boot configuration for Hetzner KVM
