@@ -27,6 +27,8 @@
 
   # Network configuration with systemd-networkd
   # Your Hetzner server uses eth0
+  networking.useDHCP = false;  # Disable to avoid conflict with systemd.network
+  networking.useNetworkd = true;
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
     matchConfig.Name = "eth0";
@@ -57,9 +59,10 @@
 
       # SSH public key for root user from your pantherOS vault
       # Reference: op://pantherOS/SSH/"public key"
+      # Writing directly to standard authorized_keys location
       rootSshKeys = {
         reference = "op://pantherOS/SSH/public key";
-        path = "/root/.ssh/authorized_keys_opnix";
+        path = "/root/.ssh/authorized_keys";
         owner = "root";
         group = "root";
         mode = "0600";
@@ -67,9 +70,10 @@
 
       # SSH public key for hbohlen user from your pantherOS vault
       # Reference: op://pantherOS/SSH/"public key"
+      # Writing directly to standard authorized_keys location
       userSshKeys = {
         reference = "op://pantherOS/SSH/public key";
-        path = "/home/hbohlen/.ssh/authorized_keys_opnix";
+        path = "/home/hbohlen/.ssh/authorized_keys";
         owner = "hbohlen";
         group = "users";
         mode = "0600";
@@ -95,19 +99,29 @@
   };
 
   # User configuration
-  # SSH keys are now managed by OpNix from 1Password
+  # SSH keys are managed by OpNix - written directly to ~/.ssh/authorized_keys
   users.users.root = {
-    openssh.authorizedKeys.keyFiles = [
-      config.services.onepassword-secrets.secretPaths.rootSshKeys
-    ];
+    # OpNix writes to /root/.ssh/authorized_keys
   };
 
   users.users.hbohlen = {
     isNormalUser = true;
     extraGroups = [ "wheel" ];
-    openssh.authorizedKeys.keyFiles = [
-      config.services.onepassword-secrets.secretPaths.userSshKeys
-    ];
+    # OpNix writes to /home/hbohlen/.ssh/authorized_keys
+  };
+
+  # Ensure .ssh directories exist before OpNix writes keys
+  system.activationScripts.createSshDirs = {
+    text = ''
+      mkdir -p /root/.ssh
+      chmod 700 /root/.ssh
+      chown root:root /root/.ssh
+
+      mkdir -p /home/hbohlen/.ssh
+      chmod 700 /home/hbohlen/.ssh
+      chown hbohlen:users /home/hbohlen/.ssh
+    '';
+    deps = [ "users" ];
   };
 
   # Sudo configuration - passwordless for wheel group
@@ -132,7 +146,7 @@
     htop
     tmux
     tailscale  # Tailscale CLI
-    _1password # 1Password CLI
+    _1password-cli # 1Password CLI (updated name)
   ];
 
   # Enable flakes

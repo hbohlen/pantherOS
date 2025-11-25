@@ -4,26 +4,26 @@
 # Optimized for CachyOS laptop
 
 # Colors for output
-set RED '\033[0;31m'
-set GREEN '\033[0;32m'
-set YELLOW '\033[1;33m'
-set BLUE '\033[0;34m'
-set NC '\033[0m' # No Color
+set -g RED '\033[0;31m'
+set -g GREEN '\033[0;32m'
+set -g YELLOW '\033[1;33m'
+set -g BLUE '\033[0;34m'
+set -g NC '\033[0m' # No Color
 
 function print_info
-    echo -e "$GREEN[INFO]$NC $argv"
+    printf "%b[INFO]%b %s\n" "$GREEN" "$NC" "$argv"
 end
 
 function print_warn
-    echo -e "$YELLOW[WARN]$NC $argv"
+    printf "%b[WARN]%b %s\n" "$YELLOW" "$NC" "$argv"
 end
 
 function print_error
-    echo -e "$RED[ERROR]$NC $argv"
+    printf "%b[ERROR]%b %s\n" "$RED" "$NC" "$argv"
 end
 
 function print_step
-    echo -e "$BLUE[STEP]$NC $argv"
+    printf "%b[STEP]%b %s\n" "$BLUE" "$NC" "$argv"
 end
 
 # Check prerequisites
@@ -34,12 +34,6 @@ function check_prerequisites
     if not command -v nix &> /dev/null
         print_error "nix command not found. Please install Nix."
         exit 1
-    end
-
-    # Check for nixos-anywhere
-    if not command -v nixos-anywhere &> /dev/null
-        print_warn "nixos-anywhere not found. Installing..."
-        nix profile install github:nix-community/nixos-anywhere
     end
 
     # Check for 1Password CLI
@@ -54,6 +48,7 @@ function check_prerequisites
     end
 
     print_info "Prerequisites OK"
+    print_info "Note: Will use 'nix run' to execute nixos-anywhere"
 end
 
 # Get token from 1Password or environment
@@ -203,10 +198,10 @@ function deploy
     # Setup token on target server before deployment
     setup_token_on_server $server_ip
 
-    # Run nixos-anywhere
+    # Run nixos-anywhere using nix run
     print_step "Running nixos-anywhere..."
     echo ""
-    if nixos-anywhere --flake .#hetzner-vps root@$server_ip
+    if nix run github:nix-community/nixos-anywhere -- --flake .#hetzner-vps root@$server_ip
         print_info "✓ Deployment completed successfully!"
     else
         print_error "Deployment failed!"

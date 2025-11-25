@@ -17,10 +17,16 @@
   outputs = { nixpkgs, disko, opnix, ... }:
     let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
+      lib = nixpkgs.lib;
+      pkgs = import nixpkgs {
+        inherit system;
+        config = {
+          allowUnfree = true;
+        };
+      };
     in
     {
-      nixosConfigurations.hetzner-vps = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.hetzner-vps = lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
           disko.nixosModules.disko
@@ -29,6 +35,7 @@
           ./hosts/servers/hetzner-vps/configuration.nix
           ./hosts/servers/hetzner-vps/disko.nix
         ];
+        specialArgs = { inherit lib pkgs; };
       };
 
       devShells.${system}.default = pkgs.mkShell {
