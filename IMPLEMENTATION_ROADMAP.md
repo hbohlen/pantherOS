@@ -56,16 +56,16 @@ This roadmap provides detailed micro-steps for implementing all OpenSpec change 
 
 **Note**: Basic neovim installation completed. Advanced nixvim configuration with plugins deferred due to compatibility issues with current nixvim version. Will be addressed in future update.
 
-### 5. add-opencode-ai
+### 5. add-opencode-ai ✅ COMPLETED
 **Proposal**: [add-opencode-ai/proposal.md](openspec/changes/add-opencode-ai/proposal.md)
 
 **Micro Steps**:
-1. Add `nix-ai-tools` flake input to `flake.nix`
-2. Install `opencode` package via home-manager
-3. Make AI coding tool available in user environment
-4. Test build with `nix flake check`
-5. Test system build with `sudo nixos-rebuild build --flake .#hetzner-vps`
-6. Verify `opencode` command is available in PATH
+1. Add `nix-ai-tools` flake input to `flake.nix` ⏸️ (opencode available directly in nixpkgs)
+2. Install `opencode` package via home-manager ✅
+3. Make AI coding tool available in user environment ✅
+4. Test build with `nix flake check` ✅
+5. Test system build with `sudo nixos-rebuild build --flake .#hetzner-vps` ✅
+6. Verify `opencode` command is available in PATH ✅
 
 ## Phase 3: Personal Device Infrastructure (Hardware Access Required)
 

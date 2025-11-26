@@ -121,12 +121,13 @@
       nixpkgs.config.allowUnfree = true;
       home.enableNixpkgsReleaseCheck = false;
 
-      # Terminal tools and editor packages
+      # Terminal tools, editor, and AI coding packages
       home.packages = with pkgs; [
         fzf      # Fuzzy finder
         eza      # Modern ls replacement
         fish     # Fish shell
         neovim   # Default editor (nixvim configuration to be added later)
+        opencode # AI coding assistant
       ];
 
       # Configure fish as default shell
