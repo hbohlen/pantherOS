@@ -69,22 +69,29 @@ This roadmap provides detailed micro-steps for implementing all OpenSpec change 
 
 ## Phase 3: Personal Device Infrastructure (Hardware Access Required)
 
-### BLOCKER: Hardware Scanning Research & Setup
+### BLOCKER: Hardware Scanning Research & Setup ✅ COMPLETED
 **Required before**: add-personal-device-hosts
 
 **Research Steps**:
-1. Research `facter` tool capabilities for NixOS hardware detection
-2. Study existing facter usage patterns in NixOS community
-3. Document hardware scanning workflow for zephyrus and yoga devices
-4. Create hardware scanning script/procedure
-5. Test facter on available hardware to validate approach
+1. Research `facter` tool capabilities for NixOS hardware detection ✅
+2. Study existing facter usage patterns in NixOS community ✅
+3. Document hardware scanning workflow for zephyrus and yoga devices ✅
+4. Create hardware scanning script/procedure ✅
+5. Test facter on available hardware to validate approach ⏳ (requires hardware access)
 
-**Implementation Steps** (after research):
-1. Install `facter` package on target devices
-2. Run `facter` to generate hardware inventory
-3. Structure facter output into NixOS-compatible format
-4. Create `meta.nix` files for each device
-5. Validate generated hardware configurations
+**Findings**:
+- **NixOS Facter**: Modern hardware detection tool (github:nix-community/nixos-facter)
+- **NixOS Facter Modules**: Automatic hardware configuration (github:nix-community/nixos-facter-modules)
+- **Workflow**: Generate JSON report → Use modules for auto-configuration
+- **Script**: `scripts/scan-hardware.sh` created for automated scanning
+- **Documentation**: `docs/hardware-scanning-workflow.md` created
+
+**Implementation Steps** (ready for hardware access):
+1. Run `sudo scripts/scan-hardware.sh zephyrus` on target device
+2. Run `sudo scripts/scan-hardware.sh yoga` on target device
+3. Transfer generated JSON reports to project repository
+4. Use nixos-facter-modules for automatic hardware configuration
+5. Create host configurations in `hosts/zephyrus/` and `hosts/yoga/`
 
 ### 6. add-personal-device-hosts
 **Proposal**: [add-personal-device-hosts/proposal.md](openspec/changes/add-personal-device-hosts/proposal.md)
