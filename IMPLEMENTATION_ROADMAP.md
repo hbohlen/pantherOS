@@ -85,13 +85,14 @@ This roadmap provides detailed micro-steps for implementing all OpenSpec change 
 - **Workflow**: Generate JSON report → Use modules for auto-configuration
 - **Script**: `scripts/scan-hardware.sh` created for automated scanning
 - **Documentation**: `docs/hardware-scanning-workflow.md` created
+- **Yoga Hardware Detected**: AMD Ryzen AI 7 350 (8 cores/16 threads), 16GB RAM, 2 disks, 2 network interfaces
 
-**Implementation Steps** (ready for hardware access):
-1. Run `sudo scripts/scan-hardware.sh zephyrus` on target device
-2. Run `sudo scripts/scan-hardware.sh yoga` on target device
-3. Transfer generated JSON reports to project repository
-4. Use nixos-facter-modules for automatic hardware configuration
-5. Create host configurations in `hosts/zephyrus/` and `hosts/yoga/`
+**Implementation Steps**:
+1. Run `sudo scripts/scan-hardware.sh zephyrus` on target device ⏳ (requires zephyrus access)
+2. Run `sudo scripts/scan-hardware.sh yoga` on target device ✅ COMPLETED
+3. Transfer generated JSON reports to project repository ✅ COMPLETED
+4. Use nixos-facter-modules for automatic hardware configuration ⏳ (next step)
+5. Create host configurations in `hosts/zephyrus/` and `hosts/yoga/` ⏳ (after zephyrus scan)
 
 ### 6. add-personal-device-hosts
 **Proposal**: [add-personal-device-hosts/proposal.md](openspec/changes/add-personal-device-hosts/proposal.md)

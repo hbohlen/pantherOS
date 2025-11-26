@@ -69,29 +69,31 @@ generate_report() {
         # Display basic info from the report
         if command -v jq &> /dev/null; then
             log_info "Hardware summary:"
-            jq -r '.hostname // "unknown"' "$output_file" | xargs echo "  Hostname: "
-            jq -r '.os.name // "unknown"' "$output_file" | xargs echo "  OS: "
-            jq -r '.kernel // "unknown"' "$output_file" | xargs echo "  Kernel: "
-            jq -r '.architecture // "unknown"' "$output_file" | xargs echo "  Architecture: "
+            echo "  System: $(jq -r '.system // "unknown"' "$output_file")"
 
-            # Count CPU cores
+            # CPU info
+            local cpu_model
+            cpu_model=$(jq -r '.hardware.cpu[0].model_name // "unknown"' "$output_file")
             local cpu_cores
-            cpu_cores=$(jq '.processors.count // 0' "$output_file")
-            echo "  CPU Cores: $cpu_cores"
+            cpu_cores=$(jq -r '.hardware.cpu[0].cores // 0' "$output_file")
+            local cpu_threads
+            cpu_threads=$(jq -r '.hardware.cpu[0].siblings // 0' "$output_file")
+            echo "  CPU: $cpu_model (${cpu_cores} cores, ${cpu_threads} threads)"
 
-            # Count memory
-            local memory_gb
-            memory_gb=$(jq '.memory.total // "0B"' "$output_file" | sed 's/B$//' | sed 's/G$//' | xargs printf "%.0f")
+            # Memory info
+            local memory_bytes
+            memory_bytes=$(jq -r '.hardware.memory[0].resources[0].range // 0' "$output_file")
+            local memory_gb=$((memory_bytes / 1024 / 1024 / 1024))
             echo "  Memory: ${memory_gb}GB"
 
             # Count disks
             local disk_count
-            disk_count=$(jq '.disks | length // 0' "$output_file")
+            disk_count=$(jq '.hardware.disk | length' "$output_file")
             echo "  Disks: $disk_count"
 
             # Count network interfaces
             local net_count
-            net_count=$(jq '.networking.interfaces | length // 0' "$output_file")
+            net_count=$(jq '.hardware.network_interface | length' "$output_file")
             echo "  Network Interfaces: $net_count"
         else
             log_warning "jq not available - skipping hardware summary display"
