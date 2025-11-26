@@ -1,0 +1,10 @@
+{
+  "enabled": true,
+  "debug": false,
+  "pruning_summary": "detailed",
+  "protectedTools": ["task", "todowrite", "todoread", "context_pruning"],
+  "strategies": {
+    "onIdle": ["deduplications", "ai-analysis"],
+    "onTool": ["deduplications", "ai-analysis"],
+  },
+}

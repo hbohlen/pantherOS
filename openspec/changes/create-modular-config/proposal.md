@@ -1,13 +1,13 @@
 # Change: Create Modular Configuration Structure
 
 ## Why
-The current configuration is monolithic and hard to maintain. Creating granular modules following AGENTS.md guidelines will improve readability, maintainability, and reusability.
+The current configuration is monolithic and hard to maintain. Creating granular modules following AGENTS.md guidelines will improve readability, maintainability, and reusability. Each module should be atomic and use nested subfolders with default.nix files for exporting.
 
 ## What Changes
-- Create /modules directory structure
-- Extract home-manager configuration into modules/home.nix
-- Extract terminal tools configuration into modules/terminal-tools.nix
-- Extract fish shell configuration into modules/fish.nix
+- Create /modules directory structure with hierarchical organization
+- Extract system packages into modules/packages/ with submodules by category
+- Extract environment variables into modules/environment/
+- Extract user configuration into modules/users/
 - Create modules/default.nix aggregator
 - Update configuration.nix to import modules
 

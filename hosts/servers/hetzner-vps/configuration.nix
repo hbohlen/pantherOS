@@ -5,6 +5,7 @@
 {
   imports = [
     ./hardware.nix
+    ../../../modules
   ];
 
   # Hostname
@@ -93,52 +94,7 @@
     allowedUDPPorts = [ config.services.tailscale.port ];
   };
 
-  # User configuration
-  users.users.root = {
-    # OpNix writes to /root/.ssh/authorized_keys
-  };
 
-  users.users.hbohlen = {
-    isNormalUser = true;
-    extraGroups = [
-      "wheel"      # sudo access
-      "podman"     # container management
-      "docker"     # docker CLI compat
-    ];
-    # OpNix writes to /home/hbohlen/.ssh/authorized_keys
-  };
-
-  # Ensure directories exist for subvolume mounts
-  system.activationScripts.createSubvolumeDirs = {
-    text = ''
-      # Create user subvolume mount points with correct ownership
-      mkdir -p /home/hbohlen/{dev,.config,.local,.cache,.ai-tools}
-      chown -R hbohlen:users /home/hbohlen/{dev,.config,.local,.cache,.ai-tools}
-      chmod 755 /home/hbohlen/{dev,.config,.local,.cache,.ai-tools}
-
-      # Create AI tools structure
-      mkdir -p /home/hbohlen/.ai-tools/{claude-code,opencode}
-      chown -R hbohlen:users /home/hbohlen/.ai-tools
-
-      # Ensure .ssh exists with correct permissions
-      mkdir -p /root/.ssh /home/hbohlen/.ssh
-      chmod 700 /root/.ssh /home/hbohlen/.ssh
-      chown root:root /root/.ssh
-      chown hbohlen:users /home/hbohlen/.ssh
-
-      # Create cache subdirectories for language tools
-      mkdir -p /home/hbohlen/.cache/{npm,cargo,rustup,go,go-build,pip}
-      chown -R hbohlen:users /home/hbohlen/.cache
-
-      # Create local directories
-      mkdir -p /home/hbohlen/.local/{bin,share,state}
-      chown -R hbohlen:users /home/hbohlen/.local
-    '';
-    deps = [ "users" ];
-  };
-
-  # Sudo configuration - passwordless for wheel group
-  security.sudo.wheelNeedsPassword = false;
 
   # SSH configuration - hardened
   services.openssh = {
@@ -147,6 +103,40 @@
       PermitRootLogin = "prohibit-password";
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
+    };
+  };
+
+  # Home Manager - User environment management
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    users.hbohlen = {
+      home = {
+        username = "hbohlen";
+        homeDirectory = "/home/hbohlen";
+        stateVersion = "25.05";
+      };
+
+      # Disable version mismatch warning
+      nixpkgs.config.allowUnfree = true;
+      home.enableNixpkgsReleaseCheck = false;
+
+      # Terminal tools packages
+      home.packages = with pkgs; [
+        fzf      # Fuzzy finder
+        eza      # Modern ls replacement
+        fish     # Fish shell
+      ];
+
+      # Configure fish as default shell
+      programs.fish = {
+        enable = true;
+      };
+
+      # Basic home-manager configuration
+      programs = {
+        home-manager.enable = true;
+      };
     };
   };
 
@@ -160,68 +150,11 @@
     # with nodatacow for optimal performance
   };
 
-  # Environment variables for XDG base directories and dev tools
-  environment.sessionVariables = {
-    # XDG Base Directory specification
-    XDG_CONFIG_HOME = "$HOME/.config";
-    XDG_CACHE_HOME = "$HOME/.cache";
-    XDG_DATA_HOME = "$HOME/.local/share";
-    XDG_STATE_HOME = "$HOME/.local/state";
 
-    # Language-specific cache locations (use ~/.cache subvolume)
-    NPM_CONFIG_CACHE = "$HOME/.cache/npm";
-    CARGO_HOME = "$HOME/.cache/cargo";
-    RUSTUP_HOME = "$HOME/.cache/rustup";
-    GOPATH = "$HOME/.cache/go";
-    GOCACHE = "$HOME/.cache/go-build";
-    PIP_CACHE_DIR = "$HOME/.cache/pip";
 
-    # Development directory
-    PROJECTS_DIR = "$HOME/dev";
 
-    # Editor
-    EDITOR = "vim";
-    VISUAL = "vim";
-  };
 
-  # System packages - core utilities and development tools
-  environment.systemPackages = with pkgs; [
-    # Core utilities
-    vim
-    git
-    curl
-    wget
-    htop
-    btop           # Better top
-    tmux
-    screen
-    ripgrep        # Fast grep
-    fd             # Fast find
-    jq             # JSON processor
 
-    # Network tools
-    tailscale
-    _1password-cli
-
-    # Development tools
-    gcc
-    gnumake
-    pkg-config
-
-    # Container tools
-    podman-compose
-    buildah        # Container image builder
-    skopeo         # Container image tool
-
-    # Btrfs tools
-    btrfs-progs
-    compsize       # Check compression ratios
-
-    # System monitoring
-    iotop
-    ncdu           # Disk usage analyzer
-    duf            # Modern df
-  ];
 
   # Development environments (optional - can be per-project with flakes)
   # Uncomment the languages you want available system-wide

@@ -12,9 +12,14 @@
       url = "github:brizzbuzz/opnix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = { nixpkgs, disko, opnix, ... }:
+  outputs = { nixpkgs, disko, opnix, home-manager, ... }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -31,6 +36,7 @@
         modules = [
           disko.nixosModules.disko
           opnix.nixosModules.default
+          home-manager.nixosModules.home-manager
           ./hosts/servers/hetzner-vps/hardware.nix
           ./hosts/servers/hetzner-vps/configuration.nix
           ./hosts/servers/hetzner-vps/disko.nix
