@@ -1,6 +1,6 @@
-# hosts/servers/hetzner-vps/configuration.nix
-# Optimized configuration for development server
-# Supports: Programming (Python, Node, Rust, Go), Containers, AI tools
+# hosts/servers/ovh-vps/default.nix
+# Optimized configuration for OVH VPS
+# Supports: Programming, Containers, AI tools
 { config, lib, pkgs, ... }:
 {
   imports = [
@@ -8,14 +8,12 @@
   ];
 
   # Hostname
-  networking.hostName = "hetzner-vps";
+  networking.hostName = "ovh-vps";
 
-  # Bootloader - GRUB with UEFI support
+  # Bootloader - GRUB with BIOS support (OVH VPS uses BIOS, not UEFI)
   boot.loader.grub = {
     enable = true;
-    efiSupport = true;
-    efiInstallAsRemovable = true;
-    device = "nodev";
+    device = "/dev/sda";  # BIOS boot to disk
     extraConfig = ''
       serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
       terminal_input serial console
@@ -28,12 +26,12 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   # Network configuration with systemd-networkd
-  # Your Hetzner server uses eth0
+  # OVH VPS uses ens3 interface
   networking.useDHCP = false;  # Disable to avoid conflict with systemd.network
   networking.useNetworkd = true;
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
-    matchConfig.Name = "eth0";
+    matchConfig.Name = "ens3";
     networkConfig = {
       DHCP = "ipv4";
       IPv6AcceptRA = true;
@@ -227,29 +225,23 @@
   # Uncomment the languages you want available system-wide
   # environment.systemPackages = with pkgs; [
   #   # Python
-  #   python3
-  #   python3Packages.pip
-  #   python3Packages.virtualenv
+  #   # python3
+  #   # python3Packages.pip
+  #   # python3Packages.virtualenv
   #
   #   # Node.js
-  #   nodejs_20
-  #   nodePackages.npm
-  #   nodePackages.pnpm
+  #   # nodejs_20
+  #   # nodePackages.npm
+  #   # nodePackages.pnpm
   #
   #   # Rust
-  #   rustc
-  #   cargo
-  #   rustfmt
-  #   clippy
+  #   # rustc
+  #   # cargo
+  #   # rustfmt
+  #   # clippy
   #
   #   # Go
-  #   go
-  #
-  #   # LSP servers
-  #   nodePackages.typescript-language-server
-  #   python3Packages.python-lsp-server
-  #   rust-analyzer
-  #   gopls
+  #   # go
   # ];
 
   # Automatic garbage collection

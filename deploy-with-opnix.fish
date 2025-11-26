@@ -209,6 +209,36 @@ function deploy
     end
 end
 
+# Deploy OVH VPS with nixos-anywhere
+function deploy-ovh
+    set server_ip $argv[1]
+
+    print_step "Starting OVH deployment to $server_ip..."
+    echo ""
+    print_warn "⚠️  This will WIPE THE DISK and install NixOS!"
+    echo ""
+
+    # Confirm deployment
+    read -P "Continue with deployment? (yes/no): " confirm
+    if test "$confirm" != "yes"
+        print_info "Deployment cancelled."
+        exit 0
+    end
+
+    # Setup token on target server before deployment
+    setup_token_on_server $server_ip
+
+    # Run nixos-anywhere using nix run for OVH
+    print_step "Running nixos-anywhere for OVH..."
+    echo ""
+    if nix run github:nix-community/nixos-anywhere -- --flake .#ovh-vps root@$server_ip
+        print_info "✓ OVH deployment completed successfully!"
+    else
+        print_error "OVH deployment failed!"
+        exit 1
+    end
+end
+
 # Post-deployment verification
 function verify_deployment
     set server_ip $argv[1]

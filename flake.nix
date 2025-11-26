@@ -38,6 +38,18 @@
         specialArgs = { inherit lib pkgs; };
       };
 
+      nixosConfigurations.ovh-vps = lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          disko.nixosModules.disko
+          opnix.nixosModules.default
+          ./hosts/servers/ovh-vps/hardware.nix
+          ./hosts/servers/ovh-vps/default.nix
+          ./hosts/servers/ovh-vps/disko.nix
+        ];
+        specialArgs = { inherit lib pkgs; };
+      };
+
       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           nil
