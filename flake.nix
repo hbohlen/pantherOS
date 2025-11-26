@@ -20,10 +20,14 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-facter-modules = {
+      url = "github:nix-community/nixos-facter-modules";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
-  outputs = { nixpkgs, disko, opnix, home-manager, nixvim, ... }:
+  outputs = { nixpkgs, disko, opnix, home-manager, nixvim, nixos-facter-modules, ... }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -58,9 +62,23 @@
           ./hosts/servers/ovh-vps/disko.nix
         ];
         specialArgs = { inherit lib pkgs; };
-      };
+       };
 
-      devShells.${system}.default = pkgs.mkShell {
+       nixosConfigurations.yoga = lib.nixosSystem {
+         system = "x86_64-linux";
+         modules = [
+           # disko.nixosModules.disko  # Commented out for configuration testing
+           opnix.nixosModules.default
+           home-manager.nixosModules.home-manager
+           nixos-facter-modules.nixosModules.facter
+           { config.facter.reportPath = ./hardware-reports/yoga-20251126-152255.json; }
+           ./hosts/yoga/default.nix
+           # ./hosts/yoga/disko.nix  # Commented out for configuration testing
+         ];
+         specialArgs = { inherit lib pkgs; };
+       };
+
+       devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           nil
           nixd

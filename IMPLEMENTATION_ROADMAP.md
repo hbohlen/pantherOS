@@ -56,6 +56,8 @@ This roadmap provides detailed micro-steps for implementing all OpenSpec change 
 
 **Note**: Basic neovim installation completed. Advanced nixvim configuration with plugins deferred due to compatibility issues with current nixvim version. Will be addressed in future update.
 
+**Yoga Host Status**: ✅ Fully configured with nixos-facter-modules integration, ready for deployment.
+
 ### 5. add-opencode-ai ✅ COMPLETED
 **Proposal**: [add-opencode-ai/proposal.md](openspec/changes/add-opencode-ai/proposal.md)
 
@@ -91,8 +93,8 @@ This roadmap provides detailed micro-steps for implementing all OpenSpec change 
 1. Run `sudo scripts/scan-hardware.sh zephyrus` on target device ⏳ (requires zephyrus access)
 2. Run `sudo scripts/scan-hardware.sh yoga` on target device ✅ COMPLETED
 3. Transfer generated JSON reports to project repository ✅ COMPLETED
-4. Use nixos-facter-modules for automatic hardware configuration ⏳ (next step)
-5. Create host configurations in `hosts/zephyrus/` and `hosts/yoga/` ⏳ (after zephyrus scan)
+4. Use nixos-facter-modules for automatic hardware configuration ✅ COMPLETED
+5. Create host configurations in `hosts/zephyrus/` and `hosts/yoga/` ✅ COMPLETED (yoga done)
 
 ### 6. add-personal-device-hosts
 **Proposal**: [add-personal-device-hosts/proposal.md](openspec/changes/add-personal-device-hosts/proposal.md)
