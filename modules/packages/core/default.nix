@@ -5,7 +5,6 @@
   # Core system packages - essential utilities and tools
   environment.systemPackages = with pkgs; [
     # Core utilities
-    vim
     git
     curl
     wget

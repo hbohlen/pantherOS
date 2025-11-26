@@ -41,18 +41,20 @@ This roadmap provides detailed micro-steps for implementing all OpenSpec change 
 5. Test system build with `sudo nixos-rebuild build --flake .#hetzner-vps` ✅
 6. Verify fish shell works after rebuild ✅
 
-### 4. add-nixvim-setup
+### 4. add-nixvim-setup ✅ PARTIALLY COMPLETED
 **Proposal**: [add-nixvim-setup/proposal.md](openspec/changes/add-nixvim-setup/proposal.md)
 
 **Micro Steps**:
-1. Add `nixvim` flake input to `flake.nix`
-2. Configure nixvim in NixOS configuration with essential plugins
-3. Add `hardtime.nvim` and `precognition.nvim` as required plugins
-4. Add additional ADHD-friendly plugins (vim-tmux-navigator, vim-surround, etc.)
-5. Replace basic vim with nixvim as default editor
-6. Test build with `nix flake check`
-7. Test system build with `sudo nixos-rebuild build --flake .#hetzner-vps`
-8. Verify `EDITOR` environment variable changed from `vim` to `nvim`
+1. Add `nixvim` flake input to `flake.nix` ✅
+2. Configure basic neovim installation ✅
+3. Add `hardtime.nvim` and `precognition.nvim` as required plugins ⏳ (compatibility issues - to be resolved)
+4. Add additional ADHD-friendly plugins (vim-tmux-navigator, vim-surround, etc.) ⏳ (compatibility issues - to be resolved)
+5. Replace basic vim with neovim as default editor ✅
+6. Test build with `nix flake check` ✅
+7. Test system build with `sudo nixos-rebuild build --flake .#hetzner-vps` ✅
+8. Verify `EDITOR` environment variable changed from `vim` to `nvim` ✅
+
+**Note**: Basic neovim installation completed. Advanced nixvim configuration with plugins deferred due to compatibility issues with current nixvim version. Will be addressed in future update.
 
 ### 5. add-opencode-ai
 **Proposal**: [add-opencode-ai/proposal.md](openspec/changes/add-opencode-ai/proposal.md)

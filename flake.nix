@@ -16,10 +16,14 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixvim = {
+      url = "github:nix-community/nixvim";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
-  outputs = { nixpkgs, disko, opnix, home-manager, ... }:
+  outputs = { nixpkgs, disko, opnix, home-manager, nixvim, ... }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
