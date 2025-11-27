@@ -1,12 +1,13 @@
 # hosts/zephyrus/default.nix
-# Basic host configuration for zephyrus
-# TODO: Update with specific hardware requirements once facter report is available
+# ASUS ROG Zephyrus G15 Configuration
+# Uses hybrid approach: nixos-hardware base + custom optimizations
+# See meta.nix for detailed hardware configuration
 { config, lib, pkgs, ... }:
 
 {
   imports = [
-    ./hardware.nix
-    # ./disko.nix  # Commented out for configuration testing
+    ./meta.nix           # Hybrid hardware configuration (nixos-hardware base + custom optimizations)
+    # ./disko.nix        # Commented out for configuration testing
     ../../modules
   ];
 
@@ -38,9 +39,9 @@
   };
 
   # User configuration - will be imported from modules
-  # home-manager configuration will be added when user setup is complete
 
   # Basic file systems for configuration testing
+  # Hardware configuration: see meta.nix (comprehensive ASUS ROG Zephyrus G15 support)
   # TODO: Replace with actual disko configuration for production
   fileSystems."/" = {
     device = "/dev/disk/by-label/nixos";

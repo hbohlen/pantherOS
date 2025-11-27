@@ -1,6 +1,6 @@
 import { tool } from "@opencode-ai/plugin/tool"
 import { mkdir } from "fs/promises"
-import { join, dirname, basename, extname, resolve } from "path"
+import { join, basename, extname, resolve } from "path"
 import { getApiKey } from "../env"
 
 // Function to detect if we're in test mode
@@ -164,7 +164,7 @@ export async function generateImage(prompt: string, config: ImageConfig = {}): P
   const extension = ".png"
   const outputPath = await getUniqueFilename(generationsDir, baseName, extension, false)
   
-  console.log(`Saving generated image to: ${outputPath}`)
+
   await Bun.write(outputPath, Buffer.from(b64, "base64"))
   
   const fileExists = await Bun.file(outputPath).exists()
@@ -261,7 +261,6 @@ export async function editImage(imagePath: string, prompt: string, config: Image
   
   const outputPath = await getUniqueFilename(editsDir, baseName, extension, true)
   
-  console.log(`Saving edited image to: ${outputPath}`)
   await Bun.write(outputPath, Buffer.from(b64, "base64"))
   
   const fileExists = await Bun.file(outputPath).exists()
@@ -324,7 +323,7 @@ export const generate = tool({
     outputDir: tool.schema.string().optional().describe("Custom output directory (default: ./generated-images/YYYY-MM-DD/)"),
     filename: tool.schema.string().optional().describe("Custom filename (default: generated)"),
   },
-  async execute(args, context) {
+  async execute(args, _context) {
     try {
       const config: ImageConfig = {
         outputDir: args.outputDir,
@@ -346,7 +345,7 @@ export const edit = tool({
     outputDir: tool.schema.string().optional().describe("Custom output directory (default: ./generated-images/YYYY-MM-DD/)"),
     filename: tool.schema.string().optional().describe("Custom filename (default: original name with _edit_XXX)"),
   },
-  async execute(args, context) {
+  async execute(args, _context) {
     try {
       const config: ImageConfig = {
         outputDir: args.outputDir,
@@ -366,7 +365,7 @@ export const analyze = tool({
     image: tool.schema.string().describe("File path or data URL of image to analyze"),
     question: tool.schema.string().describe("What to analyze about the image"),
   },
-  async execute(args, context) {
+  async execute(args, _context) {
     try {
       return await analyzeImage(args.image, args.question)
     } catch (error) {

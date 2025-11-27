@@ -1,4 +1,4 @@
-# hosts/servers/hetzner-vps/configuration.nix
+# hosts/servers/hetzner-vps/default.nix
 # Optimized configuration for development server
 # Supports: Programming (Python, Node, Rust, Go), Containers, AI tools
 { config, lib, pkgs, ... }:
@@ -111,6 +111,7 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     users.hbohlen = {
+      # Basic home configuration
       home = {
         username = "hbohlen";
         homeDirectory = "/home/hbohlen";
@@ -121,18 +122,58 @@
       nixpkgs.config.allowUnfree = true;
       home.enableNixpkgsReleaseCheck = false;
 
-      # Terminal tools, editor, and AI coding packages
+      # Enable XDG base directory specification
+      xdg.enable = true;
+
+      # OpenCode.ai configuration using xdg.configFile
+      # This links the opencode directory to ~/.config/opencode
+      xdg.configFile."opencode" = {
+        source = ../../../home/hbohlen/opencode;
+        recursive = true;
+      };
+
+      # Packages managed by home-manager
       home.packages = with pkgs; [
-        fzf      # Fuzzy finder
-        eza      # Modern ls replacement
-        fish     # Fish shell
-        neovim   # Default editor (nixvim configuration to be added later)
-        opencode # AI coding assistant
+        # Terminal tools
+        fish
+        fzf
+        eza
+        
+        # Development tools  
+        neovim
+        git
+        
+        # AI coding assistant
+        opencode
       ];
 
-      # Configure fish as default shell
+      # Fish shell configuration
       programs.fish = {
         enable = true;
+        shellInit = ''
+          # Set up OpenCode environment variables
+          set -gx OPENCODE_CONFIG_PATH "$HOME/.config/opencode"
+          set -gx OPENCODE_DATA_PATH "$HOME/.local/share/opencode"
+          set -gx OPENCODE_CACHE_PATH "$HOME/.cache/opencode"
+          
+          # Add OpenCode completions to PATH if available
+          if test -d "$HOME/.local/share/opencode/completions"
+            set -gx fish_user_paths "$fish_user_paths" "$HOME/.local/share/opencode/completions"
+          end
+          
+          # Aliases for common OpenCode commands
+          alias oc="opencode"
+          alias occ="opencode --config $OPENCODE_CONFIG_PATH"
+        '';
+      };
+
+      # Environment variables
+      home.sessionVariables = {
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+        OPENCODE_CONFIG_PATH = "$HOME/.config/opencode";
+        OPENCODE_DATA_PATH = "$HOME/.local/share/opencode";
+        OPENCODE_CACHE_PATH = "$HOME/.cache/opencode";
       };
 
       # Basic home-manager configuration
@@ -151,8 +192,6 @@
     # Podman uses /var/lib/containers which is on @containers subvolume
     # with nodatacow for optimal performance
   };
-
-
 
 
 

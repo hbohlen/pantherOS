@@ -24,10 +24,14 @@
       url = "github:nix-community/nixos-facter-modules";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-ai-tools = {
+      url = "github:numtide/nix-ai-tools";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
-  outputs = { nixpkgs, disko, opnix, home-manager, nixvim, nixos-facter-modules, ... }:
+  outputs = { nixpkgs, disko, opnix, home-manager, nixvim, nixos-facter-modules, nix-ai-tools, ... }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -46,7 +50,7 @@
           opnix.nixosModules.default
           home-manager.nixosModules.home-manager
           ./hosts/servers/hetzner-vps/hardware.nix
-          ./hosts/servers/hetzner-vps/configuration.nix
+          ./hosts/servers/hetzner-vps/default.nix
           ./hosts/servers/hetzner-vps/disko.nix
         ];
         specialArgs = { inherit lib pkgs; };
@@ -78,19 +82,19 @@
           specialArgs = { inherit lib pkgs; };
         };
 
-        nixosConfigurations.zephyrus = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            # disko.nixosModules.disko  # Commented out for configuration testing
-            opnix.nixosModules.default
-            home-manager.nixosModules.home-manager
-            # nixos-facter-modules.nixosModules.facter  # TODO: Enable once hardware report is available
-            # { config.facter.reportPath = ./hardware-reports/zephyrus-TODO.json; }
-            ./hosts/zephyrus/default.nix
-            # ./hosts/zephyrus/disko.nix  # Commented out for configuration testing
-          ];
-          specialArgs = { inherit lib pkgs; };
-        };
+        # nixosConfigurations.zephyrus = lib.nixosSystem {
+        #   system = "x86_64-linux";
+        #   modules = [
+        #     # disko.nixosModules.disko  # Commented out for configuration testing
+        #     opnix.nixosModules.default
+        #     home-manager.nixosModules.home-manager
+        #     # nixos-facter-modules.nixosModules.facter  # TODO: Enable once hardware report is available
+        #     # { config.facter.reportPath = ./hardware-reports/zephyrus-TODO.json; }
+        #     ./hosts/zephyrus/default.nix
+        #     # ./hosts/zephyrus/disko.nix  # Commented out for configuration testing
+        #   ];
+        #   specialArgs = { inherit lib pkgs; };
+        # };
 
         devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [

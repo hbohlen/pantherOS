@@ -1,10 +1,11 @@
 {
   "enabled": true,
-  "debug": false,
+  "debug": true,
+  "pruningMode": "smart",
   "pruning_summary": "detailed",
-  "protectedTools": ["task", "todowrite", "todoread", "context_pruning"],
-  "strategies": {
-    "onIdle": ["deduplications", "ai-analysis"],
-    "onTool": ["deduplications", "ai-analysis"],
+  "protectedTools": ["task", "todowrite", "todoread"],
+  "$schema": {
+    "onIdle": ["deduplication", "ai-analysis"],
+    "onTool": ["deduplication"],
   },
 }

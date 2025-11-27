@@ -1,0 +1,82 @@
+{
+  "$schema": "https://opencode.ai/docs/opencode.config.schema.json",
+
+  // Theme configuration
+  "theme": {
+    "preference": "auto",
+    "custom": null
+  },
+
+  // Editor integration
+  "editor": {
+    "preferred": "nvim",
+    "fallback": ["vim", "code", "nano"]
+  },
+
+  // Provider configurations (credentials managed separately via opencode auth)
+  "providers": {
+    "default": "openai"
+  },
+
+  // Features
+  "features": {
+    "autoComplete": true,
+    "linting": true,
+    "formatting": true,
+    "codeAnalysis": true,
+    "terminalIntegration": true
+  },
+
+  // Keyboard shortcuts
+  "shortcuts": {
+    "toggleSidebar": "Ctrl+Shift+A",
+    "runCommand": "Ctrl+Shift+C",
+    "quickCommand": "Ctrl+Shift+K"
+  },
+
+  // AI Model settings
+  "models": {
+    "completion": {
+      "provider": "openai",
+      "model": "gpt-4",
+      "temperature": 0.7,
+      "maxTokens": 2048
+    },
+    "analysis": {
+      "provider": "openai", 
+      "model": "gpt-4",
+      "temperature": 0.1,
+      "maxTokens": 4096
+    }
+  },
+
+  // Terminal settings
+  "terminal": {
+    "shell": "fish",
+    "workingDirectory": ".",
+    "environmentVariables": {
+      "OPENCODE_CONFIG_PATH": "~/.config/opencode"
+    }
+  },
+
+  // Logging configuration
+  "logging": {
+    "level": "info",
+    "file": "~/.local/share/opencode/opencode.log",
+    "rotate": {
+      "enabled": true,
+      "maxSize": "10MB",
+      "maxFiles": 5
+    }
+  },
+
+  // Permissions and security
+  "permissions": {
+    "fileAccess": {
+      "allow": ["**/*.txt", "**/*.md", "**/*.nix", "**/*.sh", "**/*.rs", "**/*.py", "**/*.js", "**/*.ts"],
+      "deny": ["**/.*", "**/*.key", "**/*.pem", "**/secrets/**"]
+    },
+    "networkAccess": true,
+    "commandExecution": true
+  }
+}

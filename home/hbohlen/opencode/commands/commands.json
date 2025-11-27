@@ -1,0 +1,23 @@
+[
+  {
+    "name": "explain-code",
+    "description": "Explain complex code snippets",
+    "command": "explain",
+    "usage": "opencode explain <file>",
+    "category": "analysis"
+  },
+  {
+    "name": "generate-tests", 
+    "description": "Generate unit tests for functions",
+    "command": "test",
+    "usage": "opencode test <file>",
+    "category": "development"
+  },
+  {
+    "name": "refactor-code",
+    "description": "Refactor code for better patterns",
+    "command": "refactor", 
+    "usage": "opencode refactor <file>",
+    "category": "improvement"
+  }
+]
