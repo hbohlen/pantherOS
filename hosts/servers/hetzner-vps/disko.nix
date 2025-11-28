@@ -38,7 +38,11 @@
               size = "100%";
               content = {
                 type = "btrfs";
-                extraArgs = [ "-f" "-L" "nixos" ]; # Force and label
+                extraArgs = [
+                  "-f"
+                  "-L"
+                  "nixos"
+                ]; # Force and label
 
                 # Btrfs subvolumes - organized by workload type
                 subvolumes = {
@@ -48,10 +52,10 @@
                   "@root" = {
                     mountpoint = "/";
                     mountOptions = [
-                      "compress=zstd:3"  # Good compression for system files
-                      "noatime"          # Performance: don't update access times
-                      "space_cache=v2"   # Modern space cache
-                      "discard=async"    # SSD: async TRIM
+                      "compress=zstd:3" # Good compression for system files
+                      "noatime" # Performance: don't update access times
+                      "space_cache=v2" # Modern space cache
+                      "discard=async" # SSD: async TRIM
                     ];
                   };
 
@@ -59,7 +63,7 @@
                   "@nix" = {
                     mountpoint = "/nix";
                     mountOptions = [
-                      "compress=zstd:1"  # Light compression (lots of similar files)
+                      "compress=zstd:1" # Light compression (lots of similar files)
                       "noatime"
                       "space_cache=v2"
                       "discard=async"
@@ -70,7 +74,7 @@
                   "@log" = {
                     mountpoint = "/var/log";
                     mountOptions = [
-                      "compress=zstd:3"  # Logs compress very well
+                      "compress=zstd:3" # Logs compress very well
                       "noatime"
                       "space_cache=v2"
                       "discard=async"
@@ -81,7 +85,7 @@
                   "@var-cache" = {
                     mountpoint = "/var/cache";
                     mountOptions = [
-                      "compress=zstd:1"  # Light compression, frequently rewritten
+                      "compress=zstd:1" # Light compression, frequently rewritten
                       "noatime"
                       "space_cache=v2"
                       "discard=async"
@@ -92,7 +96,7 @@
                   "@tmp" = {
                     mountpoint = "/tmp";
                     mountOptions = [
-                      "compress=no"      # Temp files, speed over space
+                      "compress=no" # Temp files, speed over space
                       "noatime"
                       "space_cache=v2"
                       "discard=async"
@@ -105,8 +109,8 @@
                   "@containers" = {
                     mountpoint = "/var/lib/containers";
                     mountOptions = [
-                      "nodatacow"        # CRITICAL: CoW kills container performance
-                      "compress=no"      # Container images already compressed
+                      "nodatacow" # CRITICAL: CoW kills container performance
+                      "compress=no" # Container images already compressed
                       "noatime"
                       "space_cache=v2"
                       "discard=async"
@@ -119,7 +123,7 @@
                   "@home" = {
                     mountpoint = "/home";
                     mountOptions = [
-                      "compress=zstd:3"  # Good compression for user files
+                      "compress=zstd:3" # Good compression for user files
                       "noatime"
                       "space_cache=v2"
                       "discard=async"
@@ -132,8 +136,8 @@
                   "@dev" = {
                     mountpoint = "/home/hbohlen/dev";
                     mountOptions = [
-                      "compress=zstd:3"  # Source code compresses very well
-                      "noatime"          # Performance for file operations
+                      "compress=zstd:3" # Source code compresses very well
+                      "noatime" # Performance for file operations
                       "space_cache=v2"
                       "discard=async"
                     ];
@@ -143,7 +147,7 @@
                   "@config" = {
                     mountpoint = "/home/hbohlen/.config";
                     mountOptions = [
-                      "compress=zstd:3"  # Config files compress well
+                      "compress=zstd:3" # Config files compress well
                       "noatime"
                       "space_cache=v2"
                       "discard=async"
@@ -154,7 +158,7 @@
                   "@local" = {
                     mountpoint = "/home/hbohlen/.local";
                     mountOptions = [
-                      "compress=zstd:2"  # Mixed content, medium compression
+                      "compress=zstd:2" # Mixed content, medium compression
                       "noatime"
                       "space_cache=v2"
                       "discard=async"
@@ -165,7 +169,7 @@
                   "@user-cache" = {
                     mountpoint = "/home/hbohlen/.cache";
                     mountOptions = [
-                      "compress=zstd:1"  # Frequently rewritten, light compression
+                      "compress=zstd:1" # Frequently rewritten, light compression
                       "noatime"
                       "space_cache=v2"
                       "discard=async"
@@ -178,7 +182,7 @@
                   "@ai-tools" = {
                     mountpoint = "/home/hbohlen/.ai-tools";
                     mountOptions = [
-                      "compress=zstd:1"  # AI models don't compress well
+                      "compress=zstd:1" # AI models don't compress well
                       "noatime"
                       "space_cache=v2"
                       "discard=async"
@@ -191,8 +195,8 @@
                   "@swap" = {
                     mountpoint = "/swap";
                     mountOptions = [
-                      "nodatacow"        # Required for swap
-                      "compress=no"      # No compression for swap
+                      "nodatacow" # Required for swap
+                      "compress=no" # No compression for swap
                       "noatime"
                     ];
                     swap.swapfile.size = "4G"; # 4GB swap

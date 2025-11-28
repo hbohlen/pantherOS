@@ -7,11 +7,13 @@ This document outlines the hardware scanning process for the zephyrus and yoga p
 ## Tools Used
 
 ### NixOS Facter
+
 - **Repository**: https://github.com/nix-community/nixos-facter
 - **Purpose**: Generates detailed JSON hardware reports
 - **Installation**: Available in nixpkgs as `nixos-facter`
 
 ### NixOS Facter Modules
+
 - **Repository**: https://github.com/nix-community/nixos-facter-modules
 - **Purpose**: NixOS modules that automatically configure hardware based on facter reports
 - **Features**: Automatic detection and configuration of network, graphics, USB, and other hardware
@@ -19,6 +21,7 @@ This document outlines the hardware scanning process for the zephyrus and yoga p
 ## Hardware Scanning Workflow
 
 ### Prerequisites
+
 - Physical access to target devices (zephyrus and yoga)
 - Devices must be running (can be live USB or installed system)
 - Root/sudo access on target devices
@@ -36,6 +39,7 @@ sudo nix run nixpkgs#nixos-facter -- -o /tmp/yoga-facter.json
 ```
 
 **Alternative using latest version:**
+
 ```bash
 # Using latest development version
 sudo nix run \
@@ -97,6 +101,7 @@ outputs = { nixos-facter-modules, ... }: {
 ### Step 5: Generate Hardware Configurations
 
 The nixos-facter-modules will automatically:
+
 - Detect network interfaces and configure networking
 - Configure graphics drivers
 - Set up USB devices
@@ -106,6 +111,7 @@ The nixos-facter-modules will automatically:
 ### Step 6: Manual Hardware Configuration
 
 For components not automatically detected, manually create:
+
 - `hardware.nix`: Manual hardware configuration overrides
 - `disko.nix`: Disk partitioning configuration
 - `meta.nix`: Hardware specifications summary
@@ -134,6 +140,7 @@ sudo nixos-rebuild build --flake .#yoga
 ### Fallback Options
 
 If nixos-facter doesn't detect certain hardware:
+
 - Use traditional `nixos-generate-config` as fallback
 - Manually specify hardware configuration in `hardware.nix`
 - Reference NixOS Hardware repository for device-specific configs
@@ -141,6 +148,7 @@ If nixos-facter doesn't detect certain hardware:
 ## Next Steps
 
 After hardware scanning is complete:
+
 1. Implement `add-personal-device-hosts` (Phase 3, Step 6)
 2. Configure personal device tools (Phase 4)
 3. Test deployments on physical hardware

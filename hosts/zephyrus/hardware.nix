@@ -4,9 +4,15 @@
 
 {
   # Boot configuration - placeholder
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "ahci"
+    "usbhid"
+    "sd_mod"
+  ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];  # Assuming AMD CPU - update based on actual hardware
+  boot.kernelModules = [ "kvm-amd" ]; # Assuming AMD CPU - update based on actual hardware
   boot.extraModulePackages = [ ];
 
   # Networking

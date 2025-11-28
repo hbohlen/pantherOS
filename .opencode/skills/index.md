@@ -15,6 +15,7 @@ This index provides a comprehensive listing of all available skills in pantherOS
 ### Deployment
 
 #### pantheros-deployment-orchestrator
+
 - **Description**: Automates Phase 3 build, test, and deployment process
 - **Path**: `categories/deployment/pantheros-deployment-orchestrator`
 - **Tags**: deployment, automation, nixos, build, test
@@ -25,6 +26,7 @@ This index provides a comprehensive listing of all available skills in pantherOS
 ### Hardware
 
 #### pantheros-hardware-scanner
+
 - **Description**: Scans and documents hardware specifications
 - **Path**: `categories/hardware/pantheros-hardware-scanner`
 - **Tags**: hardware, scanning, documentation, nixos
@@ -35,6 +37,7 @@ This index provides a comprehensive listing of all available skills in pantherOS
 ### Development
 
 #### pantheros-module-generator
+
 - **Description**: Generates NixOS modules with templates
 - **Path**: `categories/development/pantheros-module-generator`
 - **Tags**: development, modules, nixos, templates
@@ -45,6 +48,7 @@ This index provides a comprehensive listing of all available skills in pantherOS
 ### Security
 
 #### pantheros-secrets-manager
+
 - **Description**: Manages 1Password integration and secrets
 - **Path**: `categories/security/pantheros-secrets-manager`
 - **Tags**: security, secrets, 1password, opnix
@@ -55,6 +59,7 @@ This index provides a comprehensive listing of all available skills in pantherOS
 ### AI Workflow
 
 #### ai-memory-manager
+
 - **Description**: Manages AI memory layer and persistence
 - **Path**: `categories/ai-workflow/ai-memory-manager`
 - **Tags**: ai, memory, falkordb, graphiti
@@ -63,6 +68,7 @@ This index provides a comprehensive listing of all available skills in pantherOS
 - **Status**: Available (new)
 
 #### ai-memory-pod
+
 - **Description**: Manages AI memory container infrastructure
 - **Path**: `categories/ai-workflow/ai-memory-pod`
 - **Tags**: ai, podman, containers, deployment
@@ -71,6 +77,7 @@ This index provides a comprehensive listing of all available skills in pantherOS
 - **Status**: Available (new)
 
 #### ai-memory-plugin
+
 - **Description**: Integrates AI memory with OpenCode SDK
 - **Path**: `categories/ai-workflow/ai-memory-plugin`
 - **Tags**: ai, plugin, opencode, sdk
@@ -79,6 +86,7 @@ This index provides a comprehensive listing of all available skills in pantherOS
 - **Status**: Available (new)
 
 #### skills-orchestrator
+
 - **Description**: Manages skills lifecycle and integration
 - **Path**: `categories/ai-workflow/skills-orchestrator`
 - **Tags**: skills, management, integration, orchestration
@@ -91,11 +99,13 @@ This index provides a comprehensive listing of all available skills in pantherOS
 ### Using Skills
 
 #### List All Skills
+
 ```bash
 skills_list
 ```
 
 #### Filter by Category
+
 ```bash
 skills_list --category deployment
 skills_list --category hardware
@@ -105,6 +115,7 @@ skills_list --category ai-workflow
 ```
 
 #### Search Skills
+
 ```bash
 skills_list --search hardware
 skills_list --search deployment
@@ -112,6 +123,7 @@ skills_list --search memory
 ```
 
 #### Execute Skills
+
 ```bash
 # Deployment
 skills_deployment-orchestrator yoga
@@ -140,6 +152,7 @@ skills_skills-orchestrator migrate
 ### Integration with OpenCode
 
 #### Agent Usage
+
 Agents can invoke skills using `skills_` prefix:
 
 ```python
@@ -152,7 +165,9 @@ result = await task(
 ```
 
 #### Context Integration
+
 Skills receive context from OpenCode agents:
+
 - Agent information and session ID
 - User request and project context
 - Skill-specific parameters
@@ -184,6 +199,7 @@ skill-name/
 ### Standards
 
 See `standards/` directory for:
+
 - Skill structure guidelines
 - Metadata standards
 - Quality criteria
@@ -192,21 +208,27 @@ See `standards/` directory for:
 ## Tools
 
 ### Skill Indexer
+
 ```bash
 python tools/skill-indexer.py
 ```
+
 Regenerates skill index and documentation.
 
 ### Skill Validator
+
 ```bash
 python tools/skill-validator.py <skill-name>
 ```
+
 Validates skill structure and quality.
 
 ### Skill Migrator
+
 ```bash
 ./tools/skill-migrator.sh
 ```
+
 Migrates skills from project-level to .opencode/skills.
 
 ## Integration
@@ -214,6 +236,7 @@ Migrates skills from project-level to .opencode/skills.
 ### OpenCode Skills Plugin
 
 The opencode-skills plugin provides:
+
 - **Automatic Discovery**: Skills are automatically discovered
 - **Seamless Execution**: Skills can be executed from agents
 - **Context Integration**: Skills receive agent context
@@ -222,6 +245,7 @@ The opencode-skills plugin provides:
 ### Agent Integration
 
 Agents can:
+
 - **Discover Skills**: Query available skills
 - **Execute Skills**: Run skills with parameters
 - **Track Performance**: Monitor skill execution
@@ -230,12 +254,14 @@ Agents can:
 ## Quality Metrics
 
 ### Skill Quality
+
 - **Documentation**: All skills have comprehensive documentation
 - **Testing**: Skills include tests and validation
 - **Integration**: Skills integrate with opencode-skills plugin
 - **Performance**: Skills execute efficiently and reliably
 
 ### Coverage
+
 - **Categories**: All major domains covered
 - **Functionality**: Core capabilities available
 - **Integration**: Seamless agent integration
@@ -244,6 +270,7 @@ Agents can:
 ## Future Enhancements
 
 ### Planned Skills
+
 - **Performance Monitor**: System performance monitoring
 - **Backup Manager**: Automated backup and recovery
 - **Security Auditor**: Security audit and compliance checking
@@ -251,6 +278,7 @@ Agents can:
 - **Test Runner**: Comprehensive test execution
 
 ### Platform Integration
+
 - **Multi-Platform**: Support for different platforms
 - **Cloud Integration**: Cloud service integration
 - **API Integration**: External API integration
@@ -258,4 +286,4 @@ Agents can:
 
 ---
 
-*This index is automatically generated. Do not edit manually.*
+_This index is automatically generated. Do not edit manually._

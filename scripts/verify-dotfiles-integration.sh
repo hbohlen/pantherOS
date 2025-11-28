@@ -7,24 +7,24 @@ echo
 echo "1. Checking dotfiles module integration..."
 if [ -f "/home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix" ]; then
     echo "✅ OpenCode dotfiles module exists"
-    
+
     # Check module options
     if grep -q "mkEnableOption.*Enable OpenCode.ai and OpenAgent configuration management" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix; then
         echo "✅ OpenAgent enable option configured"
     fi
-    
+
     if grep -q "openAgent" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix; then
         echo "✅ OpenAgent configuration options available"
     fi
-    
+
     if grep -q "plugins" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix; then
         echo "✅ Plugin configuration option available"
     fi
-    
+
     if grep -q "xdg.configFile.*opencode/dcp.jsonc" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix; then
         echo "✅ DCP configuration managed as dotfile"
     fi
-    
+
     if grep -q "xdg.configFile.*opencode/opencode.jsonc" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix; then
         echo "✅ OpenCode config managed as dotfile"
     fi
@@ -38,12 +38,12 @@ echo "2. Checking home.nix dotfiles integration..."
 if [ -f "/home/hbohlen/dev/pantherOS/home/hbohlen/home.nix" ]; then
     if grep -q "home-manager.dotfiles.opencode-ai" /home/hbohlen/dev/pantherOS/home/hbohlen/home.nix; then
         echo "✅ Dotfiles module enabled in home.nix"
-        
+
         # Check configuration options
         if grep -q "openAgent" /home/hbohlen/dev/pantherOS/home/hbohlen/home.nix; then
             echo "✅ OpenAgent configuration present"
         fi
-        
+
         if grep -q "plugins.*@tarquinen/opencode-dcp" /home/hbohlen/dev/pantherOS/home/hbohlen/home.nix; then
             echo "✅ DCP plugin configured"
         fi
@@ -77,7 +77,7 @@ if [ -f "/home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc" ]; then
     echo "✅ Current dcp.jsonc exists and will be managed by dotfiles module"
     echo "   Expected managed content:"
     echo "   - enabled: true"
-    echo "   - debug: true" 
+    echo "   - debug: true"
     echo "   - pruningMode: smart"
     echo "   - protectedTools: [task, todowrite, todoread]"
     echo "   - onIdle: [deduplication, ai-analysis]"
@@ -94,4 +94,3 @@ echo "⚙️  Configurable options: Full coverage"
 echo
 echo "The OpenAgent DCP configuration is now managed as a dotfile!"
 echo "Use home-manager to manage and update OpenAgent configurations."
-

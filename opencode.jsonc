@@ -4,4 +4,11 @@
   "autoupdate": true,
   "plugin": ["@tarquinen/opencode-dcp", "opencode-skills"],
   "theme": "rosepine",
+
+  "mcp": {
+    "nixos": {
+      "type": "local",
+      "command": ["nix", "run", "github:utensils/mcp-nixos", "--"],
+    },
+  },
 }

@@ -1,7 +1,12 @@
 # hosts/yoga/default.nix
 # Yoga host configuration using nixos-facter-modules for automatic hardware detection
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -47,9 +52,9 @@
   users.users.hbohlen = {
     isNormalUser = true;
     extraGroups = [
-      "wheel"      # sudo access
-      "podman"     # container management
-      "docker"     # docker CLI compat
+      "wheel" # sudo access
+      "podman" # container management
+      "docker" # docker CLI compat
     ];
     # OpNix writes to /home/hbohlen/.ssh/authorized_keys
   };
@@ -67,7 +72,10 @@
   # Optimize nix store
   nix.settings = {
     auto-optimise-store = true;
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
   };
 
   # Basic file systems for configuration testing

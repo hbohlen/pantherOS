@@ -1,5 +1,5 @@
 # hosts/servers/hetzner-vps/hardware.nix
-{ config, lib, pkgs, modulesPath, ... }:
+{ modulesPath, ... }:
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")

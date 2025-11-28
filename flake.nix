@@ -28,22 +28,34 @@
       url = "github:numtide/nix-ai-tools";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     # DankMaterialShell - Material design shell configuration
     dgop = {
-      url = "github:dankpanic/dgop";
+      url = "github:AvengeMedia/dgop";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     DankMaterialShell = {
-      url = "github:danklinux/DankMaterialShell";
+      url = "github:AvengeMedia/DankMaterialShell";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.dgop.follows = "dgop";
     };
 
   };
 
-  outputs = { self, nixpkgs, disko, opnix, home-manager, nixvim, nixos-facter-modules, nix-ai-tools, dgop, dankMaterialShell }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      disko,
+      opnix,
+      home-manager,
+      nixvim,
+      nixos-facter-modules,
+      nix-ai-tools,
+      dgop,
+      DankMaterialShell,
+    }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -52,6 +64,11 @@
         config = {
           allowUnfree = true;
         };
+        overlays = [
+          (final: prev: {
+            opencode = nix-ai-tools.packages.${system}.opencode;
+          })
+        ];
       };
     in
     {
@@ -78,41 +95,41 @@
           ./hosts/servers/ovh-vps/disko.nix
         ];
         specialArgs = { inherit lib pkgs; };
-       };
+      };
 
-        nixosConfigurations.yoga = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            # disko.nixosModules.disko  # Commented out for configuration testing
-            opnix.nixosModules.default
-            home-manager.nixosModules.home-manager
-            nixos-facter-modules.nixosModules.facter
-            nixvim.nixosModules.nixvim
-            DankMaterialShell.nixosModules.default
-            { config.facter.reportPath = ./hosts/zephyrus/zephyrus-facter.json; }
-            ./hosts/zephyrus/default.nix
-            # ./hosts/zephyrus/disko.nix  # Commented out for configuration testing
-          ];
-          specialArgs = { inherit lib pkgs; };
-        };
+      nixosConfigurations.yoga = lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          # disko.nixosModules.disko  # Commented out for configuration testing
+          opnix.nixosModules.default
+          home-manager.nixosModules.home-manager
+          nixos-facter-modules.nixosModules.facter
+          nixvim.nixosModules.nixvim
+          DankMaterialShell.nixosModules.default
+          { config.facter.reportPath = ./hosts/zephyrus/zephyrus-facter.json; }
+          ./hosts/zephyrus/default.nix
+          # ./hosts/zephyrus/disko.nix  # Commented out for configuration testing
+        ];
+        specialArgs = { inherit lib pkgs; };
+      };
 
-        nixosConfigurations.zephyrus = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [
-            # disko.nixosModules.disko  # Commented out for configuration testing
-            opnix.nixosModules.default
-            home-manager.nixosModules.home-manager
-            nixos-facter-modules.nixosModules.facter
-            nixvim.nixosModules.nixvim
-            dankMaterialShell.nixosModules.dankMaterialShell
-            { config.facter.reportPath = ./hosts/zephyrus/zephyrus-facter.json; }
-            ./hosts/zephyrus/default.nix
-            # ./hosts/zephyrus/disko.nix  # Commented out for configuration testing
-          ];
-          specialArgs = { inherit lib pkgs; };
-        };
+      nixosConfigurations.zephyrus = lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          # disko.nixosModules.disko  # Commented out for configuration testing
+          opnix.nixosModules.default
+          home-manager.nixosModules.home-manager
+          nixos-facter-modules.nixosModules.facter
+          nixvim.nixosModules.nixvim
+          DankMaterialShell.nixosModules.dankMaterialShell
+          { config.facter.reportPath = ./hosts/zephyrus/zephyrus-facter.json; }
+          ./hosts/zephyrus/default.nix
+          # ./hosts/zephyrus/disko.nix  # Commented out for configuration testing
+        ];
+        specialArgs = { inherit lib pkgs; };
+      };
 
-        devShells.${system}.default = pkgs.mkShell {
+      devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
           nil
           nixd

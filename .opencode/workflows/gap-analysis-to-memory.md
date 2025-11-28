@@ -1,5 +1,5 @@
 ---
-description: "Automated Gap Analysis integration with Claude Memory"
+description: 'Automated Gap Analysis integration with Claude Memory'
 category: integration
 workflow_type: automated
 triggers: [gap-analysis-command, memory-integration-command]
@@ -20,15 +20,16 @@ This workflow automates the process of running gap analysis and saving results t
 **Command**: `/gap-analyze`
 
 **Context Loaded**:
+
 - `.opencode/context/project/project-context.md`
 - `.opencode/context/domain/nixos-configuration.md`
 - `.opencode/context/domain/hardware-specifications.md`
 - `.bmad-core/data/bmad-kb.md`
 
 **Expected Output**:
+
 ```markdown
-Gap Analysis Results
-====================
+# Gap Analysis Results
 
 1. **Hardware Optimization Documentation** (Priority: High)
    - Missing optimization docs for zephyrus NVIDIA config
@@ -60,6 +61,7 @@ Gap Analysis Results
 **Action**: Parse gap analysis output and categorize by priority and type
 
 **Categories**:
+
 - **Hardware**: Hardware-specific gaps
 - **Security**: Security and hardening gaps
 - **Monitoring**: Observability and monitoring gaps
@@ -68,6 +70,7 @@ Gap Analysis Results
 - **Organization**: Code organization gaps
 
 **Priority Levels**:
+
 - **High**: Critical issues requiring immediate attention
 - **Medium**: Important improvements
 - **Low**: Nice-to-have enhancements
@@ -77,6 +80,7 @@ Gap Analysis Results
 **Action**: Save each gap as a task in Claude Memory
 
 **Command Format**:
+
 ```bash
 claude-memory task add "Gap: [Gap Name]" \
   --priority [high|medium|low] \
@@ -85,6 +89,7 @@ claude-memory task add "Gap: [Gap Name]" \
 ```
 
 **Example**:
+
 ```bash
 # Save Hardware gaps
 claude-memory task add "Gap: Hardware optimization documentation incomplete" \
@@ -116,6 +121,7 @@ claude-memory task add "Gap: No system monitoring setup" \
 ```
 
 **Automated Script**:
+
 ```bash
 #!/bin/bash
 # gap-to-memory.sh
@@ -151,10 +157,12 @@ echo "View with: claude-memory task list --category gap-analysis"
 **Action**: Create comprehensive gap report with next steps
 
 **Report Structure**:
+
 ```markdown
 # Gap Analysis Report - $(date)
 
 ## Summary
+
 - **Total Gaps**: X
 - **High Priority**: X
 - **Medium Priority**: X
@@ -163,8 +171,10 @@ echo "View with: claude-memory task list --category gap-analysis"
 ## High Priority Gaps
 
 ### 1. Gap Name
+
 **Description**: Details
 **Action Items**:
+
 - [ ] Research solution
 - [ ] Implement fix
 - [ ] Verify solution
@@ -197,6 +207,7 @@ For each high-priority gap:
 **Action**: Inform user of results and next steps
 
 **Message Template**:
+
 ```
 ✅ Gap Analysis Complete!
 
@@ -229,12 +240,14 @@ Would you like me to:
 **User Input**: "Run gap analysis"
 
 **Assistant Actions**:
+
 1. Execute `/gap-analyze`
 2. Parse output
 3. Save to Claude Memory with priorities
 4. Display summary and next steps
 
 **Output**:
+
 ```
 ✅ Gap Analysis Complete!
 
@@ -262,12 +275,14 @@ Would you like me to research solutions for the high-priority gaps?
 **User Input**: "Analyze NixOS security gaps"
 
 **Assistant Actions**:
+
 1. Execute `/gap-analyze --category security`
 2. Parse security-specific gaps
 3. Save to Claude Memory with security category
 4. Focus on security remediation
 
 **Output**:
+
 ```
 ✅ Security Gap Analysis Complete!
 
@@ -295,12 +310,14 @@ Start with any task using: claude-memory task complete <id> --note "Started rese
 **Setup**: Run gap analysis weekly
 
 **Automated Process**:
+
 1. Schedule: Weekly gap analysis
 2. Compare: New vs existing gaps
 3. Update: Task priorities based on changes
 4. Report: Gap trends and progress
 
 **Cron Job** (optional):
+
 ```bash
 # Weekly gap analysis and memory update
 0 9 * * 1 /workspace/scripts/gap-analysis-weekly.sh
@@ -313,6 +330,7 @@ Start with any task using: claude-memory task complete <id> --note "Started rese
 **Action**: Provide fallback and manual memory storage
 
 **Message**:
+
 ```
 ❌ Gap analysis command failed.
 
@@ -327,6 +345,7 @@ Or retry gap analysis with: /gap-analyze --verbose
 **Action**: Retry once, then provide manual instructions
 
 **Message**:
+
 ```
 ⚠️ Gap analysis succeeded but memory storage failed once.
 

@@ -2,11 +2,11 @@
 # ASUS ROG Zephyrus G15 Configuration
 # Uses hybrid approach: nixos-hardware base + custom optimizations
 # See meta.nix for detailed hardware configuration
-{ config, lib, pkgs, ... }:
+{ lib, ... }:
 
 {
   imports = [
-    ./meta.nix           # Hybrid hardware configuration (nixos-hardware base + custom optimizations)
+    ./meta.nix # Hybrid hardware configuration (nixos-hardware base + custom optimizations)
     # ./disko.nix        # Commented out for configuration testing
     ../../modules
   ];

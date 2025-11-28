@@ -7,6 +7,7 @@ Your OpenAgent system is now fully integrated into your NixOS home-manager confi
 ## Integration Components
 
 ### 1. **Directory Structure**
+
 ```
 /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/
 ├── agents/           # 16 agent configurations
@@ -34,12 +35,14 @@ Your OpenAgent system is now fully integrated into your NixOS home-manager confi
 **File**: `/home/hbohlen/dev/pantherOS/home/hbohlen/home.nix`
 
 #### Dotfiles Integration
+
 - **Module-based management** via `home-manager.dotfiles.opencode-ai`
 - **Configuration files** managed as dotfiles in `~/.config/opencode/`
 - **Source directory preserved** for agents, commands, skills
 - **Environment variables** auto-configured for all OpenAgent paths
 
 #### Enhanced Environment Variables
+
 ```bash
 OPENCODE_CONFIG_PATH    # ~/.config/opencode
 OPENCODE_DATA_PATH      # ~/.local/share/opencode
@@ -56,6 +59,7 @@ OPENAGENT_SKILLS_PATH
 ### 3. **Fish Shell Integration**
 
 **Enhanced aliases** for OpenAgent operations:
+
 ```bash
 # Basic commands
 oc      # opencode
@@ -100,6 +104,7 @@ oa-status       # Display OpenAgent system status
 **File**: `/home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix`
 
 #### Enhanced Options
+
 ```nix
 home-manager.dotfiles.opencode-ai = {
   enable = true;              # Enable OpenCode/OpenAgent
@@ -113,35 +118,41 @@ home-manager.dotfiles.opencode-ai = {
 ```
 
 #### Auto-created Directories
+
 - `~/.cache/opencode/sessions/` - Session management
 - `~/.local/share/opencode/logs/` - System logs
 
 ## Key Features
 
 ### 1. **Universal Agent (openagent.md)**
+
 - **Safety-first** approach with approval gates
 - **Dual execution paths**: conversational vs task-based
 - **Comprehensive workflow**: Analyze → Approve → Execute → Validate → Summarize
 - **Smart delegation** to specialized subagents
 
 ### 2. **Specialized Subagents**
+
 - **Code agents**: build, review, test, analyze
 - **Core agents**: documentation, task management
 - **System builders**: agent generation, context organization
 - **Utilities**: image processing, analysis
 
 ### 3. **Command System**
+
 - **14 built-in commands** for common operations
 - **OpenSpec integration** for proposal management
 - **Context management** for project analysis
 - **Validation and optimization** tools
 
 ### 4. **Skills System**
+
 - **Directory-based** skill organization
 - **Reusable instructions** for common tasks
 - **Extensible** skill framework
 
 ### 5. **DCP (Dynamic Context Pruning)**
+
 - **Plugin**: `@tarquinen/opencode-dcp` from npm
 - **Smart pruning** of context to optimize performance
 - **Deduplication** of redundant content
@@ -152,29 +163,34 @@ home-manager.dotfiles.opencode-ai = {
 ## Usage Examples
 
 ### 1. **Project Analysis**
+
 ```bash
 octx                    # Basic context analysis
 octx-analyze            # Gap analysis
 ```
 
 ### 2. **Agent Operations**
+
 ```bash
 oa                      # List available agents
 oa-reviewer             # Invoke code reviewer
 ```
 
 ### 3. **OpenSpec Management**
+
 ```bash
 ospec-proposal          # Create new proposal
 ospec-apply             # Apply approved changes
 ```
 
 ### 4. **System Status**
+
 ```bash
 oa-status               # Check OpenAgent status
 ```
 
 ### 5. **Workflow Management**
+
 ```bash
 oa-validate             # Validate configuration
 oa-optimize             # Optimize setup
@@ -187,6 +203,7 @@ oa-optimize             # Optimize setup
 The OpenAgent configuration is now **managed via the dotfiles module** (`home-manager.dotfiles.opencode-ai`), which provides:
 
 #### Automatically Managed Files
+
 ```nix
 home-manager.dotfiles.opencode-ai = {
   enable = true;
@@ -204,6 +221,7 @@ home-manager.dotfiles.opencode-ai = {
 #### Generated Configuration Files
 
 **1. OpenCode Config** (`~/.config/opencode/opencode.jsonc`)
+
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
@@ -215,6 +233,7 @@ home-manager.dotfiles.opencode-ai = {
 ```
 
 **2. DCP Config** (`~/.config/opencode/dcp.jsonc`)
+
 ```json
 {
   "enabled": true,
@@ -230,11 +249,13 @@ home-manager.dotfiles.opencode-ai = {
 ```
 
 #### Source Directory Preserved
+
 - **Agents**: `~/.config/opencode/agents/` (from source directory)
-- **Commands**: `~/.config/opencode/commands/` (from source directory)  
+- **Commands**: `~/.config/opencode/commands/` (from source directory)
 - **Skills**: `~/.config/opencode/skills/` (from source directory)
 
 **DCP Plugin Features**:
+
 - **Plugin**: `@tarquinen/opencode-dcp` (npm: https://www.npmjs.com/package/@tarquinen/opencode-dcp)
 - **Smart pruning**: AI-powered context optimization
 - **Deduplication**: Removes redundant content automatically
@@ -246,21 +267,25 @@ home-manager.dotfiles.opencode-ai = {
 ## Verification
 
 ### Complete Integration Check
+
 ```bash
 /home/hbohlen/dev/pantherOS/scripts/verify-openagent-integration.sh
 ```
 
 ### DCP Plugin Verification
+
 ```bash
 /home/hbohlen/dev/pantherOS/scripts/verify-dcp-plugin.sh
 ```
 
 ### Dotfiles Module Verification
+
 ```bash
 /home/hbohlen/dev/pantherOS/scripts/verify-dotfiles-integration.sh
 ```
 
 **Verification Coverage**:
+
 - ✅ OpenAgent system integration (16 agents, 14 commands)
 - ✅ DCP plugin configuration and functionality
 - ✅ Dotfiles module management of configuration files
@@ -270,11 +295,13 @@ home-manager.dotfiles.opencode-ai = {
 ### Configuration Management
 
 **Update configurations** via home-manager:
+
 ```bash
 home-manager switch
 ```
 
 **Modify settings** by editing `/home/hbohlen/dev/pantherOS/home/hbohlen/home.nix`:
+
 ```nix
 home-manager.dotfiles.opencode-ai = {
   theme = "dark";              # Change theme
@@ -287,8 +314,9 @@ home-manager.dotfiles.opencode-ai = {
 ```
 
 **Add new plugins**:
+
 ```nix
-plugins = [ 
+plugins = [
   "@tarquinen/opencode-dcp",
   "@tarquinen/opencode-analytics"  # Add more plugins
 ];
@@ -307,16 +335,19 @@ plugins = [
 ### Dotfiles Module Benefits
 
 **Centralized Configuration**:
+
 - All OpenAgent settings managed through `home-manager.dotfiles.opencode-ai`
 - Configuration files auto-generated from Nix settings
 - Environment variables automatically configured
 
 **Flexible Updates**:
+
 - Modify themes, debug modes, plugin lists via Nix configuration
 - Add custom configuration files through `additionalConfig`
 - Maintain source directories for agents, commands, skills
 
 **Version Control**:
+
 - Configuration changes tracked in git through Nix configuration
 - Reproducible setup across machines
 - Easy rollback to previous configurations
@@ -324,16 +355,19 @@ plugins = [
 ### Configuration Examples
 
 **Change theme**:
+
 ```nix
 home-manager.dotfiles.opencode-ai.theme = "dark";
 ```
 
 **Disable debug mode**:
+
 ```nix
 home-manager.dotfiles.opencode-ai.openAgent.debug = false;
 ```
 
 **Add custom DCP configuration**:
+
 ```nix
 home-manager.dotfiles.opencode-ai.additionalConfig = {
   "custom-dcp-rules.json" = '{"rule": "custom setting"}';
@@ -341,6 +375,7 @@ home-manager.dotfiles.opencode-ai.additionalConfig = {
 ```
 
 **Add plugins**:
+
 ```nix
 home-manager.dotfiles.opencode-ai.plugins = [
   "@tarquinen/opencode-dcp"

@@ -6,6 +6,7 @@
 **Golden Rule**: If you can't easily test it, refactor it
 
 **Critical Patterns** (use these):
+
 - ✅ Pure functions (same input = same output, no side effects)
 - ✅ Immutability (create new data, don't modify)
 - ✅ Composition (build complex from simple)
@@ -13,6 +14,7 @@
 - ✅ Explicit dependencies (dependency injection)
 
 **Anti-Patterns** (avoid these):
+
 - ❌ Mutation, side effects, deep nesting
 - ❌ God modules, global state, large functions
 
@@ -27,18 +29,21 @@
 ## Principles
 
 ### Modular Design
+
 - Single responsibility per module
 - Clear interfaces (explicit inputs/outputs)
 - Independent and composable
 - < 100 lines per component (ideally < 50)
 
 ### Functional Approach
+
 - **Pure functions**: Same input = same output, no side effects
 - **Immutability**: Create new data, don't modify existing
 - **Composition**: Build complex from simple functions
 - **Declarative**: Describe what, not how
 
 ### Component Structure
+
 ```
 component/
 ├── index.js      # Public interface
@@ -50,6 +55,7 @@ component/
 ## Patterns
 
 ### Pure Functions
+
 ```javascript
 // ✅ Pure
 const add = (a, b) => a + b;
@@ -57,33 +63,42 @@ const formatUser = (user) => ({ ...user, fullName: `${user.firstName} ${user.las
 
 // ❌ Impure (side effects)
 let total = 0;
-const addToTotal = (value) => { total += value; return total; };
+const addToTotal = (value) => {
+  total += value;
+  return total;
+};
 ```
 
 ### Immutability
+
 ```javascript
 // ✅ Immutable
 const addItem = (items, item) => [...items, item];
 const updateUser = (user, changes) => ({ ...user, ...changes });
 
 // ❌ Mutable
-const addItem = (items, item) => { items.push(item); return items; };
+const addItem = (items, item) => {
+  items.push(item);
+  return items;
+};
 ```
 
 ### Composition
+
 ```javascript
 // ✅ Compose small functions
 const processUser = pipe(validateUser, enrichUserData, saveUser);
 const isValidEmail = (email) => validateEmail(normalizeEmail(email));
 
 // ❌ Deep inheritance
-class ExtendedUserManagerWithValidation extends UserManager { }
+class ExtendedUserManagerWithValidation extends UserManager {}
 ```
 
 ### Declarative
+
 ```javascript
 // ✅ Declarative
-const activeUsers = users.filter(u => u.isActive).map(u => u.name);
+const activeUsers = users.filter((u) => u.isActive).map((u) => u.name);
 
 // ❌ Imperative
 const names = [];
@@ -131,13 +146,15 @@ function createUserService(database, logger) {
     createUser: (userData) => {
       logger.info('Creating user');
       return database.insert('users', userData);
-    }
+    },
   };
 }
 
 // ❌ Hidden dependencies
 import db from './database.js';
-function createUser(userData) { return db.insert('users', userData); }
+function createUser(userData) {
+  return db.insert('users', userData);
+}
 ```
 
 ## Anti-Patterns

@@ -44,14 +44,14 @@ check_and_fix_permissions() {
     local nix_path=$1
     local expected_owner=$2
     local expected_group=$3
-    
+
     if [ -d "$nix_path" ]; then
         local actual_owner=$(stat -c "%U" "$nix_path")
         local actual_group=$(stat -c "%G" "$nix_path")
         local actual_perms=$(stat -c "%a" "$nix_path")
-        
+
         print_status "Checking $nix_path: owner=$actual_owner, group=$actual_group, perms=$actual_perms"
-        
+
         if [ "$actual_owner" != "$expected_owner" ] || [ "$actual_group" != "$expected_group" ]; then
             print_error "  Permission issue: expected owner:group $expected_owner:$expected_group, got $actual_owner:$actual_group"
             if [ "$CAN_MAKE_CHANGES" = true ]; then
@@ -114,7 +114,7 @@ check_and_fix_permissions "$PER_USER_GCTOOTS" "$CURRENT_USER" "$CURRENT_GROUP"
 print_status "Checking if nix develop environment can be accessed..."
 if command -v nix &> /dev/null; then
     print_status "  ✓ Nix command is available"
-    
+
     # Check if we're in a flake directory (for testing)
     if [ -f "./flake.nix" ] && [ "$(basename "$(pwd)")" = "pantherOS" ]; then
         print_status "  ✓ In a flake directory, checking if nix develop works..."

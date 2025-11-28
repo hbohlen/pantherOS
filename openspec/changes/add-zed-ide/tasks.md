@@ -21,4 +21,4 @@
    - Test Zed launches successfully
    - Verify basic editing functionality works
    - Test: Run `zed --version` and open a file</content>
-<parameter name="filePath">openspec/changes/add-zed-ide/tasks.md
+     <parameter name="filePath">openspec/changes/add-zed-ide/tasks.md

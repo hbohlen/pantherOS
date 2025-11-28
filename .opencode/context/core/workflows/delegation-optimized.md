@@ -1,21 +1,21 @@
 # Delegation Optimization Patterns
 
 <critical_rules priority="absolute" enforcement="strict">
-  <rule ref="safety_gates"/>
-  <rule ref="session_isolation"/>
-  <rule ref="cleanup_confirmation"/>
+<rule ref="safety_gates"/>
+<rule ref="session_isolation"/>
+<rule ref="cleanup_confirmation"/>
 </critical_rules>
 
 <execution_priority>
-  <tier level="1" desc="Safety & Critical">
-    <reference>safety_gates, session_isolation, cleanup_confirmation</reference>
-  </tier>
-  <tier level="2" desc="Core Operations">
-    <process>delegate_task → create_context → cleanup</process>
-  </tier>
-  <tier level="3" desc="Optimizations">
-    <patterns>lazy_init, error_handling, manifest_tracking</patterns>
-  </tier>
+<tier level="1" desc="Safety & Critical">
+<reference>safety_gates, session_isolation, cleanup_confirmation</reference>
+</tier>
+<tier level="2" desc="Core Operations">
+<process>delegate_task → create_context → cleanup</process>
+</tier>
+<tier level="3" desc="Optimizations">
+<patterns>lazy_init, error_handling, manifest_tracking</patterns>
+</tier>
 </execution_priority>
 
 <workflow id="task_delegation" template="standard">
@@ -58,9 +58,9 @@
 </templates>
 
 <delegation_rules when_to_delegate>
-  <condition category="complexity" value="multi_file"/>
-  <condition category="expertise" value="specialized"/>
-  <condition category="perspective" value="fresh_eyes"/>
+<condition category="complexity" value="multi_file"/>
+<condition category="expertise" value="specialized"/>
+<condition category="perspective" value="fresh_eyes"/>
 </delegation_rules>
 
 <references>

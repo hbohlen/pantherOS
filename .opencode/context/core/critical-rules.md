@@ -1,21 +1,21 @@
 # Critical Context System Rules
 
 <critical_rules priority="absolute" enforcement="strict">
-  <rule id="safety_gates" scope="all_context_operations">
-    ALWAYS request approval before deletion, file modifications, or dangerous operations
-  </rule>
-  <rule id="session_isolation" scope="session_management">
-    NEVER access or modify files outside current session directory
-  </rule>
-  <rule id="context_validation" scope="context_loading">
-    ALWAYS validate context files exist and are readable before loading
-  </rule>
-  <rule id="cleanup_confirmation" scope="session_cleanup">
-    ALWAYS confirm with user before deleting any session files or cleanup operations
-  </rule>
-  <rule id="single_source" scope="reference_management">
-    Define rules once and reference with @rule_id, never duplicate
-  </rule>
+<rule id="safety_gates" scope="all_context_operations">
+ALWAYS request approval before deletion, file modifications, or dangerous operations
+</rule>
+<rule id="session_isolation" scope="session_management">
+NEVER access or modify files outside current session directory
+</rule>
+<rule id="context_validation" scope="context_loading">
+ALWAYS validate context files exist and are readable before loading
+</rule>
+<rule id="cleanup_confirmation" scope="session_cleanup">
+ALWAYS confirm with user before deleting any session files or cleanup operations
+</rule>
+<rule id="single_source" scope="reference_management">
+Define rules once and reference with @rule_id, never duplicate
+</rule>
 </critical_rules>
 
 <context>
@@ -25,10 +25,10 @@
 </context>
 
 <quick_reference>
-  **Single Source**: All critical rules defined here, referenced with @rule_id
-  **Safety First**: Always prioritize user safety and data protection
-  **Session Isolation**: Never modify files outside active session
-  **Explicit Approval**: Always request confirmation for destructive operations
+**Single Source**: All critical rules defined here, referenced with @rule_id
+**Safety First**: Always prioritize user safety and data protection
+**Session Isolation**: Never modify files outside active session
+**Explicit Approval**: Always request confirmation for destructive operations
 </quick_reference>
 
 <references>

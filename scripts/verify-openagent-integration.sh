@@ -24,7 +24,7 @@ COMMANDS_COUNT=$(find /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/commands
 SKILLS_COUNT=$(find /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/skills -type d 2>/dev/null | wc -l)
 
 echo "📁 Agents: $AGENTS_COUNT files"
-echo "📁 Commands: $COMMANDS_COUNT files" 
+echo "📁 Commands: $COMMANDS_COUNT files"
 echo "📁 Skills: $SKILLS_COUNT directories"
 
 # Check key OpenAgent files
@@ -76,4 +76,3 @@ echo "🔧 Configuration files: Properly structured and linked"
 echo "📦 Environment variables: Set for all OpenAgent paths"
 echo "🐟 Fish shell: Enhanced with OpenAgent aliases"
 echo "✅ Ready to use!"
-

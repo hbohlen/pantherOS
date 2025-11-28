@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 
 {
   imports = [
@@ -20,7 +20,7 @@
     source = ./opencode;
     recursive = true;
   };
-  
+
   # Enable OpenCode/OpenAgent enhanced dotfiles management
   # This will add additional configuration files and environment variables
   home-manager.dotfiles.opencode-ai = {
@@ -43,19 +43,19 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
-    
+
     # OpenCode/OpenAgent configuration paths
     OPENCODE_CONFIG_PATH = "${config.home.homeDirectory}/.config/opencode";
     OPENCODE_DATA_PATH = "${config.home.homeDirectory}/.local/share/opencode";
     OPENCODE_CACHE_PATH = "${config.home.homeDirectory}/.cache/opencode";
-    
+
     # OpenAgent specific paths
     OPENAGENT_CONTEXT_PATH = "${config.home.homeDirectory}/.config/opencode/context";
     OPENAGENT_SESSIONS_PATH = "${config.home.homeDirectory}/.cache/opencode/sessions";
     OPENAGENT_AGENTS_PATH = "${config.home.homeDirectory}/.config/opencode/agents";
     OPENAGENT_COMMANDS_PATH = "${config.home.homeDirectory}/.config/opencode/commands";
     OPENAGENT_SKILLS_PATH = "${config.home.homeDirectory}/.config/opencode/skills";
-    
+
     # OpenAgent operational modes
     OPENAGENT_DEBUG = "true";
     OPENAGENT_DCP_ENABLED = "true";
@@ -68,11 +68,11 @@
     fish
     fzf
     eza
-    
-    # Development tools  
+
+    # Development tools
     neovim
     git
-    
+
     # AI coding assistant (from nixpkgs or nix-ai-tools)
     opencode
   ];
@@ -85,54 +85,54 @@
       set -gx OPENCODE_CONFIG_PATH "$HOME/.config/opencode"
       set -gx OPENCODE_DATA_PATH "$HOME/.local/share/opencode"
       set -gx OPENCODE_CACHE_PATH "$HOME/.cache/opencode"
-      
+
       # OpenAgent specific environment variables
       set -gx OPENAGENT_CONTEXT_PATH "$HOME/.config/opencode/context"
       set -gx OPENAGENT_SESSIONS_PATH "$HOME/.cache/opencode/sessions"
       set -gx OPENAGENT_AGENTS_PATH "$HOME/.config/opencode/agents"
       set -gx OPENAGENT_COMMANDS_PATH "$HOME/.config/opencode/commands"
       set -gx OPENAGENT_SKILLS_PATH "$HOME/.config/opencode/skills"
-      
+
       # Add OpenCode completions to PATH if available
       if test -d "$HOME/.local/share/opencode/completions"
         set -gx fish_user_paths "$fish_user_paths" "$HOME/.local/share/opencode/completions"
       end
-      
+
       # OpenAgent command aliases
       alias oc="opencode"
       alias occ="opencode --config $OPENCODE_CONFIG_PATH"
       alias oa="opencode --agents"
       alias ocmd="opencode --commands"
       alias oskill="opencode --skills"
-      
+
       # OpenAgent agent management aliases
       alias oa-openagent="opencode agent openagent"
       alias oa-codeagent="opencode agent code-agent"
       alias oa-reviewer="opencode agent reviewer"
       alias oa-tester="opencode agent tester"
-      
+
       # OpenAgent workflow aliases
       alias oa-workflow="opencode workflow"
       alias oa-validate="opencode validate"
       alias oa-optimize="opencode optimize"
-      
+
       # OpenSpec integration aliases
       alias ospec="opencode openspec"
       alias ospec-proposal="opencode openspec-proposal"
       alias ospec-apply="opencode openspec-apply"
       alias ospec-archive="opencode openspec-archive"
-      
+
       # Context management aliases
       alias octx="opencode context"
       alias octx-build="opencode build-context-system"
       alias octx-analyze="opencode gap-analyze"
-      
+
       # Quick access to OpenAgent commands
       alias oa-test="opencode test"
       alias oa-build="opencode build"
       alias oa-clean="opencode clean"
       alias oa-commit="opencode commit"
-      
+
       # Print OpenAgent status
       function oa-status
         echo "=== OpenAgent Status ==="
@@ -145,10 +145,4 @@
     '';
   };
 
-  # Optional: Enable OpenCode dotfiles module for additional configuration
-  home-manager.dotfiles.opencode-ai = {
-    enable = true;
-    theme = "auto";
-    # API key will be managed via opencode auth login or environment
-  };
 }

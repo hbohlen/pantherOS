@@ -1,7 +1,7 @@
 # hosts/servers/hetzner-vps/default.nix
 # Optimized configuration for development server
 # Supports: Programming (Python, Node, Rust, Go), Containers, AI tools
-{ config, lib, pkgs, ... }:
+{ config, pkgs, ... }:
 {
   imports = [
     ./hardware.nix
@@ -30,7 +30,7 @@
 
   # Network configuration with systemd-networkd
   # Your Hetzner server uses eth0
-  networking.useDHCP = false;  # Disable to avoid conflict with systemd.network
+  networking.useDHCP = false; # Disable to avoid conflict with systemd.network
   networking.useNetworkd = true;
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
@@ -94,8 +94,6 @@
     allowedUDPPorts = [ config.services.tailscale.port ];
   };
 
-
-
   # SSH configuration - hardened
   services.openssh = {
     enable = true;
@@ -110,6 +108,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    backupFileExtension = ".hm-bak";
     users.hbohlen = {
       # Basic home configuration
       home = {
@@ -148,16 +147,12 @@
   # Podman - Container runtime
   virtualisation.podman = {
     enable = true;
-    dockerCompat = true;  # Docker CLI compatibility
+    dockerCompat = true; # Docker CLI compatibility
     defaultNetwork.settings.dns_enabled = true;
 
     # Podman uses /var/lib/containers which is on @containers subvolume
     # with nodatacow for optimal performance
   };
-
-
-
-
 
   # Development environments (optional - can be per-project with flakes)
   # Uncomment the languages you want available system-wide
@@ -198,7 +193,10 @@
   # Optimize nix store
   nix.settings = {
     auto-optimise-store = true;
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
   };
 
   # Automatic btrfs snapshots (optional but recommended)

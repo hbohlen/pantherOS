@@ -10,11 +10,11 @@
   users.users.hbohlen = {
     isNormalUser = true;
     extraGroups = [
-      "wheel"      # sudo access
-      "podman"     # container management
-      "docker"     # docker CLI compat
+      "wheel" # sudo access
+      "podman" # container management
+      "docker" # docker CLI compat
     ];
-    shell = pkgs.fish;  # Set fish as default shell
+    shell = pkgs.fish; # Set fish as default shell
     # OpNix writes to /home/hbohlen/.ssh/authorized_keys
   };
 

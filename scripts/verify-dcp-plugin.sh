@@ -20,25 +20,25 @@ echo
 echo "2. Checking DCP configuration file..."
 if [ -f "/home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc" ]; then
     echo "✅ dcp.jsonc exists"
-    
+
     # Check key settings
     if grep -q '"enabled": true' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc; then
         echo "✅ DCP enabled"
     fi
-    
+
     if grep -q '"pruningMode": "smart"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc; then
         echo "✅ Smart pruning mode enabled"
     fi
-    
+
     if grep -q '"protectedTools"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc; then
         echo "✅ Protected tools configured"
     fi
-    
+
     # Check for idle/ontidle actions
     if grep -q '"onIdle"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc; then
         echo "✅ Idle cleanup actions configured"
     fi
-    
+
     if grep -q '"onTool"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc; then
         echo "✅ Tool-triggered pruning configured"
     fi
@@ -79,4 +79,3 @@ echo "🎯 Integration: Ready for OpenAgent context management"
 echo
 echo "The @tarquinen/opencode-dcp plugin is properly integrated and configured!"
 echo "Plugin URL: https://www.npmjs.com/package/@tarquinen/opencode-dcp"
-

@@ -23,7 +23,6 @@
 
 > 📹 **Following along with the video?** The simplified structure shown in the tutorial is available on the [`video-simple`](https://github.com/darrenhinde/OpenAgents/tree/video-simple) branch.
 
-
 ## Why Use This?
 
 - ✅ **Multi-language support** - Works with TypeScript, Python, Go, Rust, and more
@@ -37,9 +36,11 @@
 ## Quick Start
 
 ### Step 1: Install OpenCode CLI (Follow official guide)
+
 ```bash
-https://opencode.ai/docs# 
+https://opencode.ai/docs#
 ```
+
 ### Step 2: Install Agents & Commands
 
 **Option A: Interactive Installer**
@@ -56,6 +57,7 @@ curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install
 # Run interactively
 bash install.sh
 ```
+
 </details>
 
 <details>
@@ -68,6 +70,7 @@ curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install
 # Run interactively
 bash install.sh
 ```
+
 </details>
 
 <details>
@@ -85,9 +88,11 @@ wsl bash install.sh
 ```
 
 > **Note:** Git Bash comes with Git for Windows. [Download here](https://git-scm.com/download/win)
+
 </details>
 
 The installer offers:
+
 - 🎯 **Quick Profiles**: Essential, Developer, Business, Full, or Advanced
 - 🎨 **Custom Selection**: Pick exactly what you need
 - 📦 **Smart Dependencies**: Auto-installs required components
@@ -120,6 +125,7 @@ curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install
 # Advanced - Full + System Builder (32 components)
 curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh | bash -s advanced
 ```
+
 </details>
 
 <details>
@@ -144,11 +150,13 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/darrenhinde/OpenAgents
 # Advanced profile
 & "C:\Program Files\Git\bin\bash.exe" install.sh advanced
 ```
+
 </details>
 
 > **New!** The `advanced` profile includes the **System Builder** - an interactive tool that generates complete custom AI systems tailored to your domain. [Learn more](docs/features/system-builder/)
 
 **Option C: Manual Install**
+
 ```bash
 # Clone this repository
 git clone https://github.com/darrenhinde/OpenAgents.git
@@ -162,6 +170,7 @@ cp -r .opencode/context ~/.opencode/
 ```
 
 ### Step 3: Start Building
+
 ```bash
 # Start the universal agent (recommended for new users)
 opencode --agent openagent
@@ -171,6 +180,7 @@ opencode --agent openagent
 ```
 
 **What happens next:**
+
 1. OpenAgent analyzes your request (question or task)
 2. For tasks: proposes a plan and asks for approval
 3. Executes step-by-step with validation
@@ -195,6 +205,7 @@ openagent (universal coordinator)
 ```
 
 **The workflow:**
+
 1. **You describe** what you want to build
 2. **Agent plans** the implementation steps
 3. **You approve** the plan
@@ -209,6 +220,7 @@ openagent (universal coordinator)
 ## What's Included
 
 ### 🤖 Main Agents
+
 - **openagent** - Universal agent for questions and tasks (recommended default)
 - **codebase-agent** - Specialized development agent for code-focused workflows
 - **task-manager** - Breaks complex features into manageable subtasks
@@ -216,6 +228,7 @@ openagent (universal coordinator)
 - **image-specialist** - Generates images with Gemini AI
 
 ### 🔧 Specialized Subagents (Auto-delegated)
+
 - **reviewer** - Code review and security analysis
 - **tester** - Test creation and validation
 - **coder-agent** - Quick implementation tasks
@@ -224,6 +237,7 @@ openagent (universal coordinator)
 - **codebase-pattern-analyst** - Pattern discovery
 
 ### ⚡ Commands
+
 - **/commit** - Smart git commits with conventional format
 - **/optimize** - Code optimization
 - **/test** - Testing workflows
@@ -234,6 +248,7 @@ openagent (universal coordinator)
 - **/validate-repo** - Validate repository consistency
 
 ### 📚 Context Files
+
 - `core/essential-patterns.md` - Universal coding patterns
 - `project/project-context.md` - Your project-specific patterns
 
@@ -242,6 +257,7 @@ openagent (universal coordinator)
 ## Example Workflows
 
 ### Build a Feature
+
 ```bash
 opencode --agent openagent
 > "Create a user authentication system with email/password"
@@ -257,6 +273,7 @@ opencode --agent openagent
 ```
 
 ### Make a Commit
+
 ```bash
 # Make your changes
 git add .
@@ -268,7 +285,8 @@ git add .
 ```
 
 ### Add Your Patterns
-```bash
+
+````bash
 # Edit your project context
 nano ~/.opencode/context/project/project-context.md
 
@@ -281,7 +299,7 @@ nano ~/.opencode/context/project/project-context.md
 # ```
 
 # Agents will automatically use these patterns!
-```
+````
 
 ---
 
@@ -292,6 +310,7 @@ nano ~/.opencode/context/project/project-context.md
 The System Builder is an interactive tool that generates complete `.opencode` architectures customized to your needs.
 
 ### Quick Start
+
 ```bash
 # Install advanced profile (includes system builder)
 curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install.sh | bash -s advanced
@@ -301,6 +320,7 @@ curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install
 ```
 
 ### What It Does
+
 - 🎯 **Interactive Interview** - Asks about your domain, use cases, and requirements
 - 🤖 **Generates Complete System** - Creates orchestrator, subagents, context files, workflows, and commands
 - 🔗 **Integrates with Existing** - Detects and reuses your existing agents
@@ -308,6 +328,7 @@ curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install
 - 📚 **Production-Ready** - Includes documentation, testing guides, and examples
 
 ### Example
+
 ```bash
 $ /build-context-system
 
@@ -330,6 +351,7 @@ Purpose: Automate order processing and customer support
 ## Optional Add-ons
 
 ### 📱 Telegram Notifications
+
 Get notified when OpenCode sessions go idle.
 
 ```bash
@@ -351,6 +373,7 @@ cp env.example .env
 See [`.opencode/plugin/README.md`](.opencode/plugin/README.md) for detailed documentation.
 
 ### 🎨 Gemini AI Image Tools
+
 Generate and edit images using Gemini AI.
 
 ```bash
@@ -399,10 +422,13 @@ A: It's a teaching document explaining architecture patterns and how to extend t
 
 **Q: Can I use just one command or agent?**  
 A: Yes! Use the installer's list feature to see all components:
+
 ```bash
 ./install.sh --list
 ```
+
 Or cherry-pick individual files with curl:
+
 ```bash
 curl -o ~/.opencode/agent/codebase-agent.md \
   https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/.opencode/agent/codebase-agent.md
@@ -415,7 +441,9 @@ curl -o ~/.opencode/agent/codebase-agent.md \
 The installer offers five pre-configured profiles:
 
 ### 🎯 Essential (Minimal - 9 components)
+
 Minimal starter kit - universal agent with core subagents.
+
 - **Agents**: openagent
 - **Subagents**: task-manager, documentation
 - **Commands**: context, clean
@@ -425,7 +453,9 @@ Minimal starter kit - universal agent with core subagents.
 - **Best for**: Learning the system, lightweight tasks, minimal setup
 
 ### 💼 Developer (Recommended - 30 components)
+
 Complete software development environment with code generation, testing, review, and build tools.
+
 - Everything in Essential, plus:
 - **Agents**: codebase-agent
 - **Subagents**: coder-agent, reviewer, tester, build-agent, codebase-pattern-analyst
@@ -435,7 +465,9 @@ Complete software development environment with code generation, testing, review,
 - **Best for**: Most developers, daily use, full-featured development
 
 ### 📊 Business (15 components)
+
 Business process automation, content creation, and visual workflows.
+
 - **Agents**: openagent
 - **Subagents**: task-manager, documentation, image-specialist
 - **Commands**: context, clean, prompt-enhancer
@@ -446,13 +478,17 @@ Business process automation, content creation, and visual workflows.
 - **Best for**: Business automation, content creation, non-developers
 
 ### 📦 Full (36 components)
+
 Everything included - all agents, subagents, tools, and plugins.
+
 - Everything in Developer and Business combined, plus:
 - **Commands**: worktrees (git worktree management), validate-repo
 - **Best for**: Power users, exploring all features
 
 ### 🚀 Advanced (43 components)
+
 Full installation plus **System Builder** for creating custom AI architectures.
+
 - Everything in Full, plus:
 - **System Builder**: Interactive AI system generator
   - system-builder agent
@@ -477,19 +513,23 @@ curl -fsSL https://raw.githubusercontent.com/darrenhinde/OpenAgents/main/install
 ## Advanced
 
 ### Understanding the System
+
 Read [Agent System Blueprint](docs/features/agent-system-blueprint.md) to learn:
+
 - How context loading works (the `@` symbol)
 - Agent architecture patterns
 - How to create custom agents and commands
 - How to extend the system for your needs
 
 ### Safety & Security
+
 - **Approval-first workflow** - Agents propose plans before execution
 - **Configurable permissions** - Granular control over agent capabilities
 - **Secure credentials** - Environment variables for sensitive data
 - **Input sanitization** - Protection against injection attacks
 
 ### Project Structure
+
 ```
 .opencode/
 ├── agent/              # AI agents
@@ -542,6 +582,7 @@ OpenAgent will guide you through with a plan-first, approval-based approach. For
 **Learn more:** See the [OpenAgent Guide](docs/agents/openagent.md) for detailed workflow diagrams and tips.
 
 ---
+
 ## Support This Work
 
 If this helped you out and you're feeling generous, consider funding my coffee habit ☕
@@ -549,4 +590,3 @@ If this helped you out and you're feeling generous, consider funding my coffee h
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support-yellow?style=for-the-badge&logo=buy-me-a-coffee)](https://buymeacoffee.com/darrenhinde)
 
 Totally optional, but appreciated.
-

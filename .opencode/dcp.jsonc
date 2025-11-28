@@ -1,10 +1,9 @@
 {
   "enabled": true,
   "debug": true,
-  "pruningMode": "smart",
   "pruning_summary": "detailed",
   "protectedTools": ["task", "todowrite", "todoread"],
-  "$schema": {
+  "strategies": {
     "onIdle": ["deduplication", "ai-analysis"],
     "onTool": ["deduplication"],
   },

@@ -30,11 +30,13 @@ For VS Code with the Nix extension, you need to install these language servers:
 2. **nixd (Nix Language Server)**: Install `nixd` from nixpkgs
 
 You can install them globally using:
+
 ```bash
 nix profile install nixpkgs#nil nixpkgs#nixd
 ```
 
 Or if using AUR on Arch-based systems:
+
 ```bash
 yay -S nil-git nixd
 ```
@@ -59,6 +61,7 @@ sudo nixos-rebuild build --flake .#hetzner-vps
 ## Development Tools
 
 This project includes:
+
 - nil: Nix language server
 - nixd: Alternative Nix language server
 - nixpkgs-fmt: Nix code formatter

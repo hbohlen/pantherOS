@@ -184,7 +184,7 @@ use flake
 # use nix develop' > "$ENVRC_FILE"
         print_status ".envrc file created"
     fi
-    
+
     # Ensure the .envrc file is allowed by direnv
     cd "$PANTHEROS_DIR"
     if direnv status 2>/dev/null | grep -q "Found RC allowed 0"; then

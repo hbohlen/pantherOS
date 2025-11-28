@@ -9,12 +9,12 @@
     curl
     wget
     htop
-    btop           # Better top
+    btop # Better top
     tmux
     screen
-    ripgrep        # Fast grep
-    fd             # Fast find
-    jq             # JSON processor
+    ripgrep # Fast grep
+    fd # Fast find
+    jq # JSON processor
 
     # Network tools
     tailscale
@@ -22,20 +22,20 @@
 
     # Container tools
     podman-compose
-    buildah        # Container image builder
-    skopeo         # Container image tool
+    buildah # Container image builder
+    skopeo # Container image tool
 
     # Btrfs tools
     btrfs-progs
-    compsize       # Check compression ratios
+    compsize # Check compression ratios
 
     # System monitoring
     iotop
-    ncdu           # Disk usage analyzer
-    duf            # Modern df
+    ncdu # Disk usage analyzer
+    duf # Modern df
 
     # Shells
-    fish           # Fish shell (for user shell configuration)
-    bash           # Keep bash available for compatibility
+    fish # Fish shell (for user shell configuration)
+    bash # Keep bash available for compatibility
   ];
 }

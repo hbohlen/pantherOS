@@ -18,6 +18,7 @@ hosts/zephyrus/
 ## Hybrid Approach Benefits
 
 ### Base Configuration (nixos-hardware)
+
 - **GU603H profile**: Community-tested configuration specifically for your laptop model
 - **NVIDIA Prime**: Hybrid graphics setup with proper bus ID configuration
 - **Intel CPU**: Standard optimizations for 12th Gen Intel processors
@@ -25,6 +26,7 @@ hosts/zephyrus/
 - **SSD Support**: NVMe SSD optimizations
 
 ### Custom Optimizations
+
 - **Advanced Kernel Parameters**: Alder Lake + NVIDIA specific tuning
 - **WiFi 6E Optimization**: Intel AX211 specific configurations
 - **Bluetooth 5.3**: Enhanced settings for latest Bluetooth
@@ -34,30 +36,33 @@ hosts/zephyrus/
 
 ## Key Hardware Components
 
-| Component | Model | Configuration |
-|-----------|-------|---------------|
-| CPU | Intel Core i9-12900H | Alder Lake optimizations |
-| GPU | Intel Iris Xe + NVIDIA RTX 3060/3070 | Prime hybrid setup |
-| Storage | Dual NVMe SSDs (2TB + 1TB) | SSD optimizations + fstrim |
-| Network | Intel AX211 WiFi 6E + Realtek Ethernet | WiFi 6E + Bluetooth 5.3 |
-| Display | 2560×1600 internal + external | Multi-monitor support |
-| Peripherals | ASUS keyboard, Elan touchpad, webcam | Full support |
+| Component   | Model                                  | Configuration              |
+| ----------- | -------------------------------------- | -------------------------- |
+| CPU         | Intel Core i9-12900H                   | Alder Lake optimizations   |
+| GPU         | Intel Iris Xe + NVIDIA RTX 3060/3070   | Prime hybrid setup         |
+| Storage     | Dual NVMe SSDs (2TB + 1TB)             | SSD optimizations + fstrim |
+| Network     | Intel AX211 WiFi 6E + Realtek Ethernet | WiFi 6E + Bluetooth 5.3    |
+| Display     | 2560×1600 internal + external          | Multi-monitor support      |
+| Peripherals | ASUS keyboard, Elan touchpad, webcam   | Full support               |
 
 ## Configuration Highlights
 
 ### Graphics
+
 - **NVIDIA Prime Offloading**: Enable with `nvidia-offload` command
 - **Intel Integration**: Hardware-accelerated video decoding
 - **Vulkan Support**: Full GPU compute and gaming support
 - **Wayland Compatibility**: Enhanced for modern desktop environments
 
 ### Performance
+
 - **CPU Governor**: Performance mode for sustained high performance
 - **Memory Management**: Optimized for 64GB RAM configuration
 - **Thermal Management**: Enhanced cooling profiles for gaming workloads
 - **Power Profiles**: Automatic switching between performance and battery saver
 
 ### Connectivity
+
 - **WiFi 6E**: Latest wireless standard with 6GHz band support
 - **Bluetooth 5.3**: Enhanced audio and device connectivity
 - **Ethernet**: High-speed wired connectivity optimization
@@ -65,19 +70,25 @@ hosts/zephyrus/
 ## Usage
 
 ### For Gaming
+
 The system is optimized for gaming workloads with:
+
 - NVIDIA discrete GPU for graphics-intensive applications
 - Performance CPU governor for maximum responsiveness
 - Enhanced thermal management for sustained performance
 
 ### For Development
+
 Configured for development with:
+
 - High-performance CPU settings for compilation
 - Multiple monitor support for productivity
 - Comprehensive development tools and monitoring
 
 ### For Battery Life
+
 When needed, the system includes battery optimization features:
+
 - Intel integrated graphics for power efficiency
 - Power management profiles
 - WiFi power saving optimizations
@@ -85,12 +96,15 @@ When needed, the system includes battery optimization features:
 ## Maintenance
 
 ### Updates
+
 - **nixos-hardware**: Updates automatically through channel
 - **Custom optimizations**: Maintained in `meta.nix`
 - **Hardware profiles**: Can be extended as needed
 
 ### Monitoring
+
 The configuration includes comprehensive monitoring tools:
+
 - `nvtop`: GPU and system monitoring
 - `intel-gpu-tools`: Intel graphics diagnostics
 - `powertop`: Power consumption analysis
@@ -99,17 +113,21 @@ The configuration includes comprehensive monitoring tools:
 ## Troubleshooting
 
 ### Graphics Issues
+
 If you encounter graphics problems:
+
 1. Check nvidia-offload is available: `which nvidia-offload`
 2. Verify Prime setup: `nvidia-smi` should show NVIDIA GPU
 3. Check Intel graphics: `intelgpu` tools should work
 
 ### Performance Issues
+
 1. Ensure performance governor is active: `cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor`
 2. Check thermal status: `sensors` command
 3. Monitor GPU usage: `nvidia-smi -l 1`
 
 ### Network Issues
+
 1. Verify WiFi 6E support: `iw dev` should show your device
 2. Check Bluetooth: `bluetoothctl list` should show devices
 3. Test connectivity: `ping` and `speedtest-cli`
@@ -117,6 +135,7 @@ If you encounter graphics problems:
 ## Future Enhancements
 
 Potential areas for future optimization:
+
 - **Gaming profiles**: Specific profiles for different game types
 - **Development profiles**: Optimizations for specific development workflows
 - **Hardware monitoring**: Enhanced fan control and temperature management

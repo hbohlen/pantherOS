@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -10,13 +10,17 @@ in
     enable = mkEnableOption "Enable OpenCode.ai and OpenAgent configuration management";
 
     theme = mkOption {
-      type = types.enum [ "light" "dark" "auto" ];
+      type = types.enum [
+        "light"
+        "dark"
+        "auto"
+      ];
       default = "auto";
       description = ''
         Theme preference for OpenCode.ai interface
       '';
     };
-    
+
     openAgent = {
       enable = mkEnableOption "Enable OpenAgent system integration";
       debug = mkOption {
@@ -32,13 +36,13 @@ in
         };
       };
     };
-    
+
     plugins = mkOption {
       type = types.listOf types.str;
       default = [ "@tarquinen/opencode-dcp" ];
       description = "List of OpenCode plugins to load";
     };
-    
+
     additionalConfig = mkOption {
       type = types.attrsOf types.str;
       default = { };
@@ -55,7 +59,7 @@ in
       OPENAGENT_DCP_PRUNING_MODE = "smart";
       OPENAGENT_DCP_DEBUG = if cfg.openAgent.debug then "true" else "false";
     };
-    
+
     # DCP configuration as managed dotfile
     xdg.configFile."opencode/dcp.jsonc" = {
       text = ''
@@ -73,8 +77,8 @@ in
       '';
       # Don't force - allow manual customizations if needed
     };
-    
-    # OpenCode main configuration as managed dotfile  
+
+    # OpenCode main configuration as managed dotfile
     xdg.configFile."opencode/opencode.jsonc" = {
       text = ''
         {
@@ -87,41 +91,42 @@ in
       '';
       # Don't force - allow manual customizations if needed
     };
-    
+
     # Create base OpenAgent directories
-    let
-      baseDirectories = {
-        "OpenAgent context directory" = {
-          target = "${config.home.homeDirectory}/.cache/opencode/sessions";
-          recursive = true;
-          ensureDir = true;
+    home.file =
+      let
+        baseDirectories = {
+          "OpenAgent context directory" = {
+            target = "${config.home.homeDirectory}/.cache/opencode/sessions";
+            recursive = true;
+            ensureDir = true;
+          };
+          "OpenAgent logs directory" = {
+            target = "${config.home.homeDirectory}/.local/share/opencode/logs";
+            recursive = true;
+            ensureDir = true;
+          };
+          "OpenAgent plugins directory" = {
+            target = "${config.home.homeDirectory}/.local/share/opencode/plugins";
+            recursive = true;
+            ensureDir = true;
+          };
+          "OpenAgent tools directory" = {
+            target = "${config.home.homeDirectory}/.local/share/opencode/tools";
+            recursive = true;
+            ensureDir = true;
+          };
         };
-        "OpenAgent logs directory" = {
-          target = "${config.home.homeDirectory}/.local/share/opencode/logs";
-          recursive = true;
-          ensureDir = true;
-        };
-        "OpenAgent plugins directory" = {
-          target = "${config.home.homeDirectory}/.local/share/opencode/plugins";
-          recursive = true;
-          ensureDir = true;
-        };
-        "OpenAgent tools directory" = {
-          target = "${config.home.homeDirectory}/.local/share/opencode/tools";
-          recursive = true;
-          ensureDir = true;
-        };
-      };
-      additionalDirectories = lib.mapAttrs' (name: value: 
-        lib.nameValuePair "additional-config-${name}" {
-          target = "${config.home.homeDirectory}/.config/opencode/${name}";
-          text = value;
-        })
-        cfg.additionalConfig;
-      allDirectories = baseDirectories // additionalDirectories;
-    in
-    home.file = allDirectories;
-    
+        additionalDirectories = lib.mapAttrs' (
+          name: value:
+          lib.nameValuePair "additional-config-${name}" {
+            target = "${config.home.homeDirectory}/.config/opencode/${name}";
+            text = value;
+          }
+        ) cfg.additionalConfig;
+      in
+      baseDirectories // additionalDirectories;
+
     # Home Manager configuration for OpenAgent
     programs.home-manager.enable = true;
   };

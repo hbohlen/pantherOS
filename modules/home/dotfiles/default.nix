@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -16,14 +21,12 @@ in
         Simple file management for dotfiles (prefer xdg.configFile for complex setups)
       '';
     };
-    
+
     opencode-ai = import ./opencode-ai.nix;
   };
 
   config = mkIf cfg.enable {
     # Simple file creation using home.file
-    home.file = mapAttrs' (name: value: 
-      nameValuePair name { text = value; })
-      cfg.files;
+    home.file = mapAttrs' (name: value: nameValuePair name { text = value; }) cfg.files;
   };
 }

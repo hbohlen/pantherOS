@@ -9,7 +9,7 @@
 # This configuration combines nixos-hardware base (GU603H) with comprehensive
 # custom optimizations for the specific hardware profile.
 
-{ config, lib, pkgs, ... }:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -29,28 +29,28 @@
       "kvm-intel"
       "intel_pmc_core"
       "intel_uncore_frequency"
-      
+
       # Graphics and display
       "i915"
       "nvidia"
       "nvidia_drm"
       "nvidia_modeset"
-      
+
       # Storage
       "nvme"
       "ahci"
-      
+
       # Network
       "iwlwifi"
       "btusb"
       "r8169"
-      
+
       # USB and peripherals
       "usbhid"
       "uvcvideo"
       "btintel"
       "btbcm"
-      
+
       # ASUS-specific
       "asus_wmi"
       "asus_nb_wmi"
@@ -64,18 +64,18 @@
       "i915.enable_fbc=1"
       "i915.enable_guc=3"
       "i915.enable_huc=1"
-      
+
       # NVIDIA hybrid graphics
       "nvidia_drm.modeset=1"
       "nvidia.NVreg_DynamicPowerManagement=0x02"
-      
+
       # CPU performance
       "intel_pstate=active"
-      
+
       # Power management
       "pcie_aspm=force"
       "i915.enable_dc=1"
-      
+
       # Disable problematic features
       "module_blacklist=i2c_nvidia_gpu"
     ];
@@ -87,15 +87,15 @@
       options i915 enable_huc=1
       options i915 enable_fbc=1
       options i915 enable_psr=1
-      
+
       # NVIDIA power management
       options nvidia NVreg_DynamicPowerManagement=0x02
       options nvidia_drm modeset=1
-      
+
       # Intel WiFi optimizations
       options iwlwifi power_save=0
       options iwlwifi uapsd_disable=1
-      
+
       # Bluetooth improvements
       options btusb reset=1
       options btintel regdump=1
@@ -109,7 +109,7 @@
   hardware = {
     # NVIDIA driver configuration
     nvidia.open = true;
-    
+
     # CPU microcode updates
     cpu.intel.updateMicrocode = true;
 
@@ -258,15 +258,15 @@
       intel-gpu-tools
       pciutils
       usbutils
-      
+
       # ASUS ROG tools
       asusctl
       rog-control-center
-      
+
       # Performance monitoring
       powertop
       turbostat
-      
+
       # Network tools
       iwd
       wireless-tools
@@ -275,7 +275,7 @@
     variables = {
       # Vulkan ICD
       VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json:/run/opengl-driver-32/share/vulkan/icd.d/nvidia_icd.i686.json";
-      
+
       # NVIDIA specific
       __GL_SHADER_DISK_CACHE_PATH = "/tmp/nvidia-shaders";
       __GL_SHADER_DISK_CACHE_SIZE = "1073741824";
@@ -289,8 +289,18 @@
   security = {
     # Allow NVIDIA device access
     pam.loginLimits = [
-      { domain = "*"; type = "hard"; item = "memlock"; value = "unlimited"; }
-      { domain = "*"; type = "soft"; item = "memlock"; value = "unlimited"; }
+      {
+        domain = "*";
+        type = "hard";
+        item = "memlock";
+        value = "unlimited";
+      }
+      {
+        domain = "*";
+        type = "soft";
+        item = "memlock";
+        value = "unlimited";
+      }
     ];
   };
 
@@ -314,7 +324,7 @@
   # - ASUS ROG-specific services and controls
   # - Enhanced performance tuning and monitoring
   # - Comprehensive hardware monitoring tools
-  
+
   # Hardware-specific notes:
   # - CPU: Intel Core i9-12900H (Alder Lake, 14C/20T)
   # - GPU: Intel Iris Xe + NVIDIA RTX 3060/3070 (Hybrid Prime)

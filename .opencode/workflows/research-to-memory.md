@@ -1,5 +1,5 @@
 ---
-description: "Automated Research integration with Claude Memory"
+description: 'Automated Research integration with Claude Memory'
 category: integration
 workflow_type: automated
 triggers: [swarm-research-command, memory-integration-command]
@@ -20,48 +20,55 @@ This workflow automates the process of running research and saving findings to C
 **Command**: `/swarm-research "Topic Name"`
 
 **Example Topics**:
+
 - "nixos security best practices 2024"
 - "hardware optimization zenbook"
 - "tailscale enterprise setup"
 - "nix flake patterns"
 
 **Context Loaded**:
+
 - `.opencode/context/core/essential-patterns.md`
 - `.opencode/context/project/project-context.md`
 - Domain-specific context files
 
 **Expected Output**:
-```markdown
-Research Results: NixOS Security Best Practices 2024
-====================================================
+
+````markdown
+# Research Results: NixOS Security Best Practices 2024
 
 ## Key Findings
 
 ### 1. SSH Hardening
+
 - Use SSH key authentication only
 - Disable password authentication
 - Implement fail2ban for SSH protection
 - Configure SSH to use non-standard port (optional)
 
 ### 2. Firewall Configuration
+
 - Use nftables instead of iptables (modern, faster)
 - Default deny all, allow specific
 - Configure rate limiting for SSH
 - Enable logging for all dropped packets
 
 ### 3. System Hardening
+
 - Enable automatic security updates
 - Use systemd's automatic updates
 - Configure automatic reboot after updates
 - Keep kernel and firmware updated
 
 ### 4. Container Security
+
 - Use rootless Podman
 - Implement SELinux/AppArmor
 - Scan images for vulnerabilities
 - Use minimal base images
 
 ### 5. Network Security
+
 - Configure Tailscale for VPN
 - Use wireguard instead of OpenVPN
 - Implement network segmentation
@@ -70,18 +77,21 @@ Research Results: NixOS Security Best Practices 2024
 ## Recommendations
 
 ### Immediate Actions (Priority: High)
+
 1. Migrate to nftables firewall
 2. Implement fail2ban
 3. Enable automatic security updates
 4. Configure SSH hardening
 
 ### Medium-term Actions (Priority: Medium)
+
 1. Implement container security scanning
 2. Set up network monitoring
 3. Configure audit logging
 4. Implement intrusion detection
 
 ### Long-term Actions (Priority: Low)
+
 1. Set up SIEM solution
 2. Implement security compliance framework
 3. Regular penetration testing
@@ -90,6 +100,7 @@ Research Results: NixOS Security Best Practices 2024
 ## Implementation Examples
 
 ### SSH Configuration
+
 ```nix
 services.openssh = {
   enable = true;
@@ -102,8 +113,10 @@ services.openssh = {
   };
 };
 ```
+````
 
 ### Firewall Configuration
+
 ```nix
 networking.nftables = {
   enable = true;
@@ -122,11 +135,13 @@ networking.nftables = {
 ```
 
 ## Sources
+
 - NixOS Security Manual
 - NIST Cybersecurity Framework
 - CIS Benchmarks
 - Cloud Security Best Practices
-```
+
+````
 
 ### Step 2: Extract Key Information
 
@@ -156,9 +171,10 @@ claude-memory knowledge add "research:topic:examples" "implementation examples" 
 
 claude-memory knowledge add "research:topic:sources" "reference sources" \
   --category research --source "swarm-research"
-```
+````
 
 **Example**:
+
 ```bash
 # Save NixOS Security research
 claude-memory knowledge add \
@@ -187,6 +203,7 @@ claude-memory knowledge add \
 **Action**: Save research decision to memory
 
 **Command**:
+
 ```bash
 claude-memory decision \
   "Adopt nftables firewall for pantherOS" \
@@ -195,6 +212,7 @@ claude-memory decision \
 ```
 
 **Example**:
+
 ```bash
 claude-memory decision \
   "Adopt NixOS security best practices from research" \
@@ -207,37 +225,47 @@ claude-memory decision \
 **Action**: Create comprehensive research report with next steps
 
 **Report Structure**:
+
 ```markdown
 # Research Report: [Topic] - $(date)
 
 ## Executive Summary
+
 Brief overview of research purpose and key outcomes
 
 ## Key Findings
+
 1. Finding 1 - Impact and relevance
 2. Finding 2 - Impact and relevance
 3. Finding 3 - Impact and relevance
 
 ## Recommendations
+
 ### Immediate (High Priority)
+
 - [ ] Recommendation 1
 - [ ] Recommendation 2
 
 ### Medium-term (Medium Priority)
+
 - [ ] Recommendation 3
 - [ ] Recommendation 4
 
 ### Long-term (Low Priority)
+
 - [ ] Recommendation 5
 - [ ] Recommendation 6
 
 ## Implementation Examples
+
 Code snippets and configuration examples
 
 ## Sources
+
 Reference materials and links
 
 ## Next Steps
+
 1. Review findings and recommendations
 2. Prioritize based on risk/impact
 3. Create implementation plan
@@ -245,6 +273,7 @@ Reference materials and links
 5. Track progress in Claude Memory
 
 ## Related Memory Items
+
 - Knowledge: research:topic:key-findings
 - Decision: research:topic:decision
 - Tasks: (if recommendations created as tasks)
@@ -255,6 +284,7 @@ Reference materials and links
 **Action**: Inform user of results and next steps
 
 **Message Template**:
+
 ```
 🔍 Research Complete: [Topic]
 
@@ -287,6 +317,7 @@ Would you like me to:
 **User Input**: "Research NixOS security best practices"
 
 **Assistant Actions**:
+
 1. Execute `/swarm-research "nixos security best practices 2024"`
 2. Parse output for findings, recommendations, examples
 3. Save to Claude Memory as knowledge items
@@ -294,6 +325,7 @@ Would you like me to:
 5. Generate report
 
 **Output**:
+
 ```
 🔍 Research Complete: NixOS Security Best Practices 2024
 
@@ -321,12 +353,14 @@ Would you like me to create implementation tasks?
 **User Input**: "Research zephyrus hardware optimization"
 
 **Assistant Actions**:
+
 1. Execute `/swarm-research "zenbook pro 16 nixos optimization"`
 2. Focus on NVIDIA, thermal, power management
 3. Save findings
 4. Record decision on optimization strategy
 
 **Output**:
+
 ```
 🔍 Research Complete: Zenbook Pro 16 NixOS Optimization
 
@@ -354,6 +388,7 @@ Ready to implement optimizations for zephyrus?
 **User Input**: "Research and decide between iptables and nftables"
 
 **Assistant Actions**:
+
 1. Execute `/swarm-research "iptables vs nftables comparison 2024"`
 2. Compare performance, features, security
 3. Save comparison to knowledge
@@ -361,6 +396,7 @@ Ready to implement optimizations for zephyrus?
 5. Provide implementation path
 
 **Output**:
+
 ```
 🔍 Research Complete: iptables vs nftables
 
@@ -395,6 +431,7 @@ Decision saved to Claude Memory!
 **Action**: Provide fallback and manual memory storage
 
 **Message**:
+
 ```
 ❌ Research command failed.
 
@@ -409,6 +446,7 @@ Or retry with: /swarm-research --verbose "[topic]"
 **Action**: Retry once, then provide instructions
 
 **Message**:
+
 ```
 ⚠️ Research succeeded but memory storage failed once.
 

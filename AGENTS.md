@@ -1,14 +1,17 @@
 <!-- OPENSPEC:START -->
+
 # OpenSpec Instructions
 
 These instructions are for AI assistants working in this project.
 
 Always open `@/openspec/AGENTS.md` when the request:
+
 - Mentions planning or proposals (words like proposal, spec, change, plan)
 - Introduces new capabilities, breaking changes, architecture shifts, or big performance/security work
 - Sounds ambiguous and you need the authoritative spec before coding
 
 Use `@/openspec/AGENTS.md` to learn:
+
 - How to create and apply change proposals
 - Spec format and conventions
 - Project structure and guidelines
@@ -49,7 +52,6 @@ Keep this managed block so 'openspec update' can refresh the instructions.
       that point.
     </Text>
   </Rule>
-
 
   <!-- ==== MICRO-STEPS & WORKFLOW ==== -->
   <Rule id="workflow.micro-steps">
@@ -99,7 +101,6 @@ Keep this managed block so 'openspec update' can refresh the instructions.
     </Text>
   </Rule>
 
-
   <!-- ==== SOURCES, DOCS & TODOs ==== -->
   <Rule id="sources.concrete">
     <Title>Require concrete, citable sources</Title>
@@ -136,7 +137,6 @@ Keep this managed block so 'openspec update' can refresh the instructions.
       Prefer official or primary sources whenever possible.
     </Text>
   </Rule>
-
 
   <!-- ==== MODULE & FILE DESIGN (NIXOS/HOME-MANAGER) ==== -->
   <Rule id="modules.atomic-granularity">
@@ -187,7 +187,6 @@ Keep this managed block so 'openspec update' can refresh the instructions.
     </Text>
   </Rule>
 
-
   <!-- ==== DECLARATIVE VS IMPERATIVE ==== -->
   <Rule id="declarative.preference">
     <Title>Prefer declarative configuration</Title>
@@ -211,7 +210,6 @@ Keep this managed block so 'openspec update' can refresh the instructions.
     </Text>
   </Rule>
 
-
   <!-- ==== SECRETS & SECURITY ==== -->
   <Rule id="secrets.no-inline-secrets">
     <Title>Never inline secrets in code</Title>
@@ -234,7 +232,6 @@ Keep this managed block so 'openspec update' can refresh the instructions.
         when applicable.
     </Text>
   </Rule>
-
 
   <!-- ==== COMMUNICATION & OUTPUT STYLE ==== -->
   <Rule id="communication.step-by-step">
