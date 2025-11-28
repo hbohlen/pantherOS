@@ -3,4 +3,4 @@
 
 /logs/openai/**
 /node_modules/**
-/direnv
+/.direnv

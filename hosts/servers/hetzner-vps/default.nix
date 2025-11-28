@@ -132,49 +132,11 @@
         recursive = true;
       };
 
-      # Packages managed by home-manager
+      # Additional packages not covered by terminal-tools module
       home.packages = with pkgs; [
-        # Terminal tools
-        fish
-        fzf
-        eza
-        
-        # Development tools  
-        neovim
-        git
-        
         # AI coding assistant
         opencode
       ];
-
-      # Fish shell configuration
-      programs.fish = {
-        enable = true;
-        shellInit = ''
-          # Set up OpenCode environment variables
-          set -gx OPENCODE_CONFIG_PATH "$HOME/.config/opencode"
-          set -gx OPENCODE_DATA_PATH "$HOME/.local/share/opencode"
-          set -gx OPENCODE_CACHE_PATH "$HOME/.cache/opencode"
-          
-          # Add OpenCode completions to PATH if available
-          if test -d "$HOME/.local/share/opencode/completions"
-            set -gx fish_user_paths "$fish_user_paths" "$HOME/.local/share/opencode/completions"
-          end
-          
-          # Aliases for common OpenCode commands
-          alias oc="opencode"
-          alias occ="opencode --config $OPENCODE_CONFIG_PATH"
-        '';
-      };
-
-      # Environment variables
-      home.sessionVariables = {
-        EDITOR = "nvim";
-        VISUAL = "nvim";
-        OPENCODE_CONFIG_PATH = "$HOME/.config/opencode";
-        OPENCODE_DATA_PATH = "$HOME/.local/share/opencode";
-        OPENCODE_CACHE_PATH = "$HOME/.cache/opencode";
-      };
 
       # Basic home-manager configuration
       programs = {

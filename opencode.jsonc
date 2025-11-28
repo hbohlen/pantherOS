@@ -2,6 +2,6 @@
   "$schema": "https://opencode.ai/config.json",
   "username": "hbohlen",
   "autoupdate": true,
-  "plugin": ["@tarquinen/opencode-dcp"],
+  "plugin": ["@tarquinen/opencode-dcp", "opencode-skills"],
   "theme": "rosepine",
 }

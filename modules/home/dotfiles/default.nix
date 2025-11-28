@@ -16,6 +16,8 @@ in
         Simple file management for dotfiles (prefer xdg.configFile for complex setups)
       '';
     };
+    
+    opencode-ai = import ./opencode-ai.nix;
   };
 
   config = mkIf cfg.enable {

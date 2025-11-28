@@ -21,7 +21,7 @@
     # Development directory
     PROJECTS_DIR = "$HOME/dev";
 
-    # Editor
+    # Editor - nixvim provides full Neovim configuration
     EDITOR = "nvim";
     VISUAL = "nvim";
   };

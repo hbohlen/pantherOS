@@ -22,16 +22,28 @@
     };
     nixos-facter-modules = {
       url = "github:nix-community/nixos-facter-modules";
-      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.nixpkgs.follows = "nixpkgs";  # Commented out to fix flake check
     };
     nix-ai-tools = {
       url = "github:numtide/nix-ai-tools";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    
+    # DankMaterialShell - Material design shell configuration
+    dgop = {
+      url = "github:dankpanic/dgop";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
+    DankMaterialShell = {
+      url = "github:danklinux/DankMaterialShell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.dgop.follows = "dgop";
+    };
 
   };
 
-  outputs = { nixpkgs, disko, opnix, home-manager, nixvim, nixos-facter-modules, nix-ai-tools, ... }:
+  outputs = { self, nixpkgs, disko, opnix, home-manager, nixvim, nixos-facter-modules, nix-ai-tools, dgop, dankMaterialShell }:
     let
       system = "x86_64-linux";
       lib = nixpkgs.lib;
@@ -75,26 +87,30 @@
             opnix.nixosModules.default
             home-manager.nixosModules.home-manager
             nixos-facter-modules.nixosModules.facter
-            { config.facter.reportPath = ./hardware-reports/yoga-20251126-152255.json; }
-            ./hosts/yoga/default.nix
-            # ./hosts/yoga/disko.nix  # Commented out for configuration testing
+            nixvim.nixosModules.nixvim
+            DankMaterialShell.nixosModules.default
+            { config.facter.reportPath = ./hosts/zephyrus/zephyrus-facter.json; }
+            ./hosts/zephyrus/default.nix
+            # ./hosts/zephyrus/disko.nix  # Commented out for configuration testing
           ];
           specialArgs = { inherit lib pkgs; };
         };
 
-        # nixosConfigurations.zephyrus = lib.nixosSystem {
-        #   system = "x86_64-linux";
-        #   modules = [
-        #     # disko.nixosModules.disko  # Commented out for configuration testing
-        #     opnix.nixosModules.default
-        #     home-manager.nixosModules.home-manager
-        #     # nixos-facter-modules.nixosModules.facter  # TODO: Enable once hardware report is available
-        #     # { config.facter.reportPath = ./hardware-reports/zephyrus-TODO.json; }
-        #     ./hosts/zephyrus/default.nix
-        #     # ./hosts/zephyrus/disko.nix  # Commented out for configuration testing
-        #   ];
-        #   specialArgs = { inherit lib pkgs; };
-        # };
+        nixosConfigurations.zephyrus = lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            # disko.nixosModules.disko  # Commented out for configuration testing
+            opnix.nixosModules.default
+            home-manager.nixosModules.home-manager
+            nixos-facter-modules.nixosModules.facter
+            nixvim.nixosModules.nixvim
+            dankMaterialShell.nixosModules.dankMaterialShell
+            { config.facter.reportPath = ./hosts/zephyrus/zephyrus-facter.json; }
+            ./hosts/zephyrus/default.nix
+            # ./hosts/zephyrus/disko.nix  # Commented out for configuration testing
+          ];
+          specialArgs = { inherit lib pkgs; };
+        };
 
         devShells.${system}.default = pkgs.mkShell {
         buildInputs = with pkgs; [
