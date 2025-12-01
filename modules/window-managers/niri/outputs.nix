@@ -35,6 +35,7 @@ in {
           scale = 1.0;
           transform = "normal";
         };
+<<<<<<< HEAD
 
         # External DisplayPort display
         "DP-1" = mkDefault {
@@ -59,6 +60,8 @@ in {
           scale = 1.25;
           transform = "normal";
         };
+=======
+>>>>>>> feature/niri-dankmaterial-integration
       };
 
       # Variable refresh rate support

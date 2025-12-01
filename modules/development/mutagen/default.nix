@@ -8,12 +8,15 @@ with lib;
 let
   cfg = config.programs.mutagen;
 in {
+<<<<<<< HEAD
   imports = [
     ./sync.nix
     ./forward.nix
     ./projects.nix
   ];
 
+=======
+>>>>>>> feature/niri-dankmaterial-integration
   options.programs.mutagen = {
     enable = mkEnableOption "Mutagen file synchronization and forwarding";
     
@@ -23,6 +26,7 @@ in {
       description = "The Mutagen package to use";
     };
 
+<<<<<<< HEAD
     enableSync = mkOption {
       type = types.bool;
       default = true;
@@ -41,6 +45,8 @@ in {
       description = "Enable project-specific Mutagen configurations";
     };
 
+=======
+>>>>>>> feature/niri-dankmaterial-integration
     autoStart = mkOption {
       type = types.bool;
       default = false;
@@ -50,12 +56,20 @@ in {
 
   config = mkIf cfg.enable {
     # Install Mutagen and dependencies
+<<<<<<< HEAD
     environment.systemPackages = with pkgs; [
       cfg.package
       mutagen-compose
       docker-compose
       rsync
       openssh
+=======
+    environment.systemPackages = [
+      cfg.package
+      pkgs.docker-compose
+      pkgs.rsync
+      pkgs.openssh
+>>>>>>> feature/niri-dankmaterial-integration
     ];
 
     # Ensure required system services
@@ -87,6 +101,7 @@ in {
     };
 
     # Systemd user services for Mutagen
+<<<<<<< HEAD
     systemd.user = {
       # Mutagen daemon service
       services.mutagen-daemon = {
@@ -174,6 +189,20 @@ in {
             done
           ''}";
         };
+=======
+    systemd.user.services.mutagen-daemon = {
+      description = "Mutagen Daemon";
+      wantedBy = [ "default.target" ];
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = "${cfg.package}/bin/mutagen daemon run";
+        Restart = "on-failure";
+        RestartSec = 1;
+        Environment = [
+          "MUTAGEN_DATA_DIR=%h/.local/share/mutagen"
+          "MUTAGEN_CONFIG_DIR=%h/.config/mutagen"
+        ];
+>>>>>>> feature/niri-dankmaterial-integration
       };
     };
 
@@ -184,6 +213,7 @@ in {
       MUTAGEN_LOG_LEVEL = "info";
     };
 
+<<<<<<< HEAD
     # Configuration directories
     environment.etc."mutagen/mutagen.yml".text = ''
       # Global Mutagen configuration
@@ -226,6 +256,8 @@ in {
           synchronizationTimeout: 300
     '';
 
+=======
+>>>>>>> feature/niri-dankmaterial-integration
     # Shell aliases for Mutagen
     programs.bash.shellAliases = {
       ms = "mutagen sync";
@@ -238,6 +270,7 @@ in {
       mt = "mutagen sync terminate";
       mm = "mutagen sync monitor";
     };
+<<<<<<< HEAD
 
     programs.fish.shellAliases = {
       ms = "mutagen sync";
@@ -250,5 +283,7 @@ in {
       mt = "mutagen sync terminate";
       mm = "mutagen sync monitor";
     };
+=======
+>>>>>>> feature/niri-dankmaterial-integration
   };
 }

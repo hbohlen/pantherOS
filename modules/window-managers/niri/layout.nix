@@ -17,10 +17,13 @@ in {
         { name = "3"; }
         { name = "4"; }
         { name = "5"; }
+<<<<<<< HEAD
         { name = "6"; }
         { name = "7"; }
         { name = "8"; }
         { name = "9"; }
+=======
+>>>>>>> feature/niri-dankmaterial-integration
       ];
 
       # Layout presets
@@ -31,6 +34,7 @@ in {
         # Gaps configuration
         gaps = 8;
         
+<<<<<<< HEAD
         # Strut configuration for panels
         struts = {
           left = 0;
@@ -39,16 +43,21 @@ in {
           bottom = 0;
         };
 
+=======
+>>>>>>> feature/niri-dankmaterial-integration
         # Column width presets
         preset-column-widths = [
           { proportion = 1.0; }  # Full width
           { proportion = 0.5; }  # Half width
           { proportion = 0.33; } # Third width
           { proportion = 0.25; } # Quarter width
+<<<<<<< HEAD
           { fixed = 640; }      # Fixed 640px
           { fixed = 800; }      # Fixed 800px
           { fixed = 1024; }     # Fixed 1024px
           { fixed = 1280; }     # Fixed 1280px
+=======
+>>>>>>> feature/niri-dankmaterial-integration
         ];
 
         # Default column width
@@ -60,11 +69,14 @@ in {
           width = 4;
           active-color = "0x88c0d0";  # Nord blue
           inactive-color = "0x4c566a"; # Nord dark gray
+<<<<<<< HEAD
           active-gradient = {
             from = "0x88c0d0";
             to = "0x81a1c1";
             angle = 45;
           };
+=======
+>>>>>>> feature/niri-dankmaterial-integration
         };
 
         # Border configuration
@@ -73,11 +85,14 @@ in {
           width = 2;
           active-color = "0x88c0d0";  # Nord blue
           inactive-color = "0x4c566a"; # Nord dark gray
+<<<<<<< HEAD
           active-gradient = {
             from = "0x88c0d0";
             to = "0x81a1c1";
             angle = 45;
           };
+=======
+>>>>>>> feature/niri-dankmaterial-integration
         };
 
         # Shadow configuration

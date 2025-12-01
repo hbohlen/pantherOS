@@ -58,7 +58,11 @@ in {
       xdgOpenUsePortal = true;
     };
 
+<<<<<<< HEAD
     # Configure mate-polkit as the sole polkit authentication agent
+=======
+    # Configure mate-polkit as sole polkit authentication agent
+>>>>>>> feature/niri-dankmaterial-integration
     security.polkit.enable = true;
     systemd.user.services.polkit-mate = {
       description = "MATE Polkit Authentication Agent";
