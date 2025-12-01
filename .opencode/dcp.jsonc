@@ -5,6 +5,6 @@
   "protectedTools": ["task", "todowrite", "todoread"],
   "strategies": {
     "onIdle": ["deduplication", "ai-analysis"],
-    "onTool": ["deduplication"],
+    //"onTool": ["deduplication"],
   },
 }

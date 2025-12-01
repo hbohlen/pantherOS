@@ -6,10 +6,9 @@
 # Network: Intel AX211 WiFi 6E + Realtek Ethernet
 # Generated: 2025-01-27
 #
-# This configuration combines nixos-hardware base (GU603H) with comprehensive
-# custom optimizations for the specific hardware profile.
+# This configuration combines nixos-hardware base + custom optimizations
 
-{ pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -248,30 +247,10 @@
   };
 
   # ============================================================================
-  # ENVIRONMENT & PACKAGES
+  # ENVIRONMENT VARIABLES
   # ============================================================================
 
   environment = {
-    systemPackages = with pkgs; [
-      # Hardware monitoring
-      nvtop
-      intel-gpu-tools
-      pciutils
-      usbutils
-
-      # ASUS ROG tools
-      asusctl
-      rog-control-center
-
-      # Performance monitoring
-      powertop
-      turbostat
-
-      # Network tools
-      iwd
-      wireless-tools
-    ];
-
     variables = {
       # Vulkan ICD
       VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/nvidia_icd.x86_64.json:/run/opengl-driver-32/share/vulkan/icd.d/nvidia_icd.i686.json";

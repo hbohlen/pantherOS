@@ -29,6 +29,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-unit = {
+      url = "github:nix-community/nix-unit";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # DankMaterialShell - Material design shell configuration
     dgop = {
       url = "github:AvengeMedia/dgop";
@@ -39,6 +44,24 @@
       url = "github:AvengeMedia/DankMaterialShell";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.dgop.follows = "dgop";
+    };
+
+    # Quickshell - required by DankMaterialShell
+    quickshell = {
+      url = "github:quickshell-mirror/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Niri - scrollable-tiling Wayland window manager
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Zed - high-performance code editor
+    zed = {
+      url = "github:zed-industries/zed";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
   };
@@ -55,6 +78,10 @@
       nix-ai-tools,
       dgop,
       DankMaterialShell,
+      quickshell,
+      niri,
+      zed,
+      nix-unit,
     }:
     let
       system = "x86_64-linux";
@@ -66,7 +93,8 @@
         };
         overlays = [
           (final: prev: {
-            opencode = nix-ai-tools.packages.${system}.opencode;
+            # opencode = nix-ai-tools.packages.${system}.opencode;
+            quickshell = quickshell.packages.${system}.default;
           })
         ];
       };
@@ -100,48 +128,41 @@
       nixosConfigurations.yoga = lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          # disko.nixosModules.disko  # Commented out for configuration testing
+          disko.nixosModules.disko
           opnix.nixosModules.default
           home-manager.nixosModules.home-manager
           nixos-facter-modules.nixosModules.facter
           nixvim.nixosModules.nixvim
-          DankMaterialShell.nixosModules.default
-          { config.facter.reportPath = ./hosts/zephyrus/zephyrus-facter.json; }
-          ./hosts/zephyrus/default.nix
-          # ./hosts/zephyrus/disko.nix  # Commented out for configuration testing
+           DankMaterialShell.nixosModules.dankMaterialShell
+          niri.nixosModules.niri
+          { config.facter.reportPath = ./hosts/yoga/yoga-facter.json; }
+          ./hosts/yoga/default.nix
         ];
         specialArgs = { inherit lib pkgs; };
       };
 
-      nixosConfigurations.zephyrus = lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          # disko.nixosModules.disko  # Commented out for configuration testing
-          opnix.nixosModules.default
-          home-manager.nixosModules.home-manager
-          nixos-facter-modules.nixosModules.facter
-          nixvim.nixosModules.nixvim
-          DankMaterialShell.nixosModules.dankMaterialShell
-          { config.facter.reportPath = ./hosts/zephyrus/zephyrus-facter.json; }
-          ./hosts/zephyrus/default.nix
-          # ./hosts/zephyrus/disko.nix  # Commented out for configuration testing
-        ];
-        specialArgs = { inherit lib pkgs; };
-      };
+# Only include zephyrus if explicitly requested (to avoid CUDA dependencies on other hosts)
+      # nixosConfigurations.zephyrus = lib.nixosSystem {
+      #   { config.facter.reportPath = ./hosts/zephyrus/zephyrus-facter.json; }
+      #   ./hosts/zephyrus/default.nix
+      # };
 
-      devShells.${system}.default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          nil
-          nixd
-          nixpkgs-fmt
-          nix-tree
-          git
-        ];
+       devShells.${system}.default = pkgs.mkShell {
+         buildInputs = with pkgs; [
+           nil
+           nixd
+           nixpkgs-fmt
+           nix-tree
+           git
+         ];
 
-        shellHook = ''
-          echo "Development environment for pantherOS"
-          echo "Available tools: nil, nixd, nixpkgs-fmt, nix-tree, git"
-        '';
-      };
-    };
+         shellHook = ''
+           echo "Development environment for pantherOS"
+           echo "Available tools: nil, nixd, nixpkgs-fmt, nix-tree, git"
+         '';
+       };
+
+       # Integration tests using nixosTest
+       checks.${system} = import ./tests/integration/default.nix { inherit self nixpkgs; };
+     };
 }

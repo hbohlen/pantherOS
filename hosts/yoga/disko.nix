@@ -6,10 +6,10 @@
 {
   disko.devices = {
     disk = {
-      main = {
-        # Placeholder device for configuration testing
-        # TODO: Replace with actual disk device path from `ls /dev/disk/by-id/`
-        device = "/dev/disk/by-id/placeholder-device";
+      nvme0n1 = {
+        # Primary NVMe SSD for Yoga laptop
+        # Based on hardware scan: AMD Ryzen AI 7 350 system
+        device = "/dev/nvme0n1";
         type = "disk";
         content = {
           type = "gpt";

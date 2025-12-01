@@ -1,26 +1,31 @@
 ## ADDED Requirements
 
-### Requirement: Modular Configuration Structure
+### Requirement: Personal Device Host Support with Facter
 
-The system SHALL organize configuration into granular, reusable modules following AGENTS.md guidelines.
+The system SHALL support configuration of personal devices (zephyrus and yoga) with dedicated host directories containing default.nix, hardware.nix, disko.nix, and meta.nix files generated using facter.
 
-#### Scenario: Modules directory exists
+#### Scenario: Host directories with meta.nix exist
 
-- **WHEN** project structure is examined
-- **THEN** modules/ directory contains organized configuration files
+- **WHEN** personal device hosts are configured
+- **THEN** /hosts/zephyrus/ and /hosts/yoga/ directories exist with default.nix, hardware.nix, disko.nix, and meta.nix files
 
-#### Scenario: Configuration modules are atomic
+#### Scenario: Facter-based hardware scanning prerequisite
 
-- **WHEN** modules are reviewed
-- **THEN** each module has a single clear responsibility
+- **WHEN** implementing hardware.nix and disko.nix
+- **THEN** facter must be used to scan hardware and generate meta.nix files first
 
-#### Scenario: Default.nix aggregator exists
+#### Scenario: Meta.nix structured data
 
-- **WHEN** modules are imported
-- **THEN** modules/default.nix provides clean import interface
+- **WHEN** facter collects hardware specs
+- **THEN** meta.nix contains structured Nix attribute sets for CPU, RAM, storage, network, and GPU information
 
-#### Scenario: Configuration remains functional
+#### Scenario: Configuration isolation
 
-- **WHEN** system builds with modular config
-- **THEN** all functionality works as before</content>
-  <parameter name="filePath">openspec/changes/create-modular-config/specs/configuration/spec.md
+- **WHEN** personal device configurations are built
+- **THEN** they remain isolated from server configurations
+
+#### Scenario: Build validation
+
+- **WHEN** host configurations are created
+- **THEN** they build successfully without errors</content>
+  <parameter name="filePath">openspec/changes/add-personal-device-hosts/specs/configuration/spec.md

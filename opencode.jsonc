@@ -11,4 +11,18 @@
       "command": ["nix", "run", "github:utensils/mcp-nixos", "--"],
     },
   },
+
+  "lsp": {
+    "nix": {
+      "command": ["nixd"],
+      "extensions": [".nix"]
+    }
+  },
+
+  "formatter": {
+    "nix": {
+      "command": ["nixpkgs-fmt"],
+      "extensions": [".nix"]
+    }
+  },
 }

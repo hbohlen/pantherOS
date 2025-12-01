@@ -1,12 +1,12 @@
 # disko.nix - Zephyrus disk partitioning
-# TODO: Update with actual hardware specifications once facter report is available
-# This is a placeholder configuration
+# ASUS ROG Zephyrus G15 with dual NVMe SSDs (Crucial 2TB + Micron 1TB)
+# Based on hardware scan: zephyrus-facter.json
 {
   disko.devices = {
     disk = {
       nvme0n1 = {
         type = "disk";
-        device = "/dev/nvme0n1"; # TODO: Update based on actual device
+        device = "/dev/nvme0n1"; # Primary NVMe SSD (Crucial 2TB)
         content = {
           type = "gpt";
           partitions = {

@@ -1,15 +1,38 @@
 # modules/home-manager/default.nix
 # Home Manager module configuration
 
-{ pkgs, ... }:
+{ 
+  pkgs, 
+  lib, 
+  config, 
+  ...
+}:
 
 {
+  imports = [
+    ./dotfiles
+  ];
+
   # Terminal tools packages
   home.packages = with pkgs; [
-    fzf # Fuzzy finder
-    eza # Enhanced ls replacement
-    fish # Fish shell (default shell)
-    git # Version control
+    # Hardware monitoring
+    nvtopPackages.full
+    pciutils
+    usbutils
+
+    # ASUS ROG tools - temporarily disabled due to CUDA dependency
+    # asusctl
+
+    # Performance monitoring
+    powertop
+    linuxPackages.perf
+
+    # Network tools
+    iwd
+    wirelesstools
+
+    # Zed IDE - high-performance code editor
+    zed-editor
   ];
 
   # Fish shell configuration

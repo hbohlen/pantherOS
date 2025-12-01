@@ -1,9 +1,9 @@
 { config, pkgs, ... }:
 
 {
-  imports = [
-    ../../../modules/home
-  ];
+  # imports = [
+  #   ../../modules/home
+  # ];
 
   home = {
     username = "hbohlen";
@@ -21,9 +21,8 @@
     recursive = true;
   };
 
-  # Enable OpenCode/OpenAgent enhanced dotfiles management
-  # This will add additional configuration files and environment variables
-  home-manager.dotfiles.opencode-ai = {
+  # OpenCode/OpenAgent enhanced dotfiles management
+  dotfiles.opencode-ai = {
     enable = true;
     theme = "rosepine";
     openAgent = {
@@ -31,7 +30,7 @@
       debug = true;
       dcp.enable = true;
     };
-    plugins = [ "@tarquinen/opencode-dcp" ];
+    plugins = [ "@tarquinen/opencode-dcp" "opencode-skills" ];
   };
 
   # Home Manager configuration
@@ -43,6 +42,7 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";
+    TERMINAL = "ghostty";
 
     # OpenCode/OpenAgent configuration paths
     OPENCODE_CONFIG_PATH = "${config.home.homeDirectory}/.config/opencode";
@@ -72,6 +72,7 @@
     # Development tools
     neovim
     git
+    zed-editor
 
     # AI coding assistant (from nixpkgs or nix-ai-tools)
     opencode

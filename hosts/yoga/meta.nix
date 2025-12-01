@@ -1,56 +1,208 @@
 # hosts/yoga/meta.nix
-# Hardware specifications for Yoga device
-# Generated from nixos-facter report: hardware-reports/yoga-20251126-152255.json
+# Lenovo Yoga Hardware Configuration
+# Based on hardware scan: yoga-facter.json
+# CPU: AMD Ryzen AI 7 350 w/ Radeon 860M
+# GPU: AMD Radeon 860M (integrated)
+# Storage: NVMe SSD
+# Network: WiFi + Ethernet
+# Generated: 2025-01-27
+#
+# This configuration provides AMD Ryzen AI optimizations
+
+{ config, lib, pkgs, ... }:
 
 {
-  # Basic system information
-  hostname = "yoga";
-  system = "x86_64-linux";
-  virtualization = "none";
+  # ============================================================================
+  # HARDWARE-SPECIFIC KERNEL MODULES
+  # ============================================================================
 
-  # CPU specifications
-  cpu = {
-    vendor = "AuthenticAMD";
-    model = "AMD Ryzen AI 7 350 w/ Radeon 860M";
-    cores = 8;
-    threads = 16;
-    architecture = "x86_64";
-    features = [
-      "avx512f" "avx512dq" "avx512ifma" "avx512cd" "avx512bw" "avx512vl"
-      "avx2" "avx" "sse4_2" "sse4_1" "ssse3" "sse2" "aes" "pclmulqdq"
-      "fma" "movbe" "popcnt" "xsave" "avx512_bf16" "avx_vnni" "sha_ni"
+  boot = {
+    # AMD Ryzen AI platform requires specific kernel modules
+    kernelModules = [
+      # CPU microcode and power management
+      "kvm-amd"
+      "k10temp"
+      "amd_pmc"
+      "amd_pstate"
+
+      # Graphics and display
+      "amdgpu"
+      "drm"
+      "drm_kms_helper"
+
+      # Storage
+      "nvme"
+      "ahci"
+
+      # Network
+      "iwlwifi"
+      "r8169"
+
+      # USB and peripherals
+      "usbhid"
+      "uvcvideo"
+      "btusb"
+      "btintel"
+      "btbcm"
+
+      # AMD-specific
+      "amd_sfh"
     ];
+
+    # Kernel parameters optimized for AMD Ryzen AI
+    kernelParams = [
+      # AMD graphics
+      "amdgpu.dc=1"
+      "amdgpu.dcdebugmask=0x10"
+
+      # CPU performance
+      "amd_pstate=active"
+
+      # Power management
+      "pcie_aspm=force"
+      "i915.enable_dc=1"
+
+      # Disable problematic features
+      "module_blacklist=sp5100_tco"
+    ];
+
+    # Extra module options
+    extraModprobeConfig = ''
+      # AMD graphics optimizations
+      options amdgpu dc=1
+      options amdgpu dcdebugmask=0x10
+
+      # Intel WiFi optimizations (if present)
+      options iwlwifi power_save=0
+      options iwlwifi uapsd_disable=1
+
+      # Bluetooth improvements
+      options btusb reset=1
+      options btintel regdump=1
+    '';
   };
 
-  # Memory specifications
-  memory = {
-    total = "16GB";  # 16106127360 bytes
-    type = "DDR5";   # Based on typical Ryzen AI configurations
+  # ============================================================================
+  # HARDWARE ENABLEMENT
+  # ============================================================================
+
+  hardware = {
+    # AMD graphics driver configuration
+    graphics = {
+      enable = true;
+      extraPackages = with pkgs; [
+        vaapiVdpau
+        libvdpau-va-gl
+        amdvlk
+      ];
+    };
+
+    # CPU microcode updates
+    cpu.amd.updateMicrocode = true;
+
+    # Enhanced Bluetooth configuration
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+      settings = {
+        General = {
+          Experimental = true;
+          KernelExperimental = true;
+        };
+      };
+    };
+
+    # Enable firmware for various devices
+    enableAllFirmware = true;
+    enableRedistributableFirmware = true;
   };
 
-  # Storage - detected 2 disks
-  storage = {
-    count = 2;
-    # Specific disk details would be configured in disko.nix
+  # ============================================================================
+  # SERVICES CONFIGURATION
+  # ============================================================================
+
+  services = {
+    # Power management
+    power-profiles-daemon.enable = true;
+
+    # Enhanced Bluetooth management
+    blueman.enable = true;
   };
 
-  # Network - detected 2 interfaces
-  network = {
-    interfaces = 2;
-    # Wireless and Ethernet interfaces detected
+  # ============================================================================
+  # POWER MANAGEMENT & PERFORMANCE
+  # ============================================================================
+
+  # Enhanced power management
+  powerManagement = {
+    cpuFreqGovernor = "ondemand";
+    powertop.enable = true;
   };
 
-  # Graphics
-  graphics = {
-    integrated = "Radeon 860M";  # Integrated in Ryzen AI 350
+  # ============================================================================
+  # NETWORKING
+  # ============================================================================
+
+  networking = {
+    # NetworkManager with iwd for better WiFi support
+    networkmanager = {
+      enable = true;
+      wifi = {
+        powersave = false;
+        backend = "iwd";
+      };
+    };
+
+    # Use iwd for WiFi
+    wireless.iwd = {
+      enable = true;
+      settings = {
+        General = {
+          EnableNetworkConfiguration = true;
+        };
+        Network = {
+          EnableIPv6 = true;
+          RoutePriorityOffset = 300;
+        };
+      };
+    };
   };
 
-  # Additional detected hardware
-  bluetooth = true;
-  camera = true;
-  sound = true;
+  # ============================================================================
+  # FILESYSTEM & STORAGE
+  # ============================================================================
 
-  # Hardware report timestamp
-  reportDate = "2025-11-26T15:22:55Z";
-  reportPath = ../../hardware-reports/yoga-20251126-152255.json;
+  # NVMe SSD optimizations
+  services.fstrim = {
+    enable = true;
+    interval = "weekly";
+  };
+
+  # ============================================================================
+  # ENVIRONMENT VARIABLES
+  # ============================================================================
+
+  environment = {
+    variables = {
+      # Vulkan ICD
+      VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/amd_icd64.x86_64.json";
+
+      # AMD specific
+      AMD_VULKAN_ICD = "RADV";
+    };
+  };
+
+  # ============================================================================
+  # SPECIALIZATIONS & PROFILES
+  # ============================================================================
+
+  # This configuration provides AMD Ryzen AI optimizations for Lenovo Yoga
+  #
+  # Hardware-specific notes:
+  # - CPU: AMD Ryzen AI 7 350 (8C/16T)
+  # - GPU: AMD Radeon 860M (integrated)
+  # - Storage: NVMe SSD
+  # - Network: WiFi 6 + Ethernet
+  # - Display: 16-inch touchscreen
+  # - Peripherals: Integrated camera, fingerprint reader, stylus support
 }
