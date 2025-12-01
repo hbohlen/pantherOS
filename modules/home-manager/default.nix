@@ -9,8 +9,9 @@
 }:
 
 {
-  imports = [
+imports = [
     ./dotfiles
+    ./nixvim.nix
   ];
 
   # Terminal tools packages

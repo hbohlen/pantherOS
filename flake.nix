@@ -127,12 +127,11 @@
 
       nixosConfigurations.yoga = lib.nixosSystem {
         system = "x86_64-linux";
-        modules = [
+modules = [
           disko.nixosModules.disko
           opnix.nixosModules.default
           home-manager.nixosModules.home-manager
           nixos-facter-modules.nixosModules.facter
-          nixvim.nixosModules.nixvim
            DankMaterialShell.nixosModules.dankMaterialShell
           niri.nixosModules.niri
           { config.facter.reportPath = ./hosts/yoga/yoga-facter.json; }
