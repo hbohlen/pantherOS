@@ -10,6 +10,10 @@
     },
     "ghcr.io/devcontainers/features/github-cli:1": {
       "version": "latest"
+    },
+    "ghcr.io/DeterminateSystems/devcontainer-features/nix:1": {
+      "flakes": true,
+      "nixpkgs": "nixpkgs-unstable"
     }
   },
 
@@ -41,6 +45,9 @@
         // Git
         "eamodio.gitlens",
 
+        // Nix
+        "jnoortheen.nix-ide",
+
         // Utilities
         "streetsidesoftware.code-spell-checker",
         "usernamehw.errorlens",
@@ -53,7 +60,7 @@
   // "forwardPorts": [],
 
   // Use 'postCreateCommand' to run commands after the container is created
-  "postCreateCommand": "corepack enable && corepack prepare pnpm@latest --activate && pnpm install",
+  "postCreateCommand": "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && npm install -g @opencode/cli",
 
   // Configure mounts to preserve SSH keys for git operations
   "mounts": [
