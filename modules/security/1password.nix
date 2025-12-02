@@ -59,6 +59,7 @@ in {
 
     # Explicitly disable any polkit agents that might conflict with mate-polkit
     # We rely on mate-polkit as the sole authentication agent
+    # Cover both naming patterns (short and long form) to be comprehensive
     systemd.user.services.polkit-gnome-authentication-agent-1.enable = mkForce false;
     systemd.user.services.polkit-kde-authentication-agent-1.enable = mkForce false;
     systemd.user.services.xfce-polkit.enable = mkForce false;
