@@ -102,7 +102,8 @@ The following proposals have all their implementation tasks completed and are re
 - **Total Proposals**: 13
 - **Fully Complete**: 12 (92%)
 - **Incomplete**: 1 (8%)
-- **Proposals with Spec Deltas**: 3 (add-niri-window-manager, add-nixos-devcontainer, optimize-zephyrus-config)
+- **Completed Proposals with Spec Deltas**: 3 (add-niri-window-manager, add-nixos-devcontainer, optimize-zephyrus-config)
+- **Incomplete Proposals with Spec Deltas**: 1 (add-gitlab-ci-infrastructure)
 
 ## Recommended Actions
 
@@ -125,7 +126,7 @@ The following proposals have all their implementation tasks completed and are re
 
 ## Notes
 
-- Archiving process requires the `openspec` CLI tool which is not available in the current environment
+- Archiving process requires the `openspec` CLI tool (ensure it's installed/available before proceeding)
 - According to OpenSpec workflow, archiving should be done in a separate PR after deployment
 - All completed proposals have their features deployed in the active codebase
 - Manual verification tasks were marked complete as the configurations are in place in the code
