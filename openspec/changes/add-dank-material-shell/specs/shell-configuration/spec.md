@@ -33,63 +33,87 @@ The system SHALL provide DankMaterialShell as the default shell configuration on
 
 ### Requirement: DankMaterialShell Dependencies
 
-The system SHALL manage all required and optional dependencies for DankMaterialShell features.
+The system SHALL manage all required and optional dependencies for DankMaterialShell features through the common.nix module.
 
 #### Scenario: Core Dependencies
 
 - **WHEN** DankMaterialShell is enabled
-- **THEN** Quickshell is installed as the core framework
+- **THEN** Quickshell is installed as the core framework via cfg.quickshell.package
 - **AND** dgop flake input is configured with proper nixpkgs follows
+- **AND** dmsCli is included from dmsPkgs
+- **AND** material-symbols, inter, and fira-code fonts are installed
+- **AND** ddcutil, qt5ct, and qt6ct are included for Qt theming
 
 #### Scenario: Optional Feature Dependencies
 
 - **WHEN** optional features are enabled
-- **THEN** cava is available for audio visualizer widget
-- **AND** cliphist and wl-clipboard are available for clipboard history
-- **AND** matugen is available for Material Design color palette generation
-- **AND** qt6-multimedia is available for system sound feedback
-- **AND** dsearch is available for filesystem search engine
+- **THEN** cava is available when cfg.enableAudioWavelength is true
+- **AND** cliphist and wl-clipboard are available when cfg.enableClipboard is true
+- **AND** matugen is available when cfg.enableDynamicTheming is true
+- **AND** kdePackages.qtmultimedia is available when cfg.enableSystemSound is true
+- **AND** glib and networkmanager are available when cfg.enableVPN is true
+- **AND** brightnessctl is available when cfg.enableBrightnessControl is true
+- **AND** hyprpicker is available when cfg.enableColorPicker is true
+- **AND** khal is available when cfg.enableCalendarEvents is true
 
 #### Scenario: Compositor Integration
 
 - **WHEN** niri compositor is used
 - **THEN** niri-flake can be optionally configured
-- **AND** DankMaterialShell provides niri-specific integration options
+- **AND** DankMaterialShell provides niri-specific integration via homeModules.dankMaterialShell.niri
 
 ### Requirement: DankMaterialShell Feature Configuration
 
 The system SHALL provide comprehensive feature toggles for DankMaterialShell configuration on both NixOS and home-manager modules.
 
-#### Scenario: Systemd Service Configuration
+#### Scenario: Systemd Service Configuration (NixOS)
 
-- **WHEN** systemd integration is configured
-- **THEN** programs.dankMaterialShell.systemd.enable controls auto-start functionality
-- **AND** programs.dankMaterialShell.systemd.restartIfChanged controls automatic restart on configuration changes
+- **WHEN** systemd integration is configured on NixOS module
+- **THEN** systemd.user.services.dms is created with description "DankMaterialShell"
+- **AND** service is part of graphical-session.target
+- **AND** ExecStart runs dmsCli with "run --session" arguments
+- **AND** restartTriggers are set to common.qmlPath when cfg.systemd.restartIfChanged is true
+- **AND** Restart policy is set to "on-failure"
+
+#### Scenario: Systemd Service Configuration (Home-Manager)
+
+- **WHEN** systemd integration is configured on home-manager module
+- **THEN** systemd.user.services.dms is created with Description "DankMaterialShell"
+- **AND** service is part of config.wayland.systemd.target
+- **AND** X-Restart-Triggers is set to common.qmlPath when cfg.systemd.restartIfChanged is true
+- **AND** ExecStart runs dmsCli with "run --session" arguments
+- **AND** Install.WantedBy is set to config.wayland.systemd.target
 
 #### Scenario: Core Feature Toggles
 
-- **WHEN** core features are configured
-- **THEN** enableSystemMonitoring controls system monitoring widgets with dgop
-- **AND** enableClipboard controls clipboard history manager
-- **AND** enableBrightnessControl controls backlight/brightness controls
-- **AND** enableColorPicker controls color picker tool functionality
+- **WHEN** core features are configured via options.nix
+- **THEN** programs.dankMaterialShell.enableSystemMonitoring (default: true) controls dgop dependency
+- **AND** programs.dankMaterialShell.enableClipboard (default: true) controls cliphist and wl-clipboard
+- **AND** programs.dankMaterialShell.enableBrightnessControl (default: true) controls brightnessctl
+- **AND** programs.dankMaterialShell.enableColorPicker (default: true) controls hyprpicker
 
 #### Scenario: Visual and Theme Features
 
-- **WHEN** visual features are configured
-- **THEN** enableDynamicTheming controls wallpaper-based theming with matugen
-- **AND** enableAudioWavelength controls audio visualizer with cava
-- **AND** enableSystemSound controls system sound effects with qt6-multimedia
+- **WHEN** visual features are configured via options.nix
+- **THEN** programs.dankMaterialShell.enableDynamicTheming (default: true) controls matugen
+- **AND** programs.dankMaterialShell.enableAudioWavelength (default: true) controls cava
+- **AND** programs.dankMaterialShell.enableSystemSound (default: true) controls kdePackages.qtmultimedia
 
 #### Scenario: Integration Features
 
-- **WHEN** integration features are configured
-- **THEN** enableVPN controls VPN management widget
-- **AND** enableCalendarEvents controls calendar integration with khal
+- **WHEN** integration features are configured via options.nix
+- **THEN** programs.dankMaterialShell.enableVPN (default: true) controls glib and networkmanager
+- **AND** programs.dankMaterialShell.enableCalendarEvents (default: true) controls khal
+
+#### Scenario: Feature Toggle Defaults
+
+- **WHEN** DankMaterialShell is enabled without explicit feature configuration
+- **THEN** all feature toggles default to true
+- **AND** all optional dependencies are installed by default
 
 ### Requirement: DankMaterialShell Niri Integration
 
-The system SHALL provide seamless integration with the niri Wayland compositor when configured.
+The system SHALL provide seamless integration with the niri Wayland compositor through the niri.nix module.
 
 #### Scenario: Niri Prerequisites
 
@@ -102,17 +126,29 @@ The system SHALL provide seamless integration with the niri Wayland compositor w
 
 - **WHEN** using niri integration
 - **THEN** both dankMaterialShell.homeModules.dankMaterialShell.default and dankMaterialShell.homeModules.dankMaterialShell.niri modules are imported
-- **AND** niri-specific features become available
+- **AND** niri-specific options become available (niri.enableKeybinds, niri.enableSpawn)
 
 #### Scenario: Niri Keybindings
 
 - **WHEN** programs.dankMaterialShell.niri.enableKeybinds is true
-- **THEN** automatic keybinding configuration is applied for launcher, notifications, settings, and all DankMaterialShell features
+- **THEN** programs.niri.settings.binds are configured with DMS IPC commands
+- **AND** Mod+Space toggles spotlight (application launcher)
+- **AND** Mod+N toggles notification center
+- **AND** Mod+Comma toggles settings
+- **AND** Mod+P toggles notepad
+- **AND** Super+Alt+L locks screen
+- **AND** Mod+X toggles power menu
+- **AND** XF86Audio keys control volume and mute
+- **AND** Mod+Alt+N toggles night mode
+- **AND** Mod+M toggles process list when enableSystemMonitoring is true
+- **AND** Mod+V toggles clipboard when enableClipboard is true
+- **AND** XF86MonBrightness keys control brightness when enableBrightnessControl is true
 
 #### Scenario: Niri Auto-start
 
 - **WHEN** programs.dankMaterialShell.niri.enableSpawn is true
-- **THEN** DankMaterialShell automatically starts with niri compositor
+- **THEN** programs.niri.settings.spawn-at-startup includes "dms run" command
+- **AND** wl-paste clipboard watcher is started when enableClipboard is true
 
 #### Scenario: Polkit Agent Conflict Resolution
 
@@ -122,34 +158,104 @@ The system SHALL provide seamless integration with the niri Wayland compositor w
 
 ### Requirement: DankMaterialShell Customization
 
-The system SHALL support advanced customization through custom Quickshell packages, default settings, and plugin architecture.
+The system SHALL support advanced customization through custom Quickshell packages, default settings, and plugin architecture via home.nix module.
 
 #### Scenario: Custom Quickshell Package
 
 - **WHEN** a custom Quickshell version is needed
-- **THEN** programs.dankMaterialShell.quickshell.package can be set to a custom package
+- **THEN** programs.dankMaterialShell.quickshell.package can be set via lib.mkPackageOption
 - **AND** the custom package replaces the default Quickshell installation
+- **AND** programs.quickshell.package is automatically set to cfg.quickshell.package
+
+#### Scenario: Quickshell Config Integration (Home-Manager Only)
+
+- **WHEN** DankMaterialShell is enabled on home-manager
+- **THEN** programs.quickshell.enable is set to true
+- **AND** programs.quickshell.configs.dms is set to common.qmlPath
+- **AND** DMS configuration is registered with Quickshell
 
 #### Scenario: Default Settings Configuration (Home-Manager Only)
 
-- **WHEN** programs.dankMaterialShell.default.settings is configured
-- **THEN** default theme, dynamicTheming, and other settings are pre-configured
-- **AND** settings are only applied if files don't already exist
+- **WHEN** programs.dankMaterialShell.default.settings is configured with jsonFormat type
+- **THEN** xdg.configFile."DankMaterialShell/default-settings.json" is created
+- **AND** default settings include theme, dynamicTheming, and other options
+- **AND** settings are only read if settings.json doesn't exist
 - **AND** existing user configuration is never overridden
 
 #### Scenario: Default Session State (Home-Manager Only)
 
-- **WHEN** programs.dankMaterialShell.default.session is configured
-- **THEN** session state defaults are set
-- **AND** defaults are only applied on first launch
+- **WHEN** programs.dankMaterialShell.default.session is configured with jsonFormat type
+- **THEN** xdg.stateFile."DankMaterialShell/default-session.json" is created
+- **AND** default session state is only read if session.json doesn't exist
 
 #### Scenario: Plugin Installation (Home-Manager Only)
 
-- **WHEN** programs.dankMaterialShell.plugins are configured
-- **THEN** plugins can be enabled declaratively with src path
-- **AND** plugins are installed and managed by the system
+- **WHEN** programs.dankMaterialShell.plugins is configured as attrsOf submodule
+- **THEN** each plugin has enable (bool) and src (path) options
+- **AND** xdg.configFile."DankMaterialShell/plugins/${name}" links to plugin.src
+- **AND** only enabled plugins are linked
+- **AND** plugins are managed declaratively through Nix
 
 ## ADDED Requirements
+
+### Requirement: DankMaterialShell Greeter Support
+
+The system SHALL provide a DankMaterialShell-based greeter for login screens via greeter.nix module.
+
+#### Scenario: Greeter Configuration
+
+- **WHEN** programs.dankMaterialShell.greeter.enable is true
+- **THEN** services.greetd.enable is set to true by default
+- **AND** greeter runs with specified compositor (niri, hyprland, or sway)
+- **AND** dms-greeter script is generated with proper paths and commands
+
+#### Scenario: Greeter Compositor Selection
+
+- **WHEN** greeter compositor is configured
+- **THEN** programs.dankMaterialShell.greeter.compositor.name must be one of ["niri" "hyprland" "sway"]
+- **AND** programs.dankMaterialShell.greeter.compositor.customConfig can provide compositor-specific config
+- **AND** compositor package is included in PATH for greeter script
+
+#### Scenario: Greeter Configuration Files
+
+- **WHEN** greeter config files are needed
+- **THEN** programs.dankMaterialShell.greeter.configFiles lists paths to copy
+- **AND** programs.dankMaterialShell.greeter.configHome can specify user home for standard DMS config locations
+- **AND** settings.json, session.json, and dms-colors.json are copied to /var/lib/dmsgreeter
+
+#### Scenario: Greeter User Setup
+
+- **WHEN** greeter is enabled
+- **THEN** user for greetd default_session must exist
+- **AND** /var/lib/dmsgreeter directory is created with correct permissions
+- **AND** systemd tmpfiles configures directory ownership
+
+#### Scenario: Greeter Logging
+
+- **WHEN** programs.dankMaterialShell.greeter.logs.save is enabled
+- **THEN** greeter output is saved to logs.path (default: /tmp/dms-greeter.log)
+
+#### Scenario: Greeter Deprecated Options
+
+- **WHEN** old greeter options are used
+- **THEN** programs.dankMaterialShell.greeter.compositor.extraConfig is removed with migration message
+- **AND** users are directed to use compositor.customConfig instead
+
+### Requirement: DankMaterialShell Option Migration
+
+The system SHALL handle deprecated and renamed options gracefully with clear migration paths.
+
+#### Scenario: Removed Night Mode Option
+
+- **WHEN** old enableNightMode option is referenced
+- **THEN** lib.mkRemovedOptionModule is used with message "Night mode is now always available."
+- **AND** users are informed night mode is built-in
+
+#### Scenario: Renamed Systemd Option
+
+- **WHEN** old enableSystemd option is referenced
+- **THEN** lib.mkRenamedOptionModule redirects to programs.dankMaterialShell.systemd.enable
+- **AND** configuration continues to work with new option path
 
 ### Requirement: DankMaterialShell Module Documentation References
 
@@ -162,6 +268,7 @@ The system SHALL maintain clear references to module documentation for advanced 
 - **AND** home-manager module documentation is available at distro/nix/home.nix
 - **AND** niri module documentation is available at distro/nix/niri.nix
 - **AND** common options documentation is available at distro/nix/options.nix
+- **AND** greeter module documentation is available at distro/nix/greeter.nix
 
 ### Requirement: DankMaterialShell System Rebuild Process
 
