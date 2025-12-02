@@ -29,15 +29,15 @@ in {
       default = true;
       description = "Enable default Niri keybinds";
     };
+
+    settings = mkOption {
+      type = types.attrs;
+      default = {};
+      description = "Niri configuration settings";
+    };
   };
 
   config = mkIf cfg.enable {
-    # Enable Niri as the window manager
-    programs.niri = {
-      enable = true;
-      package = cfg.package;
-    };
-
     # Required system packages for Niri
     environment.systemPackages = with pkgs; [
       cfg.package
@@ -58,11 +58,7 @@ in {
       xdgOpenUsePortal = true;
     };
 
-<<<<<<< HEAD
     # Configure mate-polkit as the sole polkit authentication agent
-=======
-    # Configure mate-polkit as sole polkit authentication agent
->>>>>>> feature/niri-dankmaterial-integration
     security.polkit.enable = true;
     systemd.user.services.polkit-mate = {
       description = "MATE Polkit Authentication Agent";

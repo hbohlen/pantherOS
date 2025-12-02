@@ -13,7 +13,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixvim = {
@@ -109,8 +109,9 @@
           ./hosts/servers/hetzner-vps/hardware.nix
           ./hosts/servers/hetzner-vps/default.nix
           ./hosts/servers/hetzner-vps/disko.nix
+          { nixpkgs.pkgs = pkgs; }
         ];
-        specialArgs = { inherit lib pkgs; };
+        specialArgs = { inherit lib; };
       };
 
       nixosConfigurations.ovh-vps = lib.nixosSystem {
@@ -121,30 +122,44 @@
           ./hosts/servers/ovh-vps/hardware.nix
           ./hosts/servers/ovh-vps/default.nix
           ./hosts/servers/ovh-vps/disko.nix
+          { nixpkgs.pkgs = pkgs; }
         ];
-        specialArgs = { inherit lib pkgs; };
+        specialArgs = { inherit lib; };
       };
 
       nixosConfigurations.yoga = lib.nixosSystem {
         system = "x86_64-linux";
-modules = [
+        modules = [
           disko.nixosModules.disko
           opnix.nixosModules.default
           home-manager.nixosModules.home-manager
           nixos-facter-modules.nixosModules.facter
-           DankMaterialShell.nixosModules.dankMaterialShell
+          DankMaterialShell.nixosModules.dankMaterialShell
           niri.nixosModules.niri
           { config.facter.reportPath = ./hosts/yoga/yoga-facter.json; }
           ./hosts/yoga/default.nix
+          { nixpkgs.pkgs = pkgs; }
         ];
-        specialArgs = { inherit lib pkgs; };
+        specialArgs = { inherit lib; };
       };
 
-# Only include zephyrus if explicitly requested (to avoid CUDA dependencies on other hosts)
-      # nixosConfigurations.zephyrus = lib.nixosSystem {
-      #   { config.facter.reportPath = ./hosts/zephyrus/zephyrus-facter.json; }
-      #   ./hosts/zephyrus/default.nix
-      # };
+      nixosConfigurations.zephyrus = lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          disko.nixosModules.disko
+          opnix.nixosModules.default
+          home-manager.nixosModules.home-manager
+          nixos-facter-modules.nixosModules.facter
+          DankMaterialShell.nixosModules.dankMaterialShell
+          # niri.nixosModules.niri # Conflict with local module
+          { config.facter.reportPath = ./hosts/zephyrus/zephyrus-facter.json; }
+          ./hosts/zephyrus/default.nix
+          { nixpkgs.pkgs = pkgs; }
+        ];
+        specialArgs = { inherit lib; };
+      };
+
+
 
        devShells.${system}.default = pkgs.mkShell {
          buildInputs = with pkgs; [

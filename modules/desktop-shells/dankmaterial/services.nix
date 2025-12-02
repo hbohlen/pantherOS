@@ -10,6 +10,24 @@ let
 in {
   config = mkIf (cfg.enable && cfg.enableServices) {
     # Core system services
+    hardware.bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+      settings = {
+        General = {
+          Enable = "Source,Sink,Media,Control";
+          Experimental = true;
+        };
+      };
+    };
+
+    networking.networkmanager = {
+      enable = true;
+      wifi = {
+        backend = "iwd";
+      };
+    };
+
     services = {
       # Audio services
       pipewire = {
@@ -24,32 +42,14 @@ in {
         jack = {
           enable = false;
         };
+        wireplumber.enable = true;
       };
 
-      # Audio session manager
-      wireplumber = {
-        enable = true;
-      };
 
-      # Network services
-      networkmanager = {
-        enable = true;
-        wifi = {
-          backend = "iwd";
-        };
-      };
 
-      # Bluetooth services
-      bluetooth = {
-        enable = true;
-        powerOnBoot = true;
-        settings = {
-          General = {
-            Enable = "Source,Sink,Media,Control";
-            Experimental = true;
-          };
-        };
-      };
+
+
+
 
       # Power management
       power-profiles-daemon = {
@@ -63,7 +63,6 @@ in {
       # Location services
       geoclue2 = {
         enable = true;
-        demoAgent = false;
       };
 
       # Display management

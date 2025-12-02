@@ -35,7 +35,6 @@ in {
           scale = 1.0;
           transform = "normal";
         };
-<<<<<<< HEAD
 
         # External DisplayPort display
         "DP-1" = mkDefault {
@@ -60,8 +59,6 @@ in {
           scale = 1.25;
           transform = "normal";
         };
-=======
->>>>>>> feature/niri-dankmaterial-integration
       };
 
       # Variable refresh rate support
@@ -82,63 +79,65 @@ in {
     ];
 
     # Enable kanshi for automatic display configuration
-    services.kanshi = {
-      enable = true;
-      profiles = {
-        # Laptop only
-        laptop = {
-          outputs = [
-            {
-              criteria = "eDP-1";
-              mode = "1920x1080@60Hz";
-              position = "0,0";
-              scale = 1.0;
-            }
-          ];
-        };
-
-        # External monitor only
-        external = {
-          outputs = [
-            {
-              criteria = "HDMI-A-1";
-              mode = "1920x1080@60Hz";
-              position = "0,0";
-              scale = 1.0;
-            }
-          ];
-        };
-
-        # Dual monitor setup
-        dual = {
-          outputs = [
-            {
-              criteria = "eDP-1";
-              mode = "1920x1080@60Hz";
-              position = "0,0";
-              scale = 1.0;
-            }
-            {
-              criteria = "HDMI-A-1";
-              mode = "1920x1080@60Hz";
-              position = "1920,0";
-              scale = 1.0;
-            }
-          ];
-        };
-      };
-    };
+    # Enable kanshi for automatic display configuration - managed via Home Manager
+    # services.kanshi = {
+    #   enable = true;
+    #   profiles = {
+    #     # Laptop only
+    #     laptop = {
+    #       outputs = [
+    #         {
+    #           criteria = "eDP-1";
+    #           mode = "1920x1080@60Hz";
+    #           position = "0,0";
+    #           scale = 1.0;
+    #         }
+    #       ];
+    #     };
+    #
+    #     # External monitor only
+    #     external = {
+    #       outputs = [
+    #         {
+    #           criteria = "HDMI-A-1";
+    #           mode = "1920x1080@60Hz";
+    #           position = "0,0";
+    #           scale = 1.0;
+    #         }
+    #       ];
+    #     };
+    #
+    #     # Dual monitor setup
+    #     dual = {
+    #       outputs = [
+    #         {
+    #           criteria = "eDP-1";
+    #           mode = "1920x1080@60Hz";
+    #           position = "0,0";
+    #           scale = 1.0;
+    #         }
+    #         {
+    #           criteria = "HDMI-A-1";
+    #           mode = "1920x1080@60Hz";
+    #           position = "1920,0";
+    #           scale = 1.0;
+    #         }
+    #       ];
+    #     };
+    #   };
+    # };
 
     # Night light configuration
-    services.wlsunset = {
-      enable = true;
-      temperature = {
-        day = 6500;
-        night = 3700;
-      };
-      gamma = 1.0;
-      latitude = 40.7128;  # New York (default)
-      longitude = -74.0060;
-    };
+    # Night light configuration - managed via Home Manager
+    # services.wlsunset = {
+    #   enable = true;
+    #   temperature = {
+    #     day = 6500;
+    #     night = 3700;
+    #   };
+    #   gamma = 1.0;
+    #   latitude = 40.7128;  # New York (default)
+    #   longitude = -74.0060;
+    # };
   };
 }

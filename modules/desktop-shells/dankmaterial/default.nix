@@ -8,7 +8,6 @@ with lib;
 let
   cfg = config.programs.dankmaterial;
 in {
-<<<<<<< HEAD
   imports = [
     ./core.nix
     ./quickshell.nix
@@ -17,9 +16,6 @@ in {
     ./services.nix
     ./polkit.nix
   ];
-
-=======
->>>>>>> feature/niri-dankmaterial-integration
   options.programs.dankmaterial = {
     enable = mkEnableOption "DankMaterialShell desktop environment";
     
@@ -80,11 +76,9 @@ in {
         pulse.enable = true;
       };
 
-      # Network management
-      networkmanager.enable = true;
 
-      # Bluetooth support
-      bluetooth.enable = true;
+
+
 
       # Power management
       power-profiles-daemon.enable = true;
@@ -125,14 +119,14 @@ in {
 
     # XDG desktop integration
     xdg = {
-      autostart = {
-        "dankmaterial.desktop".enable = true;
-      };
+      # autostart = {
+      #   "dankmaterial.desktop".enable = true;
+      # };
 
-      icons = {
-        enable = true;
-        theme = "Papirus-Dark";
-      };
+      # icons = {
+      #   enable = true;
+      #   theme = "Papirus-Dark";
+      # };
 
       menus = {
         enable = true;
