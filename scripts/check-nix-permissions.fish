@@ -57,7 +57,7 @@ function check_and_fix_permissions
                 chown "$expected_owner:$expected_group" "$nix_path"
                 print_status "  Ownership fixed for $nix_path"
             else
-                print_warning "  Run this script as root to fix this issue: sudo $argv[0]"
+                print_warning "  Run this script as root to fix this issue: sudo "(status filename)
             end
             return 1
         else

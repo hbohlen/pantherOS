@@ -39,6 +39,18 @@ if type -q opencode
     alias oc='opencode'
 end
 
+# 1Password CLI aliases
+if type -q op
+    alias op-signin='eval (op signin)'
+end
+
+# Attic binary cache aliases
+if type -q attic
+    alias attic-push='attic push pantherOS'
+    alias attic-info='attic cache info pantherOS'
+    alias attic-list='attic cache list pantherOS'
+end
+
 # Better ls with eza if available
 if type -q eza
     alias ls='eza --icons'

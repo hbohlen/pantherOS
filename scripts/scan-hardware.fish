@@ -78,7 +78,7 @@ function generate_report
             # Memory info
             set memory_bytes (jq -r '.hardware.memory[0].resources[0].range // 0' "$output_file")
             set memory_gb (math "$memory_bytes / 1024 / 1024 / 1024")
-            echo "  Memory: {$memory_gb}GB"
+            echo "  Memory: $memory_gb GB"
 
             # Count disks
             set disk_count (jq '.hardware.disk | length' "$output_file")

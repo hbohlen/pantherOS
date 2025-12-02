@@ -1,0 +1,33 @@
+# Attic Configuration for Backblaze B2 Private Nix Cache
+# Copy this file to config.toml and fill in your secrets
+
+[cache.pantherOS]
+# Backblaze B2 endpoint
+endpoint = "https://s3.us-west-004.backblazeb2.com"
+
+[cache.pantherOS.credentials]
+# Get these from 1Password or environment variables
+# Application Key ID from Backblaze B2
+key_id = "${BACKBLAZE_KEY_ID}"  # Placeholder - replace with actual key or use 1Password
+
+# Application Key from Backblaze B2
+secret_key = "${BACKBLAZE_SECRET_KEY}"  # Placeholder - replace with actual key or use 1Password
+
+[cache.pantherOS.storage]
+# Your B2 bucket name
+bucket = "pantheros-nix-cache"  # Placeholder - replace with your bucket name
+
+# Optional: bucket region
+region = "us-west-004"
+
+[cache.pantherOS.compression]
+# Compression type: "zstd" (recommended), "xz", "bzip2", or "none"
+type = "zstd"
+level = 3
+
+[general]
+# Number of parallel uploads/downloads
+parallel_jobs = 4
+
+# Cache directory for attic
+cache_dir = "/home/node/.cache/attic"
