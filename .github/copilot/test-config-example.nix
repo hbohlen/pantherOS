@@ -91,7 +91,7 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
   };
 
   # Time zone
