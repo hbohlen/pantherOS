@@ -240,6 +240,8 @@ The system SHALL provide a DankMaterialShell-based greeter for login screens via
 - **WHEN** old greeter options are used
 - **THEN** programs.dankMaterialShell.greeter.compositor.extraConfig is removed with migration message
 - **AND** users are directed to use compositor.customConfig instead
+- **AND** migration guidance specifies: rename extraConfig to customConfig in configuration
+- **AND** existing configuration content remains unchanged, only the option name changes
 
 ### Requirement: DankMaterialShell Option Migration
 

@@ -128,8 +128,8 @@ The system SHALL provide dynamic theming for Firefox through Material Fox theme 
 - **THEN** ~/.config/DankMaterialShell/firefox.css is generated with dynamic colors
 - **AND** about:config settings are documented (toolkit.legacyuserprofilecustomizations.stylesheets, svg.context-properties.content.enabled, userChrome.theme-material)
 - **AND** Material Fox theme download and installation instructions are provided
-- **AND** symlink from firefox.css to chrome/theme-material-blue.css is documented
-- **AND** Firefox profile directory is detected with find ~/.mozilla/firefox command
+- **AND** user removes $PROFILE_DIR/chrome/theme-material-blue.css and creates symlink: ln -sf ~/.config/DankMaterialShell/firefox.css $PROFILE_DIR/chrome/theme-material-blue.css
+- **AND** Firefox profile directory is detected with: find ~/.mozilla/firefox -maxdepth 1 -type d -name "*.default-release"
 
 #### Scenario: Firefox Pywalfox Integration
 
@@ -191,7 +191,7 @@ The system SHALL provide dynamic theming for terminal applications using dank16 
 - **WHEN** theming foot terminal
 - **THEN** dank-colors.ini is generated with absolute paths
 - **AND** user edits ~/.config/foot/foot.ini to add include in [main] section
-- **AND** include path is absolute: include=/home/<USERNAME>/.config/foot/dank-colors.ini
+- **AND** include path is absolute: include=/home/$USER/.config/foot/dank-colors.ini
 
 #### Scenario: Alacritty Terminal Theming
 

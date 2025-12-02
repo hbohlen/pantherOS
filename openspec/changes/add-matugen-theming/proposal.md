@@ -16,7 +16,10 @@ To provide comprehensive dynamic theming support for native applications through
 - Provide Firefox integration via Material Fox theme or Pywalfox extension
 - Generate editor themes for VSCode/VSCodium with Dynamic Base16 DankShell scheme
 - Include troubleshooting guidance for common theming issues
-- **DEPENDENCY**: Requires `add-dank-material-shell` change to be completed first
+
+## Dependencies
+
+- Depends on: `add-dank-material-shell` (must be completed first)
 
 ## Impact
 
