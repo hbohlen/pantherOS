@@ -66,3 +66,37 @@ This project includes:
 - nixd: Alternative Nix language server
 - nixpkgs-fmt: Nix code formatter
 - nix-tree: Nix dependency explorer
+
+## GitHub Copilot Integration
+
+This repository is configured with GitHub Copilot Coding Agent enhancements including:
+
+- **5 MCP Servers**: Sequential thinking, Brave Search, Context7, NixOS MCP, and DeepWiki
+- **VPS SSH Access**: Remote NixOS configuration building and testing
+- **Automated Testing**: Configuration validation tools
+
+### Quick Setup
+
+Run the interactive setup script:
+
+```bash
+./.github/copilot/setup-environment.sh
+```
+
+For detailed instructions, see:
+- [**Quick Start Guide**](.github/copilot/README.md)
+- [**Complete Setup Instructions**](.github/copilot/SETUP.md)
+- [**Quick Reference Card**](.github/copilot/QUICK_REFERENCE.md)
+
+### Using Copilot
+
+Example prompts:
+
+```
+@copilot Search for the latest NixOS packages using brave-search
+@copilot Plan this migration using sequential-thinking
+@copilot Find NixOS options for configuring SSH using nixos-mcp
+@copilot Help me test this configuration on the VPS
+```
+
+See [`.github/copilot/README.md`](.github/copilot/README.md) for more details.
