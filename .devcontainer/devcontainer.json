@@ -14,7 +14,8 @@
     "ghcr.io/DeterminateSystems/devcontainer-features/nix:1": {
       "flakes": true,
       "nixpkgs": "nixpkgs-unstable"
-    }
+    },
+    "ghcr.io/meaningful-ooo/devcontainer-features/fish:1": {}
   },
 
   // Configure tool-specific properties
@@ -30,7 +31,7 @@
           "source.fixAll": "explicit"
         },
         "files.eol": "\n",
-        "terminal.integrated.defaultProfile.linux": "bash"
+        "terminal.integrated.defaultProfile.linux": "fish"
       },
 
       // Add extensions you want installed when the container is created
@@ -60,11 +61,12 @@
   // "forwardPorts": [],
 
   // Use 'postCreateCommand' to run commands after the container is created
-  "postCreateCommand": "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && npm install -g @opencode/cli",
+  "postCreateCommand": "corepack enable && corepack prepare pnpm@latest --activate && pnpm install && npm i -g opencode-ai",
 
-  // Configure mounts to preserve SSH keys for git operations
+  // Configure mounts to preserve SSH keys and fish config
   "mounts": [
-    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/node/.ssh,readonly,type=bind,consistency=cached"
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.ssh,target=/home/node/.ssh,readonly,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/.devcontainer/fish,target=/home/node/.config/fish,type=bind"
   ],
 
   // Set the default user to 'node' (non-root user)

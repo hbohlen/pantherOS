@@ -1,58 +1,58 @@
-#!/usr/bin/env bash
+#!/usr/bin/env fish
 
 echo "=== OpenAgent Dotfiles Integration Verification ==="
 echo
 
 # Check dotfiles module configuration
 echo "1. Checking dotfiles module integration..."
-if [ -f "/home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix" ]; then
+if test -f "/home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix"
     echo "✅ OpenCode dotfiles module exists"
 
     # Check module options
-    if grep -q "mkEnableOption.*Enable OpenCode.ai and OpenAgent configuration management" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix; then
+    if grep -q "mkEnableOption.*Enable OpenCode.ai and OpenAgent configuration management" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix
         echo "✅ OpenAgent enable option configured"
-    fi
+    end
 
-    if grep -q "openAgent" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix; then
+    if grep -q "openAgent" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix
         echo "✅ OpenAgent configuration options available"
-    fi
+    end
 
-    if grep -q "plugins" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix; then
+    if grep -q "plugins" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix
         echo "✅ Plugin configuration option available"
-    fi
+    end
 
-    if grep -q "xdg.configFile.*opencode/dcp.jsonc" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix; then
+    if grep -q "xdg.configFile.*opencode/dcp.jsonc" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix
         echo "✅ DCP configuration managed as dotfile"
-    fi
+    end
 
-    if grep -q "xdg.configFile.*opencode/opencode.jsonc" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix; then
+    if grep -q "xdg.configFile.*opencode/opencode.jsonc" /home/hbohlen/dev/pantherOS/modules/home/dotfiles/opencode-ai.nix
         echo "✅ OpenCode config managed as dotfile"
-    fi
+    end
 else
     echo "❌ OpenCode dotfiles module not found"
-fi
+end
 
 # Check home.nix integration
 echo
 echo "2. Checking home.nix dotfiles integration..."
-if [ -f "/home/hbohlen/dev/pantherOS/home/hbohlen/home.nix" ]; then
-    if grep -q "home-manager.dotfiles.opencode-ai" /home/hbohlen/dev/pantherOS/home/hbohlen/home.nix; then
+if test -f "/home/hbohlen/dev/pantherOS/home/hbohlen/home.nix"
+    if grep -q "home-manager.dotfiles.opencode-ai" /home/hbohlen/dev/pantherOS/home/hbohlen/home.nix
         echo "✅ Dotfiles module enabled in home.nix"
 
         # Check configuration options
-        if grep -q "openAgent" /home/hbohlen/dev/pantherOS/home/hbohlen/home.nix; then
+        if grep -q "openAgent" /home/hbohlen/dev/pantherOS/home/hbohlen/home.nix
             echo "✅ OpenAgent configuration present"
-        fi
+        end
 
-        if grep -q "plugins.*@tarquinen/opencode-dcp" /home/hbohlen/dev/pantherOS/home/hbohlen/home.nix; then
+        if grep -q "plugins.*@tarquinen/opencode-dcp" /home/hbohlen/dev/pantherOS/home/hbohlen/home.nix
             echo "✅ DCP plugin configured"
-        fi
+        end
     else
         echo "❌ Dotfiles module not enabled in home.nix"
-    fi
+    end
 else
     echo "❌ home.nix not found"
-fi
+end
 
 # Simulate expected configuration output
 echo
@@ -73,7 +73,7 @@ echo "   OPENAGENT_DCP_PRUNING_MODE=smart"
 # Check DCP configuration content
 echo
 echo "4. DCP configuration content verification..."
-if [ -f "/home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc" ]; then
+if test -f "/home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc"
     echo "✅ Current dcp.jsonc exists and will be managed by dotfiles module"
     echo "   Expected managed content:"
     echo "   - enabled: true"
@@ -82,7 +82,7 @@ if [ -f "/home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc" ]; then
     echo "   - protectedTools: [task, todowrite, todoread]"
     echo "   - onIdle: [deduplication, ai-analysis]"
     echo "   - onTool: [deduplication]"
-fi
+end
 
 echo
 echo "=== Dotfiles Integration Status ==="

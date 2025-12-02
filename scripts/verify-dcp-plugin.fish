@@ -1,73 +1,73 @@
-#!/usr/bin/env bash
+#!/usr/bin/env fish
 
 echo "=== DCP Plugin Verification ==="
 echo
 
 # Check DCP plugin configuration
 echo "1. Checking DCP plugin configuration..."
-if [ -f "/home/hbohlen/dev/pantherOS/home/hbohlen/opencode/opencode.jsonc" ]; then
-    if grep -q '"@tarquinen/opencode-dcp"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/opencode.jsonc; then
+if test -f "/home/hbohlen/dev/pantherOS/home/hbohlen/opencode/opencode.jsonc"
+    if grep -q '"@tarquinen/opencode-dcp"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/opencode.jsonc
         echo "✅ DCP plugin listed in opencode.jsonc"
     else
         echo "❌ DCP plugin not found in opencode.jsonc"
-    fi
+    end
 else
     echo "❌ opencode.jsonc not found"
-fi
+end
 
 # Check DCP configuration file
 echo
 echo "2. Checking DCP configuration file..."
-if [ -f "/home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc" ]; then
+if test -f "/home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc"
     echo "✅ dcp.jsonc exists"
 
     # Check key settings
-    if grep -q '"enabled": true' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc; then
+    if grep -q '"enabled": true' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc
         echo "✅ DCP enabled"
-    fi
+    end
 
-    if grep -q '"pruningMode": "smart"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc; then
+    if grep -q '"pruningMode": "smart"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc
         echo "✅ Smart pruning mode enabled"
-    fi
+    end
 
-    if grep -q '"protectedTools"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc; then
+    if grep -q '"protectedTools"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc
         echo "✅ Protected tools configured"
-    fi
+    end
 
     # Check for idle/ontidle actions
-    if grep -q '"onIdle"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc; then
+    if grep -q '"onIdle"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc
         echo "✅ Idle cleanup actions configured"
-    fi
+    end
 
-    if grep -q '"onTool"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc; then
+    if grep -q '"onTool"' /home/hbohlen/dev/pantherOS/home/hbohlen/opencode/dcp.jsonc
         echo "✅ Tool-triggered pruning configured"
-    fi
+    end
 else
     echo "❌ dcp.jsonc not found"
-fi
+end
 
 # Check plugin dependencies
 echo
 echo "3. Checking DCP plugin dependencies..."
-if command -v npm >/dev/null 2>&1; then
+if command -v npm >/dev/null 2>&1
     echo "✅ npm available for plugin management"
     echo "📦 DCP plugin: @tarquinen/opencode-dcp"
     echo "   Source: https://www.npmjs.com/package/@tarquinen/opencode-dcp"
 else
     echo "⚠️  npm not available - plugin installation may be manual"
-fi
+end
 
 # Check OpenAgent context pruning readiness
 echo
 echo "4. OpenAgent DCP integration check..."
-if [ -d "/home/hbohlen/dev/pantherOS/home/hbohlen/opencode" ]; then
+if test -d "/home/hbohlen/dev/pantherOS/home/hbohlen/opencode"
     echo "✅ OpenAgent directory structure ready for DCP"
     echo "📊 Expected pruning targets:"
     echo "   - Agent configurations (16 files)"
     echo "   - Command definitions (14 files)"
     echo "   - Context files and session data"
     echo "   - Redundant tool outputs and responses"
-fi
+end
 
 echo
 echo "=== DCP Plugin Status ==="

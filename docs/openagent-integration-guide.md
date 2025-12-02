@@ -268,20 +268,20 @@ home-manager.dotfiles.opencode-ai = {
 
 ### Complete Integration Check
 
-```bash
-/home/hbohlen/dev/pantherOS/scripts/verify-openagent-integration.sh
+```fish
+/home/hbohlen/dev/pantherOS/scripts/verify-openagent-integration.fish
 ```
 
 ### DCP Plugin Verification
 
-```bash
-/home/hbohlen/dev/pantherOS/scripts/verify-dcp-plugin.sh
+```fish
+/home/hbohlen/dev/pantherOS/scripts/verify-dcp-plugin.fish
 ```
 
 ### Dotfiles Module Verification
 
-```bash
-/home/hbohlen/dev/pantherOS/scripts/verify-dotfiles-integration.sh
+```fish
+/home/hbohlen/dev/pantherOS/scripts/verify-dotfiles-integration.fish
 ```
 
 **Verification Coverage**:
