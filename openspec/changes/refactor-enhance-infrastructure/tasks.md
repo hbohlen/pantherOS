@@ -114,6 +114,8 @@
 - [x] 5.2.2 Add 1Password configuration to yoga host
 - [x] 5.2.3 Ensure consistent polkitPolicyOwners configuration
 - [x] 5.2.4 Verify proper polkit integration
+- [x] 5.2.5 Ensure mate-polkit is the sole authentication agent
+- [x] 5.2.6 Disable conflicting polkit agents (gnome, kde, xfce)
 
 ### 5.3 Testing
 - [ ] 5.3.1 Test 1Password CLI on zephyrus

@@ -17,6 +17,8 @@ The system SHALL provide a standardized 1Password integration module following o
 - **THEN** polkitPolicyOwners configuration is required
 - **AND** polkit service is automatically enabled
 - **AND** system authentication works correctly
+- **AND** only mate-polkit is used as the authentication agent
+- **AND** conflicting polkit agents (gnome, kde, xfce) are disabled
 
 ### Requirement: Consistent Personal Device Configuration
 
@@ -47,6 +49,26 @@ The system SHALL maintain separate 1Password configuration for servers using OpN
 - **AND** CLI is available via package if needed
 - **AND** GUI is not installed on servers
 - **AND** secrets are managed through OpNix service
+
+### Requirement: Mate-Polkit as Sole Authentication Agent
+
+The system SHALL ensure mate-polkit is the only polkit authentication agent running.
+
+#### Scenario: Polkit agent exclusivity
+
+- **WHEN** 1Password security module is enabled
+- **THEN** mate-polkit is configured as the authentication agent
+- **AND** gnome-polkit is explicitly disabled
+- **AND** kde-polkit is explicitly disabled
+- **AND** xfce-polkit is explicitly disabled
+- **AND** no conflicting polkit agents can start
+
+#### Scenario: Integration with existing modules
+
+- **WHEN** niri or DankMaterialShell modules configure mate-polkit
+- **THEN** 1Password module does not interfere with mate-polkit setup
+- **AND** both modules cooperate to ensure mate-polkit exclusivity
+- **AND** no duplicate polkit agents are started
 
 ### Requirement: Documentation and Best Practices
 

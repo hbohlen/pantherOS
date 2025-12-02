@@ -10,11 +10,13 @@
 # - Ensures polkit is always enabled (required for GUI authentication)
 # - Enforces polkitPolicyOwners requirement (often forgotten)
 # - Provides consistent configuration pattern across hosts
+# - Ensures only mate-polkit is used as the authentication agent
 #
 # Internally configures:
 # - programs._1password (NixOS built-in module for CLI)
 # - programs._1password-gui (NixOS built-in module for GUI)
 # - security.polkit.enable (required for GUI to work)
+# - Disables conflicting polkit agents (gnome, kde, xfce) to ensure mate-polkit is sole agent
 
 { config, lib, pkgs, ... }:
 
@@ -51,6 +53,16 @@ in {
     };
 
     # Ensure polkit is enabled for 1Password GUI authentication
+    # Note: mate-polkit is configured elsewhere (niri/dankmaterial modules)
+    # as the sole polkit authentication agent
     security.polkit.enable = true;
+
+    # Explicitly disable any polkit agents that might conflict with mate-polkit
+    # We rely on mate-polkit as the sole authentication agent
+    systemd.user.services.polkit-gnome-authentication-agent-1.enable = mkForce false;
+    systemd.user.services.polkit-kde-authentication-agent-1.enable = mkForce false;
+    systemd.user.services.xfce-polkit.enable = mkForce false;
+    systemd.user.services.polkit-gnome.enable = mkForce false;
+    systemd.user.services.polkit-kde.enable = mkForce false;
   };
 }
