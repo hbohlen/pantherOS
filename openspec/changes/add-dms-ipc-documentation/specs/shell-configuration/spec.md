@@ -7,10 +7,11 @@ The system SHALL provide a comprehensive IPC (Inter-Process Communication) inter
 #### Scenario: IPC Command Syntax
 
 - **WHEN** executing IPC commands
-- **THEN** command format is: `dms ipc <module> <action> [args...]`
+- **THEN** command format is: `dms ipc call <module> <action> [args...]`
 - **AND** module specifies the DMS component to control
 - **AND** action specifies the operation to perform
 - **AND** args provides optional parameters specific to the action
+- **AND** "call" keyword is required between "ipc" and module name
 
 #### Scenario: Available IPC Modules
 
@@ -18,6 +19,7 @@ The system SHALL provide a comprehensive IPC (Inter-Process Communication) inter
 - **THEN** core modules include: spotlight, notifications, settings, notepad, lock, powermenu, night
 - **AND** audio module is available for volume control
 - **AND** conditional modules include: processlist (requires enableSystemMonitoring), clipboard (requires enableClipboard), brightness (requires enableBrightnessControl)
+- **AND** compositor-specific modules include: hypr (Hyprland overview), dankdash (wallpaper browser)
 
 #### Scenario: IPC Command Execution
 
