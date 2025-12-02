@@ -147,9 +147,11 @@ in {
 6. **Commit** with clear description of split
 
 Target modules:
-- `modules/desktop-shells/dankmaterial/widgets.nix` (407 lines → ~8 files @ 50 lines each)
-- `modules/desktop-shells/dankmaterial/services.nix` (333 lines → ~6 files @ 55 lines each)
-- `modules/home-manager/dotfiles/opencode-ai.nix` (275 lines → ~4 files @ 70 lines each)
+- `modules/desktop-shells/dankmaterial/widgets.nix` (407 lines → ~8 focused modules + 1 aggregator)
+- `modules/desktop-shells/dankmaterial/services.nix` (333 lines → ~6 focused modules + 1 aggregator)
+- `modules/home-manager/dotfiles/opencode-ai.nix` (275 lines → ~4 focused modules + 1 aggregator)
+
+Note: Split files will include necessary imports and structure, so total lines may slightly exceed original due to module overhead.
 
 ### Facter Integration Process
 
@@ -226,9 +228,10 @@ This change is fully backward compatible, no migration needed:
 ## Open Questions
 
 1. Should zellij be auto-started in terminals? **Decision**: No, opt-in via alias
-2. Should pre-commit hooks be added? **Decision**: Optional, not required
+2. Should pre-commit hooks be added? **Decision**: Future enhancement, not in initial scope
 3. Should facter.json parsing be automatic or explicit? **Decision**: Explicit in meta.nix
-4. Should module size limit be enforced? **Decision**: Guideline, not strict rule
+4. Should module size limit be enforced? **Decision**: Guideline (250 lines of code), not strict rule
+5. Should line count include comments/blanks? **Decision**: No, count code lines only
 
 ## Success Criteria
 

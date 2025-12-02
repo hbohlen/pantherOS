@@ -59,6 +59,11 @@
 - [ ] 3.2.3 Test zellij with existing terminal tools (fzf, eza)
 - [ ] 3.2.4 Document zellij workflow and keybindings
 
+### 3.4 Optional Enhancements (Future)
+- Optional: Add zellij autostart behavior
+- Optional: Create additional layout templates
+- Optional: Add pre-commit hooks framework for code quality
+
 ### 3.3 Terminal Emulator Integration
 - [ ] 3.3.1 Ensure zellij works correctly with ghostty
 - [ ] 3.3.2 Configure terminal colors and theming for zellij
@@ -83,7 +88,6 @@
 - [ ] 4.3.1 Add statix for Nix linting
 - [ ] 4.3.2 Add deadnix for dead code detection
 - [ ] 4.3.3 Add shellcheck for shell script validation
-- [ ] 4.3.4 Add pre-commit hooks framework (optional)
 
 ### 4.4 Documentation and Exploration
 - [ ] 4.4.1 Add manix for Nix function documentation

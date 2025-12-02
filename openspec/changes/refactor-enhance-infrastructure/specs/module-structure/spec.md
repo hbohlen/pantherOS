@@ -2,7 +2,7 @@
 
 ### Requirement: Module Size Limits
 
-The system SHALL maintain module files below 250 lines to ensure maintainability and clarity.
+The system SHALL maintain module files below 250 lines of code (excluding comments and blank lines) to ensure maintainability and clarity.
 
 #### Scenario: Large module detection
 
