@@ -4,7 +4,9 @@
 
 **Golden Rule**: Fetch context when needed, not before (lazy loading)
 
-**Key Principle**: Reference files WITHOUT @ symbol - agent fetches only when needed
+**Key Principle**: Use context index for discovery, load specific files as needed
+
+**Index Location**: `.opencode/context/index.md` - Quick map of all contexts
 
 **Structure**: standards/ (quality + analysis), workflows/ (process + review), system/ (internals)
 
@@ -14,97 +16,101 @@
 
 ## Overview
 
-Context files provide guidelines and templates for specific tasks. Use lazy loading (fetch when needed) to keep prompts lean.
+Context files provide guidelines and templates for specific tasks. Use the index system for efficient discovery and lazy loading to keep prompts lean.
 
-## Available Context Files
+## Context Index System
+
+**Central Index**: `.opencode/context/index.md` - Ultra-compact map of all contexts
+
+The index provides:
+- Quick map for common tasks (code, docs, tests, review, delegation)
+- Triggers/keywords for each context
+- Dependencies between contexts
+- Priority levels (critical, high, medium)
+
+### Available Context Files
 
 All files are in `.opencode/context/core/` with organized subfolders:
 
 ### Standards (Quality Guidelines + Analysis)
-
-- `.opencode/context/core/standards/code.md` - Modular, functional code principles
-- `.opencode/context/core/standards/docs.md` - Documentation standards
-- `.opencode/context/core/standards/tests.md` - Testing standards
-- `.opencode/context/core/standards/patterns.md` - Core patterns (error handling, security)
-- `.opencode/context/core/standards/analysis.md` - Analysis framework
+- `standards/code.md` - Modular, functional code principles [critical]
+- `standards/docs.md` - Documentation standards [critical]
+- `standards/tests.md` - Testing standards [critical]
+- `standards/patterns.md` - Core patterns (error handling, security) [high]
+- `standards/analysis.md` - Analysis framework [high]
 
 ### Workflows (Process Templates + Review)
+- `workflows/delegation.md` - Delegation template [high]
+- `workflows/task-breakdown.md` - Complex task breakdown [high]
+- `workflows/sessions.md` - Session lifecycle [medium]
+- `workflows/review.md` - Code review guidelines [high]
 
-- `.opencode/context/core/workflows/delegation.md` - Delegation template
-- `.opencode/context/core/workflows/task-breakdown.md` - Complex task breakdown
-- `.opencode/context/core/workflows/sessions.md` - Session lifecycle
-- `.opencode/context/core/workflows/review.md` - Code review guidelines
+## How to Use the Index
 
-## Lazy Loading (Recommended)
+**Step 1: Check Quick Map** (for common tasks)
+- Code task? → Load `standards/code.md`
+- Docs task? → Load `standards/docs.md`
+- Review task? → Load `workflows/review.md`
 
-Reference files **WITHOUT** `@` symbol - agent fetches only when needed:
+**Step 2: Load Index** (for keyword matching)
+- Load `.opencode/context/index.md`
+- Scan triggers to find relevant contexts
+- Load specific context files as needed
 
-```markdown
-"Write code following .opencode/context/core/standards/code.md"
-"Review using .opencode/context/core/workflows/review.md"
-"Break down task using .opencode/context/core/workflows/task-breakdown.md"
-```
+**Step 3: Load Dependencies**
+- Check `deps:` in index
+- Load dependent contexts for complete guidelines
 
 **Benefits:**
-
-- No prompt bloat
+- No prompt bloat (index is only ~120 tokens)
 - Fetch only what's relevant
 - Faster for simple tasks
-- Agent decides when to load
+- Clear dependency tracking
 
 ## When to Use Each File
 
 ### .opencode/context/core/standards/code.md
-
 - Writing new code
 - Modifying existing code
 - Following modular/functional patterns
 - Making architectural decisions
 
 ### .opencode/context/core/standards/docs.md
-
 - Writing README files
 - Creating API documentation
 - Adding code comments
 
 ### .opencode/context/core/standards/tests.md
-
 - Writing new tests
 - Running test suites
 - Debugging test failures
 
 ### .opencode/context/core/standards/patterns.md
-
 - Error handling
 - Security patterns
 - Common code patterns
 
 ### .opencode/context/core/standards/analysis.md
-
 - Analyzing codebase patterns
 - Investigating bugs
 - Evaluating architecture
 
 ### .opencode/context/core/workflows/delegation.md
-
 - Delegating to general agent
 - Creating task context
 - Multi-file coordination
 
 ### .opencode/context/core/workflows/task-breakdown.md
-
 - Tasks with 4+ files
 - Estimated effort >60 minutes
 - Complex dependencies
 
 ### .opencode/context/core/workflows/sessions.md
-
 - Session lifecycle
 - Cleanup procedures
 - Session isolation
 
 ### .opencode/context/core/workflows/review.md
-
 - Reviewing code
 - Conducting code audits
 - Providing PR feedback
@@ -116,7 +122,6 @@ When delegating, create focused task context:
 **Location**: `.tmp/sessions/{timestamp}-{task-slug}/context.md`
 
 **Structure**:
-
 ```markdown
 # Task Context: {Task Name}
 
@@ -125,38 +130,30 @@ Created: {timestamp}
 Status: in_progress
 
 ## Current Request
-
 {What user asked for}
 
 ## Requirements
-
 - {requirement 1}
 - {requirement 2}
 
 ## Decisions Made
-
 - {decision 1}
 
 ## Files to Modify/Create
-
 - {file 1} - {purpose}
 
 ## Static Context Available
-
 - .opencode/context/core/standards/code.md
 - .opencode/context/core/standards/tests.md
 
 ## Constraints/Notes
-
 {Important context}
 
 ## Progress
-
 - [ ] {task 1}
 - [ ] {task 2}
 
 ---
-
 **Instructions for Subagent:**
 {Specific instructions}
 ```
@@ -164,7 +161,6 @@ Status: in_progress
 ## Session Management
 
 ### Session Structure
-
 ```
 .tmp/sessions/{session-id}/
 ├── context.md          # Task context
@@ -173,20 +169,19 @@ Status: in_progress
 ```
 
 ### Session ID Format
-
 `{timestamp}-{random-4-chars}`
 Example: `20250119-143022-a4f2`
 
 ### Cleanup
-
 - Ask user before deleting session files
 - Remove after task completion
 - Keep if user wants to review
 
 ## Best Practices
 
-✅ Use lazy loading (no @ symbol)
-✅ Fetch only relevant context
+✅ Use index for context discovery
+✅ Load only relevant context files
+✅ Check dependencies in index
 ✅ Create temp context when delegating
 ✅ Clean up sessions after completion
 ✅ Reference specific sections when possible

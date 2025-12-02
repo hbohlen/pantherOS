@@ -8,13 +8,13 @@ This document outlines the hardware scanning process for the zephyrus and yoga p
 
 ### NixOS Facter
 
-- **Repository**: https://github.com/nix-community/nixos-facter
+- **Repository**: <https://github.com/nix-community/nixos-facter>
 - **Purpose**: Generates detailed JSON hardware reports
 - **Installation**: Available in nixpkgs as `nixos-facter`
 
 ### NixOS Facter Modules
 
-- **Repository**: https://github.com/nix-community/nixos-facter-modules
+- **Repository**: <https://github.com/nix-community/nixos-facter-modules>
 - **Purpose**: NixOS modules that automatically configure hardware based on facter reports
 - **Features**: Automatic detection and configuration of network, graphics, USB, and other hardware
 

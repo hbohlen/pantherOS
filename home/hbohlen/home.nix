@@ -22,16 +22,17 @@
   };
 
   # OpenCode/OpenAgent enhanced dotfiles management
-  dotfiles.opencode-ai = {
-    enable = true;
-    theme = "rosepine";
-    openAgent = {
-      enable = true;
-      debug = true;
-      dcp.enable = true;
-    };
-    plugins = [ "@tarquinen/opencode-dcp" "opencode-skills" ];
-  };
+  # OpenCode/OpenAgent enhanced dotfiles management - module not imported
+  # dotfiles.opencode-ai = {
+  #   enable = true;
+  #   theme = "rosepine";
+  #   openAgent = {
+  #     enable = true;
+  #     debug = true;
+  #     dcp.enable = true;
+  #   };
+  #   plugins = [ "@tarquinen/opencode-dcp" "opencode-skills" ];
+  # };
 
   # Home Manager configuration
   programs = {

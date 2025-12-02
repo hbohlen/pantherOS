@@ -5,7 +5,7 @@ This is a NixOS configuration for Hetzner Cloud VPS.
 ## Prerequisites
 
 1. Install Nix package manager (multi-user installation recommended):
-   ```bash
+   ```fish
    curl -L https://nixos.org/nix/install | sh
    ```
 
@@ -15,7 +15,7 @@ To work on this configuration, you have two options:
 
 ### Option 1: Using the development shell
 
-```bash
+```fish
 cd pantherOS
 nix develop
 ```
@@ -31,13 +31,13 @@ For VS Code with the Nix extension, you need to install these language servers:
 
 You can install them globally using:
 
-```bash
+```fish
 nix profile install nixpkgs#nil nixpkgs#nixd
 ```
 
 Or if using AUR on Arch-based systems:
 
-```bash
+```fish
 yay -S nil-git nixd
 ```
 
@@ -45,7 +45,7 @@ yay -S nil-git nixd
 
 To build the NixOS configuration:
 
-```bash
+```fish
 cd /path/to/pantherOS
 sudo nixos-rebuild build --flake .#hetzner-vps
 ```

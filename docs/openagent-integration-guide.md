@@ -256,7 +256,7 @@ home-manager.dotfiles.opencode-ai = {
 
 **DCP Plugin Features**:
 
-- **Plugin**: `@tarquinen/opencode-dcp` (npm: https://www.npmjs.com/package/@tarquinen/opencode-dcp)
+- **Plugin**: `@tarquinen/opencode-dcp` (npm: <https://www.npmjs.com/package/@tarquinen/opencode-dcp>)
 - **Smart pruning**: AI-powered context optimization
 - **Deduplication**: Removes redundant content automatically
 - **Protected tools**: Critical workflow tools are never pruned

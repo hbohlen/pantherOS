@@ -1,7 +1,17 @@
-import type { Plugin } from "@opencode-ai/plugin";
+import type { Plugin } from "@opencode-ai/plugin"
 
-export const Notify: Plugin = async () => {
+// 🔧 CONFIGURATION: Set to true to enable this plugin
+const ENABLED = false
+
+export const Notify: Plugin = async ({ $ }) => {
+  // Plugin disabled - set ENABLED = true to activate
+  if (!ENABLED) return {}
+  
   return {
-    // Plugin configuration for future implementation
-  };
-};
+    async event(input) {
+      if (input.event.type === "session.idle") {
+        await $`say "Your code is done!"`
+      }
+    },
+  }
+}

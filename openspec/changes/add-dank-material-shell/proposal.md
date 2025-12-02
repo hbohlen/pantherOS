@@ -2,7 +2,7 @@
 
 ## Why
 
-To provide a comprehensive, modern material design shell experience on personal devices (zephyrus and yoga), enhancing the user interface with DankMaterialShell - a full-featured shell configuration including themes, plugins, system monitoring, clipboard management, and extensive customization options from https://danklinux.com/docs/dankmaterialshell/nixos.
+To provide a comprehensive, modern material design shell experience on personal devices (zephyrus and yoga), enhancing the user interface with DankMaterialShell - a full-featured shell configuration including themes, plugins, system monitoring, clipboard management, and extensive customization options from <https://danklinux.com/docs/dankmaterialshell/nixos>.
 
 ## What Changes
 

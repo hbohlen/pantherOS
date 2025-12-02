@@ -1,3 +1,5 @@
+<!-- Context: standards/patterns | Priority: high | Version: 2.0 | Updated: 2025-01-21 -->
+
 # Essential Patterns - Core Knowledge Base
 
 ## Quick Reference

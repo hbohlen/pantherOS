@@ -1,5 +1,5 @@
 ---
-description: 'Interactive system builder that creates complete context-aware AI architectures tailored to user domains'
+description: "Interactive system builder that creates complete context-aware AI architectures tailored to user domains"
 ---
 
 <target_domain> $ARGUMENTS </target_domain>
@@ -16,20 +16,27 @@ description: 'Interactive system builder that creates complete context-aware AI 
 <task>Guide users through requirements gathering and generate complete, production-ready .opencode folder systems customized to their domain and use cases</task>
 
 <workflow_execution>
-<stage id="0" name="DetectExistingProject">
-<action>Detect existing .opencode structure and offer merge options</action>
-<process> 1. Check if .opencode/ directory exists 2. Scan for existing agents (agent/_.md, agent/subagents/_.md) 3. Scan for existing commands (command/_.md) 4. Scan for existing context files (context/_/_.md) 5. Scan for existing workflows (workflows/_.md) 6. Identify existing system capabilities 7. Present merge options to user
-</process>
-<detection_logic>
-<check_directory>
-IF .opencode/ exists:
-existing_project = true
-Scan contents
-ELSE:
-existing_project = false
-Proceed to fresh build
-</check_directory>
-
+  <stage id="0" name="DetectExistingProject">
+    <action>Detect existing .opencode structure and offer merge options</action>
+    <process>
+      1. Check if .opencode/ directory exists
+      2. Scan for existing agents (agent/*.md, agent/subagents/*.md)
+      3. Scan for existing commands (command/*.md)
+      4. Scan for existing context files (context/*/*.md)
+      5. Scan for existing workflows (workflows/*.md)
+      6. Identify existing system capabilities
+      7. Present merge options to user
+    </process>
+    <detection_logic>
+      <check_directory>
+        IF .opencode/ exists:
+          existing_project = true
+          Scan contents
+        ELSE:
+          existing_project = false
+          Proceed to fresh build
+      </check_directory>
+      
       <scan_agents>
         agents_found = []
         FOR each file in agent/*.md:
@@ -37,10 +44,10 @@ Proceed to fresh build
         FOR each file in agent/subagents/*.md:
           agents_found.append(file)
       </scan_agents>
-
+      
       <identify_capabilities>
         Known agents and their capabilities:
-        - codebase-agent: Code analysis, file operations
+        - opencoder: Code analysis, file operations
         - task-manager: Task tracking, project management
         - workflow-orchestrator: Workflow coordination
         - image-specialist: Image generation/editing
@@ -54,25 +61,25 @@ Proceed to fresh build
     <decision>
       <if test="no_existing_project">
         ## Fresh Build
-
+        
         No existing .opencode system detected.
-
+        
         I'll create a complete new system for you.
-
+        
         Proceed to Stage 1 (InitiateInterview)
       </if>
       <if test="existing_project_found">
         ## Existing Project Detected
-
+        
         Found existing .opencode system with:
         - **Agents**: {agent_count} ({agent_names})
         - **Subagents**: {subagent_count} ({subagent_names})
         - **Commands**: {command_count} ({command_names})
         - **Context Files**: {context_count}
         - **Workflows**: {workflow_count}
-
+        
         **How would you like to proceed?**
-
+        
         **Option 1: Extend Existing System** (Recommended)
         - ✅ Keep all existing files
         - ✅ Add new agents/workflows/commands for your new domain
@@ -80,22 +87,22 @@ Proceed to fresh build
         - ✅ Integrate new capabilities with existing ones
         - ✅ Create unified orchestrator that routes to both
         - Best for: Adding new capabilities to active project
-
+        
         **Option 2: Create Separate System**
         - ✅ Keep existing system intact
         - ✅ Create new system in separate namespace
         - ✅ Both systems coexist independently
         - Best for: Multi-domain projects with distinct needs
-
+        
         **Option 3: Replace Existing System**
         - ⚠️  Backup existing to .opencode.backup.{timestamp}/
         - ⚠️  Create fresh system (existing work preserved in backup)
         - ⚠️  Use with caution
         - Best for: Complete system redesign
-
+        
         **Option 4: Cancel**
         - Exit without changes
-
+        
         Please choose: [1/2/3/4]
       </if>
     </decision>
@@ -120,7 +127,6 @@ Proceed to fresh build
       </replace_existing>
     </merge_strategy>
     <checkpoint>User has chosen merge strategy or confirmed fresh build</checkpoint>
-
   </stage>
 
   <stage id="1" name="InitiateInterview">
@@ -274,7 +280,7 @@ Proceed to fresh build
     <existing_agent_matching>
       <for_development>
         Relevant existing agents:
-        - codebase-agent: Code analysis and file operations
+        - opencoder: Code analysis and file operations
         - build-agent: Build validation and type checking
         - tester: Test authoring and TDD
         - reviewer: Code review and quality assurance
@@ -704,36 +710,43 @@ Proceed to fresh build
 </workflow_execution>
 
 <routing_intelligence>
-<analyze_request>
-<step_1>Parse $ARGUMENTS for initial domain hint</step_1>
-<step_2>Determine if user provided domain or needs full interview</step_2>
-<step_3>Assess user's technical level from responses</step_3>
-</analyze_request>
-
-<allocate_context>
-<level_1>
-<when>User provides clear, complete requirements upfront</when>
-<context>Requirements only, minimal guidance</context>
-</level_1>
-<level_2>
-<when>Standard interview process (most common)</when>
-<context>Interview questions + architecture patterns + examples</context>
-</level_2>
-<level_3>
-<when>Complex domain requiring extensive guidance</when>
-<context>Full interview + detailed examples + reference architectures</context>
-</level_3>
-</allocate_context>
-
-<execute_routing>
-<route to="@system-builder" when="user_confirms_architecture">
-<context_level>Level 2 - Filtered Context</context_level>
-<pass_data> - interview_responses (all captured data) - architecture_summary (generated plan) - component_specifications (detailed specs) - file_structure_plan (directory layout)
-</pass_data>
-<expected_return> - complete_file_structure (all generated files) - validation_report (quality checks) - documentation (usage guides)
-</expected_return>
-</route>
-
+  <analyze_request>
+    <step_1>Parse $ARGUMENTS for initial domain hint</step_1>
+    <step_2>Determine if user provided domain or needs full interview</step_2>
+    <step_3>Assess user's technical level from responses</step_3>
+  </analyze_request>
+  
+  <allocate_context>
+    <level_1>
+      <when>User provides clear, complete requirements upfront</when>
+      <context>Requirements only, minimal guidance</context>
+    </level_1>
+    <level_2>
+      <when>Standard interview process (most common)</when>
+      <context>Interview questions + architecture patterns + examples</context>
+    </level_2>
+    <level_3>
+      <when>Complex domain requiring extensive guidance</when>
+      <context>Full interview + detailed examples + reference architectures</context>
+    </level_3>
+  </allocate_context>
+  
+  <execute_routing>
+    <route to="@system-builder" when="user_confirms_architecture">
+      <context_level>Level 2 - Filtered Context</context_level>
+      <pass_data>
+        - interview_responses (all captured data)
+        - architecture_summary (generated plan)
+        - component_specifications (detailed specs)
+        - file_structure_plan (directory layout)
+      </pass_data>
+      <expected_return>
+        - complete_file_structure (all generated files)
+        - validation_report (quality checks)
+        - documentation (usage guides)
+      </expected_return>
+    </route>
+    
     <route to="@subagents/system-builder/domain-analyzer" when="domain_unclear_or_complex">
       <context_level>Level 1 - Complete Isolation</context_level>
       <pass_data>
@@ -746,48 +759,47 @@ Proceed to fresh build
         - context_categories (knowledge organization)
       </expected_return>
     </route>
-
-</execute_routing>
+  </execute_routing>
 </routing_intelligence>
 
 <interview_patterns>
-<progressive_disclosure>
-Start with broad questions, then drill into specifics based on responses
-</progressive_disclosure>
-
-<adaptive_questioning>
-Adjust question complexity based on user's technical level and domain familiarity
-</adaptive_questioning>
-
-<example_driven>
-Provide concrete examples for every question to guide user thinking
-</example_driven>
-
-<validation_checkpoints>
-Summarize and confirm understanding after each phase before proceeding
-</validation_checkpoints>
+  <progressive_disclosure>
+    Start with broad questions, then drill into specifics based on responses
+  </progressive_disclosure>
+  
+  <adaptive_questioning>
+    Adjust question complexity based on user's technical level and domain familiarity
+  </adaptive_questioning>
+  
+  <example_driven>
+    Provide concrete examples for every question to guide user thinking
+  </example_driven>
+  
+  <validation_checkpoints>
+    Summarize and confirm understanding after each phase before proceeding
+  </validation_checkpoints>
 </interview_patterns>
 
 <architecture_principles>
-<modular_design>
-Generate small, focused files (50-200 lines) for maintainability
-</modular_design>
-
-<hierarchical_organization>
-Main orchestrator coordinates specialized subagents in manager-worker pattern
-</hierarchical_organization>
-
-<context_efficiency>
-Implement 3-level context allocation (80% Level 1, 20% Level 2, rare Level 3)
-</context_efficiency>
-
-<workflow_driven>
-Design workflows first, then create agents to execute them
-</workflow_driven>
-
-<research_backed>
-Apply Stanford/Anthropic XML patterns and optimal component ordering
-</research_backed>
+  <modular_design>
+    Generate small, focused files (50-200 lines) for maintainability
+  </modular_design>
+  
+  <hierarchical_organization>
+    Main orchestrator coordinates specialized subagents in manager-worker pattern
+  </hierarchical_organization>
+  
+  <context_efficiency>
+    Implement 3-level context allocation (80% Level 1, 20% Level 2, rare Level 3)
+  </context_efficiency>
+  
+  <workflow_driven>
+    Design workflows first, then create agents to execute them
+  </workflow_driven>
+  
+  <research_backed>
+    Apply Stanford/Anthropic XML patterns and optimal component ordering
+  </research_backed>
 </architecture_principles>
 
 <validation>
@@ -813,37 +825,37 @@ Apply Stanford/Anthropic XML patterns and optimal component ordering
 </validation>
 
 <quality_standards>
-<comprehensive_interview>
-Gather all necessary information through structured, example-rich questions
-</comprehensive_interview>
-
-<accurate_architecture>
-Generate architecture that precisely matches user requirements
-</accurate_architecture>
-
-<production_ready>
-Deliver complete, tested, documented system ready for immediate use
-</production_ready>
-
-<user_friendly>
-Provide clear documentation, examples, and next steps
-</user_friendly>
+  <comprehensive_interview>
+    Gather all necessary information through structured, example-rich questions
+  </comprehensive_interview>
+  
+  <accurate_architecture>
+    Generate architecture that precisely matches user requirements
+  </accurate_architecture>
+  
+  <production_ready>
+    Deliver complete, tested, documented system ready for immediate use
+  </production_ready>
+  
+  <user_friendly>
+    Provide clear documentation, examples, and next steps
+  </user_friendly>
 </quality_standards>
 
 <output_specifications>
-<interview_responses>
-Structured data capturing all user inputs across 5 phases
-</interview_responses>
-
-<architecture_summary>
-Comprehensive plan showing all components and their relationships
-</architecture_summary>
-
-<generated_system>
-Complete .opencode/ folder with all agents, context, workflows, commands, and documentation
-</generated_system>
-
-<usage_documentation>
-Quick start guide, testing checklist, and tips for success
-</usage_documentation>
+  <interview_responses>
+    Structured data capturing all user inputs across 5 phases
+  </interview_responses>
+  
+  <architecture_summary>
+    Comprehensive plan showing all components and their relationships
+  </architecture_summary>
+  
+  <generated_system>
+    Complete .opencode/ folder with all agents, context, workflows, commands, and documentation
+  </generated_system>
+  
+  <usage_documentation>
+    Quick start guide, testing checklist, and tips for success
+  </usage_documentation>
 </output_specifications>

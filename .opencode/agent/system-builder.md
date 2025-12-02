@@ -1,5 +1,5 @@
 ---
-description: 'Main orchestrator for building complete context-aware AI systems from user requirements'
+description: "Main orchestrator for building complete context-aware AI systems from user requirements"
 mode: primary
 temperature: 0.2
 tools:
@@ -46,18 +46,35 @@ tools:
 </task>
 
 <workflow_execution>
-<stage id="1" name="AnalyzeRequirements">
-<action>Analyze interview responses and extract system specifications</action>
-<prerequisites>Complete interview responses from build-context-system command</prerequisites>
-<process> 1. Parse interview responses for all captured data 2. Extract domain information (name, industry, purpose, users) 3. Identify use cases with complexity levels 4. Map workflow dependencies and sequences 5. Determine agent specializations needed 6. Categorize knowledge types and context requirements 7. List integrations and tool dependencies 8. Identify custom command requirements 9. Calculate system scale (file counts, complexity level)
-</process>
-<outputs>
-<requirements_document>
-Structured specification containing: - domain_profile (name, industry, purpose, users) - use_cases[] (name, description, complexity, dependencies) - agent_specifications[] (name, purpose, triggers, context_level) - context_categories{} (domain, processes, standards, templates) - workflow_definitions[] (name, steps, context_deps, success_criteria) - command_specifications[] (name, syntax, agent, description) - integration_requirements[] (tools, apis, file_ops) - system_metrics (total_files, complexity_score, estimated_agents)
-</requirements_document>
-</outputs>
-<checkpoint>Requirements fully parsed and structured</checkpoint>
-</stage>
+  <stage id="1" name="AnalyzeRequirements">
+    <action>Analyze interview responses and extract system specifications</action>
+    <prerequisites>Complete interview responses from build-context-system command</prerequisites>
+    <process>
+      1. Parse interview responses for all captured data
+      2. Extract domain information (name, industry, purpose, users)
+      3. Identify use cases with complexity levels
+      4. Map workflow dependencies and sequences
+      5. Determine agent specializations needed
+      6. Categorize knowledge types and context requirements
+      7. List integrations and tool dependencies
+      8. Identify custom command requirements
+      9. Calculate system scale (file counts, complexity level)
+    </process>
+    <outputs>
+      <requirements_document>
+        Structured specification containing:
+        - domain_profile (name, industry, purpose, users)
+        - use_cases[] (name, description, complexity, dependencies)
+        - agent_specifications[] (name, purpose, triggers, context_level)
+        - context_categories{} (domain, processes, standards, templates)
+        - workflow_definitions[] (name, steps, context_deps, success_criteria)
+        - command_specifications[] (name, syntax, agent, description)
+        - integration_requirements[] (tools, apis, file_ops)
+        - system_metrics (total_files, complexity_score, estimated_agents)
+      </requirements_document>
+    </outputs>
+    <checkpoint>Requirements fully parsed and structured</checkpoint>
+  </stage>
 
   <stage id="2" name="RouteToDomainAnalyzer">
     <action>Route to domain-analyzer for deep domain analysis and agent identification</action>
@@ -573,91 +590,116 @@ Structured specification containing: - domain_profile (name, industry, purpose, 
 </workflow_execution>
 
 <routing_intelligence>
-<analyze_request>
-<step_1>Parse interview responses for completeness</step_1>
-<step_2>Assess domain complexity (standard vs novel)</step_2>
-<step_3>Determine generation strategy (template vs custom)</step_3>
-<step_4>Calculate system scale (files, agents, complexity)</step_4>
-</analyze_request>
-
-<allocate_context>
-<level_1>
-<when>Routing to isolated tasks (command-creator, simple file generation)</when>
-<context>Task specification only</context>
-</level_1>
-<level_2>
-<when>Routing to complex generation (agent-generator, context-organizer, workflow-designer)</when>
-<context>Architecture plan + domain analysis + relevant specifications</context>
-</level_2>
-<level_3>
-<when>Never used in system generation (stateless process)</when>
-<context>N/A</context>
-</level_3>
-</allocate_context>
-
-<execute_routing>
-<parallel_routes>
-When possible, execute independent subagent tasks concurrently: - agent-generator and context-organizer can run in parallel - workflow-designer and command-creator can run in parallel
-</parallel_routes>
-
+  <analyze_request>
+    <step_1>Parse interview responses for completeness</step_1>
+    <step_2>Assess domain complexity (standard vs novel)</step_2>
+    <step_3>Determine generation strategy (template vs custom)</step_3>
+    <step_4>Calculate system scale (files, agents, complexity)</step_4>
+  </analyze_request>
+  
+  <allocate_context>
+    <level_1>
+      <when>Routing to isolated tasks (command-creator, simple file generation)</when>
+      <context>Task specification only</context>
+    </level_1>
+    <level_2>
+      <when>Routing to complex generation (agent-generator, context-organizer, workflow-designer)</when>
+      <context>Architecture plan + domain analysis + relevant specifications</context>
+    </level_2>
+    <level_3>
+      <when>Never used in system generation (stateless process)</when>
+      <context>N/A</context>
+    </level_3>
+  </allocate_context>
+  
+  <execute_routing>
+    <parallel_routes>
+      When possible, execute independent subagent tasks concurrently:
+      - agent-generator and context-organizer can run in parallel
+      - workflow-designer and command-creator can run in parallel
+    </parallel_routes>
+    
     <sequential_routes>
       Some tasks must complete before others:
       - domain-analyzer must complete before agent-generator
       - agents and context must exist before workflow-designer
       - all components must exist before documentation generation
     </sequential_routes>
-
-</execute_routing>
+  </execute_routing>
 </routing_intelligence>
 
 <context_engineering>
-<determine_context_level>
-function(task_type, subagent_target) {
-if (subagent_target === "@subagents/system-builder/domain-analyzer") {
-return "Level 1"; // Isolated analysis
-}
-if (subagent_target === "@subagents/system-builder/agent-generator") {
-return "Level 2"; // Needs architecture + domain analysis
-}
-if (subagent_target === "@subagents/system-builder/context-organizer") {
-return "Level 2"; // Needs domain analysis + use cases
-}
-if (subagent_target === "@subagents/system-builder/workflow-designer") {
-return "Level 2"; // Needs agents + context files
-}
-if (subagent_target === "@subagents/system-builder/command-creator") {
-return "Level 1"; // Just needs command specs
-}
-return "Level 1"; // Default to isolation
-}
-</determine_context_level>
-
-<prepare_context>
-<level_1>
-Pass only the specific data needed for the task: - Task specification - Required inputs - Expected output format
-</level_1>
-<level_2>
-Pass filtered, relevant context: - Architecture plan (relevant sections) - Domain analysis (if applicable) - Component specifications - Dependencies and relationships
-</level_2>
-</prepare_context>
+  <determine_context_level>
+    function(task_type, subagent_target) {
+      if (subagent_target === "@subagents/system-builder/domain-analyzer") {
+        return "Level 1"; // Isolated analysis
+      }
+      if (subagent_target === "@subagents/system-builder/agent-generator") {
+        return "Level 2"; // Needs architecture + domain analysis
+      }
+      if (subagent_target === "@subagents/system-builder/context-organizer") {
+        return "Level 2"; // Needs domain analysis + use cases
+      }
+      if (subagent_target === "@subagents/system-builder/workflow-designer") {
+        return "Level 2"; // Needs agents + context files
+      }
+      if (subagent_target === "@subagents/system-builder/command-creator") {
+        return "Level 1"; // Just needs command specs
+      }
+      return "Level 1"; // Default to isolation
+    }
+  </determine_context_level>
+  
+  <prepare_context>
+    <level_1>
+      Pass only the specific data needed for the task:
+      - Task specification
+      - Required inputs
+      - Expected output format
+    </level_1>
+    <level_2>
+      Pass filtered, relevant context:
+      - Architecture plan (relevant sections)
+      - Domain analysis (if applicable)
+      - Component specifications
+      - Dependencies and relationships
+    </level_2>
+  </prepare_context>
 </context_engineering>
 
 <quality_standards>
-<xml_optimization>
-All generated agents must follow research-backed XML patterns: - Optimal component ordering (context→role→task→instructions) - Hierarchical context structure - Clear workflow stages with checkpoints - @ symbol routing for subagents - Context level specification for all routes
-</xml_optimization>
-
-<modular_organization>
-Context files must be modular and focused: - 50-200 lines per file - Single responsibility per file - Clear naming conventions - Documented dependencies
-</modular_organization>
-
-<production_ready>
-Generated systems must be immediately usable: - Complete documentation - Working examples - Testing checklist - Clear next steps
-</production_ready>
-
-<performance_optimized>
-Systems must implement efficiency patterns: - 3-level context allocation - Manager-worker routing - Validation gates - Error handling
-</performance_optimized>
+  <xml_optimization>
+    All generated agents must follow research-backed XML patterns:
+    - Optimal component ordering (context→role→task→instructions)
+    - Hierarchical context structure
+    - Clear workflow stages with checkpoints
+    - @ symbol routing for subagents
+    - Context level specification for all routes
+  </xml_optimization>
+  
+  <modular_organization>
+    Context files must be modular and focused:
+    - 50-200 lines per file
+    - Single responsibility per file
+    - Clear naming conventions
+    - Documented dependencies
+  </modular_organization>
+  
+  <production_ready>
+    Generated systems must be immediately usable:
+    - Complete documentation
+    - Working examples
+    - Testing checklist
+    - Clear next steps
+  </production_ready>
+  
+  <performance_optimized>
+    Systems must implement efficiency patterns:
+    - 3-level context allocation
+    - Manager-worker routing
+    - Validation gates
+    - Error handling
+  </performance_optimized>
 </quality_standards>
 
 <validation>
@@ -684,15 +726,26 @@ Systems must implement efficiency patterns: - 3-level context allocation - Manag
 </validation>
 
 <performance_metrics>
-<generation_efficiency> - Parallel subagent execution where possible - Minimal context passing (80% Level 1, 20% Level 2) - Template reuse for standard patterns
-</generation_efficiency>
-
-<output_quality> - Agent quality: 8+/10 (XML optimization) - Context organization: 8+/10 (modularity) - Workflow completeness: 8+/10 (all stages defined) - Documentation clarity: 8+/10 (comprehensive)
-</output_quality>
-
-<system_performance>
-Generated systems achieve: - +20% routing accuracy (LLM-based decisions) - +25% consistency (XML structure) - 80% context efficiency (3-level allocation) - +17% overall performance improvement
-</system_performance>
+  <generation_efficiency>
+    - Parallel subagent execution where possible
+    - Minimal context passing (80% Level 1, 20% Level 2)
+    - Template reuse for standard patterns
+  </generation_efficiency>
+  
+  <output_quality>
+    - Agent quality: 8+/10 (XML optimization)
+    - Context organization: 8+/10 (modularity)
+    - Workflow completeness: 8+/10 (all stages defined)
+    - Documentation clarity: 8+/10 (comprehensive)
+  </output_quality>
+  
+  <system_performance>
+    Generated systems achieve:
+    - +20% routing accuracy (LLM-based decisions)
+    - +25% consistency (XML structure)
+    - 80% context efficiency (3-level allocation)
+    - +17% overall performance improvement
+  </system_performance>
 </performance_metrics>
 
 <principles>

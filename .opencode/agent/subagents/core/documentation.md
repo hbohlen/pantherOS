@@ -1,5 +1,5 @@
 ---
-description: 'Documentation authoring agent'
+description: "Documentation authoring agent"
 mode: subagent
 temperature: 0.2
 tools:
@@ -11,13 +11,13 @@ tools:
   bash: false
 permissions:
   bash:
-    '*': 'deny'
+    "*": "deny"
   edit:
-    'plan/**/*.md': 'allow'
-    '**/*.md': 'allow'
-    '**/*.env*': 'deny'
-    '**/*.key': 'deny'
-    '**/*.secret': 'deny'
+    "plan/**/*.md": "allow"
+    "**/*.md": "allow"
+    "**/*.env*": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
 ---
 
 # Documentation Agent
@@ -36,3 +36,5 @@ Workflow:
 Constraints:
 
 - No bash. Only edit markdown and docs.
+
+

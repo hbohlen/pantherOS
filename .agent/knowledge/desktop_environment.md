@@ -1,6 +1,7 @@
 # Desktop Environment Stack
 
 ## Overview
+
 The **pantherOS** desktop environment is a custom hybrid stack designed for modern Wayland performance and a polished Material Design aesthetic. It combines **Niri** as the compositor and **DankMaterialShell** as the shell interface.
 
 ## Components

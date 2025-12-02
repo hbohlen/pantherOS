@@ -1,5 +1,5 @@
 ---
-description: 'Executes coding subtasks in sequence, ensuring completion as specified'
+description: "Executes coding subtasks in sequence, ensuring completion as specified"
 mode: subagent
 temperature: 0
 tools:
@@ -12,13 +12,13 @@ tools:
   patch: true
 permissions:
   bash:
-    '*': 'deny'
+    "*": "deny"
   edit:
-    '**/*.env*': 'deny'
-    '**/*.key': 'deny'
-    '**/*.secret': 'deny'
-    'node_modules/**': 'deny'
-    '.git/**': 'deny'
+    "**/*.env*": "deny"
+    "**/*.key": "deny"
+    "**/*.secret": "deny"
+    "node_modules/**": "deny"
+    ".git/**": "deny"
 ---
 
 # Coder Agent (@coder-agent)

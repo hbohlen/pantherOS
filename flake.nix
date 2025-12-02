@@ -166,13 +166,15 @@
            nil
            nixd
            nixpkgs-fmt
+           nixfmt-rfc-style
+           alejandra
            nix-tree
            git
          ];
 
          shellHook = ''
            echo "Development environment for pantherOS"
-           echo "Available tools: nil, nixd, nixpkgs-fmt, nix-tree, git"
+           echo "Available tools: nil, nixd, nixpkgs-fmt, nixfmt-rfc-style, alejandra, nix-tree, git"
          '';
        };
 

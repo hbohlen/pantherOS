@@ -1,3 +1,5 @@
+<!-- Context: standards/tests | Priority: critical | Version: 2.0 | Updated: 2025-01-21 -->
+
 # Testing Standards
 
 ## Quick Reference
@@ -7,12 +9,10 @@
 **AAA Pattern**: Arrange → Act → Assert
 
 **Test** (✅ DO):
-
 - Happy path, edge cases, error cases
 - Business logic, public APIs
 
 **Don't Test** (❌ DON'T):
-
 - Third-party libraries, framework internals
 - Simple getters/setters, private details
 
@@ -33,10 +33,10 @@
 test('calculateTotal returns sum of item prices', () => {
   // Arrange - Set up test data
   const items = [{ price: 10 }, { price: 20 }, { price: 30 }];
-
+  
   // Act - Execute code
   const result = calculateTotal(items);
-
+  
   // Assert - Verify result
   expect(result).toBe(60);
 });
@@ -45,7 +45,6 @@ test('calculateTotal returns sum of item prices', () => {
 ## What to Test
 
 ### ✅ DO Test
-
 - Happy path (normal usage)
 - Edge cases (boundaries, empty, null, undefined)
 - Error cases (invalid input, failures)
@@ -53,7 +52,6 @@ test('calculateTotal returns sum of item prices', () => {
 - Public APIs (exported functions)
 
 ### ❌ DON'T Test
-
 - Third-party libraries
 - Framework internals
 - Simple getters/setters
@@ -69,9 +67,7 @@ test('calculateTotal returns sum of item prices', () => {
 ## Testing Pure Functions
 
 ```javascript
-function add(a, b) {
-  return a + b;
-}
+function add(a, b) { return a + b; }
 
 test('add returns sum', () => {
   expect(add(2, 3)).toBe(5);
@@ -86,19 +82,19 @@ test('add returns sum', () => {
 // Testable with dependency injection
 function createUserService(database) {
   return {
-    getUser: (id) => database.findById('users', id),
+    getUser: (id) => database.findById('users', id)
   };
 }
 
 // Test with mock
 test('getUser retrieves from database', () => {
   const mockDb = {
-    findById: jest.fn().mockReturnValue({ id: 1, name: 'John' }),
+    findById: jest.fn().mockReturnValue({ id: 1, name: 'John' })
   };
-
+  
   const service = createUserService(mockDb);
   const user = service.getUser(1);
-
+  
   expect(mockDb.findById).toHaveBeenCalledWith('users', 1);
   expect(user).toEqual({ id: 1, name: 'John' });
 });

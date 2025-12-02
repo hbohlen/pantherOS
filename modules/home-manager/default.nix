@@ -26,14 +26,15 @@ imports = [
 
     # Performance monitoring
     powertop
-    linuxPackages.perf
+    # linuxPackages.perf  # TODO: May have unfree dependencies
 
     # Network tools
     iwd
     wirelesstools
 
     # Zed IDE - high-performance code editor
-    zed-editor
+    # TODO: Check if zed-editor has unfree dependencies
+    # zed-editor
   ];
 
   # Fish shell configuration
