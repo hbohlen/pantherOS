@@ -12,8 +12,7 @@ in {
     programs.niri.settings = {
       # Output configuration for different display setups
       output = {
-        # Laptop internal display (eDP-1)
-        "eDP-1" = mkDefault {
+        "eDP-1" = {
           mode = {
             width = 1920;
             height = 1080;
@@ -24,8 +23,7 @@ in {
           transform = "normal";
         };
 
-        # External HDMI display
-        "HDMI-A-1" = mkDefault {
+        "HDMI-A-1" = {
           mode = {
             width = 1920;
             height = 1080;
@@ -35,33 +33,6 @@ in {
           scale = 1.0;
           transform = "normal";
         };
-<<<<<<< HEAD
-
-        # External DisplayPort display
-        "DP-1" = mkDefault {
-          mode = {
-            width = 1920;
-            height = 1080;
-            refresh = 60.0;
-          };
-          position = { x = 1920; y = 0; };
-          scale = 1.0;
-          transform = "normal";
-        };
-
-        # USB-C/Thunderbolt display
-        "DP-2" = mkDefault {
-          mode = {
-            width = 2560;
-            height = 1440;
-            refresh = 60.0;
-          };
-          position = { x = 1920; y = 0; };
-          scale = 1.25;
-          transform = "normal";
-        };
-=======
->>>>>>> feature/niri-dankmaterial-integration
       };
 
       # Variable refresh rate support

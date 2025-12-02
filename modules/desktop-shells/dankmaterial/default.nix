@@ -8,18 +8,7 @@ with lib;
 let
   cfg = config.programs.dankmaterial;
 in {
-<<<<<<< HEAD
-  imports = [
-    ./core.nix
-    ./quickshell.nix
-    ./theme.nix
-    ./widgets.nix
-    ./services.nix
-    ./polkit.nix
-  ];
 
-=======
->>>>>>> feature/niri-dankmaterial-integration
   options.programs.dankmaterial = {
     enable = mkEnableOption "DankMaterialShell desktop environment";
     
