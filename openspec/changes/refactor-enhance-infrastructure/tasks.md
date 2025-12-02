@@ -101,45 +101,69 @@
 - [ ] 4.5.3 Configure shell prompt for nix-shell detection
 - [ ] 4.5.4 Add tab completion for nix commands
 
-## 5. Testing and Validation
+## 5. Security Integration Standardization
 
-### 5.1 Module Refactoring Tests
-- [ ] 5.1.1 Verify all refactored modules build successfully
-- [ ] 5.1.2 Verify no functionality was lost in refactoring
-- [ ] 5.1.3 Test on all affected hosts (zephyrus, yoga)
+### 5.1 1Password Module Creation
+- [x] 5.1.1 Create `modules/security/1password.nix` following 1Password developer docs
+- [x] 5.1.2 Create `modules/security/default.nix` aggregator
+- [x] 5.1.3 Add security module to main modules/default.nix
+- [x] 5.1.4 Document module usage and configuration
 
-### 5.2 Hardware Detection Tests
-- [ ] 5.2.1 Verify meta.nix correctly uses facter.json data
-- [ ] 5.2.2 Test hardware-specific optimizations
-- [ ] 5.2.3 Verify all hosts build with enhanced meta.nix
+### 5.2 Personal Device Configuration
+- [x] 5.2.1 Update zephyrus to use new 1Password module
+- [x] 5.2.2 Add 1Password configuration to yoga host
+- [x] 5.2.3 Ensure consistent polkitPolicyOwners configuration
+- [x] 5.2.4 Verify proper polkit integration
 
-### 5.3 Integration Tests
-- [ ] 5.3.1 Test zellij in various scenarios
-- [ ] 5.3.2 Test devShell on all development machines
-- [ ] 5.3.3 Verify all tools are available and functional
+### 5.3 Testing
+- [ ] 5.3.1 Test 1Password CLI on zephyrus
+- [ ] 5.3.2 Test 1Password GUI on zephyrus
+- [ ] 5.3.3 Test 1Password CLI on yoga
+- [ ] 5.3.4 Test 1Password GUI on yoga
+- [ ] 5.3.5 Verify system authentication works correctly
 
-### 5.4 Documentation Tests
-- [ ] 5.4.1 Review all documentation for accuracy
-- [ ] 5.4.2 Test all documented workflows
-- [ ] 5.4.3 Verify examples work as documented
+## 6. Testing and Validation
 
-## 6. Documentation
+### 6.1 Module Refactoring Tests
+- [ ] 6.1.1 Verify all refactored modules build successfully
+- [ ] 6.1.2 Verify no functionality was lost in refactoring
+- [ ] 6.1.3 Test on all affected hosts (zephyrus, yoga)
 
-### 6.1 Code Documentation
-- [ ] 6.1.1 Add comments to refactored modules
-- [ ] 6.1.2 Document module organization patterns
-- [ ] 6.1.3 Add examples for common patterns
+### 6.2 Hardware Detection Tests
+- [ ] 6.2.1 Verify meta.nix correctly uses facter.json data
+- [ ] 6.2.2 Test hardware-specific optimizations
+- [ ] 6.2.3 Verify all hosts build with enhanced meta.nix
 
-### 6.2 User Documentation
-- [ ] 6.2.1 Document zellij usage and workflows
-- [ ] 6.2.2 Document devShell tools and utilities
-- [ ] 6.2.3 Document hardware detection process
-- [ ] 6.2.4 Create quick start guide for new developers
+### 6.3 Integration Tests
+- [ ] 6.3.1 Test zellij in various scenarios
+- [ ] 6.3.2 Test devShell on all development machines
+- [ ] 6.3.3 Verify all tools are available and functional
 
-### 6.3 Developer Documentation
-- [ ] 6.3.1 Document module refactoring guidelines
-- [ ] 6.3.2 Document when to split vs keep modules together
-- [ ] 6.3.3 Document hardware configuration best practices
+### 6.4 Documentation Tests
+- [ ] 6.4.1 Review all documentation for accuracy
+- [ ] 6.4.2 Test all documented workflows
+- [ ] 6.4.3 Verify examples work as documented
+
+## 7. Documentation
+
+### 7.1 Code Documentation
+- [ ] 7.1.1 Add comments to refactored modules
+- [ ] 7.1.2 Document module organization patterns
+- [ ] 7.1.3 Add examples for common patterns
+- [x] 7.1.4 Document 1Password security module
+
+### 7.2 User Documentation
+- [ ] 7.2.1 Document zellij usage and workflows
+- [ ] 7.2.2 Document devShell tools and utilities
+- [ ] 7.2.3 Document hardware detection process
+- [ ] 7.2.4 Create quick start guide for new developers
+- [x] 7.2.5 Document 1Password integration for personal devices
+
+### 7.3 Developer Documentation
+- [ ] 7.3.1 Document module refactoring guidelines
+- [ ] 7.3.2 Document when to split vs keep modules together
+- [ ] 7.3.3 Document hardware configuration best practices
+- [x] 7.3.4 Document security module creation pattern
 
 ## Acceptance Criteria
 
@@ -147,6 +171,7 @@
 - ✅ meta.nix files fully utilize facter.json hardware data
 - ✅ Zellij is configured and integrated with shell/terminal
 - ✅ devShell provides comprehensive development tooling
+- ✅ 1Password integration is standardized across personal devices following official docs
 - ✅ All configurations build successfully
 - ✅ No functionality is lost in refactoring
 - ✅ Documentation is complete and accurate

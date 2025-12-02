@@ -8,6 +8,7 @@ The codebase has grown organically and now requires refactoring to improve maint
 2. **Hardware Detection**: facter.json files contain rich hardware data that isn't fully utilized in meta.nix configurations
 3. **Terminal Multiplexing**: No terminal multiplexer configured, limiting developer productivity
 4. **Development Shell**: Current devShell is minimal and lacks essential development tools
+5. **Security Configuration**: 1Password configuration is inconsistent across hosts and not following official documentation patterns
 
 ## What Changes
 
@@ -33,14 +34,22 @@ The codebase has grown organically and now requires refactoring to improve maint
   - Add code quality and linting tools
   - Add documentation and exploration tools
 
+- **Security Standardization**: Standardize 1Password integration across personal devices
+  - Create reusable security module following 1Password developer documentation
+  - Apply consistent configuration to all personal devices (zephyrus, yoga)
+  - Ensure proper polkit integration for system authentication
+
 ## Impact
 
-- Affected specs: module-structure (new), hardware-detection (enhanced), terminal-multiplexer (new), development-shell (enhanced)
+- Affected specs: module-structure (new), hardware-detection (enhanced), terminal-multiplexer (new), development-shell (enhanced), security-integration (new)
 - Affected code: 
   - `modules/desktop-shells/dankmaterial/` (refactoring)
   - `modules/home-manager/dotfiles/` (refactoring)
+  - `modules/security/` (new - 1Password integration module)
   - `hosts/*/meta.nix` (enhancement)
+  - `hosts/zephyrus/default.nix` (security standardization)
+  - `hosts/yoga/default.nix` (security standardization)
   - `flake.nix` (devShell enhancement)
   - New module directories for decomposed components
 - **BREAKING**: None - all changes maintain backward compatibility
-- Improves code maintainability and developer experience
+- Improves code maintainability, security consistency, and developer experience
