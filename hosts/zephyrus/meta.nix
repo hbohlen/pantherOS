@@ -79,6 +79,11 @@
       "module_blacklist=i2c_nvidia_gpu"
     ];
 
+    # System control parameters
+    kernel.sysctl = {
+      "vm.swappiness" = 10;
+    };
+
     # Extra module options
     extraModprobeConfig = ''
       # Intel graphics optimizations

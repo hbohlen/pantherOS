@@ -7,6 +7,8 @@
     ./hardware.nix
   ];
 
+
+
   # Hostname
   networking.hostName = "ovh-vps";
 

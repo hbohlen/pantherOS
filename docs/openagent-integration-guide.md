@@ -256,7 +256,7 @@ home-manager.dotfiles.opencode-ai = {
 
 **DCP Plugin Features**:
 
-- **Plugin**: `@tarquinen/opencode-dcp` (npm: https://www.npmjs.com/package/@tarquinen/opencode-dcp)
+- **Plugin**: `@tarquinen/opencode-dcp` (npm: <https://www.npmjs.com/package/@tarquinen/opencode-dcp>)
 - **Smart pruning**: AI-powered context optimization
 - **Deduplication**: Removes redundant content automatically
 - **Protected tools**: Critical workflow tools are never pruned
@@ -268,20 +268,20 @@ home-manager.dotfiles.opencode-ai = {
 
 ### Complete Integration Check
 
-```bash
-/home/hbohlen/dev/pantherOS/scripts/verify-openagent-integration.sh
+```fish
+/home/hbohlen/dev/pantherOS/scripts/verify-openagent-integration.fish
 ```
 
 ### DCP Plugin Verification
 
-```bash
-/home/hbohlen/dev/pantherOS/scripts/verify-dcp-plugin.sh
+```fish
+/home/hbohlen/dev/pantherOS/scripts/verify-dcp-plugin.fish
 ```
 
 ### Dotfiles Module Verification
 
-```bash
-/home/hbohlen/dev/pantherOS/scripts/verify-dotfiles-integration.sh
+```fish
+/home/hbohlen/dev/pantherOS/scripts/verify-dotfiles-integration.fish
 ```
 
 **Verification Coverage**:

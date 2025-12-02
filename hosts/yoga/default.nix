@@ -21,6 +21,8 @@
     ./disko.nix
   ];
 
+
+
   # Hostname
   networking.hostName = "yoga";
 
@@ -84,8 +86,9 @@
   # File systems configured by disko.nix
 
     # DankMaterialShell - Material design shell environment
+    # TODO: Fix network/build issues with DankMaterialShell Go dependencies
     programs.dankMaterialShell = {
-      enable = true;
+      enable = false;
       enableSystemMonitoring = true;
       enableClipboard = true;
       enableVPN = true;
@@ -95,10 +98,13 @@
       enableAudioWavelength = true;
       enableCalendarEvents = true;
       enableSystemSound = true;
+      # enableKeybinds = true; # TODO: Update DankMaterialShell flake to support this
+      # enableSpawn = true; # TODO: Update DankMaterialShell flake to support this
     };
 
     # Niri window manager
     services.displayManager.defaultSession = "niri";
+    # programs.niri.agent.enable = false; # Option does not exist
 
     # Ghostty terminal emulator
     environment.systemPackages = with pkgs; [
@@ -109,13 +115,26 @@
     xdg.terminal-exec.settings.default = [ "ghostty.desktop" ];
     environment.sessionVariables.TERMINAL = "ghostty";
 
-   # Home Manager configuration
-   home-manager.users.hbohlen = { pkgs, lib, ... }: {
-     imports = [
-       ../../home/hbohlen/home.nix
-       ../../modules/home-manager
-     ];
+   # Shell Environment
+   programs.fish.enable = true;
+
+   # Authentication & Security - 1Password integration
+   # Using custom wrapper module (modules/security/1password.nix) that configures
+   # NixOS built-in programs._1password and programs._1password-gui per:
+   # https://developer.1password.com/docs/cli/get-started/#install
+   programs.onepassword-desktop = {
+     enable = true;
+     polkitPolicyOwners = [ "hbohlen" ];
    };
+
+   # Home Manager configuration
+   # TODO: Fix CUDA unfree dependency issue before enabling
+   # home-manager.users.hbohlen = { pkgs, lib, ... }: {
+   #   imports = [
+   #     ../../home/hbohlen/home.nix
+   #     ../../modules/home-manager
+   #   ];
+   # };
 
    # State version - DO NOT CHANGE after installation
    system.stateVersion = "25.05";

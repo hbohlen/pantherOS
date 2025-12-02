@@ -40,14 +40,14 @@ Flake Inputs → System Config → User Packages → Shell Setup → Modules
 #### Task 1.1: Add home-manager input
 
 - **Action**: Add home-manager input to flake.nix
-- **Source**: https://github.com/nix-community/home-manager
+- **Source**: <https://github.com/nix-community/home-manager>
 - **Verification**: `nix flake check` passes
 - **Risk**: Low - standard flake input addition
 
 #### Task 1.2: Add nix-ai-tools input
 
 - **Action**: Add numtide/nix-ai-tools input to flake.nix
-- **Source**: https://github.com/numtide/nix-ai-tools
+- **Source**: <https://github.com/numtide/nix-ai-tools>
 - **Verification**: `nix flake check` passes
 - **Risk**: Low - standard flake input addition
 

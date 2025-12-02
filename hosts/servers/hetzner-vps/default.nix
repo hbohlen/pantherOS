@@ -8,6 +8,8 @@
     ../../../modules
   ];
 
+
+
   # Hostname
   networking.hostName = "hetzner-vps";
 
@@ -117,9 +119,7 @@
         stateVersion = "25.05";
       };
 
-      # Disable version mismatch warning
-      nixpkgs.config.allowUnfree = true;
-      home.enableNixpkgsReleaseCheck = false;
+
 
       # Enable XDG base directory specification
       xdg.enable = true;

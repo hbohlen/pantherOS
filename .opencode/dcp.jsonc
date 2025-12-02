@@ -4,7 +4,7 @@
   "pruning_summary": "detailed",
   "protectedTools": ["task", "todowrite", "todoread"],
   "strategies": {
-    "onIdle": ["deduplication", "ai-analysis"],
+    "onIdle": ["deduplication", "ai-analysis"]
     //"onTool": ["deduplication"],
-  },
+  }
 }

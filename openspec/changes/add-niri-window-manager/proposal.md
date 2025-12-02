@@ -6,7 +6,7 @@ To provide a modern, scrollable-tiling Wayland window manager on personal device
 
 ## What Changes
 
-- Add `niri` flake input from https://github.com/sodiboo/niri-flake with proper follows configuration
+- Add `niri` flake input from [sodiboo/niri-flake](https://github.com/sodiboo/niri-flake) with proper follows configuration
 - Import Niri homeModules in personal device configurations
 - Enable Niri integration features in DankMaterialShell (enableKeybinds, enableSpawn)
 - Configure Niri as the window manager on personal devices

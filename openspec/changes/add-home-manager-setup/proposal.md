@@ -14,5 +14,4 @@ The system currently lacks user-level package management and configuration. Home
 
 - Affected specs: home-manager (new capability)
 - Affected code: flake.nix, hosts/servers/hetzner-vps/configuration.nix
-- No breaking changes to existing functionality</content>
-  <parameter name="filePath">openspec/changes/add-home-manager-setup/proposal.md
+- No breaking changes to existing functionality

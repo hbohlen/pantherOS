@@ -36,21 +36,22 @@ let
 in {
   config = mkIf cfg.enable {
     # GTK theme configuration
-    gtk = {
-      enable = true;
-      theme = {
-        name = "Adwaita-dark";
-        package = pkgs.gnome.gnome-themes-extra;
-      };
-      iconTheme = {
-        name = "Papirus-Dark";
-        package = pkgs.papirus-icon-theme;
-      };
-      font = {
-        name = "Inter";
-        size = 11;
-      };
-    };
+    # GTK theme configuration - managed via Home Manager
+    # gtk = {
+    #   enable = true;
+    #   theme = {
+    #     name = "Adwaita-dark";
+    #     package = pkgs.gnome.gnome-themes-extra;
+    #   };
+    #   iconTheme = {
+    #     name = "Papirus-Dark";
+    #     package = pkgs.papirus-icon-theme;
+    #   };
+    #   font = {
+    #     name = "Inter";
+    #     size = 11;
+    #   };
+    # };
 
     # Qt theme configuration
     qt = {
