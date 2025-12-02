@@ -115,6 +115,18 @@
     xdg.terminal-exec.settings.default = [ "ghostty.desktop" ];
     environment.sessionVariables.TERMINAL = "ghostty";
 
+   # Shell Environment
+   programs.fish.enable = true;
+
+   # Authentication & Security - 1Password integration
+   # Using custom wrapper module (modules/security/1password.nix) that configures
+   # NixOS built-in programs._1password and programs._1password-gui per:
+   # https://developer.1password.com/docs/cli/get-started/#install
+   programs.onepassword-desktop = {
+     enable = true;
+     polkitPolicyOwners = [ "hbohlen" ];
+   };
+
    # Home Manager configuration
    # TODO: Fix CUDA unfree dependency issue before enabling
    # home-manager.users.hbohlen = { pkgs, lib, ... }: {

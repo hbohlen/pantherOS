@@ -102,13 +102,14 @@
    # Shell Environment
    programs.fish.enable = true;
 
-   # Authentication & Security
-   programs._1password.enable = true;
-   programs._1password-gui = {
+   # Authentication & Security - 1Password integration
+   # Using custom wrapper module (modules/security/1password.nix) that configures
+   # NixOS built-in programs._1password and programs._1password-gui per:
+   # https://developer.1password.com/docs/cli/get-started/#install
+   programs.onepassword-desktop = {
      enable = true;
      polkitPolicyOwners = [ "hbohlen" ];
    };
-   security.polkit.enable = true;
 
    # Development Environment
    virtualisation.podman = {
