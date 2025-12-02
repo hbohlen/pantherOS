@@ -103,7 +103,8 @@
    programs.fish.enable = true;
 
    # Authentication & Security - 1Password integration
-   # Using NixOS built-in modules per 1Password developer docs:
+   # Using custom wrapper module (modules/security/1password.nix) that configures
+   # NixOS built-in programs._1password and programs._1password-gui per:
    # https://developer.1password.com/docs/cli/get-started/#install
    programs.onepassword-desktop = {
      enable = true;
