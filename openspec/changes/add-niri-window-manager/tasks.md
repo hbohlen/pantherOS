@@ -17,10 +17,10 @@
 
 - [x] 3.1 Configure Niri as default window manager on zephyrus
 - [x] 3.2 Configure Niri as default window manager on yoga
-- [ ] 3.3 Verify Niri starts automatically with DankMaterialShell
+- [x] 3.3 Verify Niri starts automatically with DankMaterialShell
 
 ## 4. Validation
 
 - [x] 4.1 Test flake build with new niri input
-- [ ] 4.2 Verify Niri window manager functionality on personal devices
-- [ ] 4.3 Test DankMaterialShell keybindings integration with Niri
+- [x] 4.2 Verify Niri window manager functionality on personal devices
+- [x] 4.3 Test DankMaterialShell keybindings integration with Niri
