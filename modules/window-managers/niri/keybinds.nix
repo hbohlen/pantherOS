@@ -32,7 +32,7 @@ in {
         "Mod+Shift+Up" = { move-window-up = []; };
         "Mod+Shift+Down" = { move-window-down = []; };
 
-<<<<<<< HEAD
+<<<<<<< HEAD # FIX:
         # Workspace management
         "Mod+1" = { focus-workspace = 1; };
         "Mod+2" = { focus-workspace = 2; };
@@ -54,7 +54,7 @@ in {
         # Brightness control
         "XF86MonBrightnessUp" = { spawn = [ "brightnessctl" "set" "10%+" ]; };
         "XF86MonBrightnessDown" = { spawn = [ "brightnessctl" "set" "10%-" ]; };
-=======
+=======# FIX:
       # Window resizing
       "Super+Control+Left".action.focus-column-left-or-monitor = [];
       "Super+Control+Right".action.focus-column-right-or-monitor = [];
@@ -79,18 +79,18 @@ in {
       "Super+F".action.maximize-column = [];
       "Super+Shift+F".action.fullscreen-window = [];
       "Super+Space".action.center-column = [];
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
+>>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32# FIX:
 
         # Screenshot
         "Print" = { spawn = [ "grimblast" "--notify" "copy" "area" ]; };
         "Mod+Print" = { spawn = [ "grimblast" "--notify" "copy" "output" ]; };
 
-<<<<<<< HEAD
+<<<<<<< HEAD # FIX:
         # System controls
         "Mod+Ctrl+L" = { spawn = [ "loginctl" "lock-session" ]; };
         "Mod+Ctrl+Q" = { spawn = [ "wlogout" ]; };
       };
-=======
+======= # FIX:
       # Layout switching
       "Super+Comma".action.set-layout = "accordion";
       "Super+Period".action.set-layout = "columns";
@@ -125,7 +125,7 @@ in {
 
       # Configuration reload
       "Super+Shift+R".action.spawn = [ "niri" "msg" "debug" "windows" ];
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
+>>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32 # FIX:
     };
   };
 }

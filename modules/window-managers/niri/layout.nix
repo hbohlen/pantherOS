@@ -10,7 +10,7 @@ let
 in {
   config = mkIf cfg.enable {
     programs.niri.settings = {
-<<<<<<< HEAD
+<<<<<<< HEAD # FIX:
 =======
       # Workspace configuration
       workspaces = [
@@ -26,22 +26,22 @@ in {
       ];
 
       # Layout presets
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
+>>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32 # FIX:
       layout = {
         # Center focused column
         center-focused-column = "never";
-        
+
         # Gaps configuration
         gaps = 8;
-        
-<<<<<<< HEAD
+
+<<<<<<< HEAD # FIX:
         # Column width presets
         preset-column-widths = [
           { proportion = 1.0; }
           { proportion = 0.5; }
           { proportion = 0.33; }
           { proportion = 0.25; }
-=======
+======= # FIX:
         # Strut configuration for panels
         struts = {
           left = 0;
@@ -59,7 +59,7 @@ in {
           { fixed = 800; }      # Fixed 800px
           { fixed = 1024; }     # Fixed 1024px
           { fixed = 1280; }     # Fixed 1280px
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
+>>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32 # FIX:
         ];
 
         # Default column width
@@ -68,7 +68,7 @@ in {
         # Focus ring configuration
         focus-ring = {
           width = 4;
-<<<<<<< HEAD
+<<<<<<< HEAD # FIX:
           active-color = "0x88c0d0";
           inactive-color = "0x4c566a";
 =======
@@ -79,13 +79,13 @@ in {
             to = "0x81a1c1";
             angle = 45;
           };
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
+>>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32 # FIX:
         };
 
         # Border configuration
         border = {
           width = 2;
-<<<<<<< HEAD
+<<<<<<< HEAD # FIX:
           active-color = "0x88c0d0";
           inactive-color = "0x4c566a";
 =======
@@ -96,7 +96,7 @@ in {
             to = "0x81a1c1";
             angle = 45;
           };
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
+>>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32 # FIX:
         };
 
         # Shadow configuration

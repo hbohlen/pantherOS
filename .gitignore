@@ -7,3 +7,4 @@
 # Attic secrets
 .devcontainer/attic/secrets.env
 .devcontainer/attic/config.toml
+/.direnv/**

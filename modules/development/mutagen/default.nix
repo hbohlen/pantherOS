@@ -8,6 +8,8 @@ with lib;
 let
   cfg = config.programs.mutagen;
 in {
+
+# FIX:
 <<<<<<< HEAD
 =======
   imports = [
@@ -18,7 +20,7 @@ in {
 >>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
   options.programs.mutagen = {
     enable = mkEnableOption "Mutagen file synchronization and forwarding";
-    
+
     package = mkOption {
       type = types.package;
       default = pkgs.mutagen;
@@ -54,6 +56,7 @@ in {
 
   config = mkIf cfg.enable {
     # Install Mutagen and dependencies
+    # FIX:
 <<<<<<< HEAD
     environment.systemPackages = [
       cfg.package
@@ -101,6 +104,7 @@ in {
     };
 
     # Systemd user services for Mutagen
+    # FIX:
 <<<<<<< HEAD
     systemd.user.services.mutagen-daemon = {
       description = "Mutagen Daemon";
@@ -185,7 +189,7 @@ in {
           ExecStart = "${pkgs.writeShellScript "mutagen-cleanup" ''
             # List all active sessions
             SESSIONS=$(${cfg.package}/bin/mutagen sync list --format=csv | tail -n +2 | cut -d, -f1)
-            
+
             # Terminate all sessions
             for session in $SESSIONS; do
               echo "Terminating session: $session"
@@ -194,7 +198,7 @@ in {
 
             # List forwarding sessions
             FORWARD_SESSIONS=$(${cfg.package}/bin/mutagen forward list --format=csv | tail -n +2 | cut -d, -f1)
-            
+
             # Terminate all forwarding sessions
             for session in $FORWARD_SESSIONS; do
               echo "Terminating forward session: $session"
@@ -202,7 +206,7 @@ in {
             done
           ''}";
         };
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
+>>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32 # FIX:
       };
     };
 
@@ -213,7 +217,7 @@ in {
       MUTAGEN_LOG_LEVEL = "info";
     };
 
-<<<<<<< HEAD
+<<<<<<< HEAD # FIX:
 =======
     # Configuration directories
     environment.etc."mutagen/mutagen.yml".text = ''
@@ -256,7 +260,7 @@ in {
           connectionTimeout: 30
           synchronizationTimeout: 300
     '';
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
+>>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32 # FIX:
     # Shell aliases for Mutagen
     programs.bash.shellAliases = {
       ms = "mutagen sync";
@@ -269,7 +273,7 @@ in {
       mt = "mutagen sync terminate";
       mm = "mutagen sync monitor";
     };
-<<<<<<< HEAD
+<<<<<<< HEAD # FIX:
 =======
     programs.fish.shellAliases = {
       ms = "mutagen sync";
@@ -282,6 +286,6 @@ in {
       mt = "mutagen sync terminate";
       mm = "mutagen sync monitor";
     };
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
+>>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32 # FIX:
   };
 }

@@ -6,4 +6,5 @@
 {
   # This module provides the structure for terminal tools
   # Actual configuration will be applied in home-manager context
+  # TODO: Implement terminal tools configuration
 }

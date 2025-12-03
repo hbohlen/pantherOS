@@ -33,7 +33,7 @@ in {
           scale = 1.0;
           transform = "normal";
         };
-<<<<<<< HEAD
+<<<<<<< HEAD # FIX:
 =======
 
         # External DisplayPort display
@@ -59,7 +59,7 @@ in {
           scale = 1.25;
           transform = "normal";
         };
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
+>>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32 # FIX:
       };
 
       # Variable refresh rate support
