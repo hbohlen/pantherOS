@@ -1,12 +1,12 @@
 # Implementation Tasks: System Monitoring
 
 ## 1. Core Infrastructure
-- [ ] 1.1 Create `modules/monitoring/default.nix` exposing `services.monitoring` options with provider selection (Datadog/Prometheus)
-- [ ] 1.2 Create `modules/monitoring/datadog.nix` for Datadog agent configuration (primary)
-- [ ] 1.3 Create `modules/monitoring/prometheus.nix` with Prometheus configuration (optional)
-- [ ] 1.4 Create `modules/monitoring/grafana.nix` with Grafana setup (optional)
+- [x] 1.1 Create `modules/monitoring/default.nix` exposing `services.monitoring` options with provider selection (Datadog/Prometheus)
+- [x] 1.2 Create `modules/monitoring/datadog.nix` for Datadog agent configuration (primary)
+- [x] 1.3 Create `modules/monitoring/prometheus.nix` with Prometheus configuration (optional)
+- [x] 1.4 Create `modules/monitoring/grafana.nix` with Grafana setup (optional)
 - [ ] 1.5 Create `modules/monitoring/loki.nix` for log aggregation (optional)
-- [ ] 1.6 Create `modules/monitoring/exporters.nix` for node_exporter and other exporters
+- [x] 1.6 Create `modules/monitoring/exporters.nix` for node_exporter and other exporters
 - [ ] 1.7 Create `modules/monitoring/alertmanager.nix` for alert configuration (Prometheus)
 
 ## 2. Default Configuration
