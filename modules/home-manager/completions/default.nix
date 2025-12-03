@@ -85,6 +85,21 @@ in
         if not test -d "$FISH_COMPLETION_CACHE_DIR"
           mkdir -p "$FISH_COMPLETION_CACHE_DIR"
         end
+        
+        # Set cache timeout (in seconds)
+        set -gx FISH_COMPLETION_CACHE_TIMEOUT ${toString cfg.caching.cacheTimeout}
+        
+        # Function to clean expired cache files
+        function __fish_completion_clean_cache
+          set cache_dir "$FISH_COMPLETION_CACHE_DIR"
+          if test -d "$cache_dir"
+            # Remove cache files older than the timeout
+            find "$cache_dir" -type f -mmin +$(math "$FISH_COMPLETION_CACHE_TIMEOUT / 60") -delete 2>/dev/null
+          end
+        end
+        
+        # Clean cache on shell startup
+        __fish_completion_clean_cache
       '')
     );
   };
