@@ -10,8 +10,6 @@ let
 in {
   config = mkIf cfg.enable {
     programs.niri.settings = {
-<<<<<<< HEAD
-=======
       # Workspace configuration
       workspaces = [
         { name = "1"; }
@@ -26,22 +24,13 @@ in {
       ];
 
       # Layout presets
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
       layout = {
         # Center focused column
         center-focused-column = "never";
-        
+
         # Gaps configuration
         gaps = 8;
-        
-<<<<<<< HEAD
-        # Column width presets
-        preset-column-widths = [
-          { proportion = 1.0; }
-          { proportion = 0.5; }
-          { proportion = 0.33; }
-          { proportion = 0.25; }
-=======
+
         # Strut configuration for panels
         struts = {
           left = 0;
@@ -49,6 +38,7 @@ in {
           top = 0;
           bottom = 0;
         };
+
         # Column width presets
         preset-column-widths = [
           { proportion = 1.0; }  # Full width
@@ -59,7 +49,6 @@ in {
           { fixed = 800; }      # Fixed 800px
           { fixed = 1024; }     # Fixed 1024px
           { fixed = 1280; }     # Fixed 1280px
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
         ];
 
         # Default column width
@@ -68,10 +57,6 @@ in {
         # Focus ring configuration
         focus-ring = {
           width = 4;
-<<<<<<< HEAD
-          active-color = "0x88c0d0";
-          inactive-color = "0x4c566a";
-=======
           active-color = "0x88c0d0";  # Nord blue
           inactive-color = "0x4c566a"; # Nord dark gray
           active-gradient = {
@@ -79,16 +64,11 @@ in {
             to = "0x81a1c1";
             angle = 45;
           };
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
         };
 
         # Border configuration
         border = {
           width = 2;
-<<<<<<< HEAD
-          active-color = "0x88c0d0";
-          inactive-color = "0x4c566a";
-=======
           active-color = "0x88c0d0";  # Nord blue
           inactive-color = "0x4c566a"; # Nord dark gray
           active-gradient = {
@@ -96,7 +76,6 @@ in {
             to = "0x81a1c1";
             angle = 45;
           };
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
         };
 
         # Shadow configuration

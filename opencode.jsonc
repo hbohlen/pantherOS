@@ -1,28 +1,577 @@
 {
+  // NOTE: SCHEMA
   "$schema": "https://opencode.ai/config.json",
-  "username": "hbohlen",
-  "autoupdate": true,
-  "plugin": ["@tarquinen/opencode-dcp", "opencode-skills"],
-  "theme": "rosepine",
 
+  // NOTE: SETTINGS
+  "username": "hbohlen",
+  "tui": {
+    "diff_style": "stacked",
+    "scroll_acceleration": {
+      "enabled": true,
+    },
+    "scroll_speed": 1.5,
+  },
+  "autoupdate": "notify",
+
+  "theme": "matrix",
+
+  "layout": "stretch",
+
+  "snapshot": true,
+
+  // NOTE: WATCHER
+  "watcher": {
+    "ignore": [],
+  },
+
+  // NOTE: EXPERIMENTAL SETTINGS
+  "experimental": {
+    "batch_tool": true, // TODO: VERIFY THIS IS THE BEST SETTTINGS TO USE
+    "chatMaxRetries": 0, // TODO: DETERMINE A GOOD VALUE FOR RETRIES
+    "disable_paste_summary": true, // TODO: DETERMINE WHETHER IT SHOULD BE TRUE OR FALSE
+
+    //  TODO: RESEARCH POTENTIAL SETTINGS FOR HOOKS
+    "hook": {
+      "file_edited": {
+        // TODO: WHAT SHOULD BE RUN WHEN A FILE IS EDITED
+      },
+      "session_completed": [
+        {
+          "command": [], //  TODO: WHAT SHOULD BE RUN WHEN A SESSION IS COMPLETED
+          "environment": {
+            // TODO: WHAT SHOULD BE RUN WHEN A SESSION IS COMPLETE
+          },
+        },
+      ],
+    },
+  },
+
+  // NOTE: PERMISSIONS
+  "permission": {
+    // TODO: RESEARCH BEST SETTINGS FOR PERMISSIONS
+    // ALL OF THESE HAVE THE OPTION FOR `allow`, `deny`, or `ask`
+    // TODO: DETERMINE IF OTHER TOOLS SHOULD GO HERE AS WELL
+    "bash": "allow",
+    "doom_loop": "allow",
+    "edit": "allow",
+    "external_directory": "allow",
+    "webfetch": "allow",
+  },
+
+  // NOTE: TOOLS
+  "tools": {
+    // TODO: RESEARCH WHAT TOOLS SHOULD BE CONFIGURED AND HOW
+  },
+
+  // All providers go under the plural "providers" key
+  "provider": {
+    "minimax": {
+      // Use the Anthropic-compatible SDK for MiniMax M2
+      "npm": "@ai-sdk/anthropic",
+      "name": "MiniMax",
+
+      "options": {
+        // Anthropic-compatible endpoint (international)
+        // For China: https://api.minimaxi.com/anthropic/v1
+        "baseURL": "https://api.minimax.io/anthropic/v1",
+
+        // Optional if you prefer config-based auth instead of `opencode auth login`
+        // "apiKey": "{env:MINIMAX_API_KEY}"
+      },
+
+      "models": {
+        "MiniMax-M2": {
+          // Display name in /models
+          "name": "MiniMax-M2",
+
+          // Let OpenCode know this supports reasoning + tools
+          "reasoning": true,
+          "tool_call": true,
+
+          // Context + output token limits so OpenCode can track headroom
+          "limit": {
+            "context": 200000,
+            "output": 8192,
+          },
+
+          // Per-model options – these map straight into the Anthropic-style API
+          "options": {
+            "temperature": 0.7,
+            "top_p": 0.9,
+            "max_tokens": 8192,
+            "stream": true,
+          },
+
+          // If you really want to keep your extra metadata (cost, modalities, etc.)
+          // you can safely hang them off a metadata object, e.g.:
+          //
+          // "metadata": {
+          //   "attachment": true,
+          //   "cost": {
+          //     "cache_read": 0.0001,
+          //     "cache_write": 0.0001,
+          //     "context_over_200k": {
+          //       "cache_read": 0.0002,
+          //       "cache_write": 0.0002,
+          //       "input": 0.0005,
+          //       "output": 0.002
+          //     },
+          //     "input": 0.0003,
+          //     "output": 0.001
+          //   },
+          //   "modalities": {
+          //     "input": ["text", "image", "audio", "video"],
+          //     "output": ["text", "image"]
+          //   },
+          //   "release_date": "2024-12",
+          //   "status": "beta"
+          // }
+        },
+      },
+    },
+  },
+  // NOTE: AGENTS
+  "agent": {
+    "plan": {
+      "color": "#FF00FF",
+      "description": "",
+      "mode": "all",
+      "model": "",
+      "permission": {
+        "bash": "allow",
+        "doom_loop": "allow",
+        "edit": "allow",
+        "webfetch": "allow",
+        "external_directory": "allow",
+      },
+      "prompt": "",
+      "temperature": 0,
+      "tools": {},
+      "top_p": 0,
+      "disable": false,
+    },
+    "explore": {},
+    "build": {},
+    "general": {},
+  },
+
+  // NOTE: INSTRUCTIONS
+  "instructions": [],
+
+  // NOTE: COMMANDS
+  "command": {},
+
+  // NOTE: KEYBINDS
+  // "keybinds": {
+  //   "agent_cycle": "",
+  //   "agent_cycle_reverse": "",
+  //   "agent_list": "",
+  //   "app_exit": "",
+  //   "command_list": "",
+  //   "editor_open": "",
+  //   "history_next": "",
+  //   "history_previous": "",
+  //   "input_clear": "",
+  //   "input_forward_delete": "",
+  // },
+
+  // NOTE: PLUGINS
+  "plugin": ["@tarquinen/opencode-dcp@0.3.30"],
+
+  // NOTE: MCP SERVERS
   "mcp": {
+    "docling": {
+      "type": "local",
+      "command": ["uvx", "--from=docling-mcp", "docling-mcp-server"],
+      "enabled": true,
+    },
+    // -------------------------
+    // Sequential Thinking (Anthropic)
+    // -------------------------
+    // Structured, step-by-step reasoning / planning
+    "sequential-thinking": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "enabled": true,
+    },
+
+    // -------------------------
+    // NixOS (mcp-nixos)
+    // -------------------------
+    // NixOS / Home Manager / nix-darwin options & packages
     "nixos": {
       "type": "local",
-      "command": ["nix", "run", "github:utensils/mcp-nixos", "--"]
-    }
+      // Requires `uv` installed: https://mcp-nixos.io/ :contentReference[oaicite:1]{index=1}
+      "command": ["uvx", "mcp-nixos"],
+      "enabled": true,
+    },
+
+    // -------------------------
+    // Brave Search
+    // -------------------------
+    // Web search using Brave Search API
+    "brave-search": {
+      "type": "local",
+      // Official config pattern for MCP clients uses this npx command :contentReference[oaicite:2]{index=2}
+      "command": ["npx", "-y", "@modelcontextprotocol/server-brave-search"],
+      "environment": {
+        // Export BRAVE_API_KEY in your shell (ideally via 1Password)
+        "BRAVE_API_KEY": "${env:BRAVE_API_KEY}",
+      },
+      "enabled": true,
+    },
+
+    // -------------------------
+    // Context7
+    // -------------------------
+    // Live framework/library docs (remote HTTP MCP)
+    // OpenCode docs use this exact URL. :contentReference[oaicite:3]{index=3}
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      // Optional: better rate limits with an API key
+      "headers": {
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}",
+      },
+      "enabled": true,
+    },
+
+    // -------------------------
+    // DeepWiki
+    // -------------------------
+    // DeepWiki.com GitHub repo docs & Q&A
+    // Official remote MCP base URL. :contentReference[oaicite:4]{index=4}
+    "deepwiki": {
+      "type": "remote",
+      "url": "https://mcp.deepwiki.com/mcp",
+      "enabled": true,
+    },
   },
 
+  // NOTE: LSP SERVERS
   "lsp": {
-    "nix": {
+    "LSP-NAME": {
+      "command": [],
+      "disabled": false,
+      "env": {},
+      "extensions": [],
+      "initialization": {},
+    },
+    "nil": {
+      "command": ["nil"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".nix"],
+      "initialization": {},
+    },
+    // TypeScript / JavaScript
+    "typescript": {
+      "command": ["npx", "typescript-language-server", "--stdio"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".ts", ".tsx", ".js", ".jsx", ".mjs", ".cjs", ".mts", ".cts"],
+      "initialization": {},
+    },
+
+    // Python (pyright)
+    "pyright": {
+      "command": ["pyright-langserver", "--stdio"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".py", ".pyi"],
+      "initialization": {},
+    },
+
+    // Rust
+    "rust-analyzer": {
+      "command": ["rust-analyzer"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".rs"],
+      "initialization": {},
+    },
+
+    // Go
+    "gopls": {
+      "command": ["gopls"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".go"],
+      "initialization": {},
+    },
+
+    // Lua
+    "lua-ls": {
+      "command": ["lua-language-server"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".lua"],
+      "initialization": {},
+    },
+
+    // JSON (VSCode JSON LSP)
+    "json": {
+      "command": ["vscode-json-languageserver", "--stdio"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".json", ".jsonc"],
+      "initialization": {},
+    },
+
+    // -------------------------
+    // ADDED IN CHANGE PROPOSAL: Add LSP and Formatters
+    // -------------------------
+
+    // Bash
+    "bash": {
+      "command": ["npx", "-y", "bash-language-server", "start"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".sh", ".bash", ".zsh"],
+      "initialization": {},
+    },
+
+    // Fish Shell
+    "fish": {
+      "command": ["fish-lsp", "--stdio"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".fish"],
+      "initialization": {},
+    },
+
+    // XML
+    "xml": {
+      "command": ["lemminx"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".xml", ".xsd", ".xslt"],
+      "initialization": {},
+    },
+
+    // TailwindCSS
+    "tailwindcss": {
+      "command": ["npx", "-y", "tailwindcss-language-server", "--stdio"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".css", ".html"],
+      "initialization": {},
+    },
+
+    // GitLab CI
+    "gitlab-ci": {
+      "command": ["npx", "-y", "gitlab-ci-localization-server", "--stdio"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".gitlab-ci.yml", ".gitlab-ci.yaml"],
+      "initialization": {},
+    },
+
+    // GitHub Actions
+    "github-actions": {
+      "command": ["npx", "-y", "github-actions-language-server", "--stdio"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".yml", ".yaml"],
+      "initialization": {},
+    },
+
+    // Git
+    "git": {
+      "command": ["npx", "-y", "git-language-server", "--stdio"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".gitignore", ".gitattributes", ".gitmodules"],
+      "initialization": {},
+    },
+
+    // OpenTofu/Terraform
+    "opentofu": {
+      "command": ["terraform-ls", "serve"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".tf", ".tfvars"],
+      "initialization": {},
+    },
+
+    // Dockerfile
+    "docker": {
+      "command": ["npx", "-y", "dockerfile-language-server-nodejs", "--stdio"],
+      "disabled": false,
+      "env": {},
+      "extensions": ["Dockerfile", "Containerfile", ".dockerfile"],
+      "initialization": {},
+    },
+
+    // NixD (alternative to nil)
+    "nixd": {
       "command": ["nixd"],
-      "extensions": [".nix"]
-    }
+      "disabled": false,
+      "env": {},
+      "extensions": [".nix"],
+      "initialization": {},
+    },
+
+    // Oxide Language
+    "oxide": {
+      "command": ["oxc", "lsp"],
+      "disabled": false,
+      "env": {},
+      "extensions": [".ox"],
+      "initialization": {},
+    },
   },
 
+  // NOTE: FORMATTERS
   "formatter": {
-    "nix": {
-      "command": ["nixpkgs-fmt"],
-      "extensions": [".nix"]
-    }
-  }
+    // TS/JS/JSON/MD/YAML/etc with Prettier
+    "prettier": {
+      "disabled": false,
+      "command": ["npx", "prettier", "--write", "$FILE"],
+      "environment": {
+        "NODE_ENV": "development",
+      },
+      "extensions": [
+        ".js",
+        ".jsx",
+        ".ts",
+        ".tsx",
+        ".mjs",
+        ".cjs",
+        ".json",
+        ".jsonc",
+        ".md",
+        ".mdx",
+        ".html",
+        ".css",
+        ".scss",
+        ".yaml",
+        ".yml",
+      ],
+    },
+
+    // Nix formatting
+    "alejandra": {
+      "disabled": false,
+      "command": ["alejandra", "$FILE"],
+      "environment": {},
+      "extensions": [".nix"],
+    },
+
+    // Python formatting via ruff
+    "ruff": {
+      "disabled": false,
+      "command": ["ruff", "format", "$FILE"],
+      "environment": {},
+      "extensions": [".py", ".pyi"],
+    },
+
+    // Rust formatting
+    "rustfmt": {
+      "disabled": false,
+      "command": ["rustfmt", "$FILE"],
+      "environment": {},
+      "extensions": [".rs"],
+    },
+
+    // -------------------------
+    // ADDED IN CHANGE PROPOSAL: Add LSP and Formatters
+    // -------------------------
+
+    // Bash formatting
+    "shfmt": {
+      "disabled": false,
+      "command": ["shfmt", "-w", "$FILE"],
+      "environment": {},
+      "extensions": [".sh", ".bash", ".zsh"],
+    },
+
+    // Fish shell formatting
+    "fish-indent": {
+      "disabled": false,
+      "command": ["fish_indent", "$FILE"],
+      "environment": {},
+      "extensions": [".fish"],
+    },
+
+    // XML formatting
+    "xmllint": {
+      "disabled": false,
+      "command": ["xmllint", "--format", "--output", "$FILE", "$FILE"],
+      "environment": {},
+      "extensions": [".xml", ".xsd", ".xslt"],
+    },
+
+    // TailwindCSS formatting (via prettier)
+    "tailwindcss-prettier": {
+      "disabled": false,
+      "command": ["npx", "prettier", "--write", "$FILE"],
+      "environment": {
+        "NODE_ENV": "development",
+      },
+      "extensions": [".css", ".html"],
+    },
+
+    // GitLab CI formatting (via prettier)
+    "gitlab-ci-prettier": {
+      "disabled": false,
+      "command": ["npx", "prettier", "--write", "$FILE"],
+      "environment": {
+        "NODE_ENV": "development",
+      },
+      "extensions": [".gitlab-ci.yml", ".gitlab-ci.yaml"],
+    },
+
+    // GitHub Actions formatting (via prettier)
+    "github-actions-prettier": {
+      "disabled": false,
+      "command": ["npx", "prettier", "--write", "$FILE"],
+      "environment": {
+        "NODE_ENV": "development",
+      },
+      "extensions": [".github/workflows/*.yml", ".github/workflows/*.yaml"],
+    },
+
+    // Lua formatting
+    "lua-format": {
+      "disabled": false,
+      "command": ["lua-format", "-i", "$FILE"],
+      "environment": {},
+      "extensions": [".lua"],
+    },
+
+    // OpenTofu/Terraform formatting
+    "terraform-fmt": {
+      "disabled": false,
+      "command": ["terraform", "fmt", "$FILE"],
+      "environment": {},
+      "extensions": [".tf", ".tfvars"],
+    },
+
+    // Dockerfile formatting
+    "dockerfile-formatter": {
+      "disabled": false,
+      "command": ["npx", "-y", "dockerfile-formatter", "$FILE"],
+      "environment": {
+        "NODE_ENV": "development",
+      },
+      "extensions": ["Dockerfile", "Containerfile", ".dockerfile"],
+    },
+
+    // NixD formatting (use alejandra, already configured)
+    "nixd-formatter": {
+      "disabled": false,
+      "command": ["alejandra", "$FILE"],
+      "environment": {},
+      "extensions": [".nix"],
+    },
+
+    // Oxide formatting
+    "ox-fmt": {
+      "disabled": false,
+      "command": ["oxc", "format", "$FILE"],
+      "environment": {},
+      "extensions": [".ox"],
+    },
+  },
 }

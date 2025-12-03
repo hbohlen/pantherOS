@@ -6,6 +6,7 @@
 
 {
   imports = [
+    # TODO: Implement Nixvim configuration
     # ../editor/nixvim  # Disabled: no implementation yet
   ];
 }

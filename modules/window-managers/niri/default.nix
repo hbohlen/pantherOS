@@ -17,7 +17,7 @@ in {
 
   options.programs.niri = {
     enable = mkEnableOption "Niri Wayland compositor";
-    
+
     package = mkOption {
       type = types.package;
       default = pkgs.niri;
@@ -58,11 +58,7 @@ in {
       xdgOpenUsePortal = true;
     };
 
-<<<<<<< HEAD
-    # Configure mate-polkit as sole polkit authentication agent
-=======
     # Configure mate-polkit as the sole polkit authentication agent
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
     security.polkit.enable = true;
     systemd.user.services.polkit-mate = {
       description = "MATE Polkit Authentication Agent";

@@ -5,6 +5,7 @@
 
 {
   imports = [
+    # TODO: Add your custom window manager module here
     # ./niri  # Disabled: use built-in programs.niri from nixpkgs instead
   ];
 }
