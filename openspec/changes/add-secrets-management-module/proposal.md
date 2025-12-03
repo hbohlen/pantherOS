@@ -13,13 +13,13 @@ A structured secrets management module would provide secure, reproducible secret
 
 ## What Changes
 
-- Create `modules/security/secrets.nix` module using sops-nix or agenix
-- Add encrypted secrets storage in repository
+- Create `modules/security/secrets.nix` module using OpNix (already in flake inputs)
+- Add encrypted secrets storage in repository using OpNix's secret management
 - Integrate secrets into NixOS configuration declaratively
 - Support per-host and per-user secrets
-- Add 1Password integration for secret sourcing
+- Add 1Password integration for secret sourcing via OpNix
 - Create helper scripts for secret management (encrypt, decrypt, rotate)
-- Document secret management workflow
+- Document secret management workflow with OpNix
 
 ## Impact
 
@@ -29,11 +29,11 @@ A structured secrets management module would provide secure, reproducible secret
 - Modified capability: `configuration` (add secrets to system configuration)
 
 ### Affected Code
-- New module: `modules/security/secrets.nix`
+- New module: `modules/security/secrets.nix` using OpNix
 - Modified: `modules/security/default.nix` to include secrets module
-- New directory: `secrets/` for encrypted secret files
+- New directory: `secrets/` for OpNix-encrypted secret files
 - Host configurations: Add secret imports in `hosts/*/default.nix`
-- flake.nix: Add sops-nix or agenix input
+- OpNix module integration (already available via flake inputs)
 
 ### Benefits
 - Secure secret storage in version control
@@ -44,7 +44,7 @@ A structured secrets management module would provide secure, reproducible secret
 - Automated secret deployment during rebuild
 
 ### Considerations
-- Initial setup requires key generation per host
+- Initial setup requires OpNix configuration per host
 - Secrets must be re-encrypted when adding new hosts
 - Secret rotation requires manual intervention
-- Age keys or GPG keys need secure backup
+- OpNix keys and 1Password integration need secure configuration

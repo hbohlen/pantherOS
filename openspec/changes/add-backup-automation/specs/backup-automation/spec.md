@@ -21,10 +21,10 @@ The system SHALL automatically create Btrfs snapshots on a configured schedule w
 ### Requirement: Remote Backup Synchronization
 The system SHALL synchronize backups to remote storage with encryption and compression.
 
-#### Scenario: Backup to S3-compatible storage
+#### Scenario: Backup to Backblaze B2
 - **WHEN** remote backup is triggered
-- **THEN** latest snapshot is encrypted
-- **AND** encrypted backup is uploaded to S3
+- **THEN** latest snapshot is encrypted using OpNix
+- **AND** encrypted backup is uploaded to Backblaze B2 (S3-compatible)
 - **AND** incremental backup only transfers changed data
 - **AND** upload progress is logged
 

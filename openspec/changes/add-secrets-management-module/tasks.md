@@ -1,19 +1,18 @@
 # Implementation Tasks: Secrets Management Module
 
 ## 1. Core Infrastructure
-- [ ] 1.1 Evaluate secrets backends (sops-nix vs agenix) - criteria: maturity, ease of use, 1Password integration
-- [ ] 1.2 Document backend choice decision and rationale
-- [ ] 1.3 Add chosen backend to flake inputs
-- [ ] 1.4 Create `modules/security/secrets.nix` module
-- [ ] 1.5 Create `secrets/` directory structure for encrypted files
-- [ ] 1.6 Set up backend-specific configuration file (`.sops.yaml` or equivalent)
+- [ ] 1.1 Review OpNix documentation and capabilities (https://github.com/brizzbuzz/opnix)
+- [ ] 1.2 Create `modules/security/secrets.nix` module using OpNix
+- [ ] 1.3 Create `secrets/` directory structure for OpNix-encrypted files
+- [ ] 1.4 Configure OpNix module integration in host configurations
+- [ ] 1.5 Set up OpNix configuration for secret management
 
-## 2. Key Management
-- [ ] 2.1 Generate age/GPG keys for each existing host
-- [ ] 2.2 Create key storage documentation and backup procedures
-- [ ] 2.3 Configure key access for automated deployments
-- [ ] 2.4 Set up key rotation procedures
-- [ ] 2.5 Document key recovery process
+## 2. OpNix Configuration
+- [ ] 2.1 Configure OpNix for each existing host
+- [ ] 2.2 Set up OpNix key management and storage
+- [ ] 2.3 Configure OpNix access for automated deployments
+- [ ] 2.4 Set up secret rotation procedures with OpNix
+- [ ] 2.5 Document OpNix configuration and recovery process
 
 ## 3. Secret Definition
 - [ ] 3.1 Define secret schema (per-host, per-user, shared)
@@ -29,12 +28,12 @@
 - [ ] 4.4 Configure secret cleanup on rollback
 - [ ] 4.5 Test secret deployment on all hosts
 
-## 5. 1Password Integration
-- [ ] 5.1 Create 1Password CLI integration for secret sourcing
-- [ ] 5.2 Set up secret sync from 1Password vaults
-- [ ] 5.3 Configure automatic secret refresh
-- [ ] 5.4 Document 1Password to secrets file workflow
-- [ ] 5.5 Create helper scripts for 1Password integration
+## 5. 1Password Integration via OpNix
+- [ ] 5.1 Configure OpNix integration with 1Password CLI
+- [ ] 5.2 Set up secret sync from 1Password vaults using OpNix
+- [ ] 5.3 Configure automatic secret refresh through OpNix
+- [ ] 5.4 Document 1Password to OpNix secrets workflow
+- [ ] 5.5 Create helper scripts for 1Password + OpNix integration
 
 ## 6. Helper Tools
 - [ ] 6.1 Create script for encrypting new secrets

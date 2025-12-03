@@ -13,14 +13,16 @@ This makes it difficult to identify performance bottlenecks, track system health
 
 ## What Changes
 
-- Add Prometheus for metrics collection
-- Add Grafana for visualization and dashboards
+- Add Datadog agent integration (primary monitoring solution - Pro subscription available)
+- Add Prometheus for metrics collection (optional, complementary to Datadog)
+- Add Grafana for visualization and dashboards (optional)
+- Add Loki for log aggregation (optional)
 - Add node_exporter for system metrics
 - Add alertmanager for notification management
 - Create default dashboards for common metrics (CPU, memory, disk, network)
 - Configure integration with existing services (Podman, Mutagen, etc.)
 - Add systemd service monitoring
-- Create monitoring module structure that can be enabled per-host
+- Create monitoring module structure that can be enabled per-host with Datadog or Prometheus/Grafana stack
 
 ## Impact
 

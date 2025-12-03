@@ -3,17 +3,17 @@
 ## MODIFIED Requirements
 
 ### Requirement: Secret Storage and Encryption
-The system SHALL store secrets encrypted in version control using age or GPG encryption, with per-host key access control.
+The system SHALL store secrets encrypted in version control using OpNix's secret management, with per-host access control.
 
 #### Scenario: Secret is encrypted for storage
 - **WHEN** a new secret is added
-- **THEN** the secret is encrypted using host public keys
+- **THEN** the secret is encrypted using OpNix
 - **AND** encrypted file is stored in `secrets/` directory
-- **AND** only authorized hosts can decrypt the secret
+- **AND** only authorized hosts can decrypt the secret via OpNix
 
 #### Scenario: Secret is deployed during system build
 - **WHEN** nixos-rebuild is executed
-- **THEN** secrets are decrypted using host private key
+- **THEN** secrets are decrypted by OpNix
 - **AND** secrets are placed in `/run/secrets/` with correct permissions
 - **AND** services can access their designated secrets
 
@@ -32,13 +32,13 @@ The system SHALL provide NixOS module options for declaring secrets and their co
 - **AND** shared secrets can be accessed by multiple hosts
 - **AND** secret access is auditable through configuration
 
-### Requirement: Secret Integration with 1Password
-The system SHALL integrate with 1Password CLI to source secrets from vaults and sync to encrypted storage.
+### Requirement: Secret Integration with 1Password via OpNix
+The system SHALL integrate with 1Password CLI through OpNix to source secrets from vaults and sync to encrypted storage.
 
 #### Scenario: Import secret from 1Password
-- **WHEN** using the 1Password import helper
-- **THEN** secret is retrieved from specified vault and item
-- **AND** secret is encrypted for target hosts
+- **WHEN** using the OpNix 1Password import helper
+- **THEN** secret is retrieved from specified vault and item via 1Password CLI
+- **AND** secret is encrypted using OpNix for target hosts
 - **AND** secret file is created in secrets directory
 
 #### Scenario: Sync secrets from 1Password
@@ -79,9 +79,9 @@ The system SHALL enforce strict permissions and ownership for secret files and p
 - **AND** permissions are set to 0400 or 0440
 - **AND** parent directory is not world-readable
 
-#### Scenario: Private keys are protected
-- **WHEN** host private keys are stored
-- **THEN** keys are stored in `/etc/secrets/keys/` with 0400 permissions
+#### Scenario: OpNix keys are protected
+- **WHEN** OpNix keys are stored
+- **THEN** keys are stored securely with 0400 permissions
 - **AND** keys are accessible only by root
 - **AND** keys are excluded from system backups by default
 

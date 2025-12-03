@@ -3,24 +3,36 @@
 ## ADDED Requirements
 
 ### Requirement: Metrics Collection
-The system SHALL collect comprehensive system metrics including CPU, memory, disk, network, and process statistics using Prometheus and exporters.
+The system SHALL collect comprehensive system metrics including CPU, memory, disk, network, and process statistics using Datadog agent (primary) or Prometheus with exporters (optional).
 
-#### Scenario: System metrics are collected
-- **WHEN** the monitoring module is enabled
+#### Scenario: System metrics are collected with Datadog
+- **WHEN** the monitoring module is enabled with Datadog
+- **THEN** Datadog agent collects system metrics continuously
+- **AND** metrics include CPU usage, memory usage, disk I/O, and network traffic
+- **AND** metrics are retained according to Datadog Pro subscription
+
+#### Scenario: System metrics are collected with Prometheus (optional)
+- **WHEN** the monitoring module is enabled with Prometheus
 - **THEN** Prometheus collects metrics from node_exporter every 15 seconds
 - **AND** metrics include CPU usage, memory usage, disk I/O, and network traffic
 - **AND** metrics are retained for at least 15 days
 
 #### Scenario: Service metrics are collected
 - **WHEN** monitored services are running
-- **THEN** Prometheus collects service-specific metrics (Podman, systemd)
-- **AND** service health status is tracked
+- **THEN** monitoring system collects service-specific metrics (Podman, systemd)
+- **AND** service health status is tracked via Datadog or Prometheus
 - **AND** service restart counts are recorded
 
 ### Requirement: Metrics Visualization
-The system SHALL provide Grafana dashboards for visualizing collected metrics with default dashboards for common use cases.
+The system SHALL provide dashboards for visualizing collected metrics using Datadog UI (primary) or Grafana (optional) with default dashboards for common use cases.
 
-#### Scenario: Default dashboards are available
+#### Scenario: Default dashboards are available in Datadog
+- **WHEN** Datadog is configured
+- **THEN** pre-configured dashboards are available in Datadog UI for system overview, resource usage, and services
+- **AND** dashboards display real-time and historical data
+- **AND** custom dashboards can be created in Datadog
+
+#### Scenario: Default dashboards are available in Grafana (optional)
 - **WHEN** Grafana is accessed
 - **THEN** pre-configured dashboards are available for system overview, resource usage, and services
 - **AND** dashboards display real-time and historical data
@@ -56,8 +68,15 @@ The system SHALL support configurable alerts for critical system conditions with
 ### Requirement: Monitoring Configuration
 The system SHALL provide NixOS module options for enabling and configuring the monitoring stack with sensible defaults.
 
-#### Scenario: Enable monitoring on a host
-- **WHEN** `programs.monitoring.enable = true` is set
+#### Scenario: Enable monitoring with Datadog on a host
+- **WHEN** `programs.monitoring.enable = true` and `programs.monitoring.provider = "datadog"` is set
+- **THEN** Datadog agent is installed and started
+- **AND** Datadog API key is retrieved from OpNix secrets
+- **AND** default integrations are configured
+- **AND** agent starts automatically on boot
+
+#### Scenario: Enable monitoring with Prometheus/Grafana on a host (optional)
+- **WHEN** `programs.monitoring.enable = true` and `programs.monitoring.provider = "prometheus"` is set
 - **THEN** Prometheus, Grafana, and exporters are installed and started
 - **AND** default configuration is applied
 - **AND** services start automatically on boot

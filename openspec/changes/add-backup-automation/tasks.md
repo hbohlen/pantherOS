@@ -9,9 +9,9 @@
 
 ## 2. Remote Backup Module
 - [ ] 2.1 Create `modules/backup/remote.nix` for remote backup configuration
-- [ ] 2.2 Add S3-compatible storage backend support
-- [ ] 2.3 Add rsync backend support for remote servers
-- [ ] 2.4 Configure backup encryption (age or GPG)
+- [ ] 2.2 Add Backblaze B2 S3-compatible storage backend support
+- [ ] 2.3 Add rsync backend support for remote servers (optional)
+- [ ] 2.4 Configure backup encryption using OpNix
 - [ ] 2.5 Implement incremental backup support
 - [ ] 2.6 Add bandwidth throttling options
 
