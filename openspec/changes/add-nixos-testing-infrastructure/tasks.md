@@ -1,11 +1,12 @@
 # Implementation Tasks: NixOS Testing Infrastructure
 
 ## 1. Test Framework Enhancement
-- [ ] 1.1 Review existing `tests/integration/default.nix` structure
-- [ ] 1.2 Enhance test framework with better utilities and helpers
-- [ ] 1.3 Add test runner with parallel execution support
-- [ ] 1.4 Create test reporting and output formatting
-- [ ] 1.5 Add test fixtures and common test data
+- [ ] 1.1 Review existing `tests/integration/default.nix` structure and disabled tests
+- [ ] 1.2 Document existing test limitations (e.g., CUDA dependencies) and workarounds
+- [ ] 1.3 Enhance test framework with better utilities and helpers
+- [ ] 1.4 Add test runner with parallel execution support
+- [ ] 1.5 Create test reporting and output formatting
+- [ ] 1.6 Add test fixtures and common test data
 
 ## 2. Disko.nix Testing
 - [ ] 2.1 Create `tests/disko/` directory structure

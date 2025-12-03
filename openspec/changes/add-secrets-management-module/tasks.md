@@ -1,7 +1,7 @@
 # Implementation Tasks: Secrets Management Module
 
 ## 1. Core Infrastructure
-- [ ] 1.1 Review OpNix documentation and capabilities (https://github.com/brizzbuzz/opnix)
+- [ ] 1.1 Review OpNix documentation and capabilities (https://github.com/brizzbuzz/opnix) - verify link and save local docs
 - [ ] 1.2 Create `modules/security/secrets.nix` module using OpNix
 - [ ] 1.3 Create `secrets/` directory structure for OpNix-encrypted files
 - [ ] 1.4 Configure OpNix module integration in host configurations

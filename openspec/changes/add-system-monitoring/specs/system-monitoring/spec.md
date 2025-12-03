@@ -69,14 +69,14 @@ The system SHALL support configurable alerts for critical system conditions with
 The system SHALL provide NixOS module options for enabling and configuring the monitoring stack with sensible defaults.
 
 #### Scenario: Enable monitoring with Datadog on a host
-- **WHEN** `programs.monitoring.enable = true` and `programs.monitoring.provider = "datadog"` is set
+- **WHEN** `services.monitoring.enable = true` and `services.monitoring.provider = "datadog"` is set
 - **THEN** Datadog agent is installed and started
-- **AND** Datadog API key is retrieved from OpNix secrets
+- **AND** Datadog API key is configured (from OpNix secrets once available)
 - **AND** default integrations are configured
 - **AND** agent starts automatically on boot
 
 #### Scenario: Enable monitoring with Prometheus/Grafana on a host (optional)
-- **WHEN** `programs.monitoring.enable = true` and `programs.monitoring.provider = "prometheus"` is set
+- **WHEN** `services.monitoring.enable = true` and `services.monitoring.provider = "prometheus"` is set
 - **THEN** Prometheus, Grafana, and exporters are installed and started
 - **AND** default configuration is applied
 - **AND** services start automatically on boot

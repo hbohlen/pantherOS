@@ -23,7 +23,7 @@ The system SHALL synchronize backups to remote storage with encryption and compr
 
 #### Scenario: Backup to Backblaze B2
 - **WHEN** remote backup is triggered
-- **THEN** latest snapshot is encrypted using OpNix
+- **THEN** latest snapshot is encrypted (using encryption keys managed by OpNix)
 - **AND** encrypted backup is uploaded to Backblaze B2 (S3-compatible)
 - **AND** incremental backup only transfers changed data
 - **AND** upload progress is logged
