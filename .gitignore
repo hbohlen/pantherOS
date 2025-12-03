@@ -1,10 +1,31 @@
+```
+# Nix-specific ignores
+result
+*.drv
+.nix-*
 
+# Dependencies
+.nix-profile/
+nix-channels/
+.nix-defexpr/
 
+# Logs and temp files
+*.log
+*.tmp
+*.swp
 
-/logs/openai/**
-/node_modules/**
-/.direnv
-# Attic secrets
-.devcontainer/attic/secrets.env
-.devcontainer/attic/config.toml
-/.direnv/**
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+```
