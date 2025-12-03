@@ -206,6 +206,13 @@ nix flake check
 2. Ensure cache directory has write permissions
 3. Clear cache and retry: `rm -rf ~/.cache/fish/completions/*`
 
+## Future Improvements
+
+- **Shared cache utilities**: Extract common cache age calculation logic into a shared utility function to reduce duplication across completion files
+- **Additional completions**: Add more completions for tools like Docker, Kubernetes, Terraform, etc.
+- **Configurable cache location**: Allow users to customize the cache directory location
+- **Cache size management**: Implement automatic cache cleanup based on size or age
+
 ## References
 
 - [Fish Shell Documentation](https://fishshell.com/docs/current/)
