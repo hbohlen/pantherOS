@@ -1,0 +1,305 @@
+# GitHub Copilot Coding Agent Action Setup
+# This configuration enables Copilot with MCP servers and NixOS testing capabilities
+
+name: NixOS Development Environment
+description: Provides Copilot with access to test NixOS configurations and specialized MCP servers
+
+# MCP Server Configurations
+mcp_servers:
+  # Sequential Thinking MCP - For complex reasoning tasks
+  sequential-thinking:
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-sequential-thinking"
+    description: "Enables structured, step-by-step thinking for complex problems"
+    capabilities:
+      - reasoning
+      - planning
+      - problem-solving
+
+  # Brave Search MCP - For web search capabilities
+  brave-search:
+    command: npx
+    args:
+      - "-y"
+      - "@modelcontextprotocol/server-brave-search"
+    env:
+      BRAVE_API_KEY: ${{ secrets.BRAVE_API_KEY }}
+    description: "Provides web search capabilities via Brave Search API"
+    capabilities:
+      - web-search
+      - documentation-lookup
+      - real-time-information
+    setup_notes: |
+      Requires BRAVE_API_KEY secret to be set in repository settings.
+      Get API key from: https://brave.com/search/api/
+
+  # Context7 MCP - For context-aware assistance
+  context7:
+    command: npx
+    args:
+      - "-y"
+      - "@context7/mcp-server"
+    description: "Provides enhanced context understanding and code analysis"
+    capabilities:
+      - context-analysis
+      - code-understanding
+      - semantic-search
+
+  # NixOS MCP - For NixOS-specific operations
+  nixos-mcp:
+    command: npx
+    args:
+      - "-y"
+      - "@nixos/mcp-server"
+    description: "Provides NixOS package search, option lookup, and configuration assistance"
+    capabilities:
+      - nixos-package-search
+      - nixos-options
+      - configuration-validation
+      - flake-operations
+
+  # DeepWiki MCP - For deep documentation search
+  deepwiki:
+    command: npx
+    args:
+      - "-y"
+      - "@deepwiki/mcp-server"
+    description: "Provides deep search across documentation and wikis"
+    capabilities:
+      - documentation-search
+      - wiki-integration
+      - knowledge-base-access
+
+# SSH Configuration for VPS Access
+vps_access:
+  host: ${{ secrets.VPS_HOST }}
+  user: ${{ secrets.VPS_USER }}
+  port: ${{ secrets.VPS_PORT || 22 }}
+  ssh_key_secret: VPS_SSH_KEY
+  description: "VPS server for building and testing NixOS configurations"
+  
+  # SSH connection configuration
+  ssh_config: |
+    Host nixos-vps
+      HostName ${{ secrets.VPS_HOST }}
+      User ${{ secrets.VPS_USER }}
+      Port ${{ secrets.VPS_PORT || 22 }}
+      IdentityFile ~/.ssh/copilot_vps_key
+      StrictHostKeyChecking accept-new
+      ServerAliveInterval 60
+      ServerAliveCountMax 3
+
+  # Commands available for NixOS operations on VPS
+  available_commands:
+    - name: push-config
+      command: |
+        rsync -avz --exclude='.git' --exclude='result' \
+          ./ nixos-vps:~/pantherOS/
+      description: "Push local NixOS configuration to VPS"
+
+    - name: build-config
+      command: |
+        ssh nixos-vps 'cd ~/pantherOS && nix build .#nixosConfigurations.hetzner-vps.config.system.build.toplevel'
+      description: "Build NixOS configuration on VPS"
+
+    - name: test-config
+      command: |
+        ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild build --flake .#hetzner-vps'
+      description: "Test NixOS configuration build on VPS"
+
+    - name: apply-config
+      command: |
+        ssh nixos-vps 'cd ~/pantherOS && sudo nixos-rebuild switch --flake .#hetzner-vps'
+      description: "Apply NixOS configuration on VPS (requires sudo)"
+
+    - name: dry-build
+      command: |
+        ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild dry-build --flake .#hetzner-vps'
+      description: "Perform a dry-run build to check what would change"
+
+# Environment Setup Steps
+setup_steps:
+  - name: Install Nix
+    description: "Ensure Nix package manager is available"
+    command: |
+      if ! command -v nix &> /dev/null; then
+        curl -L https://nixos.org/nix/install | sh -s -- --daemon
+        . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+      fi
+    when: always
+
+  - name: Configure Nix with flakes
+    description: "Enable experimental features for flakes"
+    command: |
+      mkdir -p ~/.config/nix
+      cat > ~/.config/nix/nix.conf << 'EOF'
+      experimental-features = nix-command flakes
+      EOF
+    when: always
+
+  - name: Setup SSH key for VPS
+    description: "Configure SSH authentication for VPS access"
+    command: |
+      mkdir -p ~/.ssh
+      echo "$VPS_SSH_KEY" > ~/.ssh/copilot_vps_key
+      chmod 600 ~/.ssh/copilot_vps_key
+      
+      # Add SSH config
+      cat >> ~/.ssh/config << EOF
+      Host nixos-vps
+        HostName $VPS_HOST
+        User $VPS_USER
+        Port ${VPS_PORT:-22}
+        IdentityFile ~/.ssh/copilot_vps_key
+        StrictHostKeyChecking accept-new
+      EOF
+    when: vps_access_enabled
+    env:
+      VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+      VPS_HOST: ${{ secrets.VPS_HOST }}
+      VPS_USER: ${{ secrets.VPS_USER }}
+      VPS_PORT: ${{ secrets.VPS_PORT }}
+
+  - name: Test VPS connection
+    description: "Verify SSH connection to VPS"
+    command: |
+      ssh nixos-vps 'echo "VPS connection successful"'
+    when: vps_access_enabled
+
+  - name: Install Node.js for MCP servers
+    description: "Ensure Node.js and npm are available for MCP servers"
+    command: |
+      if ! command -v node &> /dev/null; then
+        nix profile install nixpkgs#nodejs
+      fi
+    when: always
+
+  - name: Verify MCP servers
+    description: "Test that MCP servers can be initialized"
+    command: |
+      npx -y @modelcontextprotocol/server-sequential-thinking --version || true
+      echo "MCP servers verified"
+    when: always
+
+# Test Configurations
+test_configs:
+  - name: Test local build
+    description: "Verify local NixOS configuration builds successfully"
+    command: |
+      nix build .#nixosConfigurations.hetzner-vps.config.system.build.toplevel
+    working_directory: ${{ github.workspace }}
+
+  - name: Test VPS build
+    description: "Build configuration on VPS"
+    command: |
+      ssh nixos-vps 'cd ~/pantherOS && nix build .#nixosConfigurations.hetzner-vps.config.system.build.toplevel'
+    when: vps_access_enabled
+
+# Required Secrets
+required_secrets:
+  - name: BRAVE_API_KEY
+    description: "API key for Brave Search MCP server"
+    required: true
+    link: "https://brave.com/search/api/"
+
+  - name: VPS_SSH_KEY
+    description: "Private SSH key for VPS access"
+    required: true
+    note: "Generate with: ssh-keygen -t ed25519 -C 'copilot-access'"
+
+  - name: VPS_HOST
+    description: "Hostname or IP address of the VPS server"
+    required: true
+    example: "vps.example.com or 192.0.2.1"
+
+  - name: VPS_USER
+    description: "SSH username for VPS access"
+    required: true
+    example: "root or nixos"
+
+  - name: VPS_PORT
+    description: "SSH port for VPS access"
+    required: false
+    default: "22"
+
+# Tools and utilities available
+tools:
+  nixos:
+    - nixos-rebuild
+    - nix-build
+    - nix flake check
+    - nix flake show
+    - nix flake update
+    - nix-tree
+    - nix search
+
+  formatting:
+    - nixpkgs-fmt
+    - nixfmt-rfc-style
+    - alejandra
+
+  language_servers:
+    - nil
+    - nixd
+
+  debugging:
+    - nix repl
+    - nix log
+    - nix show-derivation
+
+# Usage Examples
+usage_examples:
+  - name: "Build and test a configuration change"
+    steps:
+      - "Make changes to NixOS configuration files"
+      - "Test locally: nix build .#nixosConfigurations.hetzner-vps.config.system.build.toplevel"
+      - "Push to VPS: rsync -avz ./ nixos-vps:~/pantherOS/"
+      - "Build on VPS: ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild build --flake .#hetzner-vps'"
+      - "Apply if successful: ssh nixos-vps 'cd ~/pantherOS && sudo nixos-rebuild switch --flake .#hetzner-vps'"
+
+  - name: "Search for NixOS packages using MCP"
+    steps:
+      - "Use nixos-mcp server to search for packages"
+      - "Example: 'Find a package for terminal emulators'"
+      - "MCP will search nixpkgs and return relevant options"
+
+  - name: "Research and implement a feature"
+    steps:
+      - "Use brave-search MCP to research the topic"
+      - "Use sequential-thinking MCP to plan implementation"
+      - "Use context7 MCP for code analysis"
+      - "Use deepwiki MCP for documentation lookup"
+      - "Implement changes with nixos-mcp assistance"
+
+# Additional Notes
+notes: |
+  ## Important Considerations
+  
+  1. **Security**: 
+     - Never commit SSH keys or API keys to the repository
+     - All sensitive data should be stored in GitHub Secrets
+     - Use least-privilege access for VPS user
+  
+  2. **Testing Strategy**:
+     - Always test configurations locally first when possible
+     - Use dry-run builds before applying changes
+     - Keep a known-good configuration backup
+  
+  3. **MCP Server Usage**:
+     - MCP servers are invoked automatically by Copilot
+     - Each server provides specific capabilities
+     - Combine multiple servers for complex tasks
+  
+  4. **VPS Access**:
+     - VPS is used for building configurations that require specific hardware
+     - Builds on VPS ensure compatibility with production environment
+     - Use VPS for testing before applying to production systems
+  
+  5. **Rollback Strategy**:
+     - NixOS allows easy rollback: sudo nixos-rebuild switch --rollback
+     - Previous generations are preserved automatically
+     - Test thoroughly before applying to critical systems
+
+version: "1.0.0"
