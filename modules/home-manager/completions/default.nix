@@ -120,7 +120,6 @@ in
         set -g fish_completion_show_foreign 1  # Show completions for non-built-in commands
       ''
       + optionalString cfg.caching.enable ''
-        
         # Configure completion caching (timeout: ${toString cfg.caching.cacheTimeout}s)
         # Set up completion cache directory
         set -gx FISH_COMPLETION_CACHE_DIR "${config.xdg.cacheHome}/fish/completions"

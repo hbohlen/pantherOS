@@ -36,7 +36,7 @@ function __fish_podman_containers
     set -l cache_timeout $FISH_COMPLETION_CACHE_TIMEOUT
     
     if test -n "$cache_file" -a -f "$cache_file"
-        set -l cache_age (math (date +%s) - (stat -c %Y "$cache_file" 2>/dev/null || echo 0))
+        set -l cache_age (math (date +%s) - (stat -c %Y "$cache_file" 2>/dev/null || stat -f %m "$cache_file" 2>/dev/null || echo 0))
         if test $cache_age -lt $cache_timeout
             cat "$cache_file"
             return
@@ -59,7 +59,7 @@ function __fish_podman_images
     set -l cache_timeout $FISH_COMPLETION_CACHE_TIMEOUT
     
     if test -n "$cache_file" -a -f "$cache_file"
-        set -l cache_age (math (date +%s) - (stat -c %Y "$cache_file" 2>/dev/null || echo 0))
+        set -l cache_age (math (date +%s) - (stat -c %Y "$cache_file" 2>/dev/null || stat -f %m "$cache_file" 2>/dev/null || echo 0))
         if test $cache_age -lt $cache_timeout
             cat "$cache_file"
             return
