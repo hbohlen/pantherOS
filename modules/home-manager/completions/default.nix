@@ -77,9 +77,9 @@ in
       # Configure completion caching
       ${if cfg.caching.enable then ''
         # Set up completion cache directory
-        set -gx FISH_COMPLETION_CACHE_DIR $HOME/.cache/fish/completions
-        if not test -d $FISH_COMPLETION_CACHE_DIR
-          mkdir -p $FISH_COMPLETION_CACHE_DIR
+        set -gx FISH_COMPLETION_CACHE_DIR "${config.xdg.cacheHome}/fish/completions"
+        if not test -d "$FISH_COMPLETION_CACHE_DIR"
+          mkdir -p "$FISH_COMPLETION_CACHE_DIR"
         end
       '' else ""}
       
