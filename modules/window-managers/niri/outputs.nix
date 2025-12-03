@@ -33,8 +33,6 @@ in {
           scale = 1.0;
           transform = "normal";
         };
-<<<<<<< HEAD # FIX:
-=======
 
         # External DisplayPort display
         "DP-1" = mkDefault {
@@ -59,7 +57,6 @@ in {
           scale = 1.25;
           transform = "normal";
         };
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32 # FIX:
       };
 
       # Variable refresh rate support

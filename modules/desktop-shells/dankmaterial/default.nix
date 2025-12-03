@@ -8,9 +8,6 @@ with lib;
 let
   cfg = config.programs.dankmaterial;
 in {
-<<<<<<< HEAD
-
-=======
   imports = [
     ./core.nix
     ./quickshell.nix
@@ -19,7 +16,6 @@ in {
     ./services.nix
     ./polkit.nix
   ];
->>>>>>> fb6e70feb688b42a718986987a6900480bdf1d32
   options.programs.dankmaterial = {
     enable = mkEnableOption "DankMaterialShell desktop environment";
     
