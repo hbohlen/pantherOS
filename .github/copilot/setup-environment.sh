@@ -205,9 +205,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     echo "3. VPS_PORT: $VPS_PORT"
     echo "4. VPS_SSH_KEY: (content of $SSH_KEY_PATH)"
     echo ""
-    print_info "Private key content:"
-    cat "$SSH_KEY_PATH"
-    echo ""
+    print_info "Copy the private key from $SSH_KEY_PATH into your repository secret using a secure method."
+    print_warning "Avoid printing the private key to the terminal or logs."
 fi
 
 # Test MCP servers

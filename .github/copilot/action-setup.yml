@@ -147,7 +147,7 @@ setup_steps:
       chmod 600 ~/.ssh/copilot_vps_key
       
       # Add SSH config
-      cat >> ~/.ssh/config << 'EOF'
+      cat >> ~/.ssh/config << EOF
       Host nixos-vps
         HostName $VPS_HOST
         User $VPS_USER
