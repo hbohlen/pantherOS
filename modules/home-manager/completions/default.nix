@@ -95,7 +95,7 @@ in
         # Configure completion caching (timeout: ${toString cfg.caching.cacheTimeout}s)
         # Set up completion cache directory
         set -gx FISH_COMPLETION_CACHE_DIR "${config.xdg.cacheHome}/fish/completions"
-        set -gx FISH_COMPLETION_CACHE_TIMEOUT ${toString cfg.caching.cacheTimeout}
+        set -gx FISH_COMPLETION_CACHE_TIMEOUT "${toString cfg.caching.cacheTimeout}"
         if not test -d "$FISH_COMPLETION_CACHE_DIR"
           mkdir -p "$FISH_COMPLETION_CACHE_DIR"
         end
