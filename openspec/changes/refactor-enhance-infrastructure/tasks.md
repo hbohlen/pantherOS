@@ -3,17 +3,17 @@
 ## 1. Module Structure Refactoring
 
 ### 1.1 DankMaterialShell Widgets Refactoring
-- [ ] 1.1.1 Analyze current widgets.nix structure and identify logical groupings
-- [ ] 1.1.2 Create `modules/desktop-shells/dankmaterial/widgets/` directory
-- [ ] 1.1.3 Split into focused modules: system-monitoring.nix, media-controls.nix, network-status.nix, etc.
-- [ ] 1.1.4 Update main widgets.nix to import split modules
+- [x] 1.1.1 Analyze current widgets.nix structure and identify logical groupings
+- [x] 1.1.2 Create `modules/desktop-shells/dankmaterial/widgets/` directory
+- [x] 1.1.3 Split into focused modules: system-monitoring.nix, media-controls.nix, network-status.nix, etc.
+- [x] 1.1.4 Update main widgets.nix to import split modules
 - [ ] 1.1.5 Test that all widgets continue to function correctly
 
 ### 1.2 DankMaterialShell Services Refactoring
-- [ ] 1.2.1 Analyze current services.nix structure and identify service categories
-- [ ] 1.2.2 Create `modules/desktop-shells/dankmaterial/services/` directory
-- [ ] 1.2.3 Split into focused modules: systemd-services.nix, background-tasks.nix, etc.
-- [ ] 1.2.4 Update main services.nix to import split modules
+- [x] 1.2.1 Analyze current services.nix structure and identify service categories
+- [x] 1.2.2 Create `modules/desktop-shells/dankmaterial/services/` directory
+- [x] 1.2.3 Split into focused modules: system-services.nix, systemd-services.nix, packages.nix
+- [x] 1.2.4 Update main services.nix to import split modules
 - [ ] 1.2.5 Test that all services start correctly
 
 ### 1.3 OpenCode AI Dotfiles Refactoring

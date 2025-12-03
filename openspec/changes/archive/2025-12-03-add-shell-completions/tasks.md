@@ -1,7 +1,7 @@
 # Implementation Tasks: Shell Completions
 
 ## 1. Completion Infrastructure
-- [ ] 1.1 Create `modules/shell/completions/default.nix` module
+- [x] 1.1 Create `modules/shell/completions/default.nix` module
 - [ ] 1.2 Set up Fish completions directory structure
 - [ ] 1.3 Configure Fish to load custom completions
 - [ ] 1.4 Add completion caching configuration
