@@ -1,5 +1,9 @@
 # Example Fish Completions Configuration
 # This file demonstrates various ways to configure the Fish completions module
+#
+# NOTE: This file contains multiple example configurations.
+# Uncomment ONLY ONE example at a time in your actual configuration.
+# The examples are mutually exclusive and should not all be enabled simultaneously.
 
 { config, pkgs, ... }:
 

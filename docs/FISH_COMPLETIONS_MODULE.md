@@ -259,15 +259,26 @@ The module uses NixOS Home Manager's module system with:
 - `mkAfter`: For shell init (ensures correct ordering)
 - `optionalString`: For conditional initialization code
 
-## Future Enhancements
+## Current Scope and Future Enhancements
 
-Potential areas for future improvement:
+### Current Implementation
+
+This module provides the **infrastructure** for Fish shell completions:
+- Configuration options to enable/disable completion categories
+- Environment setup for completion caching
+- Shell initialization with completion behavior defaults
+
+### Future Enhancements
+
+The following features could be added in future iterations:
 
 1. **Actual completion files**: Add Fish completion scripts for each category
 2. **Dynamic completion generation**: Scripts to generate completions for running services, containers, etc.
 3. **Completion validation**: Tests to ensure completions are installed correctly
 4. **Per-tool completion options**: More granular control over individual tools
 5. **Completion file management**: Automatic installation of completion files via `xdg.configFile`
+
+The current implementation provides the foundation upon which these enhancements can be built.
 
 ## Related Documentation
 
