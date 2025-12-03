@@ -73,18 +73,19 @@ in
     ];
 
     # Add shellInit to configure completion behavior
-    programs.fish.shellInit = mkAfter ''
-      # Configure completion caching
-      ${if cfg.caching.enable then ''
+    programs.fish.shellInit = mkAfter (
+      ''
+        # Configure Fish completion behavior
+        set -g fish_completion_show_foreign 1  # Show completions for non-built-in commands
+      ''
+      + (mkIf cfg.caching.enable ''
+        # Configure completion caching
         # Set up completion cache directory
         set -gx FISH_COMPLETION_CACHE_DIR "${config.xdg.cacheHome}/fish/completions"
         if not test -d "$FISH_COMPLETION_CACHE_DIR"
           mkdir -p "$FISH_COMPLETION_CACHE_DIR"
         end
-      '' else ""}
-      
-      # Configure Fish completion behavior
-      set -g fish_completion_show_foreign 1  # Show completions for non-built-in commands
-    '';
+      '')
+    );
   };
 }
