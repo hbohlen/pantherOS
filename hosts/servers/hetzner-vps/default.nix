@@ -202,6 +202,43 @@
     ];
   };
 
+  # Kernel parameters for development server performance
+  boot.kernel.sysctl = {
+    # Memory and swappiness optimization
+    "vm.swappiness" = 10; # Prefer RAM over swap
+    "vm.dirty_ratio" = 5; # Aggressive writeback for containers
+    "vm.dirty_background_ratio" = 2;
+
+    # TCP optimization for development workloads
+    "net.ipv4.tcp_tw_reuse" = 1;
+
+    # Container-friendly networking settings
+    "net.bridge.bridge-nf-call-iptables" = 1;
+    "net.bridge.bridge-nf-call-ip6tables" = 1;
+    "net.ipv4.ip_forward" = 1;
+
+    # Increase file descriptors for containers and builds
+    "fs.file-max" = 2097152;
+    "fs.inotify.max_user_watches" = 524288;
+  };
+
+  # System limits for development workloads
+  security.pam.loginLimits = [
+    { domain = "*"; item = "nofile"; type = "-"; value = "262144"; }
+    { domain = "*"; item = "nproc"; type = "-"; value = "262144"; }
+  ];
+
+  # Optimize journald for performance and retention
+  services.journald = {
+    extraConfig = ''
+      Storage=persistent
+      SystemMaxUse=500M
+      RuntimeMaxUse=100M
+      MaxRetentionSec=30day
+      Compress=yes
+    '';
+  };
+
   # Automatic btrfs snapshots (optional but recommended)
   # Note: Enable this to automatically create daily snapshots of important subvolumes.
   # This provides a simple recovery mechanism for accidental deletions or system issues.
@@ -254,6 +291,32 @@
     timerConfig = {
       OnCalendar = "weekly";
       Persistent = true;
+    };
+  };
+
+  # Periodic btrfs filesystem maintenance
+  systemd.services.btrfs-maintenance = {
+    description = "Btrfs filesystem maintenance";
+    script = ''
+      # Enable autodefrag on development subvolumes (non-aggressive)
+      ${pkgs.btrfs-progs}/bin/btrfs property set -ts / autodefrag on || true
+
+      # Run balance on root filesystem (non-blocking, only data/metadata)
+      ${pkgs.btrfs-progs}/bin/btrfs balance start -d -m / || true
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
+  };
+
+  systemd.timers.btrfs-maintenance = {
+    description = "Btrfs filesystem maintenance timer";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "monthly";
+      Persistent = true;
+      RandomizedDelaySec = "1h"; # Spread load if multiple systems
     };
   };
 
