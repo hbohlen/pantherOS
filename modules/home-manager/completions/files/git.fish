@@ -31,7 +31,7 @@ complete -c git -n '__fish_seen_subcommand_from push pull fetch' -xa '(__fish_gi
 
 # Function to list git branches (cached)
 function __fish_git_branches
-    set -l cache_file "$FISH_COMPLETION_CACHE_DIR/git-branches-(pwd | string replace -a / -)"
+    set -l cache_file "$FISH_COMPLETION_CACHE_DIR/git-branches-(pwd | string replace -a / _)"
     set -l cache_timeout $FISH_COMPLETION_CACHE_TIMEOUT
     
     if test -n "$cache_file" -a -f "$cache_file"
@@ -50,7 +50,7 @@ end
 
 # Function to list git remotes (cached)
 function __fish_git_remotes
-    set -l cache_file "$FISH_COMPLETION_CACHE_DIR/git-remotes-(pwd | string replace -a / -)"
+    set -l cache_file "$FISH_COMPLETION_CACHE_DIR/git-remotes-(pwd | string replace -a / _)"
     set -l cache_timeout $FISH_COMPLETION_CACHE_TIMEOUT
     
     if test -n "$cache_file" -a -f "$cache_file"

@@ -43,6 +43,6 @@ function __fish_mutagen_sessions
     
     # Generate fresh session list
     if command -v mutagen &>/dev/null
-        mutagen sync list 2>/dev/null | grep -oP '(?<=Session: )\S+' | tee "$cache_file"
+        mutagen sync list 2>/dev/null | awk '/Session:/ {print $2}' | tee "$cache_file"
     end
 end
