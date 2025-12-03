@@ -1,0 +1,44 @@
+// Zellij Development Layout
+// A productive layout for development work with editor, terminal, and monitoring panes
+
+layout {
+    // Default tab with split panes
+    default_tab_template {
+        pane size=1 borderless=true {
+            plugin location="zellij:tab-bar"
+        }
+        children
+        pane size=2 borderless=true {
+            plugin location="zellij:status-bar"
+        }
+    }
+
+    // Main development tab
+    tab name="dev" focus=true {
+        pane split_direction="vertical" {
+            // Left pane for editor
+            pane size="60%" {
+                focus true
+            }
+            // Right pane split horizontally
+            pane split_direction="horizontal" {
+                // Top right: terminal for commands
+                pane size="60%" {
+                }
+                // Bottom right: monitoring/logs
+                pane {
+                }
+            }
+        }
+    }
+
+    // Secondary tab for testing
+    tab name="test" {
+        pane
+    }
+
+    // Tab for git operations
+    tab name="git" {
+        pane
+    }
+}

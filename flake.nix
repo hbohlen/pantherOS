@@ -163,18 +163,68 @@
 
        devShells.${system}.default = pkgs.mkShell {
          buildInputs = with pkgs; [
+           # Nix Language Servers and Formatters (existing)
            nil
            nixd
            nixpkgs-fmt
            nixfmt-rfc-style
            alejandra
+           
+           # Build and Test Tools
            nix-tree
            git
+           
+           # NixOS Development Tools
+           nix-diff      # Compare derivations
+           nix-info      # System information
+           nix-index     # Package searching
+           nix-du        # Disk usage analysis
+           
+           # Code Quality Tools
+           statix        # Nix linting
+           deadnix       # Dead code detection
+           shellcheck    # Shell script validation
+           
+           # Documentation and Exploration
+           manix         # Nix function documentation
+           
+           # Deployment and Testing
+           nixos-rebuild
+           nix-unit.packages.${system}.default  # Unit testing for Nix
          ];
 
          shellHook = ''
-           echo "Development environment for pantherOS"
-           echo "Available tools: nil, nixd, nixpkgs-fmt, nixfmt-rfc-style, alejandra, nix-tree, git"
+           echo "╔════════════════════════════════════════════════════════════╗"
+           echo "║           pantherOS Development Environment               ║"
+           echo "╚════════════════════════════════════════════════════════════╝"
+           echo ""
+           echo "📦 Build Tools:"
+           echo "  • nixos-rebuild - Build and switch NixOS configurations"
+           echo "  • nix-tree      - Visualize dependency trees"
+           echo "  • nix-diff      - Compare derivations"
+           echo "  • nix-du        - Analyze disk usage"
+           echo ""
+           echo "🔍 Development Tools:"
+           echo "  • nil, nixd     - Language servers"
+           echo "  • nix-index     - Package search"
+           echo "  • nix-info      - System information"
+           echo "  • manix         - Nix function docs"
+           echo ""
+           echo "✨ Code Quality:"
+           echo "  • nixpkgs-fmt, nixfmt-rfc-style, alejandra - Formatters"
+           echo "  • statix        - Nix linter"
+           echo "  • deadnix       - Dead code detection"
+           echo "  • shellcheck    - Shell script validation"
+           echo ""
+           echo "🧪 Testing:"
+           echo "  • nix-unit      - Unit testing framework"
+           echo ""
+           echo "💡 Quick Commands:"
+           echo "  • nixos-rebuild build - Build config without switching"
+           echo "  • nix flake check     - Run all checks"
+           echo "  • statix check .      - Lint Nix files"
+           echo "  • deadnix -e .        - Find dead code"
+           echo ""
          '';
        };
 

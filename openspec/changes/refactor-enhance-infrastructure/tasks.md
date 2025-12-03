@@ -47,17 +47,17 @@
 ## 3. Terminal Multiplexer Integration
 
 ### 3.1 Zellij Configuration
-- [ ] 3.1.1 Add zellij package to home-manager configuration
-- [ ] 3.1.2 Create zellij default configuration file
-- [ ] 3.1.3 Configure zellij keybindings for productivity
-- [ ] 3.1.4 Configure zellij layout templates
+- [x] 3.1.1 Add zellij package to home-manager configuration
+- [x] 3.1.2 Create zellij default configuration file
+- [x] 3.1.3 Configure zellij keybindings for productivity
+- [x] 3.1.4 Configure zellij layout templates
 - [ ] 3.1.5 Set up zellij autostart behavior (optional)
 
 ### 3.2 Shell Integration
-- [ ] 3.2.1 Add zellij aliases to fish shell configuration
-- [ ] 3.2.2 Configure fish shell to work seamlessly with zellij
+- [x] 3.2.1 Add zellij aliases to fish shell configuration
+- [x] 3.2.2 Configure fish shell to work seamlessly with zellij
 - [ ] 3.2.3 Test zellij with existing terminal tools (fzf, eza)
-- [ ] 3.2.4 Document zellij workflow and keybindings
+- [x] 3.2.4 Document zellij workflow and keybindings
 
 ### 3.4 Optional Enhancements (Future)
 - Optional: Add zellij autostart behavior
@@ -65,38 +65,38 @@
 - Optional: Add pre-commit hooks framework for code quality
 
 ### 3.3 Terminal Emulator Integration
-- [ ] 3.3.1 Ensure zellij works correctly with ghostty
-- [ ] 3.3.2 Configure terminal colors and theming for zellij
+- [x] 3.3.1 Ensure zellij works correctly with ghostty
+- [x] 3.3.2 Configure terminal colors and theming for zellij
 - [ ] 3.3.3 Test zellij session management
 
 ## 4. Enhanced Development Shell
 
 ### 4.1 Build and Test Tools
-- [ ] 4.1.1 Add nixos-rebuild wrapper or helper scripts
-- [ ] 4.1.2 Add nix-build utilities
-- [ ] 4.1.3 Add test runners and validation tools
-- [ ] 4.1.4 Add deployment utilities
+- [x] 4.1.1 Add nixos-rebuild wrapper or helper scripts
+- [x] 4.1.2 Add nix-build utilities
+- [x] 4.1.3 Add test runners and validation tools
+- [x] 4.1.4 Add deployment utilities
 
 ### 4.2 NixOS Development Tools
-- [ ] 4.2.1 Add nix-diff for comparing derivations
-- [ ] 4.2.2 Add nix-info for system information
-- [ ] 4.2.3 Add nix-index for package searching
-- [ ] 4.2.4 Add nix-du for analyzing disk usage
-- [ ] 4.2.5 Keep existing tools (nil, nixd, nixpkgs-fmt, etc.)
+- [x] 4.2.1 Add nix-diff for comparing derivations
+- [x] 4.2.2 Add nix-info for system information
+- [x] 4.2.3 Add nix-index for package searching
+- [x] 4.2.4 Add nix-du for analyzing disk usage
+- [x] 4.2.5 Keep existing tools (nil, nixd, nixpkgs-fmt, etc.)
 
 ### 4.3 Code Quality Tools
-- [ ] 4.3.1 Add statix for Nix linting
-- [ ] 4.3.2 Add deadnix for dead code detection
-- [ ] 4.3.3 Add shellcheck for shell script validation
+- [x] 4.3.1 Add statix for Nix linting
+- [x] 4.3.2 Add deadnix for dead code detection
+- [x] 4.3.3 Add shellcheck for shell script validation
 
 ### 4.4 Documentation and Exploration
-- [ ] 4.4.1 Add manix for Nix function documentation
+- [x] 4.4.1 Add manix for Nix function documentation
 - [ ] 4.4.2 Add nix-doc for inline documentation
 - [ ] 4.4.3 Add documentation browser/viewer
-- [ ] 4.4.4 Add quick reference guides
+- [x] 4.4.4 Add quick reference guides
 
 ### 4.5 Developer Experience
-- [ ] 4.5.1 Add welcome message with available commands
+- [x] 4.5.1 Add welcome message with available commands
 - [ ] 4.5.2 Add shell aliases for common tasks
 - [ ] 4.5.3 Configure shell prompt for nix-shell detection
 - [ ] 4.5.4 Add tab completion for nix commands
