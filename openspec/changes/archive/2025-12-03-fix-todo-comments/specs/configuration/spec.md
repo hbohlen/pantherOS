@@ -1,4 +1,4 @@
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Code Quality
 All NixOS configuration files SHALL be free of unresolved TODO comments. Outstanding work SHALL be documented with inline comments explaining the context and any blockers.

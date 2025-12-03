@@ -1,4 +1,4 @@
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Commented Code Documentation
 All commented configuration blocks SHALL include inline documentation explaining why they are disabled and under what conditions they should be enabled.
