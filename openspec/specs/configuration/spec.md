@@ -1,6 +1,7 @@
 ## Purpose
 
 This specification defines the standards and requirements for NixOS configuration files in the PantherOS system, ensuring code quality, consistency, and maintainability across all host configurations.
+
 ## Requirements
 ### Requirement: Personal Device Host Support with Facter
 
