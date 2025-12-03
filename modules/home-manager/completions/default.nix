@@ -68,7 +68,7 @@ in
     xdg.configFile = mkMerge [
       # Create directory structure
       {
-        "fish/completions".source = ./completions;
+        # Removed reference to non-existent ./completions directory
       }
     ];
 
