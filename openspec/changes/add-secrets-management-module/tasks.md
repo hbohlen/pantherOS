@@ -1,11 +1,12 @@
 # Implementation Tasks: Secrets Management Module
 
 ## 1. Core Infrastructure
-- [ ] 1.1 Choose secrets backend (sops-nix vs agenix) based on evaluation
-- [ ] 1.2 Add chosen backend to flake inputs
-- [ ] 1.3 Create `modules/security/secrets.nix` module
-- [ ] 1.4 Create `secrets/` directory structure for encrypted files
-- [ ] 1.5 Set up `.sops.yaml` or equivalent configuration
+- [ ] 1.1 Evaluate secrets backends (sops-nix vs agenix) - criteria: maturity, ease of use, 1Password integration
+- [ ] 1.2 Document backend choice decision and rationale
+- [ ] 1.3 Add chosen backend to flake inputs
+- [ ] 1.4 Create `modules/security/secrets.nix` module
+- [ ] 1.5 Create `secrets/` directory structure for encrypted files
+- [ ] 1.6 Set up backend-specific configuration file (`.sops.yaml` or equivalent)
 
 ## 2. Key Management
 - [ ] 2.1 Generate age/GPG keys for each existing host

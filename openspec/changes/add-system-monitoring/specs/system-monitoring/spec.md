@@ -90,10 +90,11 @@ The system SHALL secure monitoring endpoints and require authentication for acce
 - **AND** firewall rules protect monitoring ports
 
 ### Requirement: Performance Impact
-The system SHALL minimize monitoring overhead to ensure minimal impact on host performance.
+The system SHALL minimize monitoring overhead to ensure minimal impact on host performance with configurable resource limits.
 
 #### Scenario: Monitoring uses acceptable resources
 - **WHEN** monitoring is enabled
-- **THEN** total CPU usage for monitoring services is less than 5% under normal load
-- **AND** memory usage is less than 500MB
-- **AND** disk I/O impact is minimal (< 1% of total I/O)
+- **THEN** total CPU usage for monitoring services is within configured limits (default: 5% under normal load)
+- **AND** memory usage is within configured limits (default: 500MB)
+- **AND** disk I/O impact is minimal (default: < 1% of total I/O)
+- **AND** resource limits can be adjusted per host profile
