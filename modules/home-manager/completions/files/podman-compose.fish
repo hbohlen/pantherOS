@@ -22,4 +22,4 @@ complete -c podman-compose -s d -l detach -d 'Run in background'
 complete -c podman-compose -l no-cache -d 'Do not use cache when building'
 complete -c podman-compose -l build -d 'Build images before starting'
 complete -c podman-compose -l force-recreate -d 'Recreate containers'
-complete -c podman-compose -l no-deps -d 'Don\'t start linked services'
+complete -c podman-compose -l no-deps -d "Don't start linked services"

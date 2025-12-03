@@ -1,7 +1,7 @@
 # tests/unit/completions-test.nix
 # Unit tests for Fish shell completions module
 
-{ lib, pkgs, home-manager ? null }:
+{ lib, pkgs }:
 
 {
   # Test that the module can be imported without errors
