@@ -1,5 +1,6 @@
 # hardware.nix - Zephyrus hardware configuration
-# TODO: This is a placeholder - update with actual hardware specs from facter report
+# Note: This is a placeholder configuration. To generate accurate hardware configuration,
+# run: nixos-facter | tee hosts/zephyrus/zephyrus-facter.json
 { config, lib, ... }:
 
 {

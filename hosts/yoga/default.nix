@@ -86,7 +86,8 @@
   # File systems configured by disko.nix
 
     # DankMaterialShell - Material design shell environment
-    # TODO: Fix network/build issues with DankMaterialShell Go dependencies
+    # Note: Currently disabled due to network/build issues with DankMaterialShell Go dependencies
+    # Enable this once the upstream build issues are resolved
     programs.dankMaterialShell = {
       enable = false;
       enableSystemMonitoring = true;
@@ -98,8 +99,9 @@
       enableAudioWavelength = true;
       enableCalendarEvents = true;
       enableSystemSound = true;
-      # enableKeybinds = true; # TODO: Update DankMaterialShell flake to support this
-      # enableSpawn = true; # TODO: Update DankMaterialShell flake to support this
+      # Note: enableKeybinds and enableSpawn options require DankMaterialShell flake update
+      # enableKeybinds = true;
+      # enableSpawn = true;
     };
 
     # Niri window manager
@@ -128,7 +130,8 @@
    };
 
    # Home Manager configuration
-   # TODO: Fix CUDA unfree dependency issue before enabling
+   # Note: Currently disabled due to CUDA unfree dependency issue in one of the imported modules.
+   # To enable: Set nixpkgs.config.allowUnfree = true; or identify and remove the unfree CUDA dependency.
    # home-manager.users.hbohlen = { pkgs, lib, ... }: {
    #   imports = [
    #     ../../home/hbohlen/home.nix
