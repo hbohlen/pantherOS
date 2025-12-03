@@ -225,7 +225,7 @@
   ];
 
   # Development environments (optional - can be per-project with flakes)
-  # Note: It's recommended to use project-specific development environments via nix flakes
+  # Note: It's recommended to use project-specific development environments via Nix flakes
   # rather than installing languages system-wide. This keeps the system clean and allows
   # per-project version control. Uncomment the languages below only if you need them
   # available globally for quick scripting or system administration tasks.
