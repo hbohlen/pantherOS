@@ -1,4 +1,4 @@
-## MODIFIED Requirements
+## ADDED Requirements
 
 ### Requirement: Configuration Consistency
 All server configurations SHALL import the common modules directory to ensure consistent functionality across all hosts.

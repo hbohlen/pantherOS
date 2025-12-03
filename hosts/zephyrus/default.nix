@@ -50,7 +50,8 @@
   # Hardware configuration: see meta.nix (comprehensive ASUS ROG Zephyrus G15 support)
 
    # DankMaterialShell - Material design shell environment
-   # TODO: Fix network/build issues with DankMaterialShell Go dependencies
+   # Note: Currently disabled due to network/build issues with DankMaterialShell Go dependencies
+   # Enable this once the upstream build issues are resolved
    programs.dankMaterialShell = {
      enable = false;
      enableSystemMonitoring = true;

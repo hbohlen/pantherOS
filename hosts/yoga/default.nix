@@ -130,7 +130,8 @@
    };
 
    # Home Manager configuration
-   # TODO: Fix CUDA unfree dependency issue before enabling
+   # Note: Currently disabled due to CUDA unfree dependency issue in one of the imported modules.
+   # To enable: Set nixpkgs.config.allowUnfree = true; or identify and remove the unfree CUDA dependency.
    # home-manager.users.hbohlen = { pkgs, lib, ... }: {
    #   imports = [
    #     ../../home/hbohlen/home.nix
