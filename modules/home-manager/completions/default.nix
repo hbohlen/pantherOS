@@ -19,7 +19,7 @@ in
       enable = mkEnableOption "OpenCode command completions";
     };
 
-    # OpenAgent completions  
+    # OpenAgent completions
     openagent = {
       enable = mkEnableOption "OpenAgent command completions";
     };
@@ -65,12 +65,10 @@ in
     programs.fish.enable = mkDefault true;
 
     # Create completions directory and install completion files
-    xdg.configFile = mkMerge [
+    xdg.configFile = {
       # Create directory structure
-      {
-        # Removed reference to non-existent ./completions directory
-      }
-    ];
+      # Removed reference to non-existent ./completions directory
+    };
 
     # Add shellInit to configure completion behavior
     programs.fish.shellInit = mkAfter (
@@ -78,14 +76,30 @@ in
         # Configure Fish completion behavior
         set -g fish_completion_show_foreign 1  # Show completions for non-built-in commands
       ''
-      + (mkIf cfg.caching.enable ''
-        # Configure completion caching
+      + optionalString cfg.opencode.enable ''
+        # OpenCode completions enabled
+      ''
+      + optionalString cfg.openagent.enable ''
+        # OpenAgent completions enabled
+      ''
+      + optionalString cfg.systemManagement.enable ''
+        # System management completions enabled
+      ''
+      + optionalString cfg.container.enable ''
+        # Container management completions enabled
+      ''
+      + optionalString cfg.development.enable ''
+        # Development tool completions enabled
+      ''
+      + optionalString cfg.caching.enable ''
+        # Configure completion caching (timeout: ${toString cfg.caching.cacheTimeout}s)
         # Set up completion cache directory
         set -gx FISH_COMPLETION_CACHE_DIR "${config.xdg.cacheHome}/fish/completions"
+        set -gx FISH_COMPLETION_CACHE_TIMEOUT "${toString cfg.caching.cacheTimeout}"
         if not test -d "$FISH_COMPLETION_CACHE_DIR"
           mkdir -p "$FISH_COMPLETION_CACHE_DIR"
         end
-      '')
+      ''
     );
   };
 }
