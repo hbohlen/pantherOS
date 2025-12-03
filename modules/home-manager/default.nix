@@ -12,6 +12,7 @@
 imports = [
     ./dotfiles
     ./nixvim.nix
+    ./completions
   ];
 
   # Terminal tools packages
