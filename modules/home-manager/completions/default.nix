@@ -19,7 +19,7 @@ in
       enable = mkEnableOption "OpenCode command completions";
     };
 
-    # OpenAgent completions  
+    # OpenAgent completions
     openagent = {
       enable = mkEnableOption "OpenAgent command completions";
     };
@@ -66,10 +66,51 @@ in
 
     # Create completions directory and install completion files
     xdg.configFile = mkMerge [
-      # Create directory structure
-      {
-        # Removed reference to non-existent ./completions directory
-      }
+      # OpenCode completions
+      (mkIf cfg.opencode.enable {
+        "fish/completions/opencode.fish".source = ./files/opencode.fish;
+      })
+
+      # OpenAgent completions
+      (mkIf cfg.openagent.enable {
+        "fish/completions/openagent.fish".source = ./files/openagent.fish;
+      })
+
+      # System management completions
+      (mkIf (cfg.systemManagement.enable || cfg.systemManagement.nix) {
+        "fish/completions/nix.fish".source = ./files/nix.fish;
+      })
+      (mkIf (cfg.systemManagement.enable || cfg.systemManagement.systemd) {
+        "fish/completions/systemd.fish".source = ./files/systemd.fish;
+      })
+      (mkIf (cfg.systemManagement.enable || cfg.systemManagement.backup) {
+        "fish/completions/backup.fish".source = ./files/backup.fish;
+      })
+      (mkIf (cfg.systemManagement.enable || cfg.systemManagement.network) {
+        "fish/completions/network.fish".source = ./files/network.fish;
+      })
+
+      # Container management completions
+      (mkIf (cfg.container.enable || cfg.container.podman) {
+        "fish/completions/podman.fish".source = ./files/podman.fish;
+      })
+      (mkIf (cfg.container.enable || cfg.container.podmanCompose) {
+        "fish/completions/podman-compose.fish".source = ./files/podman-compose.fish;
+      })
+
+      # Development tool completions
+      (mkIf (cfg.development.enable || cfg.development.git) {
+        "fish/completions/git.fish".source = ./files/git.fish;
+      })
+      (mkIf (cfg.development.enable || cfg.development.zellij) {
+        "fish/completions/zellij.fish".source = ./files/zellij.fish;
+      })
+      (mkIf (cfg.development.enable || cfg.development.mutagen) {
+        "fish/completions/mutagen.fish".source = ./files/mutagen.fish;
+      })
+      (mkIf (cfg.development.enable || cfg.development.direnv) {
+        "fish/completions/direnv.fish".source = ./files/direnv.fish;
+      })
     ];
 
     # Add shellInit to configure completion behavior
@@ -78,29 +119,22 @@ in
         # Configure Fish completion behavior
         set -g fish_completion_show_foreign 1  # Show completions for non-built-in commands
       ''
-      + (mkIf cfg.caching.enable ''
-        # Configure completion caching
+      + optionalString cfg.caching.enable ''
+        # Configure completion caching (timeout: ${toString cfg.caching.cacheTimeout}s)
         # Set up completion cache directory
         set -gx FISH_COMPLETION_CACHE_DIR "${config.xdg.cacheHome}/fish/completions"
+        set -gx FISH_COMPLETION_CACHE_TIMEOUT "${toString cfg.caching.cacheTimeout}"
         if not test -d "$FISH_COMPLETION_CACHE_DIR"
           mkdir -p "$FISH_COMPLETION_CACHE_DIR"
         end
-        
-        # Set cache timeout (in seconds)
-        set -gx FISH_COMPLETION_CACHE_TIMEOUT ${toString cfg.caching.cacheTimeout}
-        
-        # Function to clean expired cache files
-        function __fish_completion_clean_cache
-          set cache_dir "$FISH_COMPLETION_CACHE_DIR"
-          if test -d "$cache_dir"
-            # Remove cache files older than the timeout
-            find "$cache_dir" -type f -mmin +$(math "$FISH_COMPLETION_CACHE_TIMEOUT / 60") -delete 2>/dev/null
-          end
-        end
-        
-        # Clean cache on shell startup
-        __fish_completion_clean_cache
-      '')
+      ''
     );
+
+    # Ensure cache directory exists if caching is enabled
+    home.activation = mkIf cfg.caching.enable {
+      fishCompletionCache = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        $DRY_RUN_CMD mkdir -p "${config.xdg.cacheHome}/fish/completions"
+      '';
+    };
   };
 }

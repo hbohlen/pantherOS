@@ -1,8 +1,14 @@
 # tests/unit/default.nix
 # Unit tests for Nix functions using nix-unit
 
-{ lib }:
+{ lib, pkgs ? null }:
 
+let
+  # Import completions tests if pkgs is provided
+  completionsTests = if pkgs != null 
+    then import ./completions-test.nix { inherit lib pkgs; }
+    else {};
+in
 {
   # Test basic lib functions
   testLibAdd = {
@@ -22,4 +28,4 @@
   #   expr = myModule.myFunction "input";
   #   expected = "expected output";
   # };
-}
+} // completionsTests
