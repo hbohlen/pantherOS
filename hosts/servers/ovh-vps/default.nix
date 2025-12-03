@@ -5,6 +5,7 @@
 {
   imports = [
     ./hardware.nix
+    ../../../modules
   ];
 
 
@@ -224,7 +225,10 @@
   ];
 
   # Development environments (optional - can be per-project with flakes)
-  # Uncomment the languages you want available system-wide
+  # Note: It's recommended to use project-specific development environments via Nix flakes
+  # rather than installing languages system-wide. This keeps the system clean and allows
+  # per-project version control. Uncomment the languages below only if you need them
+  # available globally for quick scripting or system administration tasks.
   # environment.systemPackages = with pkgs; [
   #   # Python
   #   # python3
@@ -260,7 +264,10 @@
   };
 
   # Automatic btrfs snapshots (optional but recommended)
-  # Uncomment to enable
+  # Note: Enable this to automatically create daily snapshots of important subvolumes.
+  # This provides a simple recovery mechanism for accidental deletions or system issues.
+  # Snapshots are stored locally on the same filesystem, so this is NOT a backup solution.
+  # For true backups, use btrbk with remote targets or a separate backup tool.
   # services.btrbk = {
   #   enable = true;
   #   instances.daily = {

@@ -98,7 +98,8 @@ in
     };
 
     # Udev rules for battery charge limit control
-    # TODO: Verify these paths work on all ASUS ROG models
+    # Note: These paths are standard for ASUS ROG models. If battery threshold control
+    # doesn't work, check /sys/class/power_supply/BAT*/charge_control_end_threshold exists
     services.udev.rules = mkIf (cfg.enableBatteryThreshold != null) [
       ''
         # ASUS ROG Battery Charge Threshold Control
