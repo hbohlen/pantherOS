@@ -21,9 +21,8 @@
     recursive = true;
   };
 
-  # TODO: Add your OpenCode/OpenAgent dotfiles management module here
-  # OpenCode/OpenAgent enhanced dotfiles management
-  # OpenCode/OpenAgent enhanced dotfiles management - module not imported
+  # Note: OpenCode/OpenAgent enhanced dotfiles management module is available but not imported
+  # To enable the structured dotfiles management, uncomment the following configuration:
   # dotfiles.opencode-ai = {
   #   enable = true;
   #   theme = "rosepine";

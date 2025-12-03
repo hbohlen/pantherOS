@@ -86,7 +86,8 @@
   # File systems configured by disko.nix
 
     # DankMaterialShell - Material design shell environment
-    # TODO: Fix network/build issues with DankMaterialShell Go dependencies
+    # Note: Currently disabled due to network/build issues with DankMaterialShell Go dependencies
+    # Enable this once the upstream build issues are resolved
     programs.dankMaterialShell = {
       enable = false;
       enableSystemMonitoring = true;
@@ -98,8 +99,9 @@
       enableAudioWavelength = true;
       enableCalendarEvents = true;
       enableSystemSound = true;
-      # enableKeybinds = true; # TODO: Update DankMaterialShell flake to support this
-      # enableSpawn = true; # TODO: Update DankMaterialShell flake to support this
+      # Note: enableKeybinds and enableSpawn options require DankMaterialShell flake update
+      # enableKeybinds = true;
+      # enableSpawn = true;
     };
 
     # Niri window manager
