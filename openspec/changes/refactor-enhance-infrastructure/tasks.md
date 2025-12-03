@@ -47,17 +47,17 @@
 ## 3. Terminal Multiplexer Integration
 
 ### 3.1 Zellij Configuration
-- [ ] 3.1.1 Add zellij package to home-manager configuration
-- [ ] 3.1.2 Create zellij default configuration file
-- [ ] 3.1.3 Configure zellij keybindings for productivity
-- [ ] 3.1.4 Configure zellij layout templates
+- [x] 3.1.1 Add zellij package to home-manager configuration
+- [x] 3.1.2 Create zellij default configuration file
+- [x] 3.1.3 Configure zellij keybindings for productivity
+- [x] 3.1.4 Configure zellij layout templates
 - [ ] 3.1.5 Set up zellij autostart behavior (optional)
 
 ### 3.2 Shell Integration
-- [ ] 3.2.1 Add zellij aliases to fish shell configuration
-- [ ] 3.2.2 Configure fish shell to work seamlessly with zellij
+- [x] 3.2.1 Add zellij aliases to fish shell configuration
+- [x] 3.2.2 Configure fish shell to work seamlessly with zellij
 - [ ] 3.2.3 Test zellij with existing terminal tools (fzf, eza)
-- [ ] 3.2.4 Document zellij workflow and keybindings
+- [x] 3.2.4 Document zellij workflow and keybindings
 
 ### 3.4 Optional Enhancements (Future)
 - Optional: Add zellij autostart behavior
@@ -65,8 +65,8 @@
 - Optional: Add pre-commit hooks framework for code quality
 
 ### 3.3 Terminal Emulator Integration
-- [ ] 3.3.1 Ensure zellij works correctly with ghostty
-- [ ] 3.3.2 Configure terminal colors and theming for zellij
+- [x] 3.3.1 Ensure zellij works correctly with ghostty
+- [x] 3.3.2 Configure terminal colors and theming for zellij
 - [ ] 3.3.3 Test zellij session management
 
 ## 4. Enhanced Development Shell
