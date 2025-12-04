@@ -156,7 +156,7 @@ in {
     };
 
     # Firewall configuration
-    networking.firewall.allowedTCPPorts = mkIf cfg.enable [ 8080 ];
+    networking.firewall.allowedTCPPorts = [ 8080 ];
 
     # Create necessary directories
     systemd.tmpfiles.rules = [
