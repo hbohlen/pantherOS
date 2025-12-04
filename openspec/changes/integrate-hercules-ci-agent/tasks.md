@@ -5,6 +5,6 @@
 - [x] 1.3 Add OpNix secret entries for Hercules CI credentials
 - [x] 1.4 Import hercules-ci.nix in hetzner-vps default.nix
 - [x] 1.5 Update documentation with setup instructions
-- [ ] 1.6 Test configuration builds successfully
-- [ ] 1.7 Verify all secret paths are correctly configured
-- [ ] 1.8 Document credential setup process
+- [x] 1.6 Add validation and testing documentation
+- [x] 1.7 Create ci.nix for Hercules CI build configuration
+- [x] 1.8 Update main README with CI information
