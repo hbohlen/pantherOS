@@ -71,32 +71,47 @@ sudo journalctl -u hercules-ci-agent -f
 - `services.ci.herculesCI.enable` - Enable Hercules CI Agent
 - `services.ci.herculesCI.clusterJoinTokenPath` - Path to cluster join token file
 - `services.ci.herculesCI.binaryCachesPath` - Path to binary caches configuration
+- `services.ci.herculesCI.opnix.enable` - Enable OpNix-based secret provisioning
+- `services.ci.herculesCI.opnix.clusterJoinTokenReference` - 1Password reference for cluster join token
+- `services.ci.herculesCI.opnix.binaryCachesReference` - 1Password reference for binary caches
 
 ### Integration with OpNix
 
-For secure secret management, you can integrate with OpNix to manage Hercules CI secrets:
+The module now has built-in OpNix integration for automatic secret provisioning from 1Password:
 
 ```nix
-services.onepassword-secrets = {
-  secrets = {
-    herculesToken = {
-      reference = "op://pantherOS/hercules-ci/cluster-join-token";
-      path = "/var/lib/hercules-ci-agent/secrets/cluster-join-token.key";
-      owner = "hercules-ci-agent";
-      group = "hercules-ci-agent";
-      mode = "0600";
-      services = ["hercules-ci-agent"];
-    };
-  };
-};
-
 services.ci = {
   enable = true;
   herculesCI = {
     enable = true;
-    clusterJoinTokenPath = config.services.onepassword-secrets.secretPaths.herculesToken;
+    opnix = {
+      enable = true;
+      # Optional: customize 1Password references
+      clusterJoinTokenReference = "op://pantherOS/hercules-ci/cluster-join-token";
+      binaryCachesReference = "op://pantherOS/hercules-ci/binary-caches";
+    };
   };
 };
+```
+
+This automatically provisions:
+- Cluster join token from 1Password to `/var/lib/hercules-ci-agent/secrets/cluster-join-token.key`
+- Binary caches configuration from 1Password to `/var/lib/hercules-ci-agent/secrets/binary-caches.json`
+- Proper ownership (hercules-ci-agent:hercules-ci-agent) and permissions (0600)
+
+For manual secret management without OpNix, leave `opnix.enable = false` and manage secrets manually:
+
+```nix
+services.ci = {
+  enable = true;
+  herculesCI = {
+    enable = true;
+    # opnix.enable defaults to false
+  };
+};
+
+# Then manually provision secrets:
+# sudo install -o hercules-ci-agent -m 600 /path/to/token.key /var/lib/hercules-ci-agent/secrets/cluster-join-token.key
 ```
 
 ### Documentation

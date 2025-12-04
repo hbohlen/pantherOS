@@ -27,10 +27,54 @@ in {
         default = "/var/lib/hercules-ci-agent/secrets/binary-caches.json";
         description = "Path to the binary caches configuration file";
       };
+
+      # OpNix integration for secret provisioning
+      opnix = {
+        enable = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Enable OpNix-based provisioning of Hercules CI secrets from 1Password";
+        };
+
+        clusterJoinTokenReference = mkOption {
+          type = types.str;
+          default = "op://pantherOS/hercules-ci/cluster-join-token";
+          description = "1Password reference path for the cluster join token";
+        };
+
+        binaryCachesReference = mkOption {
+          type = types.str;
+          default = "op://pantherOS/hercules-ci/binary-caches";
+          description = "1Password reference path for the binary caches configuration";
+        };
+      };
     };
   };
 
   config = mkIf cfg.enable {
+    # OpNix secret provisioning for Hercules CI
+    services.onepassword-secrets = mkIf (cfg.herculesCI.enable && cfg.herculesCI.opnix.enable) {
+      secrets = {
+        herculesClusterJoinToken = {
+          reference = cfg.herculesCI.opnix.clusterJoinTokenReference;
+          path = cfg.herculesCI.clusterJoinTokenPath;
+          owner = "hercules-ci-agent";
+          group = "hercules-ci-agent";
+          mode = "0600";
+          services = ["hercules-ci-agent"];
+        };
+
+        herculesBinaryCaches = {
+          reference = cfg.herculesCI.opnix.binaryCachesReference;
+          path = cfg.herculesCI.binaryCachesPath;
+          owner = "hercules-ci-agent";
+          group = "hercules-ci-agent";
+          mode = "0600";
+          services = ["hercules-ci-agent"];
+        };
+      };
+    };
+
     # Hercules CI Agent configuration
     services.hercules-ci-agent = mkIf cfg.herculesCI.enable {
       enable = true;
@@ -76,23 +120,47 @@ in {
              }
            }
 
-      ## Setup Instructions
+      ${optionalString cfg.herculesCI.opnix.enable ''
+      ## OpNix Secret Provisioning
+
+      OpNix integration is enabled. Secrets are automatically provisioned from 1Password:
+
+      1. **Cluster Join Token**: ${cfg.herculesCI.opnix.clusterJoinTokenReference}
+         - Automatically provisioned to: ${cfg.herculesCI.clusterJoinTokenPath}
+         - Owner: hercules-ci-agent:hercules-ci-agent
+         - Permissions: 0600
+
+      2. **Binary Caches**: ${cfg.herculesCI.opnix.binaryCachesReference}
+         - Automatically provisioned to: ${cfg.herculesCI.binaryCachesPath}
+         - Owner: hercules-ci-agent:hercules-ci-agent
+         - Permissions: 0600
+
+      Secrets are managed via the onepassword-secrets service and will be automatically
+      synced before the hercules-ci-agent service starts.
+
+      To update secrets, modify them in 1Password and restart the onepassword-secrets service:
+        sudo systemctl restart onepassword-secrets.service
+      ''}
+
+      ${optionalString (!cfg.herculesCI.opnix.enable) ''
+      ## Manual Setup Instructions
 
       1. Create the secrets directory:
          sudo mkdir -p /var/lib/hercules-ci-agent/secrets
          sudo chmod 700 /var/lib/hercules-ci-agent/secrets
 
       2. Add your cluster join token:
-         sudo nano ${cfg.herculesCI.clusterJoinTokenPath}
+         sudo install -o hercules-ci-agent -m 600 /path/to/token.key ${cfg.herculesCI.clusterJoinTokenPath}
 
       3. Add your binary caches configuration:
-         sudo nano ${cfg.herculesCI.binaryCachesPath}
+         sudo install -o hercules-ci-agent -m 600 /path/to/binary-caches.json ${cfg.herculesCI.binaryCachesPath}
 
       4. Set appropriate permissions:
          sudo chown -R hercules-ci-agent:hercules-ci-agent /var/lib/hercules-ci-agent
 
       5. Start the service:
          sudo systemctl start hercules-ci-agent
+      ''}
 
       ## Service Management
 
