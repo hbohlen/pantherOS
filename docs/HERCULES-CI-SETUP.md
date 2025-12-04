@@ -227,7 +227,10 @@ Add the cache to your Nix configuration. Edit `~/pantherOS/hosts/servers/hetzner
 
 Then rebuild:
 
+SSH into the hetzner-vps server if you are not already connected:
+
 ```bash
+ssh root@hetzner-vps
 nixos-rebuild switch
 ```
 
