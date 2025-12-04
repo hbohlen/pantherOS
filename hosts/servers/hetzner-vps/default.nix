@@ -46,6 +46,19 @@
     linkConfig.RequiredForOnline = "routable";
   };
 
+  # Ensure /etc/opnix-token directory exists before OpNix service
+  # The actual token must be transferred manually after first boot
+  system.activationScripts.create-opnix-token-dir = {
+    text = ''
+      mkdir -p /etc
+      # Create placeholder - will be replaced during first boot
+      # The OpNix token must be copied here manually after deployment
+      touch /etc/opnix-token
+      chmod 600 /etc/opnix-token
+    '';
+    deps = [];
+  };
+
   # 1Password OpNix - Secret Management
   services.onepassword-secrets = {
     enable = true;
@@ -97,23 +110,25 @@
     allowedUDPPorts = [config.services.tailscale.port];
   };
 
-  # SSH configuration - TEMPORARILY LOOSENED for initial access
+  # SSH configuration - Secure key-based authentication only
+  # All SSH keys are managed by OpNix via 1Password
   services.openssh = {
     enable = true;
     settings = {
-      PermitRootLogin = "yes"; # TEMPORARY: Allow root login with password
-      PasswordAuthentication = true; # TEMPORARY: Enable password authentication
-      KbdInteractiveAuthentication = true; # TEMPORARY: Enable keyboard-interactive
+      # Allow root login ONLY with SSH keys (no password)
+      PermitRootLogin = "without-password";
+      # Disable password authentication completely
+      PasswordAuthentication = false;
+      # Disable keyboard-interactive authentication
+      KbdInteractiveAuthentication = false;
+      # Enable public key authentication explicitly
+      PubkeyAuthentication = true;
     };
   };
 
-  # SSH Keys for initial access (from 1Password pantherOS vault)
-  users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGm8R69+sP9Fdt1plIZIjxxuRBx386mEQjGAJ9G38n1G"
-  ];
-  users.users.hbohlen.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGm8R69+sP9Fdt1plIZIjxxuRBx386mEQjGAJ9G38n1G"
-  ];
+  # SSH Keys managed by OpNix (from 1Password pantherOS vault)
+  # Keys are populated by onepassword-secrets.service at boot
+  # No hardcoded keys - source of truth is OpNix vault
 
   # Home Manager - User environment management
   home-manager = {

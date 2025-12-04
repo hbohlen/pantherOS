@@ -1,33 +1,49 @@
 # disko.nix - Optimized for Contabo Cloud VPS
-# Server: Contabo Cloud VPS 40 (250GB NVMe)
+# Server: Contabo Cloud VPS (536GB NVMe)
 # Workloads: Programming, Podman containers, AI tools
 #
-# NOTE: Disk device path will be updated after running setup script
-# Current placeholder: will be replaced with actual device ID from facter
+# Hardware Profile:
+# - CPU: AMD EPYC 12-core
+# - Memory: 48GB RAM
+# - Disk: 536GB QEMU HARDDISK (SCSI)
+# - Boot: BIOS (SeaBIOS)
+#
+# Subvolume Strategy:
+# - BIOS boot with biosBoot + ext4 boot partition
+# - Btrfs with optimized compression per workload type
+# - Separate subvolumes for system, containers, development
+# - Container storage with nodatacow for performance
+# - 10GB swap for 48GB RAM system
 
 {
   disko.devices = {
     disk = {
       main = {
         type = "disk";
-        # PLACEHOLDER: Update with actual disk device from facter.json
-        # Examples: /dev/disk/by-id/ata-..., /dev/disk/by-id/nvme-..., etc.
-        device = "/dev/sda"; # Will be detected and updated
+        device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive-scsi0";
         content = {
           type = "gpt";
           partitions = {
-            # UEFI Boot Partition (if UEFI) or BIOS Boot (if BIOS)
-            # Will be adjusted after facter detects boot type
-            ESP = {
-              size = "512M";
-              type = "EF00"; # UEFI partition type (will change if BIOS)
+            # BIOS boot partition (required for BIOS boot)
+            biosBoot = {
+              size = "2M";
+              type = "21686148-6449-6E6F-744E-656564454649"; # BIOS boot partition type
               content = {
                 type = "filesystem";
                 format = "vfat";
+                mountpoint = null; # Not mounted
+              };
+            };
+
+            # Boot partition - ext4 for BIOS boot
+            boot = {
+              size = "1G";
+              content = {
+                type = "filesystem";
+                format = "ext4";
                 mountpoint = "/boot";
                 mountOptions = [
                   "defaults"
-                  "umask=0077" # Secure boot partition
                 ];
               };
             };
@@ -44,7 +60,7 @@
                 ]; # Force and label
 
                 # Btrfs subvolumes - organized by workload type
-                # Optimized for 250GB NVMe and 48GB RAM
+                # Optimized for 48GB RAM and development workloads
                 subvolumes = {
                   # ===== SYSTEM SUBVOLUMES =====
 
@@ -210,7 +226,7 @@
                       "compress=no" # No compression for swap
                       "noatime"
                     ];
-                    swap.swapfile.size = "10G"; # Increased for 48GB RAM and heavy workloads
+                    swap.swapfile.size = "10G"; # 10GB for 48GB RAM and heavy workloads
                   };
                 };
               };
