@@ -43,13 +43,13 @@ in {
     # Create necessary directories for Hercules CI secrets
     system.activationScripts.create-hercules-ci-dirs = mkIf cfg.herculesCI.enable {
       text = ''
-        if [ ! -d "/var/lib/hercules-ci-agent/secrets" ]; then
-          mkdir -p /var/lib/hercules-ci-agent/secrets
-          chmod 700 /var/lib/hercules-ci-agent/secrets
-          chown hercules-ci-agent:hercules-ci-agent /var/lib/hercules-ci-agent/secrets 2>/dev/null || true
+        mkdir -p /var/lib/hercules-ci-agent/secrets
+        chmod 700 /var/lib/hercules-ci-agent/secrets
+        # Only change ownership if the user exists
+        if id hercules-ci-agent >/dev/null 2>&1; then
+          chown -R hercules-ci-agent:hercules-ci-agent /var/lib/hercules-ci-agent
         fi
       '';
-      deps = [];
     };
 
     # Documentation
