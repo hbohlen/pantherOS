@@ -317,7 +317,7 @@ Create a script to automate:
 # Requires: gh CLI tool (GitHub CLI)
 # Install: https://cli.github.com/
 
-REPO="hbohlen/pantherOS"
+REPO="${GITHUB_REPOSITORY:-hbohlen/pantherOS}"
 PROJECT="PantherOS Roadmap"
 
 # Function to create issue

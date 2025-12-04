@@ -20,27 +20,25 @@
 PantherOS is a multi-host NixOS configuration system managing both server and personal device infrastructure through declarative configuration.
 
 ```mermaid
-C4Context
-    title System Context Diagram - PantherOS
-
-    Person(admin, "System Administrator", "Manages infrastructure")
-    Person(dev, "Developer", "Uses personal devices")
+graph TB
+    Admin[System Administrator<br/>Manages infrastructure]
+    Dev[Developer<br/>Uses personal devices]
     
-    System(pantheros, "PantherOS", "NixOS Configuration System")
+    PantherOS[PantherOS<br/>NixOS Configuration System]
     
-    System_Ext(github, "GitHub", "Source control and CI/CD")
-    System_Ext(onepass, "1Password", "Secrets management")
-    System_Ext(cloudflare, "Cloudflare", "DNS and CDN")
-    System_Ext(b2, "Backblaze B2", "Object storage")
-    System_Ext(tailscale, "Tailscale", "VPN mesh network")
+    GitHub[GitHub<br/>Source control and CI/CD]
+    OnePass[1Password<br/>Secrets management]
+    Cloudflare[Cloudflare<br/>DNS and CDN]
+    B2[Backblaze B2<br/>Object storage]
+    Tailscale[Tailscale<br/>VPN mesh network]
     
-    Rel(admin, pantheros, "Configures", "Git")
-    Rel(dev, pantheros, "Uses", "SSH/Desktop")
-    Rel(pantheros, github, "Builds/Deploys", "CI/CD")
-    Rel(pantheros, onepass, "Retrieves secrets", "OpNix")
-    Rel(pantheros, cloudflare, "DNS resolution")
-    Rel(pantheros, b2, "Stores cache", "S3 API")
-    Rel(pantheros, tailscale, "Mesh networking")
+    Admin -->|Configures via Git| PantherOS
+    Dev -->|Uses via SSH/Desktop| PantherOS
+    PantherOS -->|Builds/Deploys via CI/CD| GitHub
+    PantherOS -->|Retrieves secrets via OpNix| OnePass
+    PantherOS -->|DNS resolution| Cloudflare
+    PantherOS -->|Stores cache via S3 API| B2
+    PantherOS -->|Mesh networking| Tailscale
 ```
 
 ### Key Characteristics
