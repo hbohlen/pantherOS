@@ -133,6 +133,7 @@ in
       # Verify documentation mentions OpNix provisioning
       machine.succeed("grep -q 'OpNix Secret Provisioning' /etc/hercules-ci/README")
       machine.succeed("grep -q 'op://pantherOS/hercules-ci/cluster-join-token' /etc/hercules-ci/README")
+
     '';
   };
 

@@ -67,6 +67,15 @@ This project includes:
 - nixpkgs-fmt: Nix code formatter
 - nix-tree: Nix dependency explorer
 
+## Continuous Integration
+
+This repository supports multiple CI/CD platforms:
+
+- **Hercules CI**: Native Nix/NixOS integration for building and deploying configurations
+  - See [Hercules CI Setup Guide](docs/HERCULES_CI_SETUP.md) for configuration details
+  - Module: `modules/ci/default.nix`
+  - Example: `docs/examples/hercules-ci-example.nix`
+
 ## GitHub Copilot Integration
 
 This repository is configured with GitHub Copilot Coding Agent enhancements including:
