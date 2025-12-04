@@ -49,12 +49,16 @@ Add the following items to your `pantherOS` 1Password vault:
 {
   "mycache": {
     "kind": "CachixCache",
-    "authToken": "your-cachix-auth-token-here"
+    "authToken": "REPLACE_WITH_YOUR_CACHIX_AUTH_TOKEN"
   }
 }
 ```
 
-**Note**: Replace `your-cachix-auth-token-here` with your actual Cachix auth token if you're using Cachix. You can obtain this from https://cachix.org
+**Important**: 
+- Replace `REPLACE_WITH_YOUR_CACHIX_AUTH_TOKEN` with your actual Cachix auth token
+- Never commit or share your actual auth token
+- You can obtain a token from https://cachix.org
+- This is sensitive data - treat it like a password
 
 For other cache types, see: https://docs.hercules-ci.com/hercules-ci-agent/binary-caches/
 

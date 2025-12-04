@@ -59,8 +59,10 @@ nix eval .#nixosConfigurations.hetzner-vps.config.services.ci.herculesCI.binaryC
 ```
 
 Expected results:
-- Cluster token: `/var/lib/hercules-ci-agent/secrets/cluster-join-token.key`
-- Binary caches: `/var/lib/hercules-ci-agent/secrets/binary-caches.json`
+- Cluster token: Path configured in `services.ci.herculesCI.clusterJoinTokenPath`
+  (default: `/var/lib/hercules-ci-agent/secrets/cluster-join-token.key`)
+- Binary caches: Path configured in `services.ci.herculesCI.binaryCachesPath`
+  (default: `/var/lib/hercules-ci-agent/secrets/binary-caches.json`)
 
 ### 5. OpNix Secret Configuration Check
 
