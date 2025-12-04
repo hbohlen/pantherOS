@@ -9,6 +9,7 @@
 }: {
   imports = [
     ./hardware.nix
+    ./hercules-ci.nix
     ../../../modules
   ];
 
