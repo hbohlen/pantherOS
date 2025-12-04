@@ -66,8 +66,8 @@ while [[ $# -gt 0 ]]; do
             usage
             ;;
         -l|--lines)
-            if [[ -z "$2" ]] || ! [[ "$2" =~ ^[0-9]+$ ]] || [[ "$2" -lt 1 ]]; then
-                print_error "Invalid value for --lines: $2 (must be a positive integer)"
+            if [[ -z "${2:-}" ]] || ! [[ "${2:-}" =~ ^[0-9]+$ ]] || [[ "${2:-0}" -lt 1 ]]; then
+                print_error "Invalid value for --lines: ${2:-<missing>} (must be a positive integer)"
                 exit 1
             fi
             LOG_LINES="$2"
@@ -104,7 +104,7 @@ verify_hercules_ci() {
     
     # Step 1: Check if service exists
     print_info "Step 1: Checking if ${SERVICE_NAME} service exists..."
-    if $SUDO systemctl list-unit-files | grep -q "^${SERVICE_NAME}.service"; then
+    if $SUDO systemctl list-unit-files "${SERVICE_NAME}.service" &>/dev/null; then
         print_success "Service ${SERVICE_NAME} is configured"
     else
         print_error "Service ${SERVICE_NAME} is not configured"
@@ -136,11 +136,11 @@ verify_hercules_ci() {
     local secrets_missing=false
     
     if [[ -f /etc/hercules-ci/README ]]; then
-        # Extract paths from the README
+        # Extract paths from the README using sed for portability
         local token_path
         local caches_path
-        token_path=$(grep "Cluster Join Token:" /etc/hercules-ci/README | grep -oP '/var[^ ]*' || echo "")
-        caches_path=$(grep "Binary Caches Configuration:" /etc/hercules-ci/README | grep -oP '/var[^ ]*' || echo "")
+        token_path=$(grep "Cluster Join Token:" /etc/hercules-ci/README | sed -n 's/.*\(\/var[^ ]*\).*/\1/p' || echo "")
+        caches_path=$(grep "Binary Caches Configuration:" /etc/hercules-ci/README | sed -n 's/.*\(\/var[^ ]*\).*/\1/p' || echo "")
         
         # Check token file
         if [[ -n "$token_path" ]]; then
