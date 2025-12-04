@@ -55,6 +55,31 @@ services.ci = {
 
 ### Verification
 
+#### Automated Verification Script
+
+Use the provided verification script to check agent connectivity:
+```bash
+./scripts/verify-hercules-ci.sh
+```
+
+The script will check:
+- Service status (active/inactive)
+- Presence of required secret files
+- Service logs for connection messages
+- Agent readiness to process tasks
+
+For more detailed output:
+```bash
+./scripts/verify-hercules-ci.sh --verbose
+```
+
+For additional options:
+```bash
+./scripts/verify-hercules-ci.sh --help
+```
+
+#### Manual Verification
+
 Check the service status:
 ```bash
 sudo systemctl status hercules-ci-agent
@@ -64,6 +89,15 @@ View logs:
 ```bash
 sudo journalctl -u hercules-ci-agent -f
 ```
+
+Look for messages indicating:
+- "Agent connected" or "Connected to"
+- "Ready to process tasks" or "Waiting for jobs"
+
+If you see error messages, check:
+1. Secret files exist and have correct permissions
+2. Cluster join token is valid
+3. Network connectivity to Hercules CI servers
 
 ### Module Options
 
