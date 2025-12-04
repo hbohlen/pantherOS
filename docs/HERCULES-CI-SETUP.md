@@ -156,12 +156,7 @@ ls -la /etc/opnix-token
 
 # If not, you need to copy it manually
 # On your local machine:
-op document get "opnix-token" --vault pantherOS > /tmp/opnix-token
-scp /tmp/opnix-token root@hetzner-vps:/etc/opnix-token
-rm /tmp/opnix-token
-
-# On the server:
-chmod 600 /etc/opnix-token
+op document get "opnix-token" --vault pantherOS | ssh root@hetzner-vps 'cat > /etc/opnix-token && chmod 600 /etc/opnix-token'
 ```
 
 ### 3.3 Sync Secrets
