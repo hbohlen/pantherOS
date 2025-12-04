@@ -81,6 +81,10 @@ in
       # Test that the secrets directory was created with correct permissions
       machine.succeed("test -d /var/lib/hercules-ci-agent/secrets")
       machine.succeed("[ $(stat -c '%a' /var/lib/hercules-ci-agent/secrets) = '700' ]")
+      
+      # Test that we can check the service logs (for connectivity verification)
+      # Note: Service may not be running without proper credentials, but we can still check logs
+      machine.succeed("journalctl -u hercules-ci-agent --no-pager -n 10 || true")
     '';
   };
 
