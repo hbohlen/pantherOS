@@ -14,7 +14,6 @@ NC='\033[0m' # No Color
 # Configuration
 SERVICE_NAME="hercules-ci-agent"
 LOG_LINES=100
-TIMEOUT=30
 
 # Usage information
 usage() {
@@ -26,7 +25,6 @@ Verify Hercules CI Agent connectivity and job execution.
 OPTIONS:
     -h, --help          Show this help message
     -l, --lines N       Number of log lines to check (default: ${LOG_LINES})
-    -t, --timeout N     Timeout in seconds to wait for connection (default: ${TIMEOUT})
     -v, --verbose       Show detailed log output
 
 EXAMPLES:
@@ -35,9 +33,6 @@ EXAMPLES:
 
     # Check with more log lines
     $(basename "$0") --lines 200
-
-    # Wait longer for connection
-    $(basename "$0") --timeout 60
 
     # Show detailed logs
     $(basename "$0") --verbose
@@ -71,11 +66,11 @@ while [[ $# -gt 0 ]]; do
             usage
             ;;
         -l|--lines)
+            if [[ -z "$2" ]] || ! [[ "$2" =~ ^[0-9]+$ ]] || [[ "$2" -lt 1 ]]; then
+                print_error "Invalid value for --lines: $2 (must be a positive integer)"
+                exit 1
+            fi
             LOG_LINES="$2"
-            shift 2
-            ;;
-        -t|--timeout)
-            TIMEOUT="$2"
             shift 2
             ;;
         -v|--verbose)

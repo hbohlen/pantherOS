@@ -199,11 +199,6 @@ Check more log lines:
 ./scripts/verify-hercules-ci.sh --lines 200
 ```
 
-Wait longer for connection:
-```bash
-./scripts/verify-hercules-ci.sh --timeout 60
-```
-
 Show detailed log output:
 ```bash
 ./scripts/verify-hercules-ci.sh --verbose
