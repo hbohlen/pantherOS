@@ -242,7 +242,7 @@ Test pushing to the cache:
 export ATTIC_TOKEN="attic_eyJhbGci..."  # Token from step 4.1
 
 # Configure attic client
-attic login pantherOS http://localhost:8080 $ATTIC_TOKEN
+attic login pantherOS http://localhost:8080/pantherOS $ATTIC_TOKEN
 
 # Push a package to test
 nix build nixpkgs#hello
