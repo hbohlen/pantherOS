@@ -11,6 +11,7 @@
     ./hardware.nix
     ./hercules-ci.nix
     ./attic.nix
+    ./caddy.nix
     ../../../modules
   ];
 
@@ -107,7 +108,7 @@
   # Firewall - allow SSH and Tailscale
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [22];
+    allowedTCPPorts = [22 80 443];
     trustedInterfaces = ["tailscale0"];
     allowedUDPPorts = [config.services.tailscale.port];
   };
