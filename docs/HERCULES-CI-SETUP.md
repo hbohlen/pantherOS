@@ -196,8 +196,7 @@ atticd-atticadm make-token \
   --sub "pantherOS-builder" \
   --validity "1 year" \
   --push "pantherOS" \
-  --pull "pantherOS" \
-  --create-cache "pantherOS"
+  --pull "pantherOS"
 
 # The command will output a JWT token - save this!
 # Example output: attic_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
