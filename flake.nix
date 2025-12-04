@@ -64,6 +64,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Hercules CI - Continuous Integration for Nix
+    hercules-ci-agent = {
+      url = "github:hercules-ci/hercules-ci-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Attic - Nix binary cache server
+    attic = {
+      url = "github:zhaofengli/attic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -82,6 +94,8 @@
       niri,
       zed,
       nix-unit,
+      hercules-ci-agent,
+      attic,
     }:
     let
       system = "x86_64-linux";
@@ -106,6 +120,8 @@
           disko.nixosModules.disko
           opnix.nixosModules.default
           home-manager.nixosModules.home-manager
+          hercules-ci-agent.nixosModules.agent-service
+          attic.nixosModules.atticd
           ./hosts/servers/hetzner-vps/hardware.nix
           ./hosts/servers/hetzner-vps/default.nix
           ./hosts/servers/hetzner-vps/disko.nix
