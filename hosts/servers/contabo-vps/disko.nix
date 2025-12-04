@@ -1,27 +1,26 @@
-# disko.nix - Optimized for Development Server
-# Server: Hetzner Cloud CPX52 (480GB NVMe)
-# Workloads: Programming, Podman containers, AI coding tools (Claude Code, OpenCode.AI)
+# disko.nix - Optimized for Contabo Cloud VPS
+# Server: Contabo Cloud VPS 40 (250GB NVMe)
+# Workloads: Programming, Podman containers, AI tools
 #
-# Subvolume Strategy:
-# - Separate subvolumes for different workload types
-# - Optimized compression per workload
-# - Container-optimized storage (nodatacow)
-# - Cache and temp data in dedicated subvolumes
-# - Easy snapshot and backup management
+# NOTE: Disk device path will be updated after running setup script
+# Current placeholder: will be replaced with actual device ID from facter
 
 {
   disko.devices = {
     disk = {
       main = {
         type = "disk";
-        device = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_107063565";
+        # PLACEHOLDER: Update with actual disk device from facter.json
+        # Examples: /dev/disk/by-id/ata-..., /dev/disk/by-id/nvme-..., etc.
+        device = "/dev/sda"; # Will be detected and updated
         content = {
           type = "gpt";
           partitions = {
-            # ESP - UEFI Boot Partition
+            # UEFI Boot Partition (if UEFI) or BIOS Boot (if BIOS)
+            # Will be adjusted after facter detects boot type
             ESP = {
               size = "512M";
-              type = "EF00"; # UEFI partition type
+              type = "EF00"; # UEFI partition type (will change if BIOS)
               content = {
                 type = "filesystem";
                 format = "vfat";
@@ -45,6 +44,7 @@
                 ]; # Force and label
 
                 # Btrfs subvolumes - organized by workload type
+                # Optimized for 250GB NVMe and 48GB RAM
                 subvolumes = {
                   # ===== SYSTEM SUBVOLUMES =====
 
@@ -202,7 +202,7 @@
 
                   # ===== SWAP SUBVOLUME =====
 
-                  # Swap file subvolume
+                  # Swap file subvolume - 10GB for 48GB RAM system
                   "@swap" = {
                     mountpoint = "/swap";
                     mountOptions = [
@@ -210,7 +210,7 @@
                       "compress=no" # No compression for swap
                       "noatime"
                     ];
-                    swap.swapfile.size = "8G"; # Increased from 4GB for heavy development workloads
+                    swap.swapfile.size = "10G"; # Increased for 48GB RAM and heavy workloads
                   };
                 };
               };

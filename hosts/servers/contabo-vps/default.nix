@@ -1,6 +1,10 @@
-# hosts/servers/hetzner-vps/default.nix
-# Optimized configuration for development server
+# hosts/servers/contabo-vps/default.nix
+# Optimized configuration for Contabo Cloud VPS
 # Supports: Programming (Python, Node, Rust, Go), Containers, AI tools
+#
+# NOTE: Network interface name will be updated after running setup script
+# Likely ens* or enp*s* - will be detected in facter.json
+
 { config, pkgs, ... }:
 {
   imports = [
@@ -8,17 +12,15 @@
     ../../../modules
   ];
 
-
-
   # Hostname
-  networking.hostName = "hetzner-vps";
+  networking.hostName = "contabo-vps";
 
-  # Bootloader - GRUB with UEFI support
+  # Bootloader - GRUB with BIOS support (Contabo likely uses BIOS like OVH)
+  # Will be adjusted to UEFI if needed based on facter output
   boot.loader.grub = {
     enable = true;
-    efiSupport = true;
-    efiInstallAsRemovable = true;
-    device = "nodev";
+    device = "/dev/sda"; # Will be updated after facter
+    efiSupport = false;  # Change to true if UEFI detected
     extraConfig = ''
       serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
       terminal_input serial console
@@ -31,12 +33,13 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   # Network configuration with systemd-networkd
-  # Your Hetzner server uses eth0
+  # Network interface will be detected after running setup script
+  # Likely eth0, ens3, enp1s0, or similar
   networking.useDHCP = false; # Disable to avoid conflict with systemd.network
   networking.useNetworkd = true;
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
-    matchConfig.Name = "eth0";
+    matchConfig.Name = "eth0"; # PLACEHOLDER: Update with actual interface from facter
     networkConfig = {
       DHCP = "ipv4";
       IPv6AcceptRA = true;
@@ -45,55 +48,55 @@
   };
 
   # 1Password OpNix - Secret Management
-  # TEMPORARILY DISABLED - enable after initial setup
-  # services.onepassword-secrets = {
-  #   enable = true;
-  #   tokenFile = "/etc/opnix-token";
-  #
-  #   secrets = {
-  #     # Tailscale authentication key from your pantherOS vault
-  #     tailscaleAuthKey = {
-  #       reference = "op://pantherOS/tailscale/authKey";
-  #       path = "/etc/tailscale/auth-key";
-  #       owner = "root";
-  #       group = "root";
-  #       mode = "0600";
-  #       services = [ "tailscaled" ];
-  #     };
-  #
-  #     # SSH public key for root user
-  #     rootSshKeys = {
-  #       reference = "op://pantherOS/SSH/public key";
-  #       path = "/root/.ssh/authorized_keys";
-  #       owner = "root";
-  #       group = "root";
-  #       mode = "0600";
-  #     };
-  #
-  #     # SSH public key for hbohlen user
-  #     userSshKeys = {
-  #       reference = "op://pantherOS/SSH/public key";
-  #       path = "/home/hbohlen/.ssh/authorized_keys";
-  #       owner = "hbohlen";
-  #       group = "users";
-  #       mode = "0600";
-  #     };
-  #   };
-  # };
+  # Using your pantherOS vault
+  services.onepassword-secrets = {
+    enable = true;
+    tokenFile = "/etc/opnix-token";
 
-  # Tailscale VPN - TEMPORARILY DISABLED - enable after initial setup
-  # services.tailscale = {
-  #   enable = true;
-  #   useRoutingFeatures = "client";
-  #   authKeyFile = config.services.onepassword-secrets.secretPaths.tailscaleAuthKey;
-  # };
+    secrets = {
+      # Tailscale authentication key from your pantherOS vault
+      tailscaleAuthKey = {
+        reference = "op://pantherOS/tailscale/authKey";
+        path = "/etc/tailscale/auth-key";
+        owner = "root";
+        group = "root";
+        mode = "0600";
+        services = [ "tailscaled" ];
+      };
 
-  # Firewall - allow SSH only for now
+      # SSH public key for root user
+      rootSshKeys = {
+        reference = "op://pantherOS/SSH/public key";
+        path = "/root/.ssh/authorized_keys";
+        owner = "root";
+        group = "root";
+        mode = "0600";
+      };
+
+      # SSH public key for hbohlen user
+      userSshKeys = {
+        reference = "op://pantherOS/SSH/public key";
+        path = "/home/hbohlen/.ssh/authorized_keys";
+        owner = "hbohlen";
+        group = "users";
+        mode = "0600";
+      };
+    };
+  };
+
+  # Tailscale VPN - using OpNix-managed auth key
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "client";
+    authKeyFile = config.services.onepassword-secrets.secretPaths.tailscaleAuthKey;
+  };
+
+  # Firewall - allow Tailscale and SSH
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [ 22 ];
-    # trustedInterfaces = [ "tailscale0" ];  # Disabled for now
-    # allowedUDPPorts = [ config.services.tailscale.port ];  # Disabled for now
+    trustedInterfaces = [ "tailscale0" ];
+    allowedUDPPorts = [ config.services.tailscale.port ];
   };
 
   # SSH configuration - hardened
@@ -119,13 +122,10 @@
         stateVersion = "25.05";
       };
 
-
-
       # Enable XDG base directory specification
       xdg.enable = true;
 
       # OpenCode.ai configuration using xdg.configFile
-      # This links the opencode directory to ~/.config/opencode
       xdg.configFile."opencode" = {
         source = ../../../home/hbohlen/opencode;
         recursive = true;
@@ -153,38 +153,6 @@
     # Podman uses /var/lib/containers which is on @containers subvolume
     # with nodatacow for optimal performance
   };
-
-  # Development environments (optional - can be per-project with flakes)
-  # Note: It's recommended to use project-specific development environments via nix flakes
-  # rather than installing languages system-wide. This keeps the system clean and allows
-  # per-project version control. Uncomment the languages below only if you need them
-  # available globally for quick scripting or system administration tasks.
-  # environment.systemPackages = with pkgs; [
-  #   # Python
-  #   python3
-  #   python3Packages.pip
-  #   python3Packages.virtualenv
-  #
-  #   # Node.js
-  #   nodejs_20
-  #   nodePackages.npm
-  #   nodePackages.pnpm
-  #
-  #   # Rust
-  #   rustc
-  #   cargo
-  #   rustfmt
-  #   clippy
-  #
-  #   # Go
-  #   go
-  #
-  #   # LSP servers (for IDE support)
-  #   nodePackages.typescript-language-server
-  #   python3Packages.python-lsp-server
-  #   rust-analyzer
-  #   gopls
-  # ];
 
   # Automatic garbage collection
   nix.gc = {
@@ -238,36 +206,6 @@
       Compress=yes
     '';
   };
-
-  # Automatic btrfs snapshots (optional but recommended)
-  # Note: Enable this to automatically create daily snapshots of important subvolumes.
-  # This provides a simple recovery mechanism for accidental deletions or system issues.
-  # Snapshots are stored locally on the same filesystem, so this is NOT a backup solution.
-  # For true backups, use btrbk with remote targets or a separate backup tool.
-  # services.btrbk = {
-  #   enable = true;
-  #   instances.daily = {
-  #     onCalendar = "daily";
-  #     settings = {
-  #       snapshot_preserve = "14d";     # Keep 14 days
-  #       snapshot_preserve_min = "3d";  # Minimum 3 days
-  #
-  #       volume."/" = {
-  #         subvolume = {
-  #           "@dev" = {
-  #             snapshot_dir = ".snapshots-dev";
-  #           };
-  #           "@config" = {
-  #             snapshot_dir = ".snapshots-config";
-  #           };
-  #           "@home" = {
-  #             snapshot_dir = ".snapshots-home";
-  #           };
-  #         };
-  #       };
-  #     };
-  #   };
-  # };
 
   # Periodic cache cleanup service
   systemd.services.clean-old-caches = {

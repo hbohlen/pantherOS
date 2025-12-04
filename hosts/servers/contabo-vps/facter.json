@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "system": "x86_64-linux",
+  "virtualisation": "kvm",
+  "notes": "This facter.json is a placeholder. Run the setup script to populate it with actual hardware specs.",
+  "how_to_generate": {
+    "step1": "Boot Contabo server into NixOS live environment",
+    "step2": "Run: ./scripts/setup-contabo-vps.sh (or .fish)",
+    "step3": "Transfer hardware-info.json to local machine",
+    "step4": "Place output in this file location"
+  },
+  "hardware": {
+    "cpu": "PLACEHOLDER - Run setup script",
+    "cores": "PLACEHOLDER",
+    "memory_gb": 48,
+    "disk": {
+      "device": "PLACEHOLDER",
+      "size": "250GB",
+      "type": "NVMe"
+    },
+    "network_interfaces": [
+      "PLACEHOLDER"
+    ]
+  },
+  "detected_at": "PLACEHOLDER"
+}
