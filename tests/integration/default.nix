@@ -43,6 +43,47 @@ in
     '';
   };
 
+  # Test Hercules CI module configuration
+  hercules-ci-module = pkgs.testers.runNixOSTest {
+    name = "hercules-ci-module-test";
+    nodes.machine = { config, pkgs, ... }: {
+      imports = [ ../../modules ];
+      
+      # Enable CI with Hercules CI
+      services.ci = {
+        enable = true;
+        herculesCI = {
+          enable = true;
+          clusterJoinTokenPath = "/var/lib/hercules-ci-agent/secrets/cluster-join-token.key";
+          binaryCachesPath = "/var/lib/hercules-ci-agent/secrets/binary-caches.json";
+        };
+      };
+      
+      # Override hardware config for testing
+      hardware.enableAllFirmware = false;
+      boot.loader.grub.enable = false;
+      boot.loader.systemd-boot.enable = true;
+      fileSystems."/" = {
+        device = "/dev/vda1";
+        fsType = "ext4";
+      };
+    };
+    testScript = ''
+      machine.start()
+      machine.wait_for_unit("default.target")
+      
+      # Test that the Hercules CI service configuration is present
+      machine.succeed("systemctl list-unit-files | grep hercules-ci-agent")
+      
+      # Test that documentation was created
+      machine.succeed("test -f /etc/hercules-ci/README")
+      
+      # Test that the secrets directory was created with correct permissions
+      machine.succeed("test -d /var/lib/hercules-ci-agent/secrets")
+      machine.succeed("[ $(stat -c '%a' /var/lib/hercules-ci-agent/secrets) = '700' ]")
+    '';
+  };
+
 # Test that a basic NixOS system builds and boots (representing zephyrus config) - DISABLED due to CUDA dependencies
   # zephyrus-basic = pkgs.testers.runNixOSTest {
   #   name = "zephyrus-basic-test";
