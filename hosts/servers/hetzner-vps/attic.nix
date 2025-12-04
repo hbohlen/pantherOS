@@ -10,8 +10,8 @@
   services.ci.attic = {
     enable = true;
 
-    # Listen on all interfaces
-    listen = "[::]:8080";
+    # Listen only on the loopback interface for local access
+    listen = "[::1]:8080";
 
     # Backblaze B2 storage configuration
     storage = {
