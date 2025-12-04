@@ -45,55 +45,55 @@
   };
 
   # 1Password OpNix - Secret Management
-  # Using your pantherOS vault
-  services.onepassword-secrets = {
-    enable = true;
-    tokenFile = "/etc/opnix-token";
+  # TEMPORARILY DISABLED - enable after initial setup
+  # services.onepassword-secrets = {
+  #   enable = true;
+  #   tokenFile = "/etc/opnix-token";
+  #
+  #   secrets = {
+  #     # Tailscale authentication key from your pantherOS vault
+  #     tailscaleAuthKey = {
+  #       reference = "op://pantherOS/tailscale/authKey";
+  #       path = "/etc/tailscale/auth-key";
+  #       owner = "root";
+  #       group = "root";
+  #       mode = "0600";
+  #       services = [ "tailscaled" ];
+  #     };
+  #
+  #     # SSH public key for root user
+  #     rootSshKeys = {
+  #       reference = "op://pantherOS/SSH/public key";
+  #       path = "/root/.ssh/authorized_keys";
+  #       owner = "root";
+  #       group = "root";
+  #       mode = "0600";
+  #     };
+  #
+  #     # SSH public key for hbohlen user
+  #     userSshKeys = {
+  #       reference = "op://pantherOS/SSH/public key";
+  #       path = "/home/hbohlen/.ssh/authorized_keys";
+  #       owner = "hbohlen";
+  #       group = "users";
+  #       mode = "0600";
+  #     };
+  #   };
+  # };
 
-    secrets = {
-      # Tailscale authentication key from your pantherOS vault
-      tailscaleAuthKey = {
-        reference = "op://pantherOS/tailscale/authKey";
-        path = "/etc/tailscale/auth-key";
-        owner = "root";
-        group = "root";
-        mode = "0600";
-        services = [ "tailscaled" ];
-      };
+  # Tailscale VPN - TEMPORARILY DISABLED - enable after initial setup
+  # services.tailscale = {
+  #   enable = true;
+  #   useRoutingFeatures = "client";
+  #   authKeyFile = config.services.onepassword-secrets.secretPaths.tailscaleAuthKey;
+  # };
 
-      # SSH public key for root user
-      rootSshKeys = {
-        reference = "op://pantherOS/SSH/public key";
-        path = "/root/.ssh/authorized_keys";
-        owner = "root";
-        group = "root";
-        mode = "0600";
-      };
-
-      # SSH public key for hbohlen user
-      userSshKeys = {
-        reference = "op://pantherOS/SSH/public key";
-        path = "/home/hbohlen/.ssh/authorized_keys";
-        owner = "hbohlen";
-        group = "users";
-        mode = "0600";
-      };
-    };
-  };
-
-  # Tailscale VPN - using OpNix-managed auth key
-  services.tailscale = {
-    enable = true;
-    useRoutingFeatures = "client";
-    authKeyFile = config.services.onepassword-secrets.secretPaths.tailscaleAuthKey;
-  };
-
-  # Firewall - allow Tailscale and SSH
+  # Firewall - allow SSH only for now
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [ 22 ];
-    trustedInterfaces = [ "tailscale0" ];
-    allowedUDPPorts = [ config.services.tailscale.port ];
+    # trustedInterfaces = [ "tailscale0" ];  # Disabled for now
+    # allowedUDPPorts = [ config.services.tailscale.port ];  # Disabled for now
   };
 
   # SSH configuration - hardened
