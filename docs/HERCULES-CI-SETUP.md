@@ -215,7 +215,7 @@ atticd-atticadm show-cache pantherOS
 
 ### 4.3 Configure Nix to Use the Cache
 
-Add the cache to your Nix configuration. Edit `/home/user/pantherOS/hosts/servers/hetzner-vps/attic.nix`:
+Add the cache to your Nix configuration. Edit `~/pantherOS/hosts/servers/hetzner-vps/attic.nix`:
 
 ```nix
   # Uncomment and update with your actual values:
