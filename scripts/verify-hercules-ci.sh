@@ -137,6 +137,7 @@ verify_hercules_ci() {
     
     if [[ -f /etc/hercules-ci/README ]]; then
         # Extract paths from the README using sed for portability
+        # Note: Assumes paths are in /var and contain no spaces (as per module configuration)
         local token_path
         local caches_path
         token_path=$(grep "Cluster Join Token:" /etc/hercules-ci/README | sed -n 's/.*\(\/var[^ ]*\).*/\1/p' || echo "")
