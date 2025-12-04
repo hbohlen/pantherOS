@@ -273,7 +273,7 @@ Create a file with this format (replace placeholders):
 
 ```bash
 # On the server
-nix-store --generate-binary-cache-key pantherOS-cache /var/lib/atticd/cache-key-secret.key /var/lib/atticd/cache-key-public.key
+nix-store --generate-binary-cache-key pantherOS /var/lib/atticd/cache-key-secret.key /var/lib/atticd/cache-key-public.key
 
 # Get the private key
 cat /var/lib/atticd/cache-key-secret.key
