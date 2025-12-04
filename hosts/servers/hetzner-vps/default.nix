@@ -96,15 +96,23 @@
     # allowedUDPPorts = [ config.services.tailscale.port ];  # Disabled for now
   };
 
-  # SSH configuration - hardened
+  # SSH configuration - TEMPORARILY LOOSENED for initial access
   services.openssh = {
     enable = true;
     settings = {
-      PermitRootLogin = "prohibit-password";
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
+      PermitRootLogin = "yes";  # TEMPORARY: Allow root login with password
+      PasswordAuthentication = true;  # TEMPORARY: Enable password authentication
+      KbdInteractiveAuthentication = true;  # TEMPORARY: Enable keyboard-interactive
     };
   };
+
+  # SSH Keys for initial access (from 1Password pantherOS vault)
+  users.users.root.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGm8R69+sP9Fdt1plIZIjxxuRBx386mEQjGAJ9G38n1G"
+  ];
+  users.users.hbohlen.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGm8R69+sP9Fdt1plIZIjxxuRBx386mEQjGAJ9G38n1G"
+  ];
 
   # Home Manager - User environment management
   home-manager = {

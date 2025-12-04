@@ -1,4 +1,4 @@
-```
+
 # Nix-specific ignores
 result
 *.drv
@@ -28,4 +28,7 @@ nix-channels/
 # System files
 .DS_Store
 Thumbs.db
-```
+/logs/openai
+
+.spec-workflow
+.direnv
