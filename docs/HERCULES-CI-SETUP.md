@@ -442,7 +442,7 @@ df -h /var/lib/atticd
 # Attic automatic GC is configured (3 months retention)
 # Manual cleanup if needed:
 systemctl stop atticd
-atticd-atticadm gc
+attic cache gc pantherOS
 systemctl start atticd
 ```
 
