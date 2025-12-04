@@ -20,18 +20,23 @@
     herculesCI = {
       enable = true;
       
-      # Path to the cluster join token
-      # Obtain this from your Hercules CI dashboard
-      clusterJoinTokenPath = "/var/lib/hercules-ci-agent/secrets/cluster-join-token.key";
+      # Option 1: Use OpNix for automatic secret provisioning from 1Password
+      opnix = {
+        enable = true;
+        # Secrets will be automatically provisioned from these 1Password references
+        clusterJoinTokenReference = "op://pantherOS/hercules-ci/cluster-join-token";
+        binaryCachesReference = "op://pantherOS/hercules-ci/binary-caches";
+      };
       
-      # Path to the binary caches configuration
-      # This should be a JSON file with your binary cache settings
-      binaryCachesPath = "/var/lib/hercules-ci-agent/secrets/binary-caches.json";
+      # Option 2: Manual secret management (when opnix.enable = false)
+      # Paths where secrets should be placed manually
+      # clusterJoinTokenPath = "/var/lib/hercules-ci-agent/secrets/cluster-join-token.key";
+      # binaryCachesPath = "/var/lib/hercules-ci-agent/secrets/binary-caches.json";
     };
   };
 
   # Alternative: Direct configuration without using the wrapper module
-  # (This is equivalent to the above configuration)
+  # (This bypasses the pantherOS CI module)
   #
   # services.hercules-ci-agent = {
   #   enable = true;
@@ -40,12 +45,30 @@
   #     binaryCachesPath = "/var/lib/hercules-ci-agent/secrets/binary-caches.json";
   #   };
   # };
+  #
+  # # Then manually provision secrets with OpNix:
+  # services.onepassword-secrets.secrets = {
+  #   herculesToken = {
+  #     reference = "op://pantherOS/hercules-ci/cluster-join-token";
+  #     path = "/var/lib/hercules-ci-agent/secrets/cluster-join-token.key";
+  #     owner = "hercules-ci-agent";
+  #     group = "hercules-ci-agent";
+  #     mode = "0600";
+  #     services = ["hercules-ci-agent"];
+  #   };
+  # };
 
-  # Example binary-caches.json content:
+  # Example binary-caches.json content (stored in 1Password):
   # {
   #   "mycache": {
   #     "kind": "CachixCache",
   #     "authToken": "your-cachix-auth-token-here"
   #   }
   # }
+  
+  # Setup requirements:
+  # 1. Store cluster-join-token in 1Password at: pantherOS/hercules-ci/cluster-join-token
+  # 2. Store binary-caches.json in 1Password at: pantherOS/hercules-ci/binary-caches
+  # 3. Ensure OpNix token file exists at: /etc/opnix-token
+  # 4. Deploy the configuration with: nixos-rebuild switch --flake .#your-host
 }
