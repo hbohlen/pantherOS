@@ -2,7 +2,7 @@
 set -e
 
 ################################################################################
-# Automated Hetzner VPS Deployment Script
+# Automated Contabo VPS Deployment Script
 #
 # This script automates the entire deployment process:
 # - Validates required secrets and configuration
@@ -12,8 +12,8 @@ set -e
 # - Provides comprehensive feedback and error handling
 #
 # Usage:
-#   ./deploy-hetzner.sh --flake '.#hetzner-vps' --ip 1.2.3.4 --use-1password
-#   ./deploy-hetzner.sh --flake '.#hetzner-vps' --ip 1.2.3.4 --token ~/opnix-token.txt
+#   ./deploy-contabo.sh --flake '.#contabo-vps' --ip 1.2.3.4 --use-1password
+#   ./deploy-contabo.sh --flake '.#contabo-vps' --ip 1.2.3.4 --token ~/opnix-token.txt
 #
 # Options:
 #   --flake FLAKE           Nix flake target (required)
@@ -157,7 +157,7 @@ load_ci_configuration() {
         # Auto-detect flake target if not specified
         if [ -z "$FLAKE_TARGET" ]; then
             # Try to infer from common patterns
-            FLAKE_TARGET=".#hetzner-vps"
+            FLAKE_TARGET=".#contabo-vps"
             print_info "Auto-detected flake target: $FLAKE_TARGET"
         fi
     fi
@@ -746,7 +746,7 @@ main() {
         cat <<'EOF'
 ╔══════════════════════════════════════════════════════════╗
 ║                                                          ║
-║     NixOS Hetzner VPS Automated Deployment              ║
+║     NixOS Contabo VPS Automated Deployment              ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
 EOF

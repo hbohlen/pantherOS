@@ -10,9 +10,9 @@ mcp_servers:
   sequential-thinking:
     command: npx
     args:
-      - "-y"
-      - "@modelcontextprotocol/server-sequential-thinking"
-    description: "Enables structured, step-by-step thinking for complex problems"
+      - '-y'
+      - '@modelcontextprotocol/server-sequential-thinking'
+    description: 'Enables structured, step-by-step thinking for complex problems'
     capabilities:
       - reasoning
       - planning
@@ -22,11 +22,11 @@ mcp_servers:
   brave-search:
     command: npx
     args:
-      - "-y"
-      - "@modelcontextprotocol/server-brave-search"
+      - '-y'
+      - '@modelcontextprotocol/server-brave-search'
     env:
       BRAVE_API_KEY: ${{ secrets.BRAVE_API_KEY }}
-    description: "Provides web search capabilities via Brave Search API"
+    description: 'Provides web search capabilities via Brave Search API'
     capabilities:
       - web-search
       - documentation-lookup
@@ -39,9 +39,9 @@ mcp_servers:
   context7:
     command: npx
     args:
-      - "-y"
-      - "@context7/mcp-server"
-    description: "Provides enhanced context understanding and code analysis"
+      - '-y'
+      - '@context7/mcp-server'
+    description: 'Provides enhanced context understanding and code analysis'
     capabilities:
       - context-analysis
       - code-understanding
@@ -51,9 +51,9 @@ mcp_servers:
   nixos-mcp:
     command: npx
     args:
-      - "-y"
-      - "@nixos/mcp-server"
-    description: "Provides NixOS package search, option lookup, and configuration assistance"
+      - '-y'
+      - '@nixos/mcp-server'
+    description: 'Provides NixOS package search, option lookup, and configuration assistance'
     capabilities:
       - nixos-package-search
       - nixos-options
@@ -64,9 +64,9 @@ mcp_servers:
   deepwiki:
     command: npx
     args:
-      - "-y"
-      - "@deepwiki/mcp-server"
-    description: "Provides deep search across documentation and wikis"
+      - '-y'
+      - '@deepwiki/mcp-server'
+    description: 'Provides deep search across documentation and wikis'
     capabilities:
       - documentation-search
       - wiki-integration
@@ -78,8 +78,8 @@ vps_access:
   user: ${{ secrets.VPS_USER }}
   port: ${{ secrets.VPS_PORT || 22 }}
   ssh_key_secret: VPS_SSH_KEY
-  description: "VPS server for building and testing NixOS configurations"
-  
+  description: 'VPS server for building and testing NixOS configurations'
+
   # SSH connection configuration
   ssh_config: |
     Host nixos-vps
@@ -97,32 +97,32 @@ vps_access:
       command: |
         rsync -avz --exclude='.git' --exclude='result' \
           ./ nixos-vps:~/pantherOS/
-      description: "Push local NixOS configuration to VPS"
+      description: 'Push local NixOS configuration to VPS'
 
     - name: build-config
       command: |
         ssh nixos-vps 'cd ~/pantherOS && nix build .#nixosConfigurations.hetzner-vps.config.system.build.toplevel'
-      description: "Build NixOS configuration on VPS"
+      description: 'Build NixOS configuration on VPS'
 
     - name: test-config
       command: |
         ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild build --flake .#hetzner-vps'
-      description: "Test NixOS configuration build on VPS"
+      description: 'Test NixOS configuration build on VPS'
 
     - name: apply-config
       command: |
         ssh nixos-vps 'cd ~/pantherOS && sudo nixos-rebuild switch --flake .#hetzner-vps'
-      description: "Apply NixOS configuration on VPS (requires sudo)"
+      description: 'Apply NixOS configuration on VPS (requires sudo)'
 
     - name: dry-build
       command: |
         ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild dry-build --flake .#hetzner-vps'
-      description: "Perform a dry-run build to check what would change"
+      description: 'Perform a dry-run build to check what would change'
 
 # Environment Setup Steps
 setup_steps:
   - name: Install Nix
-    description: "Ensure Nix package manager is available"
+    description: 'Ensure Nix package manager is available'
     command: |
       if ! command -v nix &> /dev/null; then
         curl -L https://nixos.org/nix/install | sh -s -- --daemon
@@ -131,7 +131,7 @@ setup_steps:
     when: always
 
   - name: Configure Nix with flakes
-    description: "Enable experimental features for flakes"
+    description: 'Enable experimental features for flakes'
     command: |
       mkdir -p ~/.config/nix
       cat > ~/.config/nix/nix.conf << 'EOF'
@@ -140,12 +140,12 @@ setup_steps:
     when: always
 
   - name: Setup SSH key for VPS
-    description: "Configure SSH authentication for VPS access"
+    description: 'Configure SSH authentication for VPS access'
     command: |
       mkdir -p ~/.ssh
       echo "$VPS_SSH_KEY" > ~/.ssh/copilot_vps_key
       chmod 600 ~/.ssh/copilot_vps_key
-      
+
       # Add SSH config
       cat >> ~/.ssh/config << EOF
       Host nixos-vps
@@ -163,13 +163,13 @@ setup_steps:
       VPS_PORT: ${{ secrets.VPS_PORT }}
 
   - name: Test VPS connection
-    description: "Verify SSH connection to VPS"
+    description: 'Verify SSH connection to VPS'
     command: |
       ssh nixos-vps 'echo "VPS connection successful"'
     when: vps_access_enabled
 
   - name: Install Node.js for MCP servers
-    description: "Ensure Node.js and npm are available for MCP servers"
+    description: 'Ensure Node.js and npm are available for MCP servers'
     command: |
       if ! command -v node &> /dev/null; then
         nix profile install nixpkgs#nodejs
@@ -177,7 +177,7 @@ setup_steps:
     when: always
 
   - name: Verify MCP servers
-    description: "Test that MCP servers can be initialized"
+    description: 'Test that MCP servers can be initialized'
     command: |
       npx -y @modelcontextprotocol/server-sequential-thinking --version || true
       echo "MCP servers verified"
@@ -186,13 +186,13 @@ setup_steps:
 # Test Configurations
 test_configs:
   - name: Test local build
-    description: "Verify local NixOS configuration builds successfully"
+    description: 'Verify local NixOS configuration builds successfully'
     command: |
       nix build .#nixosConfigurations.hetzner-vps.config.system.build.toplevel
     working_directory: ${{ github.workspace }}
 
   - name: Test VPS build
-    description: "Build configuration on VPS"
+    description: 'Build configuration on VPS'
     command: |
       ssh nixos-vps 'cd ~/pantherOS && nix build .#nixosConfigurations.hetzner-vps.config.system.build.toplevel'
     when: vps_access_enabled
@@ -200,29 +200,29 @@ test_configs:
 # Required Secrets
 required_secrets:
   - name: BRAVE_API_KEY
-    description: "API key for Brave Search MCP server"
+    description: 'API key for Brave Search MCP server'
     required: true
-    link: "https://brave.com/search/api/"
+    link: 'https://brave.com/search/api/'
 
   - name: VPS_SSH_KEY
-    description: "Private SSH key for VPS access"
+    description: 'Private SSH key for VPS access'
     required: true
     note: "Generate with: ssh-keygen -t ed25519 -C 'copilot-access'"
 
   - name: VPS_HOST
-    description: "Hostname or IP address of the VPS server"
+    description: 'Hostname or IP address of the VPS server'
     required: true
-    example: "vps.example.com or 192.0.2.1"
+    example: 'vps.example.com or 192.0.2.1'
 
   - name: VPS_USER
-    description: "SSH username for VPS access"
+    description: 'SSH username for VPS access'
     required: true
-    example: "root or nixos"
+    example: 'root or nixos'
 
   - name: VPS_PORT
-    description: "SSH port for VPS access"
+    description: 'SSH port for VPS access'
     required: false
-    default: "22"
+    default: '22'
 
 # Tools and utilities available
 tools:
@@ -251,55 +251,55 @@ tools:
 
 # Usage Examples
 usage_examples:
-  - name: "Build and test a configuration change"
+  - name: 'Build and test a configuration change'
     steps:
-      - "Make changes to NixOS configuration files"
-      - "Test locally: nix build .#nixosConfigurations.hetzner-vps.config.system.build.toplevel"
-      - "Push to VPS: rsync -avz ./ nixos-vps:~/pantherOS/"
+      - 'Make changes to NixOS configuration files'
+      - 'Test locally: nix build .#nixosConfigurations.hetzner-vps.config.system.build.toplevel'
+      - 'Push to VPS: rsync -avz ./ nixos-vps:~/pantherOS/'
       - "Build on VPS: ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild build --flake .#hetzner-vps'"
       - "Apply if successful: ssh nixos-vps 'cd ~/pantherOS && sudo nixos-rebuild switch --flake .#hetzner-vps'"
 
-  - name: "Search for NixOS packages using MCP"
+  - name: 'Search for NixOS packages using MCP'
     steps:
-      - "Use nixos-mcp server to search for packages"
+      - 'Use nixos-mcp server to search for packages'
       - "Example: 'Find a package for terminal emulators'"
-      - "MCP will search nixpkgs and return relevant options"
+      - 'MCP will search nixpkgs and return relevant options'
 
-  - name: "Research and implement a feature"
+  - name: 'Research and implement a feature'
     steps:
-      - "Use brave-search MCP to research the topic"
-      - "Use sequential-thinking MCP to plan implementation"
-      - "Use context7 MCP for code analysis"
-      - "Use deepwiki MCP for documentation lookup"
-      - "Implement changes with nixos-mcp assistance"
+      - 'Use brave-search MCP to research the topic'
+      - 'Use sequential-thinking MCP to plan implementation'
+      - 'Use context7 MCP for code analysis'
+      - 'Use deepwiki MCP for documentation lookup'
+      - 'Implement changes with nixos-mcp assistance'
 
 # Additional Notes
 notes: |
   ## Important Considerations
-  
-  1. **Security**: 
+
+  1. **Security**:
      - Never commit SSH keys or API keys to the repository
      - All sensitive data should be stored in GitHub Secrets
      - Use least-privilege access for VPS user
-  
+
   2. **Testing Strategy**:
      - Always test configurations locally first when possible
      - Use dry-run builds before applying changes
      - Keep a known-good configuration backup
-  
+
   3. **MCP Server Usage**:
      - MCP servers are invoked automatically by Copilot
      - Each server provides specific capabilities
      - Combine multiple servers for complex tasks
-  
+
   4. **VPS Access**:
      - VPS is used for building configurations that require specific hardware
      - Builds on VPS ensure compatibility with production environment
      - Use VPS for testing before applying to production systems
-  
+
   5. **Rollback Strategy**:
      - NixOS allows easy rollback: sudo nixos-rebuild switch --rollback
      - Previous generations are preserved automatically
      - Test thoroughly before applying to critical systems
 
-version: "1.0.0"
+version: '1.0.0'

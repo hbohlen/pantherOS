@@ -1,0 +1,404 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_hosts:
+        description: 'Select target hosts to deploy'
+        type: choice
+        required: true
+        options:
+          - hetzner-vps
+          - ovh-vps
+          - contabo-vps
+          - hetzner-vps,ovh-vps
+          - hetzner-vps,contabo-vps
+          - ovh-vps,contabo-vps
+          - all
+      deployment_method:
+        description: 'Deployment method'
+        type: choice
+        required: true
+        default: 'update-existing'
+        options:
+          - update-existing
+          - fresh-install
+      skip_reboot:
+        description: 'Skip reboot after installation (for nixos-anywhere only)'
+        type: boolean
+        default: true
+      verbose_logging:
+        description: 'Enable verbose logging'
+        type: boolean
+        default: false
+
+env:
+  NIX_CONFIG: |
+    trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0jW0kvS1i5vZHY+h9D3c0YqH4v1EQ=
+    substituters = https://cache.nixos.org
+    experimental-features = nix-command flakes
+
+concurrency:
+  group: deploy-${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  verify-artifacts:
+    name: Verify Build Artifacts
+    runs-on: ubuntu-latest
+    outputs:
+      has_artifacts: ${{ steps.check.outputs.has_artifacts }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+          merge-multiple: true
+
+      - name: Check artifacts
+        id: check
+        run: |
+          set -e
+
+          echo "::group::📦 Checking build artifacts"
+          if [ -d "./artifacts" ]; then
+            echo "Available artifacts:"
+            ls -la ./artifacts/ || true
+
+            if [ -n "$(find ./artifacts -name 'result' -type d 2>/dev/null)" ]; then
+              echo "has_artifacts=true" >> $GITHUB_OUTPUT
+              echo "✅ Build artifacts found"
+              echo "::notice::Build artifacts verified, deployment can proceed"
+            else
+              echo "has_artifacts=false" >> $GITHUB_OUTPUT
+              echo "❌ Build artifacts not found"
+              echo "::error::Build artifacts not found. Run the Build & Test workflow first."
+            fi
+          else
+            echo "has_artifacts=false" >> $GITHUB_OUTPUT
+            echo "❌ Artifacts directory not found"
+            echo "::error::No artifacts directory found. Run the Build & Test workflow first."
+          fi
+          echo "::endgroup::"
+
+  determine-hosts:
+    name: Determine Target Hosts
+    runs-on: ubuntu-latest
+    needs: verify-artifacts
+    outputs:
+      hosts: ${{ steps.parse.outputs.hosts }}
+    steps:
+      - name: Determine hosts
+        id: parse
+        run: |
+          echo "Input: ${{ github.event.inputs.target_hosts }}"
+
+          case "${{ github.event.inputs.target_hosts }}" in
+            "hetzner-vps")
+              echo "hosts=hetzner-vps" >> $GITHUB_OUTPUT
+              ;;
+            "ovh-vps")
+              echo "hosts=ovh-vps" >> $GITHUB_OUTPUT
+              ;;
+            "contabo-vps")
+              echo "hosts=contabo-vps" >> $GITHUB_OUTPUT
+              ;;
+            "hetzner-vps,ovh-vps")
+              echo "hosts=hetzner-vps,ovh-vps" >> $GITHUB_OUTPUT
+              ;;
+            "hetzner-vps,contabo-vps")
+              echo "hosts=hetzner-vps,contabo-vps" >> $GITHUB_OUTPUT
+              ;;
+            "ovh-vps,contabo-vps")
+              echo "hosts=ovh-vps,contabo-vps" >> $GITHUB_OUTPUT
+              ;;
+            "all")
+              echo "hosts=hetzner-vps,ovh-vps,contabo-vps" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              echo "❌ Invalid host selection"
+              exit 1
+              ;;
+          esac
+
+  deploy-hetzner-vps:
+    name: Deploy hetzner-vps
+    runs-on: ubuntu-latest
+    needs: [verify-artifacts, determine-hosts]
+    if: contains(needs.determine-hosts.outputs.hosts, 'hetzner-vps')
+    environment:
+      name: production
+      url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: hetzner-vps-build
+          path: ./hetzner-vps-build
+
+      - name: Setup Nix
+        uses: cachix/install-nix-action@v30
+
+      - name: Deploy hetzner-vps
+        env:
+          SERVER_IP: ${{ secrets.HETZNER_VPS_IP }}
+          DEPLOYMENT_METHOD: ${{ github.event.inputs.deployment_method }}
+          SKIP_REBOOT: ${{ github.event.inputs.skip_reboot }}
+          VERBOSE: ${{ github.event.inputs.verbose_logging }}
+          OPNIX_TOKEN: ${{ secrets.OPNIX_TOKEN }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          set -e
+
+          echo "::group::🚀 Starting deployment to hetzner-vps"
+          echo "Deployment method: $DEPLOYMENT_METHOD"
+          echo "Skip reboot: $SKIP_REBOOT"
+          echo "::notice::Starting deployment to hetzner-vps"
+
+          if [ "$DEPLOYMENT_METHOD" = "update-existing" ]; then
+            echo "Using nixos-rebuild switch method"
+            nixos-rebuild switch --flake .#hetzner-vps \
+              --target-host root@$SERVER_IP \
+              --use-remote-secret
+          else
+            echo "Using nixos-anywhere method"
+            SKIP_REBOOT_FLAG=""
+            if [ "$SKIP_REBOOT" = "true" ]; then
+              SKIP_REBOOT_FLAG="--no-reboot"
+            fi
+
+            nix run github:nix-community/nixos-anywhere -- \
+              $SKIP_REBOOT_FLAG \
+              --flake .#hetzner-vps \
+              root@$SERVER_IP
+          fi
+
+          echo "::notice::Deployment to hetzner-vps completed successfully"
+          echo "::endgroup::"
+
+      - name: Verify deployment
+        env:
+          SERVER_IP: ${{ secrets.HETZNER_VPS_IP }}
+        run: |
+          set -e
+
+          echo "::group::✅ Verifying deployment to hetzner-vps"
+
+          echo "::step::Checking SSH connectivity"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "echo 'SSH connection successful'"
+
+          echo "::step::Checking NixOS version"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "nixos-version"
+
+          echo "::step::Checking OpNix service"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "systemctl is-active onepassword-secrets.service"
+
+          echo "::step::Checking Tailscale service"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "systemctl is-active tailscaled.service || echo 'Tailscale not active (may need auth)'"
+
+          echo "::group::Deployment verification successful"
+          echo "::notice::All health checks passed for hetzner-vps"
+
+  deploy-ovh-vps:
+    name: Deploy ovh-vps
+    runs-on: ubuntu-latest
+    needs: [verify-artifacts, determine-hosts]
+    if: contains(needs.determine-hosts.outputs.hosts, 'ovh-vps')
+    environment:
+      name: staging
+      url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ovh-vps-build
+          path: ./ovh-vps-build
+
+      - name: Setup Nix
+        uses: cachix/install-nix-action@v30
+
+      - name: Deploy ovh-vps
+        env:
+          SERVER_IP: ${{ secrets.OVH_VPS_IP }}
+          DEPLOYMENT_METHOD: ${{ github.event.inputs.deployment_method }}
+          SKIP_REBOOT: ${{ github.event.inputs.skip_reboot }}
+          VERBOSE: ${{ github.event.inputs.verbose_logging }}
+          OPNIX_TOKEN: ${{ secrets.OPNIX_TOKEN }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          set -e
+
+          echo "::group::🚀 Starting deployment to ovh-vps"
+          echo "Deployment method: $DEPLOYMENT_METHOD"
+          echo "Skip reboot: $SKIP_REBOOT"
+          echo "::notice::Starting deployment to ovh-vps"
+
+          if [ "$DEPLOYMENT_METHOD" = "update-existing" ]; then
+            echo "Using nixos-rebuild switch method"
+            nixos-rebuild switch --flake .#ovh-vps \
+              --target-host root@$SERVER_IP \
+              --use-remote-secret
+          else
+            echo "Using nixos-anywhere method"
+            SKIP_REBOOT_FLAG=""
+            if [ "$SKIP_REBOOT" = "true" ]; then
+              SKIP_REBOOT_FLAG="--no-reboot"
+            fi
+
+            nix run github:nix-community/nixos-anywhere -- \
+              $SKIP_REBOOT_FLAG \
+              --flake .#ovh-vps \
+              root@$SERVER_IP
+          fi
+
+          echo "::notice::Deployment to ovh-vps completed successfully"
+          echo "::endgroup::"
+
+      - name: Verify deployment
+        env:
+          SERVER_IP: ${{ secrets.OVH_VPS_IP }}
+        run: |
+          set -e
+
+          echo "::group::✅ Verifying deployment to ovh-vps"
+
+          echo "::step::Checking SSH connectivity"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "echo 'SSH connection successful'"
+
+          echo "::step::Checking NixOS version"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "nixos-version"
+
+          echo "::step::Checking OpNix service"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "systemctl is-active onepassword-secrets.service"
+
+          echo "::step::Checking Tailscale service"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "systemctl is-active tailscaled.service || echo 'Tailscale not active (may need auth)'"
+
+          echo "::group::Deployment verification successful"
+          echo "::notice::All health checks passed for ovh-vps"
+
+  deploy-contabo-vps:
+    name: Deploy contabo-vps
+    runs-on: ubuntu-latest
+    needs: [verify-artifacts, determine-hosts]
+    if: contains(needs.determine-hosts.outputs.hosts, 'contabo-vps')
+    environment:
+      name: staging
+      url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: contabo-vps-build
+          path: ./contabo-vps-build
+
+      - name: Setup Nix
+        uses: cachix/install-nix-action@v30
+
+      - name: Deploy contabo-vps
+        env:
+          SERVER_IP: ${{ secrets.CONTABO_VPS_IP }}
+          DEPLOYMENT_METHOD: ${{ github.event.inputs.deployment_method }}
+          SKIP_REBOOT: ${{ github.event.inputs.skip_reboot }}
+          VERBOSE: ${{ github.event.inputs.verbose_logging }}
+          OPNIX_TOKEN: ${{ secrets.OPNIX_TOKEN }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          set -e
+
+          echo "::group::🚀 Starting deployment to contabo-vps"
+          echo "Deployment method: $DEPLOYMENT_METHOD"
+          echo "Skip reboot: $SKIP_REBOOT"
+          echo "::notice::Starting deployment to contabo-vps"
+
+          if [ "$DEPLOYMENT_METHOD" = "update-existing" ]; then
+            echo "Using nixos-rebuild switch method"
+            nixos-rebuild switch --flake .#contabo-vps \
+              --target-host root@$SERVER_IP \
+              --use-remote-secret
+          else
+            echo "Using nixos-anywhere method"
+            SKIP_REBOOT_FLAG=""
+            if [ "$SKIP_REBOOT" = "true" ]; then
+              SKIP_REBOOT_FLAG="--no-reboot"
+            fi
+
+            nix run github:nix-community/nixos-anywhere -- \
+              $SKIP_REBOOT_FLAG \
+              --flake .#contabo-vps \
+              root@$SERVER_IP
+          fi
+
+          echo "::notice::Deployment to contabo-vps completed successfully"
+          echo "::endgroup::"
+
+      - name: Verify deployment
+        env:
+          SERVER_IP: ${{ secrets.CONTABO_VPS_IP }}
+        run: |
+          set -e
+
+          echo "::group::✅ Verifying deployment to contabo-vps"
+
+          echo "::step::Checking SSH connectivity"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "echo 'SSH connection successful'"
+
+          echo "::step::Checking NixOS version"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "nixos-version"
+
+          echo "::step::Checking OpNix service"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "systemctl is-active onepassword-secrets.service"
+
+          echo "::step::Checking Tailscale service"
+          ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=no root@$SERVER_IP "systemctl is-active tailscaled.service || echo 'Tailscale not active (may need auth)'"
+
+          echo "::group::Deployment verification successful"
+          echo "::notice::All health checks passed for contabo-vps"
+
+  deployment-summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [deploy-hetzner-vps, deploy-ovh-vps, deploy-contabo-vps]
+    if: always()
+    steps:
+      - name: Summary
+        run: |
+          HETZNER_STATUS="${{ needs.deploy-hetzner-vps.result }}"
+          OVH_STATUS="${{ needs.deploy-ovh-vps.result }}"
+          CONTABO_STATUS="${{ needs.deploy-contabo-vps.result }}"
+
+          echo "::group::📊 Deployment Summary"
+          echo "hetzner-vps: $HETZNER_STATUS"
+          echo "ovh-vps: $OVH_STATUS"
+          echo "contabo-vps: $CONTABO_STATUS"
+
+          if [ "$HETZNER_STATUS" = "success" ] && \
+             [ "$OVH_STATUS" = "success" ] && \
+             [ "$CONTABO_STATUS" = "success" ]; then
+            echo "✅ All deployments succeeded"
+            echo "::notice::Deployment completed successfully for all target hosts"
+            exit 0
+          else
+            FAILED_HOSTS=""
+            [ "$HETZNER_STATUS" != "success" ] && FAILED_HOSTS="$FAILED_HOSTS hetzner-vps"
+            [ "$OVH_STATUS" != "success" ] && FAILED_HOSTS="$FAILED_HOSTS ovh-vps"
+            [ "$CONTABO_STATUS" != "success" ] && FAILED_HOSTS="$FAILED_HOSTS contabo-vps"
+
+            echo "❌ Some deployments failed: $FAILED_HOSTS"
+            echo "::error::Deployment failed for: $FAILED_HOSTS"
+            echo "Please check the logs for each failed deployment"
+            exit 1
+          fi
+          echo "::endgroup::"

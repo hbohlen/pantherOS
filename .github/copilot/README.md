@@ -21,6 +21,7 @@ cd /home/runner/work/pantherOS/pantherOS
 ```
 
 This interactive script will:
+
 - Verify prerequisites (Nix, Node.js, Git, SSH)
 - Configure Nix with flakes support
 - Set up SSH access to your VPS (optional)
@@ -32,9 +33,11 @@ This interactive script will:
 Add these secrets to your repository (Settings → Secrets and variables → Actions):
 
 **Required for Brave Search:**
+
 - `BRAVE_API_KEY` - Get from https://brave.com/search/api/
 
 **Required for VPS Access:**
+
 - `VPS_SSH_KEY` - Private SSH key for VPS authentication
 - `VPS_HOST` - VPS hostname or IP address
 - `VPS_USER` - SSH username (e.g., "nixos" or "root")
@@ -69,27 +72,32 @@ ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild build --flake .#hetzner-vps'
 ## MCP Servers
 
 ### Sequential Thinking
+
 **Command:** `npx -y @modelcontextprotocol/server-sequential-thinking`  
 **Purpose:** Complex reasoning and step-by-step planning  
 **Use for:** Architecture decisions, multi-step migrations, debugging
 
 ### Brave Search
+
 **Command:** `npx -y @modelcontextprotocol/server-brave-search`  
 **Purpose:** Web search and real-time information  
 **Use for:** Finding documentation, checking versions, researching solutions  
 **Requires:** `BRAVE_API_KEY` secret
 
 ### Context7
+
 **Command:** `npx -y @context7/mcp-server`  
 **Purpose:** Enhanced code understanding and semantic analysis  
 **Use for:** Impact analysis, finding related code, understanding dependencies
 
 ### NixOS MCP
+
 **Command:** `npx -y @nixos/mcp-server`  
 **Purpose:** NixOS-specific operations  
 **Use for:** Package search, option lookup, configuration validation
 
 ### DeepWiki
+
 **Command:** `npx -y @deepwiki/mcp-server`  
 **Purpose:** Deep documentation and wiki search  
 **Use for:** Finding specific docs, wiki integration, historical info
@@ -99,21 +107,25 @@ ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild build --flake .#hetzner-vps'
 ### Available Commands
 
 #### Push Configuration
+
 ```bash
 rsync -avz --exclude='.git' --exclude='result' ./ nixos-vps:~/pantherOS/
 ```
 
 #### Build on VPS
+
 ```bash
 ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild build --flake .#hetzner-vps'
 ```
 
 #### Test (Dry Run)
+
 ```bash
 ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild dry-build --flake .#hetzner-vps'
 ```
 
 #### Apply Configuration
+
 ```bash
 ssh nixos-vps 'cd ~/pantherOS && sudo nixos-rebuild switch --flake .#hetzner-vps'
 ```
@@ -132,24 +144,28 @@ ssh nixos-vps 'cd ~/pantherOS && sudo nixos-rebuild switch --flake .#hetzner-vps
 ### Example Prompts
 
 **Using Sequential Thinking:**
+
 ```
 @copilot Plan a migration from systemd-networkd to NetworkManager using sequential thinking
 ```
 
 **Using Brave Search:**
+
 ```
 @copilot Search for the latest stable version of the niri Wayland compositor
 ```
 
 **Using NixOS MCP:**
+
 ```
 @copilot Find NixOS packages for terminal emulators and show their options
 ```
 
 **Combined Approach:**
+
 ```
-@copilot I want to add a new service to my NixOS config. Use brave-search to find 
-best practices, sequential-thinking to plan the implementation, and nixos-mcp to 
+@copilot I want to add a new service to my NixOS config. Use brave-search to find
+best practices, sequential-thinking to plan the implementation, and nixos-mcp to
 find the right options. Then help me test it on the VPS.
 ```
 
@@ -170,6 +186,7 @@ find the right options. Then help me test it on the VPS.
 ## Testing
 
 ### Local Testing
+
 ```bash
 # Validate flake
 nix flake check
@@ -185,6 +202,7 @@ nixpkgs-fmt .
 ```
 
 ### VPS Testing
+
 ```bash
 # Connection test
 ssh nixos-vps 'echo "Connected"'
@@ -200,6 +218,7 @@ ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild dry-build --flake .#hetzner-vps'
 ```
 
 ### MCP Server Testing
+
 ```bash
 # Test sequential-thinking
 npx -y @modelcontextprotocol/server-sequential-thinking --version
@@ -213,21 +232,25 @@ BRAVE_API_KEY=your_key npx -y @modelcontextprotocol/server-brave-search --help
 ### Common Issues
 
 **SSH Connection Failed**
+
 - Verify VPS is running: `ping $VPS_HOST`
 - Check key permissions: `chmod 600 ~/.ssh/copilot_vps`
 - Test with verbose output: `ssh -vvv nixos-vps`
 
 **Build Failed**
+
 - Check flake syntax: `nix flake check`
 - Update flake inputs: `nix flake update`
 - Review error logs: `nix log <derivation>`
 
 **MCP Server Not Working**
+
 - Verify Node.js: `node --version`
 - Test npx: `npx -y cowsay hello`
 - Check API keys in secrets
 
 **Disk Space Issues**
+
 - Clean garbage: `sudo nix-collect-garbage -d`
 - Check space: `df -h /nix/store`
 
@@ -261,6 +284,7 @@ See `SETUP.md` for detailed troubleshooting steps.
 ## Support
 
 For detailed information, see:
+
 - **Setup Guide:** `SETUP.md` - Comprehensive setup instructions
 - **Configuration:** `action-setup.yml` - Full configuration reference
 - **NixOS Manual:** https://nixos.org/manual/nixos/stable/
@@ -275,6 +299,7 @@ Last updated: 2025-12-02
 ## Contributing
 
 To improve this configuration:
+
 1. Test your changes thoroughly
 2. Update documentation
 3. Submit a pull request

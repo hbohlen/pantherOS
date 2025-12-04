@@ -3,7 +3,7 @@
   description = "NixOS configuration for Hetzner Cloud VPS";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -187,6 +187,7 @@
            
            # Documentation and Exploration
            manix         # Nix function documentation
+           nix-doc       # Inline documentation for Nix
            
            # Deployment and Testing
            nixos-rebuild

@@ -17,7 +17,7 @@ jobs:
   validate-flake:
     name: Validate Nix Flake
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
           - ovh-vps
           # Add other configurations as needed
       fail-fast: false
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -85,7 +85,7 @@ jobs:
   format-check:
     name: Check Nix Formatting
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -106,7 +106,7 @@ jobs:
     needs: [validate-flake, build-configurations]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     # Only run on main branch pushes, and only if secrets are configured
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -161,7 +161,7 @@ jobs:
     name: Run Integration Tests
     runs-on: ubuntu-latest
     needs: build-configurations
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -184,7 +184,7 @@ jobs:
   security-scan:
     name: Security Scan
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

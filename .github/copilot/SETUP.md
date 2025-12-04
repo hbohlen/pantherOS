@@ -39,11 +39,13 @@ This setup enables GitHub Copilot with:
 ### Local Environment
 
 1. **Nix Package Manager** (with flakes enabled)
+
    ```bash
    curl -L https://nixos.org/nix/install | sh -s -- --daemon
    ```
 
 2. **Node.js** (for MCP servers)
+
    ```bash
    nix profile install nixpkgs#nodejs
    ```
@@ -78,13 +80,13 @@ Settings → Secrets and variables → Actions → New repository secret
 
 Required secrets:
 
-| Secret Name | Description | Example |
-|-------------|-------------|---------|
-| `BRAVE_API_KEY` | Brave Search API key | `BSA...` |
-| `VPS_SSH_KEY` | Private SSH key for VPS | `-----BEGIN OPENSSH PRIVATE KEY-----...` |
-| `VPS_HOST` | VPS hostname or IP | `vps.example.com` or `192.0.2.1` |
-| `VPS_USER` | SSH username | `nixos` or `root` |
-| `VPS_PORT` | SSH port (optional) | `22` (default) |
+| Secret Name     | Description             | Example                                  |
+| --------------- | ----------------------- | ---------------------------------------- |
+| `BRAVE_API_KEY` | Brave Search API key    | `BSA...`                                 |
+| `VPS_SSH_KEY`   | Private SSH key for VPS | `-----BEGIN OPENSSH PRIVATE KEY-----...` |
+| `VPS_HOST`      | VPS hostname or IP      | `vps.example.com` or `192.0.2.1`         |
+| `VPS_USER`      | SSH username            | `nixos` or `root`                        |
+| `VPS_PORT`      | SSH port (optional)     | `22` (default)                           |
 
 ### Step 2: Generate SSH Key for VPS Access
 
@@ -138,12 +140,14 @@ ssh -i ~/.ssh/copilot_vps user@vps-host 'cd ~/pantherOS && nix --version'
 **Purpose**: Enables structured, step-by-step reasoning for complex problems.
 
 **Use Cases**:
+
 - Planning multi-step changes
 - Debugging complex issues
 - Architecture decisions
 - Refactoring strategies
 
 **Example Usage**:
+
 ```
 @copilot Help me plan a migration from configuration A to B using sequential thinking
 ```
@@ -153,17 +157,20 @@ ssh -i ~/.ssh/copilot_vps user@vps-host 'cd ~/pantherOS && nix --version'
 **Purpose**: Provides web search capabilities for real-time information.
 
 **Use Cases**:
+
 - Finding documentation
 - Looking up package versions
 - Researching best practices
 - Checking compatibility
 
 **Example Usage**:
+
 ```
 @copilot Search for the latest NixOS stable release
 ```
 
 **Setup Notes**:
+
 - Requires `BRAVE_API_KEY` secret
 - Free tier: 2,000 queries/month
 - Get API key: https://brave.com/search/api/
@@ -173,12 +180,14 @@ ssh -i ~/.ssh/copilot_vps user@vps-host 'cd ~/pantherOS && nix --version'
 **Purpose**: Enhanced context understanding and code analysis.
 
 **Use Cases**:
+
 - Understanding complex codebases
 - Semantic code search
 - Finding related configurations
 - Impact analysis
 
 **Example Usage**:
+
 ```
 @copilot Analyze the impact of changing the firewall configuration
 ```
@@ -188,12 +197,14 @@ ssh -i ~/.ssh/copilot_vps user@vps-host 'cd ~/pantherOS && nix --version'
 **Purpose**: NixOS-specific operations and assistance.
 
 **Use Cases**:
+
 - Package search
 - Option lookup
 - Configuration validation
 - Flake operations
 
 **Example Usage**:
+
 ```
 @copilot Find NixOS options for configuring SSH
 ```
@@ -203,12 +214,14 @@ ssh -i ~/.ssh/copilot_vps user@vps-host 'cd ~/pantherOS && nix --version'
 **Purpose**: Deep search across documentation and wikis.
 
 **Use Cases**:
+
 - Finding specific documentation
 - Wiki integration
 - Knowledge base access
 - Historical information
 
 **Example Usage**:
+
 ```
 @copilot Search the NixOS wiki for Wayland configuration examples
 ```
@@ -259,27 +272,32 @@ ssh nixos-vps 'cd ~/pantherOS && sudo nixos-rebuild switch --flake .#hetzner-vps
 ### Workflow Example
 
 1. **Make changes locally**
+
    ```bash
    # Edit configuration files
    vim hosts/servers/hetzner-vps/default.nix
    ```
 
 2. **Test locally** (if possible)
+
    ```bash
    nix build .#nixosConfigurations.hetzner-vps.config.system.build.toplevel
    ```
 
 3. **Push to VPS**
+
    ```bash
    rsync -avz --exclude='.git' --exclude='result' ./ nixos-vps:~/pantherOS/
    ```
 
 4. **Build on VPS**
+
    ```bash
    ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild build --flake .#hetzner-vps'
    ```
 
 5. **Test with dry-run**
+
    ```bash
    ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild dry-build --flake .#hetzner-vps'
    ```
@@ -341,6 +359,7 @@ npx -y @context7/mcp-server --help
 **Problem**: Cannot connect to VPS
 
 **Solutions**:
+
 1. Verify VPS is running: `ping $VPS_HOST`
 2. Check SSH key permissions: `chmod 600 ~/.ssh/copilot_vps`
 3. Test with verbose output: `ssh -vvv nixos-vps`
@@ -351,6 +370,7 @@ npx -y @context7/mcp-server --help
 **Problem**: Configuration fails to build
 
 **Solutions**:
+
 1. Check flake inputs: `nix flake update`
 2. Verify syntax: `nix flake check`
 3. Review error logs: `nix log <derivation-path>`
@@ -361,6 +381,7 @@ npx -y @context7/mcp-server --help
 **Problem**: MCP server not responding
 
 **Solutions**:
+
 1. Verify Node.js installation: `node --version`
 2. Check npx can access internet: `npx -y cowsay hello`
 3. Verify API keys are set correctly
@@ -371,6 +392,7 @@ npx -y @context7/mcp-server --help
 **Problem**: Cannot apply configuration on VPS
 
 **Solutions**:
+
 1. Ensure user has sudo access: `ssh nixos-vps 'sudo -l'`
 2. Add user to wheel group (on VPS): `sudo usermod -aG wheel username`
 3. Configure passwordless sudo if needed (on VPS):
@@ -383,6 +405,7 @@ npx -y @context7/mcp-server --help
 **Problem**: Not enough space for build
 
 **Solutions**:
+
 1. Clean up old generations (on VPS):
    ```bash
    sudo nix-collect-garbage -d
@@ -433,11 +456,11 @@ mcp_servers:
   my-custom-server:
     command: npx
     args:
-      - "-y"
-      - "@my-org/custom-mcp-server"
+      - '-y'
+      - '@my-org/custom-mcp-server'
     env:
       CUSTOM_API_KEY: ${{ secrets.CUSTOM_API_KEY }}
-    description: "My custom MCP server"
+    description: 'My custom MCP server'
 ```
 
 ### Multiple VPS Targets

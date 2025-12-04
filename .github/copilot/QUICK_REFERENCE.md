@@ -13,13 +13,13 @@
 
 ## MCP Servers Cheat Sheet
 
-| Server | Purpose | Example Use |
-|--------|---------|-------------|
+| Server                  | Purpose               | Example Use                                           |
+| ----------------------- | --------------------- | ----------------------------------------------------- |
 | **sequential-thinking** | Step-by-step planning | `@copilot Plan a migration using sequential thinking` |
-| **brave-search** | Web search | `@copilot Search for NixOS 25.05 release notes` |
-| **context7** | Code analysis | `@copilot Analyze the impact of changing this module` |
-| **nixos-mcp** | NixOS operations | `@copilot Find packages for terminal emulators` |
-| **deepwiki** | Documentation search | `@copilot Search NixOS wiki for Wayland setup` |
+| **brave-search**        | Web search            | `@copilot Search for NixOS 25.05 release notes`       |
+| **context7**            | Code analysis         | `@copilot Analyze the impact of changing this module` |
+| **nixos-mcp**           | NixOS operations      | `@copilot Find packages for terminal emulators`       |
+| **deepwiki**            | Documentation search  | `@copilot Search NixOS wiki for Wayland setup`        |
 
 ## Common Commands
 
@@ -128,30 +128,30 @@ ssh nixos-vps 'sudo nix-store --optimize'
 ### Configuration Changes
 
 ```
-@copilot I want to add [feature] to my NixOS config. 
-Use nixos-mcp to find the right options, sequential-thinking 
+@copilot I want to add [feature] to my NixOS config.
+Use nixos-mcp to find the right options, sequential-thinking
 to plan the changes, and help me test it on the VPS.
 ```
 
 ### Debugging
 
 ```
-@copilot The build failed with [error]. Use brave-search to 
+@copilot The build failed with [error]. Use brave-search to
 find solutions and help me debug this issue.
 ```
 
 ### Research
 
 ```
-@copilot Use brave-search to research [topic] and deepwiki to 
-find relevant documentation. Then use sequential-thinking to 
+@copilot Use brave-search to research [topic] and deepwiki to
+find relevant documentation. Then use sequential-thinking to
 plan how to implement this in my NixOS config.
 ```
 
 ### Code Review
 
 ```
-@copilot Use context7 to analyze this configuration change and 
+@copilot Use context7 to analyze this configuration change and
 tell me what systems it will affect.
 ```
 
@@ -177,36 +177,43 @@ tell me what systems it will affect.
 ## Typical Workflow
 
 1. **Make changes locally**
+
    ```bash
    vim hosts/servers/hetzner-vps/default.nix
    ```
 
 2. **Test locally**
+
    ```bash
    nix build .#nixosConfigurations.hetzner-vps.config.system.build.toplevel
    ```
 
 3. **Push to VPS**
+
    ```bash
    rsync -avz --exclude='.git' --exclude='result' ./ nixos-vps:~/pantherOS/
    ```
 
 4. **Build on VPS**
+
    ```bash
    ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild build --flake .#hetzner-vps'
    ```
 
 5. **Dry-run**
+
    ```bash
    ssh nixos-vps 'cd ~/pantherOS && nixos-rebuild dry-build --flake .#hetzner-vps'
    ```
 
 6. **Apply (if tests pass)**
+
    ```bash
    ssh nixos-vps 'cd ~/pantherOS && sudo nixos-rebuild switch --flake .#hetzner-vps'
    ```
 
 7. **Verify**
+
    ```bash
    ssh nixos-vps 'systemctl status'
    ```
@@ -244,24 +251,26 @@ export VPS_PORT="22"
 
 ## Troubleshooting Quick Fixes
 
-| Problem | Quick Fix |
-|---------|-----------|
-| SSH connection failed | `ssh -vvv nixos-vps` (check verbose output) |
-| Permission denied | `chmod 600 ~/.ssh/copilot_vps` |
-| Flake check failed | `nix flake check --show-trace` |
-| Build failed | `nix log <derivation>` or `nix build --show-trace` |
-| Out of disk space | `sudo nix-collect-garbage -d && sudo nix-store --optimize` |
-| MCP not working | `node --version` and `npx -y cowsay hello` |
-| Can't apply config | Check user has sudo: `ssh nixos-vps 'sudo -l'` |
+| Problem               | Quick Fix                                                  |
+| --------------------- | ---------------------------------------------------------- |
+| SSH connection failed | `ssh -vvv nixos-vps` (check verbose output)                |
+| Permission denied     | `chmod 600 ~/.ssh/copilot_vps`                             |
+| Flake check failed    | `nix flake check --show-trace`                             |
+| Build failed          | `nix log <derivation>` or `nix build --show-trace`         |
+| Out of disk space     | `sudo nix-collect-garbage -d && sudo nix-store --optimize` |
+| MCP not working       | `node --version` and `npx -y cowsay hello`                 |
+| Can't apply config    | Check user has sudo: `ssh nixos-vps 'sudo -l'`             |
 
 ## Emergency Rollback
 
 **On VPS (if you can still SSH):**
+
 ```bash
 ssh nixos-vps 'sudo nixos-rebuild switch --rollback'
 ```
 
 **On VPS console (if SSH is broken):**
+
 ```bash
 # At GRUB menu, select previous generation
 # OR
