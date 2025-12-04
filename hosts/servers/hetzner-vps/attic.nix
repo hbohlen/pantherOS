@@ -10,8 +10,8 @@
   services.ci.attic = {
     enable = true;
 
-    # Listen only on the loopback interface for local access
-    listen = "[::1]:8080";
+    # Listen only on the loopback interface for local access (proxied by Caddy)
+    listen = "127.0.0.1:8080";
 
     # Backblaze B2 storage configuration
     storage = {
