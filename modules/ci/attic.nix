@@ -212,6 +212,7 @@ in {
       ## Creating a Cache
 
       After the server starts, create a cache:
+        atticd-atticadm make-cache my-cache
         atticd-atticadm make-token --sub "my-cache" --validity "1 year" --push "*" --pull "*"
 
       Configure Nix to use this cache:
