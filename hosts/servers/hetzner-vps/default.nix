@@ -1,14 +1,16 @@
 # hosts/servers/hetzner-vps/default.nix
 # Optimized configuration for development server
 # Supports: Programming (Python, Node, Rust, Go), Containers, AI tools
-{ config, pkgs, ... }:
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
     ./hardware.nix
     ../../../modules
   ];
-
-
 
   # Hostname
   networking.hostName = "hetzner-vps";
@@ -36,7 +38,7 @@
   networking.useNetworkd = true;
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
-    matchConfig.Name = "eth0";
+    matchConfig.Name = "eth0 enp1s0";
     networkConfig = {
       DHCP = "ipv4";
       IPv6AcceptRA = true;
@@ -45,64 +47,63 @@
   };
 
   # 1Password OpNix - Secret Management
-  # TEMPORARILY DISABLED - enable after initial setup
-  # services.onepassword-secrets = {
-  #   enable = true;
-  #   tokenFile = "/etc/opnix-token";
-  #
-  #   secrets = {
-  #     # Tailscale authentication key from your pantherOS vault
-  #     tailscaleAuthKey = {
-  #       reference = "op://pantherOS/tailscale/authKey";
-  #       path = "/etc/tailscale/auth-key";
-  #       owner = "root";
-  #       group = "root";
-  #       mode = "0600";
-  #       services = [ "tailscaled" ];
-  #     };
-  #
-  #     # SSH public key for root user
-  #     rootSshKeys = {
-  #       reference = "op://pantherOS/SSH/public key";
-  #       path = "/root/.ssh/authorized_keys";
-  #       owner = "root";
-  #       group = "root";
-  #       mode = "0600";
-  #     };
-  #
-  #     # SSH public key for hbohlen user
-  #     userSshKeys = {
-  #       reference = "op://pantherOS/SSH/public key";
-  #       path = "/home/hbohlen/.ssh/authorized_keys";
-  #       owner = "hbohlen";
-  #       group = "users";
-  #       mode = "0600";
-  #     };
-  #   };
-  # };
+  services.onepassword-secrets = {
+    enable = true;
+    tokenFile = "/etc/opnix-token";
 
-  # Tailscale VPN - TEMPORARILY DISABLED - enable after initial setup
-  # services.tailscale = {
-  #   enable = true;
-  #   useRoutingFeatures = "client";
-  #   authKeyFile = config.services.onepassword-secrets.secretPaths.tailscaleAuthKey;
-  # };
+    secrets = {
+      # Tailscale authentication key from your pantherOS vault
+      tailscaleAuthKey = {
+        reference = "op://pantherOS/tailscale/authKey";
+        path = "/etc/tailscale/auth-key";
+        owner = "root";
+        group = "root";
+        mode = "0600";
+        services = ["tailscaled"];
+      };
 
-  # Firewall - allow SSH only for now
+      # SSH public key for root user
+      rootSshKeys = {
+        reference = "op://pantherOS/SSH/public key";
+        path = "/root/.ssh/authorized_keys";
+        owner = "root";
+        group = "root";
+        mode = "0600";
+      };
+
+      # SSH public key for hbohlen user
+      userSshKeys = {
+        reference = "op://pantherOS/SSH/public key";
+        path = "/home/hbohlen/.ssh/authorized_keys";
+        owner = "hbohlen";
+        group = "users";
+        mode = "0600";
+      };
+    };
+  };
+
+  # Tailscale VPN
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "client";
+    authKeyFile = config.services.onepassword-secrets.secretPaths.tailscaleAuthKey;
+  };
+
+  # Firewall - allow SSH and Tailscale
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 22 ];
-    # trustedInterfaces = [ "tailscale0" ];  # Disabled for now
-    # allowedUDPPorts = [ config.services.tailscale.port ];  # Disabled for now
+    allowedTCPPorts = [22];
+    trustedInterfaces = ["tailscale0"];
+    allowedUDPPorts = [config.services.tailscale.port];
   };
 
   # SSH configuration - TEMPORARILY LOOSENED for initial access
   services.openssh = {
     enable = true;
     settings = {
-      PermitRootLogin = "yes";  # TEMPORARY: Allow root login with password
-      PasswordAuthentication = true;  # TEMPORARY: Enable password authentication
-      KbdInteractiveAuthentication = true;  # TEMPORARY: Enable keyboard-interactive
+      PermitRootLogin = "yes"; # TEMPORARY: Allow root login with password
+      PasswordAuthentication = true; # TEMPORARY: Enable password authentication
+      KbdInteractiveAuthentication = true; # TEMPORARY: Enable keyboard-interactive
     };
   };
 
@@ -126,8 +127,6 @@
         homeDirectory = "/home/hbohlen";
         stateVersion = "25.05";
       };
-
-
 
       # Enable XDG base directory specification
       xdg.enable = true;
@@ -232,8 +231,18 @@
 
   # System limits for development workloads
   security.pam.loginLimits = [
-    { domain = "*"; item = "nofile"; type = "-"; value = "262144"; }
-    { domain = "*"; item = "nproc"; type = "-"; value = "262144"; }
+    {
+      domain = "*";
+      item = "nofile";
+      type = "-";
+      value = "262144";
+    }
+    {
+      domain = "*";
+      item = "nproc";
+      type = "-";
+      value = "262144";
+    }
   ];
 
   # Optimize journald for performance and retention
@@ -295,7 +304,7 @@
 
   systemd.timers.clean-old-caches = {
     description = "Clean old cache files weekly";
-    wantedBy = [ "timers.target" ];
+    wantedBy = ["timers.target"];
     timerConfig = {
       OnCalendar = "weekly";
       Persistent = true;
@@ -320,7 +329,7 @@
 
   systemd.timers.btrfs-maintenance = {
     description = "Btrfs filesystem maintenance timer";
-    wantedBy = [ "timers.target" ];
+    wantedBy = ["timers.target"];
     timerConfig = {
       OnCalendar = "monthly";
       Persistent = true;
