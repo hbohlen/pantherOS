@@ -5,6 +5,9 @@ with lib;
 let
   cfg = config.services.ci;
 in {
+  imports = [
+    ./attic.nix
+  ];
   options.services.ci = {
     enable = mkEnableOption "Enable CI/CD infrastructure";
 
@@ -26,6 +29,12 @@ in {
         type = types.str;
         default = "/var/lib/hercules-ci-agent/secrets/binary-caches.json";
         description = "Path to the binary caches configuration file";
+      };
+
+      concurrentTasks = mkOption {
+        type = types.int;
+        default = 4;
+        description = "Number of concurrent tasks to run";
       };
 
       # OpNix integration for secret provisioning
@@ -76,12 +85,20 @@ in {
     };
 
     # Hercules CI Agent configuration
+    # Note: services.hercules-ci-agent is provided by the official hercules-ci-agent NixOS module
     services.hercules-ci-agent = mkIf cfg.herculesCI.enable {
       enable = true;
       settings = {
         clusterJoinTokenPath = cfg.herculesCI.clusterJoinTokenPath;
         binaryCachesPath = cfg.herculesCI.binaryCachesPath;
+        concurrentTasks = cfg.herculesCI.concurrentTasks;
       };
+    };
+
+    # Ensure Hercules CI agent starts after OpNix has populated secrets
+    systemd.services.hercules-ci-agent = mkIf (cfg.herculesCI.enable && cfg.herculesCI.opnix.enable) {
+      after = ["onepassword-secrets.service"];
+      wants = ["onepassword-secrets.service"];
     };
 
     # Create necessary directories for Hercules CI secrets

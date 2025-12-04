@@ -10,6 +10,7 @@
   imports = [
     ./hardware.nix
     ./hercules-ci.nix
+    ./attic.nix
     ../../../modules
   ];
 
