@@ -87,9 +87,7 @@ in {
       enable = true;
 
       # Credentials file path (managed by OpNix or manually)
-      credentialsFile = if cfg.opnix.enable
-        then config.services.onepassword-secrets.secretPaths.atticCredentials
-        else "/var/lib/atticd/credentials.env";
+      credentialsFile = "/var/lib/atticd/credentials.env";
 
       settings = {
         listen = cfg.listen;
