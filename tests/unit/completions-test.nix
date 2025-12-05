@@ -11,16 +11,6 @@
   };
 
   # Test that completion files exist
-  testOpencodeCompletionFileExists = {
-    expr = builtins.pathExists ../../modules/home-manager/completions/files/opencode.fish;
-    expected = true;
-  };
-
-  testOpenagentCompletionFileExists = {
-    expr = builtins.pathExists ../../modules/home-manager/completions/files/openagent.fish;
-    expected = true;
-  };
-
   testNixCompletionFileExists = {
     expr = builtins.pathExists ../../modules/home-manager/completions/files/nix.fish;
     expected = true;

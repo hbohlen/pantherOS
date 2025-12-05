@@ -14,16 +14,6 @@ in
   options.programs.fish.completions = {
     enable = mkEnableOption "Fish shell completions";
 
-    # OpenCode completions
-    opencode = {
-      enable = mkEnableOption "OpenCode command completions";
-    };
-
-    # OpenAgent completions
-    openagent = {
-      enable = mkEnableOption "OpenAgent command completions";
-    };
-
     # System management completions
     systemManagement = {
       enable = mkEnableOption "System management command completions";
@@ -66,16 +56,6 @@ in
 
     # Create completions directory and install completion files
     xdg.configFile = mkMerge [
-      # OpenCode completions
-      (mkIf cfg.opencode.enable {
-        "fish/completions/opencode.fish".source = ./files/opencode.fish;
-      })
-
-      # OpenAgent completions
-      (mkIf cfg.openagent.enable {
-        "fish/completions/openagent.fish".source = ./files/openagent.fish;
-      })
-
       # System management completions
       (mkIf (cfg.systemManagement.enable || cfg.systemManagement.nix) {
         "fish/completions/nix.fish".source = ./files/nix.fish;
