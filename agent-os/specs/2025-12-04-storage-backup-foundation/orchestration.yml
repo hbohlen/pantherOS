@@ -1,0 +1,21 @@
+task_groups:
+  - name: flake-parts-module-scaffolding
+    claude_code_subagent: nixos-module-authoring
+  - name: hardware-detection-profile-selection
+    claude_code_subagent: nixos-hardware-deployment
+  - name: disko-layout-modules
+    claude_code_subagent: nixos-hardware-deployment
+  - name: mount-options-compression
+    claude_code_subagent: nixos-hardware-deployment
+  - name: host-profile-composition
+    claude_code_subagent: nixos-hardware-deployment
+  - name: snapshot-automation
+    claude_code_subagent: nixos-hardware-deployment
+  - name: offsite-backup-integration
+    claude_code_subagent: nixos-security-backup
+  - name: datadog-monitoring-integration
+    claude_code_subagent: nixos-monitoring
+  - name: testing-framework
+    claude_code_subagent: testing-test-writing
+  - name: documentation-diagrams
+    claude_code_subagent: markdown-documentation

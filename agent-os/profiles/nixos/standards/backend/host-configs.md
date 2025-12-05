@@ -1,0 +1,1 @@
+# Host Configurations\n\n- hosts/<category>/<hostname>/default.nix as main config.\n- Import hardware.nix, disko.nix, meta.nix.\n- Categories: servers/ (VPS), yoga/, zephyrus/ (desktops).\n- Use meta.nix for system metadata.

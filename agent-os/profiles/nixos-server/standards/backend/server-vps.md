@@ -1,0 +1,1 @@
+# Server VPS Standards\n\n- Specific to hosts/servers/*-vps/.\n- Modules: caddy.nix, attic.nix, hercules-ci.nix.\n- Deployment scripts: deploy-contabo.sh, deploy-hetzner.sh.\n- CI: ci.nix, verify-hercules-ci.sh.

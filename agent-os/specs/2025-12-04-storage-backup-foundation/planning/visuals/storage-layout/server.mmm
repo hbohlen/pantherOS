@@ -1,0 +1,96 @@
+---
+title: Server VPS Subvolume Layout (Hetzner/Contabo/OVH)
+---
+flowchart TB
+    %% Single Pool (VPS Disk)
+    subgraph "Single Pool (~200-536GB VPS Disk)"
+        direction TB
+        ROOT_S[@ (Root)<br/>compress=zstd:3<br/>noatime]
+        HOME_S[@home<br/>compress=zstd:3<br/>noatime]
+        DEV_S[@dev<br/>compress=zstd:3<br/>noatime]
+        CONFIG[@config<br/>compress=zstd:3<br/>noatime]
+        LOCAL[@local<br/>compress=zstd:3<br/>noatime]
+        USER_CACHE_S[@user-cache<br/>compress=zstd:1<br/>noatime]
+        AITOOLS[@ai-tools<br/>compress=zstd:3<br/>noatime]
+        NIX_S[@nix<br/>nodatacow<br/>compress=zstd:1]
+        LOG_S[@log<br/>compress=zstd:3<br/>noatime]
+        VAR_CACHE[@var-cache<br/>compress=zstd:1<br/>noatime]
+        TMP_S[@tmp<br/>compress=no<br/>noatime]
+        CONTAINERS_S[@containers<br/>nodatacow<br/>compress=no]
+        SWAP[@swap<br/>nodatacow<br/>compress=no]
+    end
+
+    %% Database Subvolumes (Hetzner/Contabo)
+    subgraph "Database Subvolumes (Production/Staging)"
+        direction TB
+        PG_S[@postgresql<br/>nodatacow<br/>compress=no]
+        REDIS_S[@redis<br/>nodatacow<br/>compress=no]
+    end
+
+    %% Mount Points
+    ROOT_S -.-> |/| ROOT_MS[Root Filesystem]
+    HOME_S -.-> |/home| HOME_MS[User Home Directories]
+    DEV_S -.-> |/srv/dev| DEV_MS[Development Data]
+    CONFIG -.-> |/etc| CONFIG_MS[System Configuration]
+    LOCAL -.-> |/usr/local| LOCAL_MS[Local Software]
+    USER_CACHE_S -.-> |/home/.cache| UC_MS[User Cache]
+    AITOOLS -.-> |opt/ai-tools| AI_MS[AI/ML Tools]
+    NIX_S -.-> |/nix| NIX_MS[Nix Store]
+    LOG_S -.-> |/var/log| LOG_MS[System Logs]
+    VAR_CACHE -.-> |/var/cache| VC_MS[Variable Cache]
+    TMP_S -.-> |/tmp| TMP_MS[Temporary Files]
+    CONTAINERS_S -.-> |/var/lib/containers| CON_MS[Container Storage]
+    SWAP -.-> |swap| SWAP_MS[Swap File]
+    PG_S -.-> |/var/lib/postgresql| PG_MS[PostgreSQL Data]
+    REDIS_S -.-> |/var/lib/redis| REDIS_MS[Redis Data]
+
+    %% Relationships
+    ROOT_S --> HOME_S
+    ROOT_S --> DEV_S
+    ROOT_S --> CONFIG
+    ROOT_S --> LOCAL
+    ROOT_S --> USER_CACHE_S
+    ROOT_S --> AITOOLS
+    ROOT_S --> NIX_S
+    ROOT_S --> LOG_S
+    ROOT_S --> VAR_CACHE
+    ROOT_S --> TMP_S
+    ROOT_S --> CONTAINERS_S
+    ROOT_S --> SWAP
+    ROOT_S --> PG_S
+    ROOT_S --> REDIS_S
+
+    %% Snapshot Configuration
+    subgraph "Snapshot Policies"
+        direction TB
+        LAPTOP_POLICY[Laptop Policy<br/>7 daily / 4 weekly / 12 monthly<br/>Yoga, Zephyrus]
+        SERVER_POLICY[Server Policy<br/>30 daily / 12 weekly / 12 monthly<br/>Hetzner, Contabo, OVH]
+    end
+
+    SERVER_POLICY --> ROOT_S
+    SERVER_POLICY --> HOME_S
+    SERVER_POLICY --> PG_S
+    SERVER_POLICY --> REDIS_S
+    SERVER_POLICY --> CONTAINERS_S
+
+    %% Backup Integration
+    BACKUP_INTEGRATION[Backup Integration<br/>btrbk → Backblaze B2]
+    BACKUP_INTEGRATION --> ROOT_S
+    BACKUP_INTEGRATION --> HOME_S
+    BACKUP_INTEGRATION --> PG_S
+    BACKUP_INTEGRATION --> REDIS_S
+
+    %% Styling
+    classDef pool fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    classDef database fill:#ffcdd2,stroke:#c62828,stroke-width:2px
+    classDef nodatacow fill:#ffeb3b,stroke:#f57f17,stroke-width:3px
+    classDef mount fill:#f5f5f5,stroke:#616161,stroke-width:1px,stroke-dasharray: 5 5
+    classDef policy fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef backup fill:#fff3e0,stroke:#e65100,stroke-width:2px
+
+    class ROOT_S,HOME_S,DEV_S,CONFIG,LOCAL,USER_CACHE_S,AITOOLS,NIX_S,LOG_S,VAR_CACHE,TMP_S,CONTAINERS_S,SWAP pool
+    class PG_S,REDIS_S database
+    class NIX_S,CONTAINERS_S,PG_S,REDIS_S,SWAP nodatacow
+    class ROOT_MS,HOME_MS,DEV_MS,CONFIG_MS,LOCAL_MS,UC_MS,AI_MS,NIX_MS,LOG_MS,VC_MS,TMP_MS,CON_MS,SWAP_MS,PG_MS,REDIS_MS mount
+    class LAPTOP_POLICY,SERVER_POLICY policy
+    class BACKUP_INTEGRATION backup

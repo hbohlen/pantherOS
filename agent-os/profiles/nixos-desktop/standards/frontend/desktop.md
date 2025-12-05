@@ -1,0 +1,1 @@
+# Desktop Standards\n\n- modules/window-managers/niri/ for Niri WM (keybinds, layout).\n- desktop-shells/dankmaterial/ (quickshell, widgets, theme).\n- zephyrus HARDWARE_OPTIMIZATION.md patterns.\n- Integrate with home-manager.

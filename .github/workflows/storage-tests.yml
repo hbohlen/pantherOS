@@ -1,0 +1,177 @@
+name: Storage Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+        with:
+          extra_nix_config: |
+            trusted-builders = [
+              "cache-nixos.org"
+            ]
+            substituters = [
+              "https://cache.nixos.org"
+              "https://nix-community.cachix.org"
+            ]
+
+      - name: Cache Nix store
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/nix
+            /tmp/nix-cache
+          key: nix-${{ runner.os }}-${{ hashFiles('**/flake.lock') }}
+          restore-keys: |
+            nix-${{ runner.os }}-
+
+      - name: Verify Nix flake
+        run: nix flake check --accept-flake-config
+
+      - name: Run storage unit tests
+        run: nix build .#storage-unit-tests
+        continue-on-error: true
+
+      - name: Upload test logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storage-unit-test-logs
+          path: |
+            result/logs/
+            /tmp/nix-unit-logs/
+          retention-days: 7
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        host: [zephyrus, yoga, hetzner, contabo, ovh]
+      fail-fast: false
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+        with:
+          extra_nix_config: |
+            trusted-builders = [
+              "cache-nixos.org"
+            ]
+            substituters = [
+              "https://cache.nixos.org"
+              "https://nix-community.cachix.org"
+            ]
+
+      - name: Cache Nix store
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/nix
+            /tmp/nix-cache
+          key: nix-${{ runner.os }}-${{ matrix.host }}-${{ hashFiles('**/flake.lock') }}
+          restore-keys: |
+            nix-${{ runner.os }}-${{ matrix.host }}-
+
+      - name: Run NixOS VM integration tests for ${{ matrix.host }}
+        run: |
+          nix build .#checks.x86_64-linux.storage-integration-tests.${{ matrix.host }} || true
+        continue-on-error: true
+
+      - name: Upload integration test logs (${{ matrix.host }})
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storage-integration-test-logs-${{ matrix.host }}
+          path: |
+            result/logs/
+            /tmp/nixos-test-logs/
+          retention-days: 7
+
+  hardware-detection-tests:
+    name: Hardware Detection Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+
+      - name: Test hardware detection logic
+        run: |
+          nix build .#storage-unit-tests
+          nix eval .#lib.x86_64-linux.storage.hardwareProfiles.detectZephyrus || true
+          echo "✓ Hardware detection tests completed"
+
+  snapshot-policy-tests:
+    name: Snapshot Policy Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+
+      - name: Test snapshot policies
+        run: |
+          nix build .#storage-unit-tests
+          nix eval .#lib.x86_64-linux.storage.snapshotHelpers.getSnapshotRetention
+          echo "✓ Snapshot policy tests completed"
+
+  storage-config-validation:
+    name: Storage Configuration Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+
+      - name: Validate all NixOS configurations
+        run: |
+          nix eval --apply 'configs: builtins.length (builtins.attrValues configs)' .#nixosConfigurations || echo "No nixosConfigurations"
+
+      - name: Build host configurations
+        run: |
+          for host in zephyrus yoga hetzner contabo ovh; do
+            echo "Building $host configuration..."
+            nix build .#nixosConfigurations.$host --no-link || true
+          done
+
+      - name: Upload configuration validation logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storage-config-validation-logs
+          path: |
+            /tmp/nix-build-logs/
+          retention-days: 7

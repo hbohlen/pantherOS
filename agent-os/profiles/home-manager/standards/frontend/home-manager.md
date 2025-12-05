@@ -1,0 +1,1 @@
+# Home-Manager Specific Standards\n\n- Focus on user-level: home.nix, nixvim/settings/, plugins/.\n- opencode integrations: agents/system-builder.md, commands/commit.md etc.\n- zellij layouts: compact.kdl, development.kdl.\n- completions/, dotfiles/.

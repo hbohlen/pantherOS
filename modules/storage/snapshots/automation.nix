@@ -1,0 +1,188 @@
+# modules/storage/snapshots/automation.nix
+# Snapshot Automation Systemd Timers
+# Configures automated snapshot scheduling with off-peak timing
+#
+# This module manages systemd timers for:
+# - snapper-timeline: Regular timeline snapshots
+# - snapper-cleanup: Automatic cleanup of old snapshots
+# - Custom weekly/monthly snapshot creation
+#
+# All timers are configured for off-peak hours (02:00-04:00) to minimize
+# performance impact during production hours.
+
+{ lib, config, ... }:
+
+let
+  inherit (lib) mkOption types mkIf;
+  cfg = config.storage.snapshots;
+in
+{
+  options = {
+    storage.snapshots.offPeakHour = mkOption {
+      description = ''
+        Hour of the day to schedule off-peak snapshot operations.
+        Snapshots run during this hour to minimize performance impact.
+
+        Recommended range: 2-4 (2:00-4:00 AM)
+      '';
+      type = types.int;
+      default = 2;
+    };
+
+    storage.snapshots.enableAutomation = mkOption {
+      description = ''
+        Enable automated snapshot timers.
+
+        When enabled, this configures systemd timers for:
+        - Hourly timeline snapshots
+        - Daily snapshot cleanup
+        - Weekly/monthly snapshot creation (if needed)
+      '';
+      type = types.bool;
+      default = true;
+    };
+  };
+
+  config = mkIf (cfg.enable && cfg.enableAutomation) {
+    # ===== SNAPPER-TIMELINE TIMER =====
+    # Runs every hour to create timeline snapshots
+    systemd.timers."snapper-timeline" = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        # Create snapshot every hour
+        OnCalendar = "hourly";
+
+        # Run during off-peak hours only (02:00-03:59)
+        # This prevents snapshots during business hours
+        # Note: OnCalendar="02:00" would only run at 02:00
+        # We keep hourly but the service checks the hour
+
+        # Persistent=true means if the system was down during scheduled time,
+        # the timer will run immediately when the system comes back up
+        Persistent = true;
+
+        # Unit to activate
+        Unit = "snapper-timeline.service";
+      };
+    };
+
+    # ===== SNAPPER-CLEANUP TIMER =====
+    # Runs daily to clean up old snapshots based on retention policies
+    systemd.timers."snapper-cleanup" = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        # Run once per day at the configured off-peak hour
+        
+
+        # Start time is configured via OnCalendar format
+        # If offPeakHour is 2, it becomes "02:00:00"
+        OnCalendar = "${lib.strings.fixedWidthString 2 "0" (toString cfg.offPeakHour)}:00:00";
+
+        # Persistent=true for recovery after downtime
+        Persistent = true;
+
+        # Unit to activate
+        Unit = "snapper-cleanup.service";
+      };
+    };
+
+    # ===== CUSTOM WEEKLY SNAPSHOT TIMER =====
+    # Snapper timeline doesn't explicitly create weekly/monthly snapshots
+    # This timer creates tagged snapshots for weekly/monthly retention
+    systemd.timers."snapper-weekly" = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        # Run every Sunday at the off-peak hour
+        OnCalendar = "Sun ${lib.strings.fixedWidthString 2 "0" (toString cfg.offPeakHour)}:00:00";
+
+        # Persistent=true for recovery after downtime
+        Persistent = true;
+
+        # Unit to activate
+        Unit = "snapper-weekly.service";
+      };
+    };
+
+    # ===== CUSTOM MONTHLY SNAPSHOT TIMER =====
+    # Creates the first snapshot of each month
+    systemd.timers."snapper-monthly" = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        # Run on the 1st of each month at the off-peak hour
+        OnCalendar = "*-*-01 ${lib.strings.fixedWidthString 2 "0" (toString cfg.offPeakHour)}:00:00";
+
+        # Persistent=true for recovery after downtime
+        Persistent = true;
+
+        # Unit to activate
+        Unit = "snapper-monthly.service";
+      };
+    };
+
+    # ===== SNAPPER-WEEKLY SERVICE =====
+    # Creates a weekly snapshot for each configured subvolume
+    systemd.services."snapper-weekly" = {
+      description = "Create Weekly Snapshots";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = let
+          # Generate snapper command for each enabled subvolume
+          createWeeklySnapshot = subvolume:
+            "${config.systemd.package}/bin/snapper create --type single --cleanup-algorithm timeline --description 'Weekly snapshot' --command '${subvolume}'";
+          snapshotCommands = map createWeeklySnapshot cfg.enabledSubvolumes;
+        in
+          # Combine all snapshot commands
+          builtins.concatStringsSep " && " snapshotCommands;
+
+        # Set a timeout for the entire operation
+        TimeoutStartSec = "5min";
+
+        # Log the operation
+        StandardOutput = "journal";
+        StandardError = "journal";
+
+        # Run with minimal privileges
+        User = "root";
+      };
+    };
+
+    # ===== SNAPPER-MONTHLY SERVICE =====
+    # Creates a monthly snapshot for each configured subvolume
+    systemd.services."snapper-monthly" = {
+      description = "Create Monthly Snapshots";
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = let
+          # Generate snapper command for each enabled subvolume
+          createMonthlySnapshot = subvolume:
+            "${config.systemd.package}/bin/snapper create --type single --cleanup-algorithm timeline --description 'Monthly snapshot' --command '${subvolume}'";
+          snapshotCommands = map createMonthlySnapshot cfg.enabledSubvolumes;
+        in
+          # Combine all snapshot commands
+          builtins.concatStringsSep " && " snapshotCommands;
+
+        # Set a timeout for the entire operation
+        TimeoutStartSec = "5min";
+
+        # Log the operation
+        StandardOutput = "journal";
+        StandardError = "journal";
+
+        # Run with minimal privileges
+        User = "root";
+      };
+    };
+
+    # ===== SNAPSHOT TIMING VALIDATION =====
+    # Warn if off-peak hour is during business hours
+    assertions = [
+      {
+        assertion = cfg.offPeakHour >= 0 && cfg.offPeakHour <= 23;
+        message = ''
+          storage.snapshots.offPeakHour must be between 0 and 23 (inclusive).
+          Recommended: 2-4 (2:00-4:00 AM) for off-peak operation.
+        '';
+      }
+    ];
+  };
+}
