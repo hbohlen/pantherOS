@@ -1,14 +1,16 @@
 # hosts/servers/ovh-vps/default.nix
 # Optimized configuration for OVH VPS
 # Supports: Programming, Containers, AI tools
-{ config, lib, pkgs, ... }:
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
     ./hardware.nix
     ../../../modules
   ];
-
-
 
   # Hostname
   networking.hostName = "ovh-vps";
@@ -16,7 +18,7 @@
   # Bootloader - GRUB with BIOS support (OVH VPS uses BIOS, not UEFI)
   boot.loader.grub = {
     enable = true;
-    device = "/dev/sda";  # BIOS boot to disk
+    device = "/dev/sda"; # BIOS boot to disk
     extraConfig = ''
       serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
       terminal_input serial console
@@ -30,7 +32,7 @@
 
   # Network configuration with systemd-networkd
   # OVH VPS uses ens3 interface
-  networking.useDHCP = false;  # Disable to avoid conflict with systemd.network
+  networking.useDHCP = false; # Disable to avoid conflict with systemd.network
   networking.useNetworkd = true;
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
@@ -56,7 +58,7 @@
         owner = "root";
         group = "root";
         mode = "0600";
-        services = [ "tailscaled" ];
+        services = ["tailscaled"];
       };
 
       # SSH public key for root user
@@ -89,9 +91,9 @@
   # Firewall - allow Tailscale and SSH
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 22 ];
-    trustedInterfaces = [ "tailscale0" ];
-    allowedUDPPorts = [ config.services.tailscale.port ];
+    allowedTCPPorts = [22];
+    trustedInterfaces = ["tailscale0"];
+    allowedUDPPorts = [config.services.tailscale.port];
   };
 
   # User configuration
@@ -102,9 +104,9 @@
   users.users.hbohlen = {
     isNormalUser = true;
     extraGroups = [
-      "wheel"      # sudo access
-      "podman"     # container management
-      "docker"     # docker CLI compat
+      "wheel" # sudo access
+      "podman" # container management
+      "docker" # docker CLI compat
     ];
     # OpNix writes to /home/hbohlen/.ssh/authorized_keys
   };
@@ -135,7 +137,7 @@
       mkdir -p /home/hbohlen/.local/{bin,share,state}
       chown -R hbohlen:users /home/hbohlen/.local
     '';
-    deps = [ "users" ];
+    deps = ["users"];
   };
 
   # Sudo configuration - passwordless for wheel group
@@ -154,7 +156,7 @@
   # Podman - Container runtime
   virtualisation.podman = {
     enable = true;
-    dockerCompat = true;  # Docker CLI compatibility
+    dockerCompat = true; # Docker CLI compatibility
     defaultNetwork.settings.dns_enabled = true;
 
     # Podman uses /var/lib/containers which is on @containers subvolume
@@ -181,8 +183,8 @@
     PROJECTS_DIR = "$HOME/dev";
 
     # Editor
-    EDITOR = "vim";
-    VISUAL = "vim";
+    EDITOR = lib.mkForce "vim";
+    VISUAL = lib.mkForce "vim";
   };
 
   # System packages - core utilities and development tools
@@ -193,12 +195,12 @@
     curl
     wget
     htop
-    btop           # Better top
+    btop # Better top
     tmux
     screen
-    ripgrep        # Fast grep
-    fd             # Fast find
-    jq             # JSON processor
+    ripgrep # Fast grep
+    fd # Fast find
+    jq # JSON processor
 
     # Network tools
     tailscale
@@ -211,17 +213,17 @@
 
     # Container tools
     podman-compose
-    buildah        # Container image builder
-    skopeo         # Container image tool
+    buildah # Container image builder
+    skopeo # Container image tool
 
     # Btrfs tools
     btrfs-progs
-    compsize       # Check compression ratios
+    compsize # Check compression ratios
 
     # System monitoring
     iotop
-    ncdu           # Disk usage analyzer
-    duf            # Modern df
+    ncdu # Disk usage analyzer
+    duf # Modern df
   ];
 
   # Development environments (optional - can be per-project with flakes)
@@ -260,7 +262,7 @@
   # Optimize nix store
   nix.settings = {
     auto-optimise-store = true;
-    experimental-features = [ "nix-command" "flakes" ];
+    experimental-features = ["nix-command" "flakes"];
   };
 
   # Automatic btrfs snapshots (optional but recommended)
@@ -311,7 +313,7 @@
 
   systemd.timers.clean-old-caches = {
     description = "Clean old cache files weekly";
-    wantedBy = [ "timers.target" ];
+    wantedBy = ["timers.target"];
     timerConfig = {
       OnCalendar = "weekly";
       Persistent = true;

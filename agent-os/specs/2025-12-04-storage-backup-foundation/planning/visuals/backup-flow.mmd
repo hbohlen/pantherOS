@@ -1,0 +1,136 @@
+---
+title: PantherOS Backup Data Flow
+---
+flowchart TD
+    %% Snapshot Creation
+    subgraph "Snapshot Phase"
+        T1[02:00 Daily Timer<br/>panther-backup-timer]
+        S1[Create Btrfs Snapshot<br/>snapper/btrbk]
+        S2[Snapshot: @, @home, @etc]
+        S3[Snapshot: @postgresql<br/>@redis (if enabled)]
+        S4[Snapshot: @containers<br/>(optional, laptops)]
+    end
+
+    %% Pre-backup Validation
+    subgraph "Pre-Backup Validation"
+        V1[Validate Credentials<br/>Check B2 API access]
+        V2[Check Disk Space<br/>>10% free required]
+        V3[Network Check<br/>online.target]
+    end
+
+    %% Backup Processing
+    subgraph "Backup Processing"
+        B1[Compress Snapshots<br/>zstd:3 compression]
+        B2[Create Archive<br/>tar.zst format]
+        B3[Upload to B2<br/>S3-compatible API]
+        B4[Retry Logic<br/>3 attempts, exponential backoff]
+    end
+
+    %% B2 Storage
+    subgraph "Backblaze B2 Storage"
+        BUCKET[Bucket: pantherOS-backups]
+        PATH[Path Structure:<br/>hostname/subvolume/<br/>year/month/]
+        FILE[File: timestamp_<subvolume>_snapshots.tar.zst]
+    end
+
+    %% Validation
+    subgraph "Post-Backup Validation"
+        VAL1[Backup Recency Check<br/><36h old]
+        VAL2[Size Validation<br/>sanity check]
+        VAL3[Integrity Check<br/>B2 API verify]
+        VAL4[Generate Report<br/>status.json]
+    end
+
+    %% Monitoring
+    subgraph "Monitoring & Alerts"
+        MON1[Send Metrics<br/>Datadog/custom]
+        MON2[Success Alert<br/>Backup completed]
+        MON3[Failure Alert<br/>Retry exceeded]
+        MON4[Cost Tracking<br/>B2 usage calc]
+    end
+
+    %% Restore Path
+    subgraph "Restore Process"
+        R1[Identify Backup<br/>Find timestamp]
+        R2[Download from B2<br/>authenticated]
+        R3[Extract Archive<br/>tar.zst]
+        R4[Receive Snapshot<br/>btrfs receive]
+        R5[Mount & Verify<br/>integrity check]
+    end
+
+    %% Error Handling
+    subgraph "Error Handling"
+        E1[Credential Error<br/>→ Alert admin]
+        E2[Network Error<br/>→ Retry with backoff]
+        E3[Disk Full<br/>→ Alert & cleanup]
+        E4[B2 API Error<br/>→ Retry & escalate]
+    end
+
+    %% Flow Sequence
+    T1 --> V1
+    V1 --> V2
+    V2 --> V3
+    V3 --> S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> B1
+    B1 --> B2
+    B2 --> B3
+    B3 --> B4
+    B4 --> BUCKET
+    BUCKET --> PATH
+    PATH --> FILE
+    FILE --> VAL1
+    VAL1 --> VAL2
+    VAL2 --> VAL3
+    VAL3 --> VAL4
+    VAL4 --> MON1
+    MON1 --> MON2
+
+    %% Restore Flow (separate path)
+    R1 --> R2
+    R2 --> R3
+    R3 --> R4
+    R4 --> R5
+
+    %% Error Paths
+    V1 -.->|Error| E1
+    V2 -.->|Error| E3
+    V3 -.->|Error| E2
+    B3 -.->|Error| E4
+    E4 -.->|Retry| B4
+
+    %% Retry Loop
+    B4 -.->|Failure| B3
+    B3 -.->|Retry| B2
+
+    %% Timing Annotations
+    DAILY[Daily: 02:00<br/>Randomized delay: 0-30min]
+    WEEKLY[Weekly: Sunday 03:00<br/>Extended validation]
+    MONTHLY[Monthly: 1st 04:00<br/>Full integrity test]
+
+    T1 -.-> DAILY
+    VAL4 -.-> WEEKLY
+    VAL4 -.-> MONTHLY
+
+    %% Styling
+    classDef timer fill:#e3f2fd,stroke:#0277bd,stroke-width:2px
+    classDef snapshot fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    classDef validation fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+    classDef backup fill:#fff3e0,stroke:#f57c00,stroke-width:2px
+    classDef storage fill:#e0f2f1,stroke:#00695c,stroke-width:2px
+    classDef monitoring fill:#fce4ec,stroke:#c2185b,stroke-width:2px
+    classDef restore fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
+    classDef error fill:#ffebee,stroke:#d32f2f,stroke-width:2px
+    classDef timing fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+
+    class T1 timer
+    class S1,S2,S3,S4 snapshot
+    class V1,V2,V3,VAL1,VAL2,VAL3,VAL4 validation
+    class B1,B2,B3,B4 backup
+    class BUCKET,PATH,FILE storage
+    class MON1,MON2,MON3,MON4 monitoring
+    class R1,R2,R3,R4,R5 restore
+    class E1,E2,E3,E4 error
+    class DAILY,WEEKLY,MONTHLY timing

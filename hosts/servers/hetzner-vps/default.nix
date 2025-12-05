@@ -1,14 +1,19 @@
 # hosts/servers/hetzner-vps/default.nix
 # Optimized configuration for development server
 # Supports: Programming (Python, Node, Rust, Go), Containers, AI tools
-{ config, pkgs, ... }:
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [
     ./hardware.nix
+    ./hercules-ci.nix
+    ./attic.nix
+    ./caddy.nix
     ../../../modules
   ];
-
-
 
   # Hostname
   networking.hostName = "hetzner-vps";
@@ -36,7 +41,7 @@
   networking.useNetworkd = true;
   systemd.network.enable = true;
   systemd.network.networks."10-wan" = {
-    matchConfig.Name = "eth0";
+    matchConfig.Name = "eth0 enp1s0";
     networkConfig = {
       DHCP = "ipv4";
       IPv6AcceptRA = true;
@@ -44,8 +49,20 @@
     linkConfig.RequiredForOnline = "routable";
   };
 
+  # Ensure /etc/opnix-token directory exists before OpNix service
+  # The actual token must be transferred manually after first boot
+  system.activationScripts.create-opnix-token-dir = {
+    text = ''
+      mkdir -p /etc
+      # Create placeholder - will be replaced during first boot
+      # The OpNix token must be copied here manually after deployment
+      touch /etc/opnix-token
+      chmod 600 /etc/opnix-token
+    '';
+    deps = [];
+  };
+
   # 1Password OpNix - Secret Management
-  # Using your pantherOS vault
   services.onepassword-secrets = {
     enable = true;
     tokenFile = "/etc/opnix-token";
@@ -58,7 +75,7 @@
         owner = "root";
         group = "root";
         mode = "0600";
-        services = [ "tailscaled" ];
+        services = ["tailscaled"];
       };
 
       # SSH public key for root user
@@ -81,30 +98,40 @@
     };
   };
 
-  # Tailscale VPN - using OpNix-managed auth key
+  # Tailscale VPN
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "client";
     authKeyFile = config.services.onepassword-secrets.secretPaths.tailscaleAuthKey;
   };
 
-  # Firewall - allow Tailscale and SSH
+  # Firewall - allow SSH and Tailscale
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [ 22 ];
-    trustedInterfaces = [ "tailscale0" ];
-    allowedUDPPorts = [ config.services.tailscale.port ];
+    allowedTCPPorts = [22 80 443];
+    trustedInterfaces = ["tailscale0"];
+    allowedUDPPorts = [config.services.tailscale.port];
   };
 
-  # SSH configuration - hardened
+  # SSH configuration - Secure key-based authentication only
+  # All SSH keys are managed by OpNix via 1Password
   services.openssh = {
     enable = true;
     settings = {
-      PermitRootLogin = "prohibit-password";
+      # Allow root login ONLY with SSH keys (no password)
+      PermitRootLogin = "without-password";
+      # Disable password authentication completely
       PasswordAuthentication = false;
+      # Disable keyboard-interactive authentication
       KbdInteractiveAuthentication = false;
+      # Enable public key authentication explicitly
+      PubkeyAuthentication = true;
     };
   };
+
+  # SSH Keys managed by OpNix (from 1Password pantherOS vault)
+  # Keys are populated by onepassword-secrets.service at boot
+  # No hardcoded keys - source of truth is OpNix vault
 
   # Home Manager - User environment management
   home-manager = {
@@ -118,8 +145,6 @@
         homeDirectory = "/home/hbohlen";
         stateVersion = "25.05";
       };
-
-
 
       # Enable XDG base directory specification
       xdg.enable = true;
@@ -202,6 +227,53 @@
     ];
   };
 
+  # Kernel parameters for development server performance
+  boot.kernel.sysctl = {
+    # Memory and swappiness optimization
+    "vm.swappiness" = 10; # Prefer RAM over swap
+    "vm.dirty_ratio" = 5; # Aggressive writeback for containers
+    "vm.dirty_background_ratio" = 2;
+
+    # TCP optimization for development workloads
+    "net.ipv4.tcp_tw_reuse" = 1;
+
+    # Container-friendly networking settings
+    "net.bridge.bridge-nf-call-iptables" = 1;
+    "net.bridge.bridge-nf-call-ip6tables" = 1;
+    "net.ipv4.ip_forward" = 1;
+
+    # Increase file descriptors for containers and builds
+    "fs.file-max" = 2097152;
+    "fs.inotify.max_user_watches" = 524288;
+  };
+
+  # System limits for development workloads
+  security.pam.loginLimits = [
+    {
+      domain = "*";
+      item = "nofile";
+      type = "-";
+      value = "262144";
+    }
+    {
+      domain = "*";
+      item = "nproc";
+      type = "-";
+      value = "262144";
+    }
+  ];
+
+  # Optimize journald for performance and retention
+  services.journald = {
+    extraConfig = ''
+      Storage=persistent
+      SystemMaxUse=500M
+      RuntimeMaxUse=100M
+      MaxRetentionSec=30day
+      Compress=yes
+    '';
+  };
+
   # Automatic btrfs snapshots (optional but recommended)
   # Note: Enable this to automatically create daily snapshots of important subvolumes.
   # This provides a simple recovery mechanism for accidental deletions or system issues.
@@ -250,10 +322,36 @@
 
   systemd.timers.clean-old-caches = {
     description = "Clean old cache files weekly";
-    wantedBy = [ "timers.target" ];
+    wantedBy = ["timers.target"];
     timerConfig = {
       OnCalendar = "weekly";
       Persistent = true;
+    };
+  };
+
+  # Periodic btrfs filesystem maintenance
+  systemd.services.btrfs-maintenance = {
+    description = "Btrfs filesystem maintenance";
+    script = ''
+      # Enable autodefrag on development subvolumes (non-aggressive)
+      ${pkgs.btrfs-progs}/bin/btrfs property set -ts / autodefrag on || true
+
+      # Run balance on root filesystem (non-blocking, only data/metadata)
+      ${pkgs.btrfs-progs}/bin/btrfs balance start -d -m / || true
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
+  };
+
+  systemd.timers.btrfs-maintenance = {
+    description = "Btrfs filesystem maintenance timer";
+    wantedBy = ["timers.target"];
+    timerConfig = {
+      OnCalendar = "monthly";
+      Persistent = true;
+      RandomizedDelaySec = "1h"; # Spread load if multiple systems
     };
   };
 

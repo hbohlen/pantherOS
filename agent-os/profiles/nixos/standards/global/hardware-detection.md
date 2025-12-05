@@ -1,0 +1,1 @@
+# Hardware Detection Standards\n\n- Per-host hardware.nix importing facter.json facts.\n- Use lib/hardware-detection.nix for shared detection logic.\n- scripts/ like scan-hardware.fish, parse-hardware.fish for inventory.\n- Examples: hosts/zephyrus/hardware-facter.nix.

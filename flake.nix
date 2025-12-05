@@ -3,7 +3,7 @@
   description = "NixOS configuration for Hetzner Cloud VPS";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -64,6 +64,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Hercules CI - Continuous Integration for Nix
+    hercules-ci-agent = {
+      url = "github:hercules-ci/hercules-ci-agent";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Attic - Nix binary cache server
+    attic = {
+      url = "github:zhaofengli/attic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -82,6 +94,8 @@
       niri,
       zed,
       nix-unit,
+      hercules-ci-agent,
+      attic,
     }:
     let
       system = "x86_64-linux";
@@ -106,6 +120,8 @@
           disko.nixosModules.disko
           opnix.nixosModules.default
           home-manager.nixosModules.home-manager
+          hercules-ci-agent.nixosModules.agent-service
+          attic.nixosModules.atticd
           ./hosts/servers/hetzner-vps/hardware.nix
           ./hosts/servers/hetzner-vps/default.nix
           ./hosts/servers/hetzner-vps/disko.nix
@@ -159,7 +175,8 @@
         specialArgs = { inherit lib; };
       };
 
-
+      # Storage library - accessible via flake outputs
+      lib.${system}.storage = import ./lib/storage { inherit lib; };
 
        devShells.${system}.default = pkgs.mkShell {
          buildInputs = with pkgs; [
@@ -169,25 +186,26 @@
            nixpkgs-fmt
            nixfmt-rfc-style
            alejandra
-           
+
            # Build and Test Tools
            nix-tree
            git
-           
+
            # NixOS Development Tools
            nix-diff      # Compare derivations
            nix-info      # System information
            nix-index     # Package searching
            nix-du        # Disk usage analysis
-           
+
            # Code Quality Tools
            statix        # Nix linting
            deadnix       # Dead code detection
            shellcheck    # Shell script validation
-           
+
            # Documentation and Exploration
            manix         # Nix function documentation
-           
+           nix-doc       # Inline documentation for Nix
+
            # Deployment and Testing
            nixos-rebuild
            nix-unit.packages.${system}.default  # Unit testing for Nix
@@ -230,5 +248,11 @@
 
        # Integration tests using nixosTest
        checks.${system} = import ./tests/integration/default.nix { inherit self nixpkgs; };
+
+       # Storage unit tests using nix-unit
+       packages.${system}.storage-unit-tests = import ./tests/storage {
+         inherit system pkgs;
+         nix-unit-src = nix-unit;
+       };
      };
 }

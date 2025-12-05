@@ -81,6 +81,17 @@
                     ];
                   };
 
+                  # System journal logs (separate for retention policies)
+                  "@journal" = {
+                    mountpoint = "/var/log/journal";
+                    mountOptions = [
+                      "compress=zstd:2" # Medium compression for journal
+                      "noatime"
+                      "space_cache=v2"
+                      "discard=async"
+                    ];
+                  };
+
                   # System cache (package manager caches, etc.)
                   "@var-cache" = {
                     mountpoint = "/var/cache";
@@ -199,7 +210,7 @@
                       "compress=no" # No compression for swap
                       "noatime"
                     ];
-                    swap.swapfile.size = "4G"; # 4GB swap
+                    swap.swapfile.size = "8G"; # Increased from 4GB for heavy development workloads
                   };
                 };
               };

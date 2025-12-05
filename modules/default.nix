@@ -10,6 +10,8 @@
     ./desktop-shells
     ./development
     ./security
+    ./ci
+    ./storage
     # Note: Custom window manager modules can be added here if needed
     # ./home-manager  # Only imported in home-manager context, not here
     # ./home  # Disabled for now - using xdg.configFile directly

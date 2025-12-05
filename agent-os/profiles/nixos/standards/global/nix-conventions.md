@@ -1,0 +1,1 @@
+# Nix Conventions\n\n- Root flake.nix defines inputs (nixpkgs, home-manager, disko) and outputs (nixosConfigurations, homeConfigurations).\n- Use modules/ directory for reusable NixOS modules with default.nix entrypoints.\n- lib/ for shared utilities like hardware-detection.nix.\n- scripts/ for deployment and verification (deploy-*.sh, verify-*.fish).

@@ -1,0 +1,1 @@
+# Home-Manager Integration\n\n- home/hbohlen/home.nix as user config.\n- Subdirs: development/, window-managers/, desktop-shells/.\n- nixvim plugins, opencode agents/commands in home-manager/dotfiles/opencode/.

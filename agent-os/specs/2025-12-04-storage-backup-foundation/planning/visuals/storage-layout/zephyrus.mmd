@@ -1,0 +1,70 @@
+---
+title: Zephyrus Dual-NVMe Subvolume Layout
+---
+flowchart TB
+    %% Primary Pool
+    subgraph "Primary Pool (/dev/nvme0n1 - 2TB)"
+        direction TB
+        ROOT1[@ (Root)<br/>compress=zstd:3<br/>noatime]
+        HOME1[@home<br/>compress=zstd:3<br/>noatime]
+        DEV[@dev-projects<br/>nodatacow<br/>ssd optimized]
+        NIX1[@nix<br/>nodatacow<br/>compress=zstd:1]
+    end
+
+    %% Secondary Pool
+    subgraph "Secondary Pool (/dev/nvme1n1 - 1TB)"
+        direction TB
+        CONTAINERS[@containers<br/>nodatacow<br/>compress=no]
+        CACHE[@cache<br/>compress=zstd:1<br/>noatime]
+        PODMAN[@podman-cache<br/>nodatacow<br/>compress=no]
+        SNAPSHOTS1[@snapshots<br/>compress=zstd:3<br/>noatime]
+        TMP1[@tmp<br/>compress=no<br/>noatime]
+        USER_CACHE1[@user-cache<br/>compress=zstd:1<br/>noatime]
+    end
+
+    %% Optional Database Subvolumes
+    subgraph "Optional Database Subvolumes"
+        direction TB
+        PG[@postgresql<br/>nodatacow<br/>compress=no]
+        REDIS[@redis<br/>nodatacow<br/>compress=no]
+        BACKUP_SUB[@backups<br/>compress=zstd:3<br/>noatime]
+    end
+
+    %% Relationships
+    ROOT1 --> HOME1
+    ROOT1 --> DEV
+    ROOT1 --> NIX1
+
+    CONTAINERS --> CACHE
+    CACHE --> PODMAN
+    PODMAN --> SNAPSHOTS1
+    SNAPSHOTS1 --> TMP1
+    TMP1 --> USER_CACHE1
+
+    %% Mount points
+    ROOT1 -.-> |/| ROOT_M[Root Filesystem]
+    HOME1 -.-> |/home| HOME_M[User Data]
+    DEV -.-> |/home/dev| DEV_M[Development Projects]
+    NIX1 -.-> |/nix| NIX_M[Nix Store]
+    CONTAINERS -.-> |/var/lib/containers| CON_M[Container Storage]
+    CACHE -.-> |/var/cache| CACHE_M[System Cache]
+    PODMAN -.-> |/var/lib/containers/podman| POD_M[Podman Cache]
+    SNAPSHOTS1 -.-> |.snapshots| SNAP_M[Local Snapshots]
+    TMP1 -.-> |/tmp| TMP_M[Temporary Files]
+    USER_CACHE1 -.-> |/home/.cache| UC_M[User Cache]
+    PG -.-> |/var/lib/postgresql| PG_M[PostgreSQL Data]
+    REDIS -.-> |/var/lib/redis| RD_M[Redis Data]
+    BACKUP_SUB -.-> |/var/lib/backups| BACKUP_M[Backup Storage]
+
+    %% Styling
+    classDef primary fill:#bbdefb,stroke:#1976d2,stroke-width:2px
+    classDef secondary fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    classDef database fill:#ffcdd2,stroke:#d32f2f,stroke-width:2px
+    classDef nodatacow fill:#ffeb3b,stroke:#f57f17,stroke-width:3px
+    classDef mount fill:#f5f5f5,stroke:#616161,stroke-width:1px,stroke-dasharray: 5 5
+
+    class ROOT1,HOME1,DEV,NIX1 primary
+    class CONTAINERS,CACHE,PODMAN,SNAPSHOTS1,TMP1,USER_CACHE1 secondary
+    class PG,REDIS,BACKUP_SUB database
+    class DEV,CONTAINERS,NIX1,PODMAN,PG,REDIS nodatacow
+    class ROOT_M,HOME_M,DEV_M,NIX_M,CON_M,CACHE_M,POD_M,SNAP_M,TMP_M,UC_M,PG_M,RD_M,BACKUP_M mount

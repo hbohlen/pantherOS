@@ -15,6 +15,7 @@
       "docker" # docker CLI compat
     ];
     shell = pkgs.fish; # Set fish as default shell
+    initialPassword = "changme";  # TEMPORARY: Initial password for first login
     # OpNix writes to /home/hbohlen/.ssh/authorized_keys
   };
 

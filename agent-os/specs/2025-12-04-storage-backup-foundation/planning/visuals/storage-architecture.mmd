@@ -1,0 +1,87 @@
+---
+title: PantherOS Storage Architecture
+---
+flowchart TD
+    %% Module Layer
+    subgraph "Storage Module Layer"
+        SM[Storage Module<br/>modules/storage/default.nix]
+        BTRFS[Btrfs Management<br/>modules/storage/btrfs/]
+        SNAP[Snapshots<br/>modules/storage/snapshots/]
+        BACKUP[Backup<br/>modules/storage/backup/]
+        MON[Monitoring<br/>modules/storage/monitoring/]
+    end
+
+    %% Profiles Layer
+    subgraph "Host Profiles Layer"
+        P_Z[Zephyrus Profile<br/>modules/storage/profiles/zephyrus.nix]
+        P_Y[Yoga Profile<br/>modules/storage/profiles/yoga.nix]
+        P_H[Hetzner Profile<br/>modules/storage/profiles/hetzner.nix]
+        P_C[Contabo Profile<br/>modules/storage/profiles/contabo.nix]
+        P_O[OVH Profile<br/>modules/storage/profiles/ovh.nix]
+    end
+
+    %% Disko Layer
+    subgraph "Disk Layout Layer"
+        D_LAPTOP[Laptop Disk<br/>modules/storage/disko/laptop-disk.nix]
+        D_DUAL[Dual NVMe Disk<br/>modules/storage/disko/dual-nvme-disk.nix]
+        D_SERVER[Server Disk<br/>modules/storage/disko/server-disk.nix]
+    end
+
+    %% Host Layer
+    subgraph "Host Deployment Layer"
+        H_Z[Zephyrus<br/>Dual NVMe Laptop]
+        H_Y[Yoga<br/>Single NVMe Laptop]
+        H_H[Hetzner<br/>458GB VPS]
+        H_C[Contabo<br/>536GB VPS]
+        H_O[OVH<br/>200GB VPS]
+    end
+
+    %% Data Flow
+    SM --> BTRFS
+    SM --> SNAP
+    SM --> BACKUP
+    SM --> MON
+
+    %% Profile Selection
+    BTRFS --> P_Z
+    BTRFS --> P_Y
+    BTRFS --> P_H
+    BTRFS --> P_C
+    BTRFS --> P_O
+
+    SNAP --> P_Z
+    SNAP --> P_Y
+    SNAP --> P_H
+    SNAP --> P_C
+    SNAP --> P_O
+
+    BACKUP --> P_Z
+    BACKUP --> P_Y
+    BACKUP --> P_H
+    BACKUP --> P_C
+    BACKUP --> P_O
+
+    %% Profile to Disko
+    P_Z --> D_DUAL
+    P_Y --> D_LAPTOP
+    P_H --> D_SERVER
+    P_C --> D_SERVER
+    P_O --> D_SERVER
+
+    %% Disko to Host
+    D_DUAL --> H_Z
+    D_LAPTOP --> H_Y
+    D_SERVER --> H_H
+    D_SERVER --> H_C
+    D_SERVER --> H_O
+
+    %% Styling
+    classDef module fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef profile fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef disko fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef host fill:#fff3e0,stroke:#e65100,stroke-width:2px
+
+    class SM,BTRFS,SNAP,BACKUP,MON module
+    class P_Z,P_Y,P_H,P_C,P_O profile
+    class D_LAPTOP,D_DUAL,D_SERVER disko
+    class H_Z,H_Y,H_H,H_C,H_O host
