@@ -205,7 +205,7 @@
 
                   # ===== AI TOOLS DATA =====
 
-                  # Claude Code and OpenCode.AI data/models
+                  # Claude Code data/models
                   "@ai-tools" = {
                     mountpoint = "/home/hbohlen/.ai-tools";
                     mountOptions = [

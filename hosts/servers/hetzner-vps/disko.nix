@@ -1,6 +1,6 @@
 # disko.nix - Optimized for Development Server
 # Server: Hetzner Cloud CPX52 (480GB NVMe)
-# Workloads: Programming, Podman containers, AI coding tools (Claude Code, OpenCode.AI)
+# Workloads: Programming, Podman containers, AI coding tools (Claude Code)
 #
 # Subvolume Strategy:
 # - Separate subvolumes for different workload types
@@ -189,7 +189,7 @@
 
                   # ===== AI TOOLS DATA =====
 
-                  # Claude Code and OpenCode.AI data/models
+                  # Claude Code data/models
                   "@ai-tools" = {
                     mountpoint = "/home/hbohlen/.ai-tools";
                     mountOptions = [

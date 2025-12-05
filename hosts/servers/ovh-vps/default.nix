@@ -120,7 +120,7 @@
       chmod 755 /home/hbohlen/{dev,.config,.local,.cache,.ai-tools}
 
       # Create AI tools structure
-      mkdir -p /home/hbohlen/.ai-tools/{claude-code,opencode}
+      mkdir -p /home/hbohlen/.ai-tools/claude-code
       chown -R hbohlen:users /home/hbohlen/.ai-tools
 
       # Ensure .ssh exists with correct permissions

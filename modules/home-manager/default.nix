@@ -60,27 +60,9 @@ imports = [
       alias ...="cd ../.."
       alias ....="cd ../../.."
 
-      # OpenCode integration (if available)
-      if type -q opencode
-        alias oc="opencode"
-        alias occ="opencode --config ~/.config/opencode"
-      end
-
       # Set up environment variables
       set -gx EDITOR "nvim"
       set -gx VISUAL "nvim"
-
-      # Add OpenCode to PATH if it's installed via nix
-      if test -d "$HOME/.local/share/opencode/completions"
-        set -gx fish_user_paths "$fish_user_paths" "$HOME/.local/share/opencode/completions"
-      end
-
-      # Set up OpenCode environment variables
-      if test -n "$HOME"
-        set -gx OPENCODE_CONFIG_PATH "$HOME/.config/opencode"
-        set -gx OPENCODE_DATA_PATH "$HOME/.local/share/opencode"
-        set -gx OPENCODE_CACHE_PATH "$HOME/.cache/opencode"
-      end
     '';
   };
 
@@ -89,11 +71,6 @@ imports = [
     # Editor configuration
     EDITOR = "nvim";
     VISUAL = "nvim";
-
-    # OpenCode environment variables
-    OPENCODE_CONFIG_PATH = "$HOME/.config/opencode";
-    OPENCODE_DATA_PATH = "$HOME/.local/share/opencode";
-    OPENCODE_CACHE_PATH = "$HOME/.cache/opencode";
   };
 
   # Additional home-manager configuration

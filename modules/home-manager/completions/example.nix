@@ -8,10 +8,6 @@
   programs.fish.completions = {
     enable = true;
     
-    # Enable OpenCode/OpenAgent completions
-    opencode.enable = true;
-    openagent.enable = true;
-    
     # Enable all system management completions
     systemManagement = {
       enable = true;  # This enables all sub-options
