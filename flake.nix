@@ -107,7 +107,7 @@
         };
         overlays = [
           (final: prev: {
-            # opencode = nix-ai-tools.packages.${system}.opencode;
+            claude-code = nix-ai-tools.packages.${system}.claude-code;
             quickshell = quickshell.packages.${system}.default;
           })
         ];

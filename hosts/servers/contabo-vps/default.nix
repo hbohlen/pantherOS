@@ -125,16 +125,10 @@
       # Enable XDG base directory specification
       xdg.enable = true;
 
-      # OpenCode.ai configuration using xdg.configFile
-      xdg.configFile."opencode" = {
-        source = ../../../home/hbohlen/opencode;
-        recursive = true;
-      };
-
-      # Additional packages not covered by terminal-tools module
+      # Additional packages
       home.packages = with pkgs; [
-        # AI coding assistant
-        opencode
+        # AI coding assistant from numtide/nix-ai-tools
+        claude-code
       ];
 
       # Basic home-manager configuration
